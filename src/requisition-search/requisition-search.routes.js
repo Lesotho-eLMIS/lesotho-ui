@@ -17,36 +17,43 @@
 
     'use strict';
 
-    angular
-        .module('requisition-convert-to-order')
-        .config(routes);
+    angular.module('requisition-search').config(routes);
 
-    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
+    routes.$inject = ['$stateProvider'];
 
-    function routes($stateProvider, FULFILLMENT_RIGHTS) {
+    function routes($stateProvider) {
 
-        $stateProvider.state('openlmis.requisitions.convertToOrder', {
+        $stateProvider.state('openlmis.requisitions.search', {
             showInNavigation: true,
-            label: 'requisitionConvertToOrder.convertToOrder.label',
-            url: '/convertToOrder?programId&facilityId&sort&page&size&storageKey',
-            controller: 'ConvertToOrderController',
+            isOffline: true,
+            label: 'requisitionSearch.view',
+            url: '/view?program&facility&initiatedDateFrom&initiatedDateTo&page&size&offline&sort&requisitionStatus',
+            params: {
+                sort: ['createdDate,desc']
+            },
+            controller: 'RequisitionSearchController',
+            templateUrl: 'requisition-search/requisition-search.html',
+            canAccess: function(permissionService, REQUISITION_RIGHTS) {
+                return permissionService.hasRoleWithRightAndFacility(REQUISITION_RIGHTS.REQUISITION_VIEW);
+            },
             controllerAs: 'vm',
-            templateUrl: 'requisition-convert-to-order/convert-to-order.html',
-            accessRights: [FULFILLMENT_RIGHTS.ORDERS_EDIT],
             resolve: {
-                programs: function(programService) {
-                    return programService.getAll();
-                },
-                facilities: function(facilityService) {
-                    return facilityService.getAllMinimal();
+                facilities: function(requisitionSearchService) {
+                    return requisitionSearchService.getFacilities();
                 },
                 requisitions: function(paginationService, requisitionService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        return requisitionService.forConvert(stateParams);
+                        if (stateParams.facility) {
+                            var offlineFlag = stateParams.offline;
+                            delete stateParams.offline;
+                            return requisitionService.search(offlineFlag === 'true', stateParams);
+                        }
+                        return undefined;
                     });
                 }
             }
         });
+
     }
 
 })();

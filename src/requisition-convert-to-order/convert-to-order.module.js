@@ -17,21 +17,20 @@
 
     'use strict';
 
-    angular
-        .module('requisition-acknowledge')
-        .config(routes);
-
-    routes.$inject = ['$stateProvider'];
-
-    function routes($stateProvider) {
-
-        $stateProvider.state('openlmis.requisitions.acknowledgeList', {
-            showInNavigation: true,
-            isOffline: true,
-            label: 'requisitionAcknowledge.acknowledge',
-            url: '/acknowledgeList?page&size&program&offline&sort',
-            templateUrl: 'requisition-acknowledge/requisition-acknowledge-list.html'
-        });
-    }
+    /**
+     * @module requisition-convert-to-order
+     *
+     * @description
+     * Responsible for requisition convert to order screen.
+     */
+    angular.module('requisition-convert-to-order', [
+        'requisition',
+        'openlmis-date',
+        'referencedata-facility',
+        'referencedata-program',
+        'openlmis-modal',
+        'openlmis-pagination',
+        'ui.router'
+    ]);
 
 })();
