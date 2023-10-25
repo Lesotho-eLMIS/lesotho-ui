@@ -70,8 +70,8 @@
                 <td>{{requisition.processingPeriod.startDate | openlmisDate}}</td>
                 <td>{{requisition.processingPeriod.endDate | openlmisDate}}</td>
                 <td>{{requisition.createdDate | openlmisDate}}</td>
-                <td ng-show="requisition.status=='Released'">Acknowledged</td>
-                <td ng-show="requisition.status!='Released'">{{requisition.status | requisitionStatus}}</td>
+                <td ng-show="requisition.status=='RELEASED'">Acknowledged</td>
+                <td ng-show="requisition.status!='RELEASED'">{{requisition.status | requisitionStatus}}</td>
                 <td class="col-emergency">
                     <i ng-class="{'icon-ok': requisition.emergency}"></i>
                 </td>
