@@ -17,22 +17,26 @@
 
     'use strict';
 
-    angular
-        .module('order')
-        .config(routes);
-
-    routes.$inject = ['$stateProvider'];
-
-    function routes($stateProvider) {
-
-        $stateProvider.state('openlmis.orders', {
-            abstract: true,
-            url: '/orders',
-            showInNavigation: false, //Removing Orders(Fulfill orders, Manage proof of delivery, View Orders) for Lesotho eLMIS
-            priority: 10,
-            label: 'order.orders',
-            template: '<div ui-view></div>'
-        });
-    }
+    /**
+     * @module requisition-search
+     *
+     * @description
+     * Responsible for managing requisition search screen.
+     */
+    angular.module('requisition-search', [
+        'openlmis-date',
+        'openlmis-modal',
+        'openlmis-local-storage',
+        'openlmis-pagination',
+        'referencedata-facility',
+        'requisition',
+        'requisition-constants',
+        'requisition-status-messages',
+        'ui.router',
+        'referencedata-supervisory-node',
+        'referencedata-requisition-group',
+        'referencedata-role',
+        'referencedata-user'
+    ]);
 
 })();

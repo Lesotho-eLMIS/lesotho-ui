@@ -17,19 +17,21 @@
 
     'use strict';
 
-    /**
-     * @module
-     *
-     * @description
-     * Responsible for managing requisition for acknowledge list screen.
-     */
-    angular.module('requisition-acknowledge', [
-        'requisition',
-        'openlmis-auth',
-        'openlmis-local-storage',
-        'openlmis-pagination',
-        'referencedata-program',
-        'ui.router',
-        'openlmis-feature-flag'
-    ]);
+    angular
+        .module('requisition-search')
+        .run(routes);
+
+    routes.$inject = ['loginService', 'requisitionSearchService'];
+
+    function routes(loginService, requisitionSearchService) {
+
+        loginService.registerPostLoginAction(function() {
+            requisitionSearchService.getFacilities();
+        });
+
+        loginService.registerPostLogoutAction(function() {
+            return requisitionSearchService.clearCachedFacilities();
+        });
+    }
+
 })();
