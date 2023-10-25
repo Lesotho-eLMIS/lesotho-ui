@@ -58,13 +58,13 @@
                     <th ng-if="vm.showReasonDropdown">{{vm.key('reason') | message}}</th>
                     <th ng-if="vm.showReasonDropdown">{{vm.key('reasonComments') | message}}</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">Reference Number</th>
-                    <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">Invoice Number</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Reference Number</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Invoice Number</th>
 
                     <th>{{vm.key('quantity') | message}}</th>
 
-                    <th ng-hide="vm.FromSupplier">{{vm.key('UnitPrice') | message}}</th>
-                    <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">Amount</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Unit Price</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Amount</th>
 
                     <th ng-if="vm.showVVMStatusColumn">{{vm.key('vvmStatus') | message}}</th>
                     <th>{{vm.key('date') | message}}</th>
