@@ -10,15 +10,21 @@
 <status-messages requisition="vm.requisition"></status-messages>
 
 <div>
-    <input type="checkbox" id="redistributionRadio">
-    <label for="redistributionRadio">Mark for redistribution</label>
-    <fieldset class="form-group">
-        <label for="requestingFacility">Supplying Facility</label>
-        <select id="requestingFacility"
-                ng-model="vm.requestingFacility"
-                ng-required="!vm.supplyingFacility"
-                ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
-    </fieldset>
+    <span>
+        <input type="checkbox" id="redistributionRadio">
+        <label for="redistributionRadio">Mark for redistribution</label>
+    </span>
+    
+    <span>
+        <fieldset class="form-group">
+            <label for="requestingFacility">Supplying Facility</label>
+            <select id="requestingFacility"
+                    ng-model="vm.requestingFacility"
+                    ng-required="!vm.supplyingFacility"
+                    ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
+        </fieldset>
+    </span>
+
 </div>
 
 <nav>
