@@ -31,7 +31,7 @@
         '$state', '$filter', '$stateParams', 'offlineService', 'localStorageFactory', 'confirmService'
     ];
 
-    function pointOfDeliveryManageController($state, $filter, $stateParams, facilities, offlineService, localStorageFactory,
+    function pointOfDeliveryManageController($state, $filter, $stateParams,  offlineService, localStorageFactory,
                                          confirmService) {
 
         var vm = this;
