@@ -28,7 +28,7 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter', '$stateParams', 'facilities', 'offlineService', 'localStorageFactory', 'confirmService'
+        '$state', '$filter', '$stateParams', 'offlineService', 'localStorageFactory', 'confirmService'
     ];
 
     function pointOfDeliveryManageController($state, $filter, $stateParams, facilities, offlineService, localStorageFactory,
