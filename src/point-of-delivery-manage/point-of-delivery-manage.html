@@ -6,7 +6,7 @@
         <select id="receivingFacility"
                 ng-model="vm.receivingFacility"
                 ng-required="!vm.supplyingFacility"
-                ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
+                ng-options="vm.facility.name"></select>
     </fieldset>
     <fieldset class="form-group">
         <label for="supplyingFacility">{{'proofOfDeliveryManage.supplyingFacility' | message}}</label>
