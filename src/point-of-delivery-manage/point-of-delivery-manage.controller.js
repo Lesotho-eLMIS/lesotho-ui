@@ -168,7 +168,7 @@
          */
         function onInit() {
             //vm.requisitions = requisitions;
-            vm.facilities = facilities;
+            //vm.facilities = facilities;
             //vm.statuses = REQUISITION_STATUS.$toList();
             console.log("######## Welcome TO POD #########");
             console.log($state);
