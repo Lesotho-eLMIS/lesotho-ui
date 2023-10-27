@@ -31,6 +31,14 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             label: 'pointOfDeliveryManage.title',
             //priority: 4,
             showInNavigation: true,
+            controller: 'pointOfDeliveryManageController',
+            controllerAs: 'vm'/*,
+            resolve: {
+                facilities: function(requisitionSearchService) {
+                    return requisitionSearchService.getFacilities();
+                },
+             
+            }*/
         });
     }
 })();
