@@ -28,10 +28,10 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter', '$stateParams', 'offlineService', 'localStorageFactory', 'confirmService'
+        '$state', '$filter', '$stateParams', 'facility','offlineService', 'localStorageFactory', 'confirmService'
     ];
 
-    function pointOfDeliveryManageController($state, $filter, $stateParams,  offlineService, localStorageFactory,
+    function pointOfDeliveryManageController($state, $filter, $stateParams, facility, offlineService, localStorageFactory,
                                          confirmService) {
 
         var vm = this;
@@ -41,6 +41,7 @@
         //vm.openRnr = openRnr;
         //vm.removeOfflineRequisition = removeOfflineRequisition;
         //vm.isOfflineDisabled = isOfflineDisabled;
+        vm.facility = facility;
 
         /**
          * @ngdoc property
@@ -171,7 +172,7 @@
             //vm.facilities = facilities;
             //vm.statuses = REQUISITION_STATUS.$toList();
             console.log("######## Welcome TO POD #########");
-            console.log($stateParams);
+            console.log(facility);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
            /*
             if ($stateParams.facility) {
