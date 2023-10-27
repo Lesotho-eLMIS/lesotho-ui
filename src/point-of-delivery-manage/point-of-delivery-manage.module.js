@@ -25,7 +25,8 @@
      */
     angular.module('point-of-delivery-manage', [
         'ui.router',
-        'openlmis-config'
+        'openlmis-config',
+        'referencedata-facility',
     ]);
 
 })();

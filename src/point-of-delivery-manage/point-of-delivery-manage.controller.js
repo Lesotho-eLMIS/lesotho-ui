@@ -173,7 +173,7 @@
             console.log("######## Welcome TO POD #########");
             console.log($state);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
-
+           /*
             if ($stateParams.facility) {
                 vm.selectedFacility = $filter('filter')(vm.facilities, {
                     id: $stateParams.facility
@@ -196,7 +196,7 @@
 
             if ($stateParams.requisitionStatus) {
                 vm.selectedStatus = $stateParams.requisitionStatus;
-            }
+            } */
         }
 
         /**
