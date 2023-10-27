@@ -2,9 +2,9 @@
 
 <form class="sidebar" ng-submit="vm.loadOrders()">
     <fieldset class="form-group">
-        <label for="requestingFacility">{{'proofOfDeliveryManage.requestingFacility' | message}}</label>
-        <select id="requestingFacility"
-                ng-model="vm.requestingFacility"
+        <label for="receivingFacility">{{'proofOfDeliveryManage.receivingFacility' | message}}</label>
+        <select id="receivingFacility"
+                ng-model="vm.receivingFacility"
                 ng-required="!vm.supplyingFacility"
                 ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
     </fieldset>

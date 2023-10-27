@@ -42,6 +42,7 @@
         //vm.removeOfflineRequisition = removeOfflineRequisition;
         //vm.isOfflineDisabled = isOfflineDisabled;
         vm.facility = facility;
+        vm.receivingFacility = undefined;
 
         /**
          * @ngdoc property
@@ -173,6 +174,7 @@
             //vm.statuses = REQUISITION_STATUS.$toList();
             console.log("######## Welcome TO POD #########");
             console.log(facility);
+            vm.receivingFacility = facility.name;
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
            /*
             if ($stateParams.facility) {
