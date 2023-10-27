@@ -171,7 +171,7 @@
             //vm.facilities = facilities;
             //vm.statuses = REQUISITION_STATUS.$toList();
             console.log("######## Welcome TO POD #########");
-            console.log($state);
+            console.log($stateParams);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
            /*
             if ($stateParams.facility) {
