@@ -43,9 +43,7 @@
         //vm.isOfflineDisabled = isOfflineDisabled;
         vm.facility = facility;
         vm.receivingFacility = undefined;
-        vm.homeFacilities = [
-            facility
-          ];
+        vm.homeFacilities = undefined;
 
         /**
          * @ngdoc property
@@ -175,6 +173,9 @@
             //vm.requisitions = requisitions;
             //vm.facilities = facilities;
             //vm.statuses = REQUISITION_STATUS.$toList();
+            vm.homeFacilities = [
+                facility
+              ];
             vm.receivingFacility = facility.name;
             console.log(homeFacilities);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
