@@ -36,10 +36,11 @@
 
         var vm = this;
 
+        vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.receivingFacility = undefined;
-        vm.homeFacilities = undefined;
+        
 
         /**
          * @ngdoc property
@@ -166,13 +167,13 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            vm.facilities = facilities;
+            
             vm.homeFacilities = [
                 facility
               ];
             vm.receivingFacility = facility.name;
             
-           console.log(facilities);
+           console.log(vm.supplyingFacilities);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
