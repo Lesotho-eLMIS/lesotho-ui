@@ -28,10 +28,10 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter', '$stateParams', 'facility','offlineService', 'localStorageFactory', 'confirmService','facilityService'
+        '$state', '$filter','$q', '$stateParams', 'facility','offlineService', 'localStorageFactory', 'confirmService','facilityService'
     ];
 
-    function pointOfDeliveryManageController($state, $filter, $stateParams, facility, offlineService, localStorageFactory,
+    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility, offlineService, localStorageFactory,
                                          confirmService, facilityService) {
 
         var vm = this;
@@ -175,11 +175,18 @@
                 facility
               ];
             vm.receivingFacility = facility.name;
+            var defer = $q.defer();
+
+            defer.promise.then(function(){
+                facilityService.query().then(function(response) {
+                    // Handle the resolved data here
+                    console.log(response.data);
+                  });
+                })
+
+            defer.resolve();
             console.log("##### Here We Go #####")
-            facilityService.query().then(function(response) {
-                // Handle the resolved data here
-                console.log(response.data);
-              });
+           
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
