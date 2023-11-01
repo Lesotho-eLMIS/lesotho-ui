@@ -40,7 +40,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                      
                       };
                       
-                      var queryParams = {
+                    var queryParams = {
                         "type":"warehouse"
                       };
 
@@ -48,8 +48,8 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
 
                     facilityService.query(paginationParams,queryParams).then(function (result) {
                         // Handle the result, which will be the facilities data
-                        console.log("Facilities:", result);
-                        return result;
+                        // console.log("Facilities:", result);
+                        return result.content;
                       })
                       .catch(function (error) {
                         // Handle any errors that may occur during the query
