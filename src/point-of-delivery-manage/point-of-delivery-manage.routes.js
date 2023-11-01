@@ -35,7 +35,15 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             controllerAs: 'vm',
             resolve: {
                 facilities: function(facilityService) {
-                    return facilityService.query();
+                    return facilityService.query().then(function (result) {
+                        // Handle the result, which will be the facilities data
+                        console.log("Facilities:", result);
+                        return result;
+                      })
+                      .catch(function (error) {
+                        // Handle any errors that may occur during the query
+                        console.error("Error:", error);
+                      });
                 },
                 facility: function($stateParams, facilityFactory) {
                     if (!$stateParams.facility) {
