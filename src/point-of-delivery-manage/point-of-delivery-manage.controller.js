@@ -172,7 +172,7 @@
                 facility
               ];
             vm.receivingFacility = facility.name;
-            
+           vm.supplyingFacilities = facilities;
            console.log(vm.supplyingFacilities);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
