@@ -35,16 +35,14 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             controllerAs: 'vm',
             resolve: {
                 facilities: function(facilityService) {
-                    var paginationParams = {
-                     
-                      };
+                    var paginationParams = {};
                       
                     var queryParams = {
                         "type":"warehouse"
                       };
                       return facilityService.query(paginationParams, queryParams)
                       .then(function(result) {
-                          // Handle the result, which will be the facilities data
+                          // Return Facilities of Type = Warehouse
                           return result.content;
                       })
                       .catch(function(error) {
@@ -56,6 +54,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     
                 },
                 facility: function($stateParams, facilityFactory) {
+                    // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
                     }
