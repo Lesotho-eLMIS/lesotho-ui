@@ -35,6 +35,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             controllerAs: 'vm',
             resolve: {
                 facilities: function(facilityService) {
+                    var supplyingFacilities;
 
                     var paginationParams = {
                      
@@ -49,12 +50,15 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     facilityService.query(paginationParams,queryParams).then(function (result) {
                         // Handle the result, which will be the facilities data
                         // console.log("Facilities:", result);
-                        return result.content;
+                        supplyingFacilities = result.content;
                       })
                       .catch(function (error) {
                         // Handle any errors that may occur during the query
                         console.error("Error:", error);
-                      });
+                    });
+
+                    console.log(supplyingFacilities);
+                    return supplyingFacilities;
                 },
                 facility: function($stateParams, facilityFactory) {
                     if (!$stateParams.facility) {
