@@ -28,19 +28,15 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter','$q', '$stateParams', 'facility','offlineService', 'localStorageFactory', 'confirmService','facilityService'
+        '$state', '$filter','$q', '$stateParams', 'facility','facilities','offlineService', 'localStorageFactory', 'confirmService','facilityService'
     ];
 
-    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility, offlineService, localStorageFactory,
-                                         confirmService, facilityService) {
+    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities, offlineService, localStorageFactory,
+                                         confirmService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        //vm.search = search;
-        //vm.openRnr = openRnr;
-        //vm.removeOfflineRequisition = removeOfflineRequisition;
-        //vm.isOfflineDisabled = isOfflineDisabled;
         vm.facility = facility;
         vm.receivingFacility = undefined;
         vm.homeFacilities = undefined;
@@ -170,23 +166,13 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            
+            vm.facilities = facilities;
             vm.homeFacilities = [
                 facility
               ];
             vm.receivingFacility = facility.name;
-            var defer = $q.defer();
-
-            defer.promise.then(function(){
-                facilityService.query().then(function(response) {
-                    // Handle the resolved data here
-                    console.log(response.data);
-                  });
-                })
-
-            defer.resolve();
-            console.log("##### Here We Go #####")
-           
+            
+           console.log(vm.facilities);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }

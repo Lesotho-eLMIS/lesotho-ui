@@ -34,9 +34,9 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             controller: 'pointOfDeliveryManageController',
             controllerAs: 'vm',
             resolve: {
-                /*facilities: function(requisitionSearchService) {
-                    return requisitionSearchService.getFacilities();
-                },*/
+                facilities: function(facilityService) {
+                    return facilityService.query();
+                },
                 facility: function($stateParams, facilityFactory) {
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
