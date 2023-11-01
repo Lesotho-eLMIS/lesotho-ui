@@ -179,7 +179,7 @@
             facilityService.query().then(function(response) {
                 // Handle the resolved data here
                 console.log(response.data);
-              })
+              });
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
