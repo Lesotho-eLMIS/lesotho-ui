@@ -28,11 +28,11 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter', '$stateParams', 'facility','offlineService', 'localStorageFactory', 'confirmService'
+        '$state', '$filter', '$stateParams', 'facility','offlineService', 'localStorageFactory', 'confirmService','facilityService'
     ];
 
     function pointOfDeliveryManageController($state, $filter, $stateParams, facility, offlineService, localStorageFactory,
-                                         confirmService) {
+                                         confirmService, facilityService) {
 
         var vm = this;
 
@@ -177,7 +177,7 @@
                 facility
               ];
             vm.receivingFacility = facility.name;
-            console.log(vm.homeFacilities);
+            console.log(facilityService.query());
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
            /*
             if ($stateParams.facility) {
