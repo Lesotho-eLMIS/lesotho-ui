@@ -35,7 +35,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             controllerAs: 'vm',
             resolve: {
                 facilities: function(facilityService) {
-                    return facilityService.query().then(function (result) {
+                    facilityService.query().then(function (result) {
                         // Handle the result, which will be the facilities data
                         console.log("Facilities:", result);
                         return result;
