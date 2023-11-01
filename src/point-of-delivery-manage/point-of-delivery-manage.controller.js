@@ -170,39 +170,18 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            //vm.requisitions = requisitions;
-            //vm.facilities = facilities;
-            //vm.statuses = REQUISITION_STATUS.$toList();
+            
             vm.homeFacilities = [
                 facility
               ];
             vm.receivingFacility = facility.name;
-            console.log(facilityService.query());
+            console.log("##### Here We Go #####")
+            facilityService.query().then(function(response) {
+                // Handle the resolved data here
+                console.log(response.data);
+              })
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
-           /*
-            if ($stateParams.facility) {
-                vm.selectedFacility = $filter('filter')(vm.facilities, {
-                    id: $stateParams.facility
-                })[0];
-            }
-
-            if (vm.selectedFacility && $stateParams.program) {
-                vm.selectedProgram = $filter('filter')(vm.selectedFacility.supportedPrograms, {
-                    id: $stateParams.program
-                })[0];
-            }
-
-            if ($stateParams.initiatedDateFrom) {
-                vm.startDate = $stateParams.initiatedDateFrom;
-            }
-
-            if ($stateParams.initiatedDateTo) {
-                vm.endDate = $stateParams.initiatedDateTo;
-            }
-
-            if ($stateParams.requisitionStatus) {
-                vm.selectedStatus = $stateParams.requisitionStatus;
-            } */
+          
         }
 
         /**
