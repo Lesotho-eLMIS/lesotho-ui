@@ -29,46 +29,27 @@
         .service('pointOfDeliveryManageService', pointOfDeliveryManageService);
 
         pointOfDeliveryManageService.$inject = ['facilityService',
-        'facilityFactory', 'authorizationService', '$q', 'localStorageService'
+        'facilityFactory', 'authorizationService', '$q', 'localStorageService','pointOfDeliveryManageResource'
     ];
 
     function pointOfDeliveryManageService(facilityService,facilityFactory, authorizationService, $q,
-                                       localStorageService) {
+                                       localStorageService,pointOfDeliveryManageResource) {
 
         var promise,
             POD_FACILITIES = 'pointOfDeliveryManageFacilities';
-
-        this.getFacilities = getFacilities;
-        this.clearCachedFacilities = clearCachedFacilities;
-
-        /**
-         * @ngdoc method9
-         * @methodOf requisition-search.requisitionSearchService
-         * @name getFacilities
-         *
-         * @description
-         * Prepares the list of facilities to be displayed on the Requisition Search view.
-         * 
-         * @return {Array}  the list of facilities based on both permission strings and role assignments for partner
-         *                  nodes
-         */
-        function getFacilities() {
-            if (promise) {
-                return promise;
-            }
-
+        this.submitPODEvent = submitPODEvent;
+        this.testService = testService;
         
-            var cachedFacilities = localStorageService.get(POD_FACILITIES);
-            if (cachedFacilities) {
-                promise = $q.resolve(angular.fromJson(cachedFacilities));
-            } else {
-                promise = $q
-                    .all([
-                        facilityService.query()
-                    ]);
-                    }
+        function submitPODEvent(event) {
 
-            return promise;
+            return pointOfDeliveryManageResource.create(event)
+                .then(function() {
+                    $rootScope.$emit('openlmis-referencedata.offline-events-indicator');
+                });
+        }
+
+        function testService(){
+            console.log("$$$$$$$$$$$$$$$$$$$$$$$$ Service Wired $$$$$$$$$$$$$$$$")
         }
 
         

@@ -28,11 +28,11 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter','$q', '$stateParams', 'facility','facilities','offlineService', 'localStorageFactory', 'confirmService','facilityService'
+        '$state', '$filter','$q', '$stateParams', 'facility','facilities','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService'
     ];
 
     function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities, offlineService, localStorageFactory,
-                                         confirmService) {
+                                         confirmService, pointOfDeliveryManageService) {
 
         var vm = this;
 
@@ -173,7 +173,7 @@
               ];
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;
-           
+            pointOfDeliveryManageService.testService();
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
