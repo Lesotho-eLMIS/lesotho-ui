@@ -29,14 +29,26 @@
         .service('pointOfDeliveryManageService', pointOfDeliveryManageService);
 
         pointOfDeliveryManageService.$inject = ['facilityService',
-        'facilityFactory', 'authorizationService', '$q', 'localStorageService','pointOfDeliveryManageResource'
+        'facilityFactory', 'authorizationService', '$q', 'localStorageService','$resource','openlmisUrlFactory','pointOfDeliveryManageResource'
     ];
 
     function pointOfDeliveryManageService(facilityService,facilityFactory, authorizationService, $q,
-                                       localStorageService,pointOfDeliveryManageResource) {
+                                       localStorageService,$resource,openlmisUrlFactory,pointOfDeliveryManageResource) {
 
         var promise,
             POD_FACILITIES = 'pointOfDeliveryManageFacilities';
+           // Using Resource to Communicate with POD Endpoints
+
+            var resource = $resource(openlmisUrlFactory('/api/podEvents:id'), {}, {
+                /*  get: {
+                    method: 'GET',
+                    transformResponse: transformGetResponse
+                }, */
+                savePODEvent: {
+                    url: openlmisUrlFactory('/api/podEvents'),
+                    method: 'POST'
+                }              
+            });
         this.submitPODEvent = submitPODEvent;
         this.testService = testService;
         
@@ -49,7 +61,7 @@
         }
 
         function testService(){
-            console.log("$$$$$$$$$$$$$$$$$$$$$$$$ Service Wired $$$$$$$$$$$$$$$$")
+            resource.savePODEvent({}); // Test Posting Function Call
         }
 
         

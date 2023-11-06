@@ -167,13 +167,25 @@
          * setting data to be available on the view.
          */
         function onInit() {
+            var event = {
+                "sourceId": "087e81f6-a74d-4bba-9d01-16e0d64e9609",
+                "sourceFreeText": "Tri-pharm",
+                "destinationId": "e6799d64-d10d-4011-b8c2-0e4d4a3f65ce",
+                "referenceNumber": "REF-0000123",
+                "packingDate": "2023-10-25",
+                "packedBy": "Ntate Ntsokoane",
+                "numberOfCartons": "2405",
+                "numberOfContainers": "6607",
+                "remarks": "Well received"
+              };
             
             vm.homeFacilities = [
                 facility
               ];
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;
-            pointOfDeliveryManageService.testService();
+            //pointOfDeliveryManageService.testService();
+            //pointOfDeliveryManageService.submitPODEvent(event)
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }

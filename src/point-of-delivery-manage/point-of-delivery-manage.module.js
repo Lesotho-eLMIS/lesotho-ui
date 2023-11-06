@@ -24,9 +24,15 @@
      * Provides point-of-delivery-manage state and controller.
      */
     angular.module('point-of-delivery-manage', [
+        'ngResource',
         'ui.router',
         'openlmis-config',
         'referencedata-facility',
+        'stockmanagement',
+        'openlmis-repository',
+        'openlmis-class-extender',
+        'referencedata-user',
+        'openlmis-urls'
     ]);
 
 })();

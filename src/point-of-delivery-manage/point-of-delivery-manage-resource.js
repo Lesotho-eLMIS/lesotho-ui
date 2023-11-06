@@ -14,32 +14,24 @@
  */
 
 (function() {
-
     'use strict';
-
-    /**
-     * @ngdoc service
-     * @name point-of-delivery-manage.pointOfDeliveryManageResource
-     *
-     * @description
-     * Communicates with the POD events endpoint of the OpenLMIS server.
-     */
+  
     angular
-        .module('point-of-delivery-manage')
-        .factory('pointOfDeliveryManageResource', pointOfDeliveryManageResource);
-
-        pointOfDeliveryManageResource.inject = ['OpenlmisResource', 'classExtender'];
-
+      .module('point-of-delivery-manage')
+      .factory('pointOfDeliveryManageResource', pointOfDeliveryManageResource);
+  
+    pointOfDeliveryManageResource.$inject = ['OpenlmisResource', 'classExtender'];
+  
     function pointOfDeliveryManageResource(OpenlmisResource, classExtender) {
-
-        classExtender.extend(pointOfDeliveryManageResource, OpenlmisResource);
-
-        return pointOfDeliveryManageResource;
-
-        function pointOfDeliveryManageResource() {
-            this.super('/api/podEvents', {
-                paginated: false
-            });
-        }
+      classExtender.extend(pointOfDeliveryManageResource, OpenlmisResource);
+  
+      function pointOfDeliveryManageResource() {
+        this.super('/api/podEvents', {
+          paginated: false
+        });
+      }
+  
+      return pointOfDeliveryManageResource;
     }
-})();
+  })();
+  
