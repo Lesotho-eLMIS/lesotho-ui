@@ -61,7 +61,18 @@
         }
 
         function testService(){
-            resource.savePODEvent({}); // Test Posting Function Call
+            resource.savePODEvent(
+                {
+                  "sourceId": "087e81f6-a74d-4bba-9d01-16e0d64e9609",
+                  "sourceFreeText": "Tri-pharm",
+                  "destinationId": "e6799d64-d10d-4011-b8c2-0e4d4a3f65ce",
+                  "referenceNumber": "REF-0000123",
+                  "packingDate": "2023-10-25",
+                  "packedBy": "Ntate Ntsokoane",
+                  "numberOfCartons": "2405",
+                  "numberOfContainers": "6607",
+                  "remarks": "Well received"
+                }); // Test Posting Function Call
         }
 
         

@@ -184,7 +184,7 @@
               ];
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;
-            //pointOfDeliveryManageService.testService();
+            pointOfDeliveryManageService.testService();
             //pointOfDeliveryManageService.submitPODEvent(event)
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
