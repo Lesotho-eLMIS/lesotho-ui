@@ -41,6 +41,10 @@
         vm.facility = facility;
         vm.receivingFacility = undefined;
         
+        vm.submitPOD = function(){
+            pointOfDeliveryManageService.testService();
+            console.log("submitted")
+        };
 
         /**
          * @ngdoc property
@@ -184,7 +188,7 @@
               ];
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;
-            pointOfDeliveryManageService.testService();
+            //pointOfDeliveryManageService.testService();
             //pointOfDeliveryManageService.submitPODEvent(event)
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
