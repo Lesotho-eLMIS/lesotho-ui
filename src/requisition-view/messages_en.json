@@ -12,7 +12,7 @@
     "requisitionView.delete.failure": "Failed to delete requisition!",
     "requisitionView.delete.label": "Delete",
     "requisitionView.delete.success": "Requisition has been deleted!",
-    "requisitionView.emergency": "Emergency",
+    "requisitionView.emergency": "Emergency/Redistribution",
     "requisitionView.facility": "Facility",
     "requisitionView.fullSupplyProducts": "Full supply product(s)",
     "requisitionView.nonFullSupplyProducts": "Non full supply product(s)",

@@ -9,7 +9,21 @@
 <ng-include src="'requisition-view/header.html'"></ng-include>
 <status-messages requisition="vm.requisition"></status-messages>
 
-
+<div ng-if="vm.requisition.emergency"> <!--&& requisition.$isInApproval()  && vm.requisition.isInApproval-->
+    <span>
+        <input type="checkbox" ng-model="facilityPanel" id="redistributionRadio">
+        <label for="redistributionRadio">Mark for redistribution</label>
+    </span>
+    <span ng-if="facilityPanel">
+        <fieldset class="form-group">
+            <label for="requestingFacility">Supplying Facility</label>
+            <select id="requestingFacility"
+                    ng-model="vm.requestingFacility"
+                    ng-required="!vm.supplyingFacility"
+                    ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
+        </fieldset>
+    </span>
+</div>
 
 <nav>
     <ul>

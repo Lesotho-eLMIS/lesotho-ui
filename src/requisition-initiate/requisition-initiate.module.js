@@ -18,15 +18,28 @@
     'use strict';
 
     /**
-     * @module redistribution
+     * @module requisition-initiate
      *
      * @description
-     * Provides redistribution state and controller.
+     * Responsible for initiate requisition screen.
      */
-    angular.module('redistribution', [
-        'ui.router',
-        'openlmis-config'
+    angular.module('requisition-initiate', [
+        'angular.filter',
+        'ngResource',
+        'requisition',
+        'requisition-constants',
+        'openlmis-i18n',
+        'openlmis-auth',
+        'openlmis-permissions',
+        'openlmis-date',
+        'openlmis-facility-program-select',
+        'openlmis-uuid',
+        'referencedata-facility',
+        'referencedata-period',
+        'openlmis-form',
+        'openlmis-modal',
+        'referencedata-program',
+        'ui.router'
     ]);
 
 })();
-

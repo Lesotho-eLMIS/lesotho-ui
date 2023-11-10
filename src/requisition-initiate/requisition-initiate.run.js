@@ -18,19 +18,16 @@
     'use strict';
 
     angular
-        .module('redistribution-create')
-        .config(routes);
+        .module('requisition-initiate')
+        .run(declareRights);
 
-routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'*/];
+    declareRights.$inject = ['facilityProgramCacheService', 'REQUISITION_RIGHTS'];
 
-    function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
-        $stateProvider.state('openlmis.redistribution.create', {
-            isOffline: true,
-            url: '/Create',
-            templateUrl: 'redistribution-create/redistribution-create_02.html',
-            label: 'redistributionCreate.label',
-            //priority: 4,
-            showInNavigation: true,
-        });
+    function declareRights(facilityProgramCacheService, REQUISITION_RIGHTS) {
+        facilityProgramCacheService.pushRightsForModule('requisition-initiate', [
+            REQUISITION_RIGHTS.REQUISITION_AUTHORIZE,
+            REQUISITION_RIGHTS.REQUISITION_CREATE
+        ]);
     }
+
 })();
