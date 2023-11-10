@@ -34,7 +34,7 @@
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
         'RequisitionStockCountDateModal', 'localStorageFactory', 'canSubmit', 'canAuthorize', 'canApproveAndReject',
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
-        'rejectionReasonModalService', '$q'
+        'rejectionReasonModalService', '$q', 'facilities'
     ];
 
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
@@ -43,10 +43,23 @@
                                        RequisitionWatcher, accessTokenFactory, messageService, stateTrackerService,
                                        RequisitionStockCountDateModal, localStorageFactory, canSubmit, canAuthorize,
                                        canApproveAndReject, canDelete, canSkip, canSync,
-                                       program, facility, processingPeriod, rejectionReasonModalService, $q) {
+                                       program, facility, processingPeriod, rejectionReasonModalService, $q, 
+                                       facilities) {
 
         var vm = this,
             watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-view.controller:RequisitionViewController
+         * @name facilities
+         * @type {Object}
+         *
+         * @description
+         * Holds facilities.
+         */
+        vm.facilities = undefined; //For Lesotho eLMIS
+
         /**
          * @ngdoc property
          * @propertyOf requisition-view.controller:RequisitionViewController
@@ -213,6 +226,7 @@
         vm.displaySyncButton = undefined;
 
         // Functions
+        vm.supplyingFacilities = facilities; //For Lesotho eLMIS
         vm.$onInit = onInit;
         vm.updateRequisition = updateRequisition;
         vm.syncRnr = syncRnr;
@@ -241,6 +255,7 @@
         function onInit() {
             setTypeAndClass();
             vm.program = program;
+            vm.supplyingFacilities = facilities; //For Lesotho eLMIS
             vm.facility = facility;
             vm.processingPeriod = processingPeriod;
             vm.displaySubmitButton = canSubmit && !vm.program.skipAuthorization;

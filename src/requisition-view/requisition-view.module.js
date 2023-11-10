@@ -31,6 +31,7 @@
         'openlmis-date',
         'openlmis-invalid',
         'openlmis-permissions',
+        'referencedata-facility',
         'requisition',
         'requisition-summary',
         'requisition-validation',

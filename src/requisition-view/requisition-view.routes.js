@@ -52,6 +52,23 @@
                 processingPeriod: function(periodService, requisition) {
                     return periodService.get(requisition.processingPeriod.id);
                 },
+                facilities: function(facilityService) {
+                    var paginationParams = {};
+                      
+                    var queryParams = {
+                        "type":"warehouse"
+                      };
+                      return facilityService.query(paginationParams, queryParams)
+                      .then(function(result) {
+                          // Return Facilities of Type = Warehouse
+                          return result.content;
+                      })
+                      .catch(function(error) {
+                          // Handle any errors that may occur during the query
+                          console.error("Error:", error);
+                          return [];
+                      });
+                },
                 facility: function(facilityService, requisition) {
                     return facilityService.get(requisition.facility.id);
                 },

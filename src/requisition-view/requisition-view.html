@@ -16,11 +16,11 @@
     </span>
     <span ng-if="facilityPanel">
         <fieldset class="form-group">
-            <label for="requestingFacility">Supplying Facility</label>
-            <select id="requestingFacility"
-                    ng-model="vm.requestingFacility"
-                    ng-required="!vm.supplyingFacility"
-                    ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
+            <label for="supplyingFacilities">Supplying Facility</label>
+            <select id="supplyingFacilities"
+                    ng-model="vm.supplyingFacilities"
+                    ng-required="!vm.requestingFacility"
+                    ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select>
         </fieldset>
     </span>
 </div>
