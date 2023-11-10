@@ -31,6 +31,37 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             label: 'pointOfDeliveryManage.title',
             //priority: 4,
             showInNavigation: true,
+            controller: 'pointOfDeliveryManageController',
+            controllerAs: 'vm',
+            resolve: {
+                facilities: function(facilityService) {
+                    var paginationParams = {};
+                      
+                    var queryParams = {
+                        "type":"warehouse"
+                      };
+                      return facilityService.query(paginationParams, queryParams)
+                      .then(function(result) {
+                          // Return Facilities of Type = Warehouse
+                          return result.content;
+                      })
+                      .catch(function(error) {
+                          // Handle any errors that may occur during the query
+                          console.error("Error:", error);
+                          return [];
+                      });
+
+                    
+                },
+                facility: function($stateParams, facilityFactory) {
+                    // Load the current User's Assigned Facility
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
+                }
+             
+            }
         });
     }
 })();

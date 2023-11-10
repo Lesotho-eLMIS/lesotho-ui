@@ -17,23 +17,30 @@
 
     'use strict';
 
-    /**
-     * @module point-of-delivery-manage
-     *
-     * @description
-     * Provides point-of-delivery-manage state and controller.
-     */
-    angular.module('point-of-delivery-manage', [
-        'ngResource',
-        'ui.router',
-        'openlmis-config',
-        'referencedata-facility',
-        'stockmanagement',
-        'openlmis-repository',
-        'openlmis-class-extender',
-        'referencedata-user',
-        'openlmis-urls'
-    ]);
+    angular
+        .module('requisition-view')
+        .factory('RequisitionStockCountDateModal', RequisitionStockCountDateModalFactory);
+
+    RequisitionStockCountDateModalFactory.$inject = ['openlmisModalService'];
+
+    function RequisitionStockCountDateModalFactory(openlmisModalService) {
+
+        return StockCountDateModal;
+
+        function StockCountDateModal(requisition) {
+            return openlmisModalService.createDialog({
+                controller: 'RequisitionStockCountDateModalController',
+                controllerAs: 'vm',
+                templateUrl: 'requisition-view/requisition-stock-count-date-modal.html',
+                show: true,
+                resolve: {
+                    requisition: function() {
+                        return requisition;
+                    }
+                }
+            }).promise;
+        }
+
+    }
 
 })();
-

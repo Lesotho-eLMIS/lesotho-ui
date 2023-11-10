@@ -10,5 +10,6 @@
   "pointOfDeliveryManage.numberOfContainers": "Number of Containers",
   "pointOfDeliveryManage.receivedBy": "Received By",
   "pointOfDeliveryManage.receivedDate": "Receiving Date",
-  "pointOfDeliveryManage.submit": "Submit"
+  "pointOfDeliveryManage.submit": "Submit",
+  "proofOfDeliveryManage.receivingFacility":"Receiving Facility"
 }

@@ -2,11 +2,11 @@
 
 <form class="sidebar" ng-submit="vm.loadOrders()">
     <fieldset class="form-group">
-        <label for="requestingFacility">{{'proofOfDeliveryManage.requestingFacility' | message}}</label>
-        <select id="requestingFacility"
-                ng-model="vm.requestingFacility"
+        <label for="receivingFacility">{{'proofOfDeliveryManage.receivingFacility' | message}}</label>
+        <select id="receivingFacility"
+                ng-model="vm.receivingFacility"
                 ng-required="!vm.supplyingFacility"
-                ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
+                ng-options="facility.name for facility in vm.homeFacilities"></select>
     </fieldset>
     <fieldset class="form-group">
         <label for="supplyingFacility">{{'proofOfDeliveryManage.supplyingFacility' | message}}</label>
@@ -15,17 +15,6 @@
                 ng-required="!vm.requestingFacility"
                 ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select>
     </fieldset>
-
-    <fieldset class="form-group">
-        <label for="searchFor">{{'pointOfDeliveryManage.receivedBy' | message}}</label>
-        <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
-    </fieldset>
-    
-    <fieldset class="form-group">
-        <label for="searchFor">{{'pointOfDeliveryManage.receivedDate' | message}}</label>
-        <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
-    </fieldset>
-    <!--<input type="submit" value="{{'proofOfDeliveryManage.search' | message}}"/>-->
 </form>
 <form class="content" ng-submit="vm.search()" openlmis-table-filter>
     <fieldset class="form-group">
@@ -61,7 +50,7 @@
         </fieldset>
         
         <fieldset class="form-group">
-            <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}"/>
+            <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}" ng-click="vm.submitPOD()"/>
         </fieldset>
         
     </fieldset>

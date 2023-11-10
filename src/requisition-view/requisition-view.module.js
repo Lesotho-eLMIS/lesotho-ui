@@ -18,22 +18,25 @@
     'use strict';
 
     /**
-     * @module point-of-delivery-manage
+     * @module requisition-view
      *
      * @description
-     * Provides point-of-delivery-manage state and controller.
+     * Responsible for requisition view screen.
      */
-    angular.module('point-of-delivery-manage', [
-        'ngResource',
-        'ui.router',
-        'openlmis-config',
-        'referencedata-facility',
-        'stockmanagement',
-        'openlmis-repository',
-        'openlmis-class-extender',
-        'referencedata-user',
-        'openlmis-urls'
+    angular.module('requisition-view', [
+        'openlmis-templates',
+        'openlmis-i18n',
+        'openlmis-state-tracker',
+        'openlmis-modal',
+        'openlmis-date',
+        'openlmis-invalid',
+        'openlmis-permissions',
+        'requisition',
+        'requisition-summary',
+        'requisition-validation',
+        'requisition-status-messages',
+        'requisition-view-tab',
+        'ui.router'
     ]);
 
 })();
-
