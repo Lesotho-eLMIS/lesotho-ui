@@ -40,6 +40,7 @@
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.receivingFacility = undefined;
+
         vm.POD = {};
      
     
@@ -195,8 +196,8 @@
          * setting data to be available on the view.
          */
         function onInit() {
-                 
-            vm.homeFacilities = [
+
+          vm.homeFacilities = [
                 facility
               ];
             vm.receivingFacility = facility.name;

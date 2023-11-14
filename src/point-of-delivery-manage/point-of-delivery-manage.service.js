@@ -53,7 +53,7 @@
         this.sendPayload = sendPayload;
         
         function sendPayload(payloadData){
-            resource.savePODEvent(payloadData)
+            resource.savePODEvent(payloadData)       
         }
 
         
