@@ -49,7 +49,7 @@
                 var sourceId = vm.supplyingFacility.id;
                 var destinationId = vm.receivingFacility.id;
                 var referenceNumber = vm.POD.referenceNo;
-                var packingDate = vm.POD.packingDate;
+                var packingDate = vm.proofOfDelivery.receivedDate;
                 var packedBy = vm.POD.packedBy;
                 var numberOfCartons = vm.POD.numberOfCartons;
                 var numberOfContainers = vm.POD.numberOfContainers;
