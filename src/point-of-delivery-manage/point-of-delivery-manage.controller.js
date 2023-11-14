@@ -40,10 +40,34 @@
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.receivingFacility = undefined;
-        
-        vm.submitPOD = function(){
-            pointOfDeliveryManageService.testService();
-            console.log("submitted")
+        vm.POD = {};
+     
+    
+        vm.submitPOD = function () {
+
+                var sourceId = vm.supplyingFacility.id;
+                var destinationId = vm.receivingFacility.id;
+                var referenceNumber = vm.POD.referenceNo;
+                var packingDate = vm.POD.packingDate;
+                var packedBy = vm.POD.packedBy;
+                var numberOfCartons = vm.POD.numberOfCartons;
+                var numberOfContainers = vm.POD.numberOfContainers;
+                var remarks = vm.POD.remarks;
+
+              
+                var payloadData = {
+                    sourceId:sourceId,
+                    destinationId:destinationId,
+                    referenceNumber:referenceNumber,
+                    packingDate:packingDate,
+                    packedBy:packedBy,
+                    numberOfCartons:numberOfCartons,
+                    numberOfContainers:numberOfContainers,
+                    remarks:remarks
+                };
+
+            pointOfDeliveryManageService.sendPayload(payloadData);
+            console.log("submitted");
         };
 
         /**
@@ -171,25 +195,12 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            var event = {
-                "sourceId": "087e81f6-a74d-4bba-9d01-16e0d64e9609",
-                "sourceFreeText": "Tri-pharm",
-                "destinationId": "e6799d64-d10d-4011-b8c2-0e4d4a3f65ce",
-                "referenceNumber": "REF-0000123",
-                "packingDate": "2023-10-25",
-                "packedBy": "Ntate Ntsokoane",
-                "numberOfCartons": "2405",
-                "numberOfContainers": "6607",
-                "remarks": "Well received"
-              };
-            
+                 
             vm.homeFacilities = [
                 facility
               ];
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;
-            //pointOfDeliveryManageService.testService();
-            //pointOfDeliveryManageService.submitPODEvent(event)
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }

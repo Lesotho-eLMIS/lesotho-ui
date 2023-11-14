@@ -16,41 +16,41 @@
                 ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select>
     </fieldset>
 </form>
-<form class="content" ng-submit="vm.search()" openlmis-table-filter>
+<form class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>
     <fieldset class="form-group">
 
         <fieldset class="form-group">
-            <label for="searchFor">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
-            <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
+            <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
+            <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50"/>
         </fieldset>
         
         <fieldset class="form-group">
-            <label for="searchFor">{{'pointOfDeliveryManage.packingDate' | message}}</label>
+            <label for="receivedDate">{{'pointOfDeliveryManage.packingDate' | message}}</label>
             <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
         </fieldset>
         
         <fieldset class="form-group">
-            <label for="searchFor">{{'pointOfDeliveryManage.packedBy' | message}}</label>
-            <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
+            <label for="packedBy">{{'pointOfDeliveryManage.packedBy' | message}}</label>
+            <input id="packedBy" type="text" ng-model="vm.POD.packedBy" maxlength="50"/>
         </fieldset>
         
         <fieldset class="form-group">
-            <label for="searchFor">{{'pointOfDeliveryManage.numberOfCartons' | message}}</label>
-            <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
+            <label for="numberOfCartons">{{'pointOfDeliveryManage.numberOfCartons' | message}}</label>
+            <input id="numberOfCartons" type="text" ng-model="vm.POD.numberOfCartons" maxlength="50"/>
         </fieldset>
         
         <fieldset class="form-group">
-            <label for="searchFor">{{'pointOfDeliveryManage.numberOfContainers' | message}}</label>
-            <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
+            <label for="numberOfContainers">{{'pointOfDeliveryManage.numberOfContainers' | message}}</label>
+            <input id="numberOfContainers" type="text" ng-model="vm.POD.numberOfContainers" maxlength="50"/>
         </fieldset> 
 
         <fieldset class="form-group">
-            <label for="searchFor">{{'pointOfDeliveryManage.remarks' | message}}</label>
-            <textarea id="searchFor" type="text" ng-model="vm.keyword" rows="3" cols="50"></textarea>
+            <label for="remarks">{{'pointOfDeliveryManage.remarks' | message}}</label>
+            <textarea id="remarks" type="text" ng-model="vm.POD.remarks" rows="3" cols="50"></textarea>
         </fieldset>
         
         <fieldset class="form-group">
-            <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}" ng-click="vm.submitPOD()"/>
+            <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}"/>
         </fieldset>
         
     </fieldset>
