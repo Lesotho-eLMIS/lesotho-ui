@@ -40,10 +40,10 @@
            // Using Resource to Communicate with POD Endpoints
 
             var resource = $resource(openlmisUrlFactory('/api/podEvents:id'), {}, {
-                /*  get: {
-                    method: 'GET',
-                    transformResponse: transformGetResponse
-                }, */
+                get: {
+                    url: openlmisUrlFactory('/api/podEvents'),
+                    method: 'GET'
+                }, 
                 savePODEvent: {
                     url: openlmisUrlFactory('/api/podEvents'),
                     method: 'POST'
@@ -51,10 +51,27 @@
             });
  
         this.sendPayload = sendPayload;
+        this.getPODs = getPODs; 
         
         function sendPayload(payloadData){
             resource.savePODEvent(payloadData)       
         }
+        // Getting all PODs for facility with given destinationId
+        function getPODs(){
+            var params = {
+                destinationId: '48794f3d-2842-4d58-83d9-bd07d0fde594'
+            }
+            return resource.get(params).$promise.then(function(response) {
+                // Transforming the response to an object if it's an array
+                if (Array.isArray(response)) {
+                    console.log(response);
+                    return { data: response }; // Wrap the array in an object property
+                }
+                return response; // Return the response as is if it's not an array
+            });
+        }
+
+
 
         
     }
