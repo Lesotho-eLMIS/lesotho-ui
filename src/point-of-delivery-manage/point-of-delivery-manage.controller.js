@@ -196,8 +196,10 @@
          * setting data to be available on the view.
          */
         function onInit() {
-
-          vm.homeFacilities = [
+            // Test the Get POD function
+            var pods = pointOfDeliveryManageService.getPODs();
+            console.log(pods)
+            vm.homeFacilities = [
                 facility
               ];
             vm.receivingFacility = facility.name;

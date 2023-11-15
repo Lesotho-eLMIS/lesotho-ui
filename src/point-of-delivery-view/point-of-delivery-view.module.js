@@ -25,7 +25,15 @@
      */
     angular.module('point-of-delivery-view', [
         'ui.router',
-        'openlmis-config'
+        'openlmis-config',
+        'referencedata-facility',
+        'point-of-delivery-manage',
+        'ngResource',
+        'stockmanagement',
+        'openlmis-repository',
+        'openlmis-class-extender',
+        'referencedata-user',
+        'openlmis-urls'
     ]);
 
 })();
