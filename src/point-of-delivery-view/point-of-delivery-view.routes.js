@@ -65,8 +65,9 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     }
                     return $stateParams.facility;
                 }
-             
             }
         });
-    }
+       
+     }
 })();
+  

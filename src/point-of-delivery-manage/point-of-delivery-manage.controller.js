@@ -28,11 +28,11 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter','$q', '$stateParams', 'facility','facilities','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService'
-    ];
+        '$state', '$filter','$q', '$stateParams', 'facility','facilities','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService', 
+        '$scope'];
 
     function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities, offlineService, localStorageFactory,
-                                         confirmService, pointOfDeliveryManageService) {
+                                         confirmService, pointOfDeliveryManageService, $scope ) {
 
         var vm = this;
 
@@ -40,7 +40,7 @@
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.receivingFacility = undefined;
-
+     
         vm.POD = {};
      
     
@@ -71,6 +71,8 @@
             console.log("submitted");
         };
 
+
+        
         /**
          * @ngdoc property
          * @propertyOf requisition-search.controller:RequisitionViewController
@@ -196,9 +198,7 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            // Test the Get POD function
-            var pods = pointOfDeliveryManageService.getPODs();
-            console.log(pods)
+
             vm.homeFacilities = [
                 facility
               ];
@@ -207,6 +207,22 @@
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
+
+        
+        // Handle the promise resolution
+        var sendToView = pointOfDeliveryManageService.getPODs();
+
+        console.log("I broke it!!");
+               
+        sendToView.then(function(resolvedObject) {
+        // Assign the resolved object to a scope variable
+            $scope.dataObject = resolvedObject;
+        })
+        .catch(function(error) {
+         // Handle errors
+             console.error('Error in controller:', error);
+            });
+                
 
         /**
          * @ngdoc method
