@@ -93,9 +93,8 @@
          * setting data to be available on the view.
          */
 
-       //vm.testId = undefined;
-
-       vm.homeFacilities = [ facility ];
+     
+        vm.homeFacilities = [ facility ];
 
         function onInit() {
 
@@ -103,18 +102,15 @@
             //     facility
             //   ];
             vm.receivingFacility = facility.name;
-            console.log("Receiving Facility is: " + vm.receivingFacility);      
-
-            vm.supplyingFacilities = facilities;
-            
-
+            vm.supplyingFacilities = facilities;        
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
 
-         // Handle the promise resolution
+         
         var sendToView = pointOfDeliveryManageService.getPODs(facility.id);
 
+       // Handle the promise resolution
         sendToView.then(function(resolvedObject) {
         // Assign the resolved object to a scope variable
             $scope.dataObject = resolvedObject;

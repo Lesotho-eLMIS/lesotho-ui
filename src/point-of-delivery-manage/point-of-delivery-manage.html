@@ -19,40 +19,27 @@
 <form class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>
     <fieldset class="form-group">
 
-        <fieldset class="form-group">
-            <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
-            <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50"/>
-        </fieldset>
+        <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
+        <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50"/>
+               
+        <label for="receivedDate">{{'pointOfDeliveryManage.packingDate' | message}}</label>
+        <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
         
-        <fieldset class="form-group">
-            <label for="receivedDate">{{'pointOfDeliveryManage.packingDate' | message}}</label>
-            <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
-        </fieldset>
         
-        <fieldset class="form-group">
-            <label for="packedBy">{{'pointOfDeliveryManage.packedBy' | message}}</label>
-            <input id="packedBy" type="text" ng-model="vm.POD.packedBy" maxlength="50"/>
-        </fieldset>
+        <label for="packedBy">{{'pointOfDeliveryManage.packedBy' | message}}</label>
+        <input id="packedBy" type="text" ng-model="vm.POD.packedBy" maxlength="50"/>
         
-        <fieldset class="form-group">
-            <label for="numberOfCartons">{{'pointOfDeliveryManage.numberOfCartons' | message}}</label>
-            <input id="numberOfCartons" type="text" ng-model="vm.POD.numberOfCartons" maxlength="50"/>
-        </fieldset>
+        <label for="numberOfCartons">{{'pointOfDeliveryManage.numberOfCartons' | message}}</label>
+        <input id="numberOfCartons" type="text" ng-model="vm.POD.numberOfCartons" maxlength="50"/>
+                
+        <label for="numberOfContainers">{{'pointOfDeliveryManage.numberOfContainers' | message}}</label>
+        <input id="numberOfContainers" type="text" ng-model="vm.POD.numberOfContainers" maxlength="50"/>
         
-        <fieldset class="form-group">
-            <label for="numberOfContainers">{{'pointOfDeliveryManage.numberOfContainers' | message}}</label>
-            <input id="numberOfContainers" type="text" ng-model="vm.POD.numberOfContainers" maxlength="50"/>
-        </fieldset> 
-
-        <fieldset class="form-group">
-            <label for="remarks">{{'pointOfDeliveryManage.remarks' | message}}</label>
-            <textarea id="remarks" type="text" ng-model="vm.POD.remarks" rows="3" cols="50"></textarea>
-        </fieldset>
+        <label for="remarks">{{'pointOfDeliveryManage.remarks' | message}}</label>
+        <textarea id="remarks" type="text" ng-model="vm.POD.remarks" rows="3" cols="50"></textarea>
         
-        <fieldset class="form-group">
-            <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}" ng-click="vm.submitPOD()"/>
-        </fieldset>
-        
+        <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}"/>
+                
     </fieldset>
 </form>
 
