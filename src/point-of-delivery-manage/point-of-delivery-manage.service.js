@@ -52,9 +52,13 @@
             });
  
         this.sendPayload = sendPayload;
-        this.getPODs = function(){
+        this.getPODs = function(testID){
+
+            console.log("In service getting destination id: " + testID);
+
+
             var params = {
-                         destinationId: '48794f3d-2842-4d58-83d9-bd07d0fde594'
+                         destinationId: testID //'48794f3d-2842-4d58-83d9-bd07d0fde594'
                     }
                 return resource.get(params).$promise.then(function(response) {
                     // Transforming the response to an object if it's an array

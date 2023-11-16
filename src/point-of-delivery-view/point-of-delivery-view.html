@@ -1,4 +1,4 @@
-<h2>{{ 'pointOfDeliveryView.title' | message }}</h2>
+<h2>{{'pointOfDeliveryView.deliveriesAt' | message: {'facility':  vm.receivingFacility} }}</h2>
 
 <section class="openlmis-table-container">
     <table>
@@ -20,7 +20,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="item in dataObject">
-                <td>{{vm.receivingFacility}}</td>
+                <td>{{item.facility}}</td>
                 <td>{{item.referenceNumber}}</td>
                 <td>{{item.packingDate}}</td>
                 <td>{{item.packedBy}}</td>

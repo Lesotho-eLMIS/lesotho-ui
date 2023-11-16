@@ -1,14 +1,15 @@
 {
-  "pointOfDeliveryView.title": "View Deliveries",
+  "pointOfDeliveryView.deliveriesAt": "View Deliveries at ${facility}",
+  "pointOfDeliveryView.facility": "Supplying Facility",
   "pointOfDeliveryView.label": "View",
-  "pointOfDeliveryView.facility": "Facility",
-  "pointOfDeliveryView.referenceNo": "Reference Number",
-  "pointOfDeliveryView.packingDate": "Packing Date",
-  "pointOfDeliveryView.packedBy": "Packed By",
-  "pointOfDeliveryView.numberOfCartons": "Number of Cartons",
+  "pointOfDeliveryView.numberOfCartons": "Number of Cartons",  
   "pointOfDeliveryView.numberOfContainers": "Number of Containers",
+  "pointOfDeliveryView.packedBy": "Packed By",
+  "pointOfDeliveryView.packingDate": "Packing Date",  
   "pointOfDeliveryView.receivedBy": "Received By",
   "pointOfDeliveryView.receivedDate": "Receiving Date",
+  "pointOfDeliveryView.referenceNo": "Reference Number",
   "pointOfDeliveryView.remarks": "Remarks",
-  "pointOfDeliveryView.submit": "Submit"
+  "pointOfDeliveryView.submit": "Submit",
+  "pointOfDeliveryView.title": "View Deliveries"
 }

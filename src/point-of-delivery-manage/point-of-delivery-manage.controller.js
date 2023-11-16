@@ -39,7 +39,7 @@
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
-        vm.receivingFacility = undefined;
+     //   vm.receivingFacility = undefined;
      
         vm.POD = {};
      
@@ -92,21 +92,28 @@
          * Initialization method called after the controller has been created. Responsible for
          * setting data to be available on the view.
          */
+
+       //vm.testId = undefined;
+
+       vm.homeFacilities = [ facility ];
+
         function onInit() {
 
-            vm.homeFacilities = [
-                facility
-              ];
+            // vm.homeFacilities = [
+            //     facility
+            //   ];
             vm.receivingFacility = facility.name;
-            console.log(facility.name);
+            console.log("Receiving Facility is: " + vm.receivingFacility);      
+
             vm.supplyingFacilities = facilities;
+            
+
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
 
-        
-        // Handle the promise resolution
-        var sendToView = pointOfDeliveryManageService.getPODs();
+         // Handle the promise resolution
+        var sendToView = pointOfDeliveryManageService.getPODs(facility.id);
 
         sendToView.then(function(resolvedObject) {
         // Assign the resolved object to a scope variable
