@@ -9,5 +9,6 @@
   "pointOfDeliveryView.numberOfContainers": "Number of Containers",
   "pointOfDeliveryView.receivedBy": "Received By",
   "pointOfDeliveryView.receivedDate": "Receiving Date",
+  "pointOfDeliveryView.remarks": "Remarks",
   "pointOfDeliveryView.submit": "Submit"
 }

@@ -63,10 +63,8 @@
                             var objectOfObjects = response.reduce((result, obj) => {
                             result[obj.id] = obj;
                             return result;
-                          }, {});
-                          
-                          console.log("Just created these objects to return of length: " + Object.keys(objectOfObjects).length);
-    
+                          }, {});                          
+  
                         return objectOfObjects; 
                         
                     }
