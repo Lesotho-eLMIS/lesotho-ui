@@ -2,7 +2,7 @@
 
 <section class="openlmis-table-container">
     <table>
-        <caption ng-if="!dataObject">
+        <caption ng-if="!PODEvents">
             {{pointOfDeliveryView.title}}
         </caption>
         <thead>
@@ -19,8 +19,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in dataObject">
-                <td>{{item.facility}}</td>
+            <tr ng-repeat="item in PODEvents">
+                <td>{{item.sourceName}}</td>
                 <td>{{item.referenceNumber}}</td>
                 <td>{{item.packingDate}}</td>
                 <td>{{item.packedBy}}</td>
