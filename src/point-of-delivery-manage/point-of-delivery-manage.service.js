@@ -52,75 +52,30 @@
             });
  
         this.sendPayload = sendPayload;
-        this.getPODs = function(){
+        this.getPODs = function(receivingFacilityId){
+            
             var params = {
-                         destinationId: '48794f3d-2842-4d58-83d9-bd07d0fde594'
+                         destinationId: receivingFacilityId //'48794f3d-2842-4d58-83d9-bd07d0fde594'
                     }
                 return resource.get(params).$promise.then(function(response) {
                     // Transforming the response to an object if it's an array
                     if (Array.isArray(response)) {
-                        console.log(response);
-                        console.log("Pushing response of lenght: " + response.length + " into pushit");
-    
-                        
-    
-                        var objectOfObjects = response.reduce((result, obj) => {
+                                  
+                            var objectOfPODs = response.reduce((result, obj) => {
                             result[obj.id] = obj;
                             return result;
-                          }, {});
-                          
-                          console.log("Just created these objects to return of length: " + Object.keys(objectOfObjects).length);
-    
-                        return objectOfObjects; //{ pushit: response }; // Wrap the array in an object property
+                          }, {});                          
+  
+                        return objectOfPODs; 
                         
                     }
-    
-    
-                        //return { pushit: response }; // Wrap the array in an object property
-                        
-                   // }
-                    console.log("Does it run here?");
-                    return response; // Return the response as is if it's not an array
+                    return response; 
                 });
             }
-        //getPODs; 
-        
+          
         function sendPayload(payloadData){
             resource.savePODEvent(payloadData);
         }
-        // Getting all PODs for facility with given destinationId
-        // function getPODs(){
-        //     var params = {
-        //         destinationId: '48794f3d-2842-4d58-83d9-bd07d0fde594'
-        //     }
-        //     return resource.get(params).$promise.then(function(response) {
-        //         // Transforming the response to an object if it's an array
-        //         if (Array.isArray(response)) {
-        //             console.log(response);
-        //             console.log("Pushing response of lenght: " + response.length + " into pushit");
-
-                    
-
-        //             var objectOfObjects = response.reduce((result, obj) => {
-        //                 result[obj.id] = obj;
-        //                 return result;
-        //               }, {});
-                      
-        //               console.log("Just created these objects to return: " + objectOfObjects);
-
-        //             return objectOfObjects; //{ pushit: response }; // Wrap the array in an object property
-                    
-        //         }
-
-
-        //             //return { pushit: response }; // Wrap the array in an object property
-                    
-        //        // }
-        //         console.log("Does it run here?");
-        //         return response; // Return the response as is if it's not an array
-        //     });
-        // }
-
         
     }
 })();

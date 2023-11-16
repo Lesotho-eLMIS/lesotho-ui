@@ -1,26 +1,26 @@
-<h2>{{ 'pointOfDeliveryView.title' | message }}</h2>
+<h2>{{'pointOfDeliveryView.deliveriesAt' | message: {'facility':  vm.receivingFacility} }}</h2>
 
 <section class="openlmis-table-container">
     <table>
-        <caption ng-if="!vm.pushit.length">
-            Point of Delivery View
+        <caption ng-if="!PODEvents">
+            {{pointOfDeliveryView.title}}
         </caption>
         <thead>
             <tr>
-                <th>Facility</th>
-                <th>Reference Number</th>
-                <th>Packing Date</th>
-                <th>Packed By</th>
-				<th>Number of Cartons</th>
-				<th>Number of Containers</th>
-                <th>Received By</th>
-                <th>Remarks</th>
-                <th class="col-sticky sticky-right">Received Date</th>
+                <th>{{'pointOfDeliveryView.facility' | message}}</th>
+                <th>{{'pointOfDeliveryView.referenceNo' | message}}</th>
+                <th>{{'pointOfDeliveryView.packingDate' | message}}</th>
+                <th>{{'pointOfDeliveryView.packedBy' | message}}</th>
+				<th>{{'pointOfDeliveryView.numberOfCartons' | message}}</th>
+				<th>{{'pointOfDeliveryView.numberOfContainers' | message}}</th>
+                <th>{{'pointOfDeliveryView.receivedBy' | message}}</th>
+                <th>{{'pointOfDeliveryView.remarks' | message}}</th>
+                <th class="col-sticky sticky-right">{{'pointOfDeliveryView.receivedDate' | message}}</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in dataObject">
-                <td>{{item.sourceId}}</td>
+            <tr ng-repeat="item in PODEvents">
+                <td>{{item.sourceName}}</td>
                 <td>{{item.referenceNumber}}</td>
                 <td>{{item.packingDate}}</td>
                 <td>{{item.packedBy}}</td>
@@ -33,34 +33,4 @@
         </tbody>
     </table>
 </section>
-<!--
-<form ng-submit="vm.search()" openlmis-table-filter>
-    <fieldset class="form-group">
-        <label for="searchFor">{{'pointOfDelivery.facility' | message}}</label>
-        <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
-        
-        <label for="searchFor">{{'pointOfDelivery.referenceNo' | message}}</label>
-        <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
-        
-        <label for="searchFor">{{'pointOfDelivery.packingDate' | message}}</label>
-        <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
-        
-        <label for="searchFor">{{'pointOfDelivery.packedBy' | message}}</label>
-        <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
-        
-        <label for="searchFor">{{'pointOfDelivery.numberOfCartons' | message}}</label>
-        <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
-        
-        <label for="searchFor">{{'pointOfDelivery.numberOfContainers' | message}}</label>
-        <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
-        
-        <label for="searchFor">{{'pointOfDelivery.receivedBy' | message}}</label>
-        <input id="searchFor" type="text" ng-model="vm.keyword" maxlength="50"/>
-        
-        <label for="searchFor">{{'pointOfDelivery.receivedDate' | message}}</label>
-        <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
-        
-        <input type="submit" value="{{'pointOfDelivery.submit' | message}}"/>
-    </fieldset>
-</form>  -->
 

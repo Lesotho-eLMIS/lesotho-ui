@@ -28,10 +28,10 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter','$q', '$stateParams', 'facility','facilities','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService', 
+        '$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService', 
         '$scope'];
 
-    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities, offlineService, localStorageFactory,
+    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
                                          confirmService, pointOfDeliveryManageService, $scope ) {
 
         var vm = this;
@@ -39,7 +39,7 @@
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
-        vm.receivingFacility = undefined;
+     //   vm.receivingFacility = undefined;
      
         vm.POD = {};
      
@@ -68,10 +68,114 @@
                 };
 
             pointOfDeliveryManageService.sendPayload(payloadData);
-            console.log("submitted");
         };
+        
+       /*
+        vm.getSupplyingFacilityName = function(supplyingFacilityId){
+
+            var paginationParams = {};
+                      
+            var queryParams = {
+                 "id":supplyingFacilityId
+                };
+            var facilityObject = facilityService.query(paginationParams, queryParams)
+            facilityObject.then(function(result) {
+                          // Return Facility Name
+                          console.log(result.content.name);
+                          return result.content.name;
+                })
+                .catch(function(error) {
+                          // Handle any errors that may occur during the query
+                          console.error("Error:", error);
+                          return "";
+                });
+
+        }; */
+
+        vm.getSupplyingFacilityName = async function(supplyingFacilityId) {
+            try {
+               
+                var facilityObject = await facilityService.get(supplyingFacilityId);
+                
+                // Return Facility Name
+                //console.log(facilityObject.name);
+                return facilityObject.name;
+            } catch (error) {
+                // Handle any errors that may occur during the query
+                console.error("Error:", error);
+                return ""; // Or handle the error appropriately
+            }
+        };
+     
+      /*  vm.addSupplyingFacility =  function(eventPODs) {
+             var eventPODsWithSuppierNames = {};
+             for (let key in eventPODs) {
+                var name;
+                var singlePODEvent = eventPODs[key];
+                //Check whether SourceId has a value before calling
+                if(singlePODEvent.sourceId){
+                    //console.log(singlePODEvent.sourceId);
+                    name = vm.getSupplyingFacilityName(singlePODEvent.sourceId); 
+                    name.then(function(resolvedObject) {             
+                        singlePODEvent.sourceName  = resolvedObject;
+                        })
+                        .catch(function(error) {
+                         // Handle errors
+                             console.error('Error in controller:', error);
+                        });
+                                     
+                }
+
+                console.log(singlePODEvent)
+                //add supplying facility name to POD object
+                // vm.getSupplyingFacilityName()
+                eventPODsWithSuppierNames[key] = singlePODEvent;
+
+              }
+              //console.log(eventPODsWithSuppierNames);
+              return eventPODsWithSuppierNames;
+        }; */
+
+        vm.addSupplyingFacility = async function(eventPODs) {
+            try {
+                // Create an array of Promises
+                const promises = Object.keys(eventPODs).map(async key => {
+                    const singlePODEvent = eventPODs[key];
+        
+                    // Check whether SourceId has a value before calling
+                    if (singlePODEvent.sourceId) {
+                        try {
+                            const resolvedObject = await vm.getSupplyingFacilityName(singlePODEvent.sourceId);
+                            singlePODEvent.sourceName = resolvedObject;
+                        } catch (error) {
+                            // Handle errors
+                            console.error('Error in controller:', error);
+                        }
+                    }
+        
+                    return singlePODEvent;
+                });
+        
+                // Await all Promises to resolve
+                const eventPODsWithSupplierNames = await Promise.all(promises);
+        
+                return eventPODsWithSupplierNames.reduce((acc, curr, index) => {
+                    acc[index] = curr;
+                    return acc;
+                }, {});
+            } catch (error) {
+                // Handle any errors that may occur during processing
+                console.error('Error:', error);
+                return {};
+            }
+        };
+        
+        
 
 
+
+
+        
         
         /**
          * @ngdoc property
@@ -85,110 +189,6 @@
         vm.facilities = undefined;
 
         /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name statuses
-         * @type {Array}
-         *
-         * @description
-         * Contains all available requisition statuses.
-         */
-        vm.statuses = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name searchOffline
-         * @type {Boolean}
-         *
-         * @description
-         * Flag defining whether online or offline search should done. If it is set to true
-         * the local storage will be searched for requisitions.
-         */
-        vm.searchOffline = false;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name selectedFacility
-         * @type {Object}
-         *
-         * @description
-         * The facility selected by the user.
-         */
-        vm.selectedFacility = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name selectedProgram
-         * @type {Object}
-         *
-         * @description
-         * The program selected by the user.
-         */
-        vm.selectedProgram = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name selectedStatus
-         * @type {String}
-         *
-         * @description
-         * The requisition status selected by the user.
-         */
-        vm.selectedStatus = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name startDate
-         * @type {Object}
-         *
-         * @description
-         * The beginning of the period to search for requisitions.
-         */
-        vm.startDate = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name endDate
-         * @type {Object}
-         *
-         * @description
-         * The end of the period to search for requisitions.
-         */
-        vm.endDate = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name requisitions
-         * @type {Array}
-         *
-         * @description
-         * Holds all requisitions that will be displayed on screen.
-         */
-        vm.requisitions = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name offline
-         * @type {Boolean}
-         *
-         * @description
-         * Indicates if requisitions will be searched offline or online.
-         */
-        vm.offline = undefined;
-
-        vm.options = {
-            'requisitionSearch.dateInitiated': ['createdDate,desc']
-        };
-
-        /**
          * @ngdoc method
          * @methodOf requisition-search.controller:RequisitionViewController
          * @name $onInit
@@ -197,26 +197,38 @@
          * Initialization method called after the controller has been created. Responsible for
          * setting data to be available on the view.
          */
+
+     
+        vm.homeFacilities = [ facility ];
+
         function onInit() {
 
-            vm.homeFacilities = [
-                facility
-              ];
+            // vm.homeFacilities = [
+            //     facility
+            //   ];
             vm.receivingFacility = facility.name;
-            vm.supplyingFacilities = facilities;
+            vm.supplyingFacilities = facilities;        
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
 
-        
-        // Handle the promise resolution
-        var sendToView = pointOfDeliveryManageService.getPODs();
+         
+        var sendToView = pointOfDeliveryManageService.getPODs(facility.id);
 
-        console.log("I broke it!!");
-               
+       // Handle the promise resolution
         sendToView.then(function(resolvedObject) {
         // Assign the resolved object to a scope variable
-            $scope.dataObject = resolvedObject;
+            $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
+            $scope.dataObject.then(function(resolvedObject) {             
+                $scope.PODEvents  = resolvedObject;
+                
+                
+                })
+                .catch(function(error) {
+                 // Handle errors
+                     console.error('Error in controller:', error);
+                });
+
         })
         .catch(function(error) {
          // Handle errors
@@ -224,78 +236,78 @@
             });
                 
 
-        /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name isOfflineDisabled
-         *
-         * @description
-         * Check if "Search offline" checkbox should be disabled. It will set the searchOffline
-         * flag to true if app goes in the offline mode.
-         *
-         * @return {Boolean} true if offline is disabled, false otherwise
-         */
-        function isOfflineDisabled() {
-            if (offlineService.isOffline()) {
-                vm.offline = true;
-            }
-            return offlineService.isOffline();
-        }
+        // /**
+        //  * @ngdoc method
+        //  * @methodOf requisition-search.controller:RequisitionViewController
+        //  * @name isOfflineDisabled
+        //  *
+        //  * @description
+        //  * Check if "Search offline" checkbox should be disabled. It will set the searchOffline
+        //  * flag to true if app goes in the offline mode.
+        //  *
+        //  * @return {Boolean} true if offline is disabled, false otherwise
+        //  */
+        // function isOfflineDisabled() {
+        //     if (offlineService.isOffline()) {
+        //         vm.offline = true;
+        //     }
+        //     return offlineService.isOffline();
+        // }
 
-        /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name openRnr
-         *
-         * @description
-         * Redirect to requisition page after clicking on grid row.
-         *
-         * @param {String} requisitionId Requisition UUID
-         */
-        function openRnr(requisitionId) {
-            $state.go('openlmis.requisitions.requisition.fullSupply', {
-                rnr: requisitionId
-            });
-        }
+        // /**
+        //  * @ngdoc method
+        //  * @methodOf requisition-search.controller:RequisitionViewController
+        //  * @name openRnr
+        //  *
+        //  * @description
+        //  * Redirect to requisition page after clicking on grid row.
+        //  *
+        //  * @param {String} requisitionId Requisition UUID
+        //  */
+        // function openRnr(requisitionId) {
+        //     $state.go('openlmis.requisitions.requisition.fullSupply', {
+        //         rnr: requisitionId
+        //     });
+        // }
 
-        /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name removeOfflineRequisition
-         *
-         * @description
-         * Removes requisition from local storage.
-         *
-         * @param {Resource} requisition Requisition to remove
-         */
-        function removeOfflineRequisition(requisition) {
-            confirmService.confirmDestroy('requisitionSearch.removeOfflineRequisition.confirm').then(function() {
-                offlineRequisitions.removeBy('id', requisition.id);
-                requisition.$availableOffline = false;
-            });
-        }
+        // /**
+        //  * @ngdoc method
+        //  * @methodOf requisition-search.controller:RequisitionViewController
+        //  * @name removeOfflineRequisition
+        //  *
+        //  * @description
+        //  * Removes requisition from local storage.
+        //  *
+        //  * @param {Resource} requisition Requisition to remove
+        //  */
+        // function removeOfflineRequisition(requisition) {
+        //     confirmService.confirmDestroy('requisitionSearch.removeOfflineRequisition.confirm').then(function() {
+        //         offlineRequisitions.removeBy('id', requisition.id);
+        //         requisition.$availableOffline = false;
+        //     });
+        // }
 
-        /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name search
-         *
-         * @description
-         * Searches requisitions by criteria selected in form.
-         */
-        function search() {
-            var stateParams = angular.copy($stateParams);
+        // /**
+        //  * @ngdoc method
+        //  * @methodOf requisition-search.controller:RequisitionViewController
+        //  * @name search
+        //  *
+        //  * @description
+        //  * Searches requisitions by criteria selected in form.
+        //  */
+        // function search() {
+        //     var stateParams = angular.copy($stateParams);
 
-            stateParams.program = vm.selectedProgram ? vm.selectedProgram.id : null;
-            stateParams.facility = vm.selectedFacility ? vm.selectedFacility.id : null;
-            stateParams.initiatedDateFrom = vm.startDate ? $filter('isoDate')(vm.startDate) : null;
-            stateParams.initiatedDateTo = vm.endDate ? $filter('isoDate')(vm.endDate) : null;
-            stateParams.offline = vm.offline;
-            stateParams.requisitionStatus = vm.selectedStatus;
+        //     stateParams.program = vm.selectedProgram ? vm.selectedProgram.id : null;
+        //     stateParams.facility = vm.selectedFacility ? vm.selectedFacility.id : null;
+        //     stateParams.initiatedDateFrom = vm.startDate ? $filter('isoDate')(vm.startDate) : null;
+        //     stateParams.initiatedDateTo = vm.endDate ? $filter('isoDate')(vm.endDate) : null;
+        //     stateParams.offline = vm.offline;
+        //     stateParams.requisitionStatus = vm.selectedStatus;
 
-            $state.go('openlmis.requisitions.search', stateParams, {
-                reload: true
-            });
-        }
+        //     $state.go('openlmis.requisitions.search', stateParams, {
+        //         reload: true
+        //     });
+        // }
     }
 })();
