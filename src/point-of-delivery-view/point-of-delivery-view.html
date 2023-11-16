@@ -2,7 +2,7 @@
 
 <section class="openlmis-table-container">
     <table>
-        <caption ng-if="!vm.periods.length">
+        <caption ng-if="!vm.pushit.length">
             Point of Delivery View
         </caption>
         <thead>
@@ -14,16 +14,21 @@
 				<th>Number of Cartons</th>
 				<th>Number of Containers</th>
                 <th>Received By</th>
+                <th>Remarks</th>
                 <th class="col-sticky sticky-right">Received Date</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="period in vm.periods">
-                <td> </td>
-                <td>{{period.startDate | openlmisDate}}</td>
-                <td>{{period.endDate | openlmisDate}}</td>
-                <td>{{period.rnrStatus | requisitionStatus}}</td>
-                <td> </td>
+            <tr ng-repeat="item in dataObject">
+                <td>{{item.sourceId}}</td>
+                <td>{{item.referenceNumber}}</td>
+                <td>{{item.packingDate}}</td>
+                <td>{{item.packedBy}}</td>
+                <td>{{item.numberOfCartons}}</td>
+                <td>{{item.numberOfContainers}}</td>
+                <td>{{item.receivedBy}}</td>
+                <td>{{item.remarks}}</td>
+                <td>{{item.receivingDate}}</td>
             </tr>
         </tbody>
     </table>
