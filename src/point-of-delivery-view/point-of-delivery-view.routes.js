@@ -54,9 +54,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                           // Handle any errors that may occur during the query
                           console.error("Error:", error);
                           return [];
-                      });
-
-                    
+                      });                    
                 },
                 facility: function($stateParams, facilityFactory) {
                     // Load the current User's Assigned Facility
