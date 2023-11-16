@@ -257,6 +257,7 @@
             $scope.dataObject.then(function(resolvedObject) {             
                 $scope.PODEvents  = resolvedObject;
                 
+                
                 })
                 .catch(function(error) {
                  // Handle errors
