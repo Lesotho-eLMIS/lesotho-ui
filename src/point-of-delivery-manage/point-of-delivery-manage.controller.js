@@ -39,7 +39,7 @@
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
-        vm.receivingFacility = undefined;
+     //   vm.receivingFacility = undefined;
      
         vm.POD = {};
      
@@ -68,7 +68,6 @@
                 };
 
             pointOfDeliveryManageService.sendPayload(payloadData);
-            console.log("submitted");
         };
         
        /*
@@ -189,44 +188,6 @@
          */
         vm.facilities = undefined;
 
-        // /**
-        //  * @ngdoc property
-        //  * @propertyOf requisition-search.controller:RequisitionViewController
-        //  * @name statuses
-        //  * @type {Array}
-        //  *
-        //  * @description
-        //  * Contains all available requisition statuses.
-        //  */
-        // vm.statuses = undefined;
-
-        // /**
-        //  * @ngdoc property
-        //  * @propertyOf requisition-search.controller:RequisitionViewController
-        //  * @name searchOffline
-        //  * @type {Boolean}
-        //  *
-        //  * @description
-        //  * Flag defining whether online or offline search should done. If it is set to true
-        //  * the local storage will be searched for requisitions.
-        //  */
-        // vm.searchOffline = false;
-
-        //         /**
-        //  * @ngdoc property
-        //  * @propertyOf requisition-search.controller:RequisitionViewController
-        //  * @name offline
-        //  * @type {Boolean}
-        //  *
-        //  * @description
-        //  * Indicates if requisitions will be searched offline or online.
-        //  */
-        // vm.offline = undefined;
-
-        // vm.options = {
-        //     'requisitionSearch.dateInitiated': ['createdDate,desc']
-        // };
-
         /**
          * @ngdoc method
          * @methodOf requisition-search.controller:RequisitionViewController
@@ -236,21 +197,25 @@
          * Initialization method called after the controller has been created. Responsible for
          * setting data to be available on the view.
          */
+
+     
+        vm.homeFacilities = [ facility ];
+
         function onInit() {
 
-            vm.homeFacilities = [
-                facility
-              ];
+            // vm.homeFacilities = [
+            //     facility
+            //   ];
             vm.receivingFacility = facility.name;
-            vm.supplyingFacilities = facilities;
+            vm.supplyingFacilities = facilities;        
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
         }
 
-        
-        // Handle the promise resolution
-        var sendToView = pointOfDeliveryManageService.getPODs();
+         
+        var sendToView = pointOfDeliveryManageService.getPODs(facility.id);
 
+       // Handle the promise resolution
         sendToView.then(function(resolvedObject) {
         // Assign the resolved object to a scope variable
             $scope.dataObject = vm.addSupplyingFacility(resolvedObject);

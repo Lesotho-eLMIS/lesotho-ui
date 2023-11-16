@@ -52,25 +52,24 @@
             });
  
         this.sendPayload = sendPayload;
-        this.getPODs = function(){
+        this.getPODs = function(receivingFacilityId){
+            
             var params = {
-                         destinationId: '48794f3d-2842-4d58-83d9-bd07d0fde594'
+                         destinationId: receivingFacilityId //'48794f3d-2842-4d58-83d9-bd07d0fde594'
                     }
                 return resource.get(params).$promise.then(function(response) {
                     // Transforming the response to an object if it's an array
                     if (Array.isArray(response)) {
                                   
-                            var objectOfObjects = response.reduce((result, obj) => {
+                            var objectOfPODs = response.reduce((result, obj) => {
                             result[obj.id] = obj;
                             return result;
-                          }, {});
-                          
-                          console.log("Just created these objects to return of length: " + Object.keys(objectOfObjects).length);
-    
-                        return objectOfObjects; 
+                          }, {});                          
+  
+                        return objectOfPODs; 
                         
                     }
-                    return response; // Return the response as is if it's not an array
+                    return response; 
                 });
             }
           
