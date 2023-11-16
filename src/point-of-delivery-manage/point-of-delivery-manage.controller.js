@@ -68,7 +68,6 @@
                 };
 
             pointOfDeliveryManageService.sendPayload(payloadData);
-            console.log("submitted");
         };
 
 
@@ -83,44 +82,6 @@
          * The list of all facilities available to the user.
          */
         vm.facilities = undefined;
-
-        // /**
-        //  * @ngdoc property
-        //  * @propertyOf requisition-search.controller:RequisitionViewController
-        //  * @name statuses
-        //  * @type {Array}
-        //  *
-        //  * @description
-        //  * Contains all available requisition statuses.
-        //  */
-        // vm.statuses = undefined;
-
-        // /**
-        //  * @ngdoc property
-        //  * @propertyOf requisition-search.controller:RequisitionViewController
-        //  * @name searchOffline
-        //  * @type {Boolean}
-        //  *
-        //  * @description
-        //  * Flag defining whether online or offline search should done. If it is set to true
-        //  * the local storage will be searched for requisitions.
-        //  */
-        // vm.searchOffline = false;
-
-        //         /**
-        //  * @ngdoc property
-        //  * @propertyOf requisition-search.controller:RequisitionViewController
-        //  * @name offline
-        //  * @type {Boolean}
-        //  *
-        //  * @description
-        //  * Indicates if requisitions will be searched offline or online.
-        //  */
-        // vm.offline = undefined;
-
-        // vm.options = {
-        //     'requisitionSearch.dateInitiated': ['createdDate,desc']
-        // };
 
         /**
          * @ngdoc method
@@ -137,6 +98,7 @@
                 facility
               ];
             vm.receivingFacility = facility.name;
+            console.log(facility.name);
             vm.supplyingFacilities = facilities;
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
           
