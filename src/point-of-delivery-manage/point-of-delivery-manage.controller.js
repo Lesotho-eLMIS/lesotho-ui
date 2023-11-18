@@ -28,11 +28,11 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService', 
-        '$scope'];
+        '$state', '$filter','$q', '$stateParams', 'facility','facilities','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService', 
+        '$scope', 'notificationService'];
 
-    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
-                                         confirmService, pointOfDeliveryManageService, $scope ) {
+    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities, offlineService, localStorageFactory,
+                                         confirmService, pointOfDeliveryManageService, $scope, notificationService ) {
 
         var vm = this;
 
@@ -42,8 +42,7 @@
      //   vm.receivingFacility = undefined;
      
         vm.POD = {};
-     
-    
+
         vm.submitPOD = function () {
 
                 var sourceId = vm.supplyingFacility.id;
@@ -68,114 +67,12 @@
                 };
 
             pointOfDeliveryManageService.sendPayload(payloadData);
+            vm.POD = {};
+            // $scope.podManageForm.$setPristine();
+            // $scope.podManageForm.$setUntouched();
         };
-        
-       /*
-        vm.getSupplyingFacilityName = function(supplyingFacilityId){
-
-            var paginationParams = {};
-                      
-            var queryParams = {
-                 "id":supplyingFacilityId
-                };
-            var facilityObject = facilityService.query(paginationParams, queryParams)
-            facilityObject.then(function(result) {
-                          // Return Facility Name
-                          console.log(result.content.name);
-                          return result.content.name;
-                })
-                .catch(function(error) {
-                          // Handle any errors that may occur during the query
-                          console.error("Error:", error);
-                          return "";
-                });
-
-        }; */
-
-        vm.getSupplyingFacilityName = async function(supplyingFacilityId) {
-            try {
-               
-                var facilityObject = await facilityService.get(supplyingFacilityId);
-                
-                // Return Facility Name
-                //console.log(facilityObject.name);
-                return facilityObject.name;
-            } catch (error) {
-                // Handle any errors that may occur during the query
-                console.error("Error:", error);
-                return ""; // Or handle the error appropriately
-            }
-        };
-     
-      /*  vm.addSupplyingFacility =  function(eventPODs) {
-             var eventPODsWithSuppierNames = {};
-             for (let key in eventPODs) {
-                var name;
-                var singlePODEvent = eventPODs[key];
-                //Check whether SourceId has a value before calling
-                if(singlePODEvent.sourceId){
-                    //console.log(singlePODEvent.sourceId);
-                    name = vm.getSupplyingFacilityName(singlePODEvent.sourceId); 
-                    name.then(function(resolvedObject) {             
-                        singlePODEvent.sourceName  = resolvedObject;
-                        })
-                        .catch(function(error) {
-                         // Handle errors
-                             console.error('Error in controller:', error);
-                        });
-                                     
-                }
-
-                console.log(singlePODEvent)
-                //add supplying facility name to POD object
-                // vm.getSupplyingFacilityName()
-                eventPODsWithSuppierNames[key] = singlePODEvent;
-
-              }
-              //console.log(eventPODsWithSuppierNames);
-              return eventPODsWithSuppierNames;
-        }; */
-
-        vm.addSupplyingFacility = async function(eventPODs) {
-            try {
-                // Create an array of Promises
-                const promises = Object.keys(eventPODs).map(async key => {
-                    const singlePODEvent = eventPODs[key];
-        
-                    // Check whether SourceId has a value before calling
-                    if (singlePODEvent.sourceId) {
-                        try {
-                            const resolvedObject = await vm.getSupplyingFacilityName(singlePODEvent.sourceId);
-                            singlePODEvent.sourceName = resolvedObject;
-                        } catch (error) {
-                            // Handle errors
-                            console.error('Error in controller:', error);
-                        }
-                    }
-        
-                    return singlePODEvent;
-                });
-        
-                // Await all Promises to resolve
-                const eventPODsWithSupplierNames = await Promise.all(promises);
-        
-                return eventPODsWithSupplierNames.reduce((acc, curr, index) => {
-                    acc[index] = curr;
-                    return acc;
-                }, {});
-            } catch (error) {
-                // Handle any errors that may occur during processing
-                console.error('Error:', error);
-                return {};
-            }
-        };
-        
-        
 
 
-
-
-        
         
         /**
          * @ngdoc property
@@ -203,12 +100,13 @@
 
         function onInit() {
 
-            // vm.homeFacilities = [
-            //     facility
-            //   ];
+          // var stateParams = angular.copy($stateParams);
+            
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;        
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
+            //stateParams.sort = 'createdDate,desc';
+            //console.log("Sorting state param in Controller");
           
         }
 
@@ -218,17 +116,7 @@
        // Handle the promise resolution
         sendToView.then(function(resolvedObject) {
         // Assign the resolved object to a scope variable
-            $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
-            $scope.dataObject.then(function(resolvedObject) {             
-                $scope.PODEvents  = resolvedObject;
-                
-                
-                })
-                .catch(function(error) {
-                 // Handle errors
-                     console.error('Error in controller:', error);
-                });
-
+            $scope.PODEvents = resolvedObject;
         })
         .catch(function(error) {
          // Handle errors
