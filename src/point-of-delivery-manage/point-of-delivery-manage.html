@@ -16,7 +16,7 @@
                 ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select>
     </fieldset>
 </form>
-<form class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>
+<form name="podManageForm" class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>
     <fieldset class="form-group">
         <Fieldset>
             <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>

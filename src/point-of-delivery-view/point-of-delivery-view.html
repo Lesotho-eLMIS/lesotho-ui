@@ -22,15 +22,16 @@
             <tr ng-repeat="item in PODEvents">
                 <td>{{item.sourceName}}</td>
                 <td>{{item.referenceNumber}}</td>
-                <td>{{item.packingDate}}</td>
+                <td>{{item.packingDate | openlmisDate}}</td>
                 <td>{{item.packedBy}}</td>
                 <td>{{item.numberOfCartons}}</td>
                 <td>{{item.numberOfContainers}}</td>
                 <td>{{item.receivedBy}}</td>
                 <td>{{item.remarks}}</td>
-                <td>{{item.receivingDate}}</td>
+                <td>{{item.receivingDate | openlmisDate}}</td>
             </tr>
         </tbody>
     </table>
+    <openlmis-pagination/>
 </section>
 
