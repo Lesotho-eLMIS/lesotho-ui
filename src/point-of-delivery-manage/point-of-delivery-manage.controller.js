@@ -29,12 +29,15 @@
 
     pointOfDeliveryManageController.$inject = [
         '$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService', 
-        '$scope', 'notificationService'];
+        '$scope', 'notificationService', 'dateUtils'];
 
     function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
-                                         confirmService, pointOfDeliveryManageService, $scope, notificationService ) {
+                                         confirmService, pointOfDeliveryManageService, $scope, notificationService, dateUtils ) {
 
         var vm = this;
+
+        vm.maxDate = new Date();
+        vm.maxDate.setHours(23, 59, 59, 999);
 
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
@@ -69,8 +72,8 @@
             pointOfDeliveryManageService.sendPayload(payloadData);
             vm.POD = {};
             vm.proofOfDelivery = {};
-            // $scope.podManageForm.$setPristine();
-            // $scope.podManageForm.$setUntouched();
+            $scope.podManageForm.$setPristine();
+            $scope.podManageForm.$setUntouched();
         };
 
 
