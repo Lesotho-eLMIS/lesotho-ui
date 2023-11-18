@@ -37,6 +37,9 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     templateUrl: 'point-of-delivery-view/point-of-delivery-view.html',
                 }
             },
+            params: {
+                sort: ['createdDate,desc']
+            },
 
             resolve: {
                 facilities: function(facilityService) {
@@ -62,7 +65,45 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
-                }
+                },
+                requisitions: function(paginationService, requisitionService, $stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
+                        if (stateParams.facility) {
+                            var offlineFlag = stateParams.offline;
+                            delete stateParams.offline;
+                            return requisitionService.search(offlineFlag === 'true', stateParams);
+                        }
+                        return undefined;
+                    });
+                },
+                facility: function($stateParams, facilityFactory) {
+                    // Load the current User's Assigned Facility
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
+                },
+                PODs: function(paginationService, pointOfDeliveryManageService, $stateParams) {
+                        return paginationService.registerUrl($stateParams, function(stateParams){
+                            if (stateParams.destinationId){
+                                console.log("inside pagination");
+                                //stateParams.sort = 'createdDate,desc';
+                                return pointOfDeliveryManageService.getPODs(facility.id);
+                            }
+                            return undefined;
+                        });
+                        // customPageParamName: 'customPage',
+                        // customSizeParamName: 'customSize'
+                    }
+                     // PODs: function(paginationService, pointOfDeliveryManageService, $stateParams) {
+                //     return paginationService.registerUrl($stateParams, function(stateParams) {
+                //         if (stateParams.supplyingFacilityId) {
+                //             stateParams.sort = 'createdDate,desc';
+                //             return pointOfDeliveryManageService.getPODs(stateParams);
+                //         }
+                //         return undefined;
+                //     });
+                // }
             }
         });
        
