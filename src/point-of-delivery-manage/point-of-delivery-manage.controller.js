@@ -34,6 +34,7 @@
     function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
                                          confirmService, pointOfDeliveryManageService, $scope, notificationService, dateUtils ) {
 
+
         var vm = this;
 
         vm.maxDate = new Date();
@@ -69,11 +70,20 @@
                     remarks:remarks
                 };
 
-            pointOfDeliveryManageService.sendPayload(payloadData);
+
+            var podResponse = pointOfDeliveryManageService.sendPayload(payloadData);
+            if (podResponse) {
+                // Adding success message when POD saved.
+                notificationService.success('Successfully Received');
+            } else {
+                notificationService.error('Failed to receive data');
+            };
+               
             vm.POD = {};
             vm.proofOfDelivery = {};
             $scope.podManageForm.$setPristine();
             $scope.podManageForm.$setUntouched();
+
         };
 
 

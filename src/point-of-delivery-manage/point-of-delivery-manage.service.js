@@ -75,9 +75,7 @@
             }
           
         function sendPayload(payloadData){
-
-        resource.savePODEvent(payloadData);
-           
+            return resource.savePODEvent(payloadData);
         }
         
     }
