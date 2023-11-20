@@ -25,6 +25,7 @@
      */
     angular.module('point-of-delivery-manage', [
         'ngResource',
+        'openlmis-date',
         'ui.router',
         'openlmis-config',
         'referencedata-facility',

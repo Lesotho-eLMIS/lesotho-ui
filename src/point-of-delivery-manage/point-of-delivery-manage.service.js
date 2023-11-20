@@ -28,11 +28,11 @@
         .module('requisition-search')
         .service('pointOfDeliveryManageService', pointOfDeliveryManageService);
 
-        pointOfDeliveryManageService.$inject = ['facilityService',
-        'facilityFactory', 'authorizationService', '$q', 'localStorageService','$resource','openlmisUrlFactory','pointOfDeliveryManageResource'
+        pointOfDeliveryManageService.$inject = ['facilityService', 'facilityFactory', 'authorizationService', '$q', '$stateParams',
+        '$state', 'localStorageService','$resource','openlmisUrlFactory','pointOfDeliveryManageResource'
     ];
 
-    function pointOfDeliveryManageService(facilityService,facilityFactory, authorizationService, $q,
+    function pointOfDeliveryManageService(facilityService,facilityFactory, authorizationService, $q, $stateParams, $state,
                                        localStorageService,$resource,openlmisUrlFactory,pointOfDeliveryManageResource) {
 
         var promise,
@@ -51,11 +51,13 @@
                 }              
             });
  
-        this.sendPayload = sendPayload;
+        this.sendPayload = sendPayload; // To post data 
+
+        //To fetch POD records.
         this.getPODs = function(receivingFacilityId){
-            
+
             var params = {
-                         destinationId: receivingFacilityId //'48794f3d-2842-4d58-83d9-bd07d0fde594'
+                         destinationId: receivingFacilityId 
                     }
                 return resource.get(params).$promise.then(function(response) {
                     // Transforming the response to an object if it's an array
@@ -66,8 +68,7 @@
                             return result;
                           }, {});                          
   
-                        return objectOfPODs; 
-                        
+                        return objectOfPODs;                         
                     }
                     return response; 
                 });

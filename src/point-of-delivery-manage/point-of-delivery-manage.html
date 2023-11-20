@@ -16,31 +16,31 @@
                 ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select>
     </fieldset>
 </form>
-<form class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>
+<form name="podManageForm" class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>
     <fieldset class="form-group">
         <Fieldset>
             <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
-            <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50"/>
+            <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50" required/>
         </Fieldset>
         
          <Fieldset>
             <label for="receivedDate">{{'pointOfDeliveryManage.packingDate' | message}}</label>
-            <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
+            <input id="receivedDate" type="date" max-date="vm.maxDate" ng-model="vm.proofOfDelivery.receivedDate" required/>
          </Fieldset>      
         
         <Fieldset>
             <label for="packedBy">{{'pointOfDeliveryManage.packedBy' | message}}</label>
-            <input id="packedBy" type="text" ng-model="vm.POD.packedBy" maxlength="50"/>
+            <input id="packedBy" type="text" ng-model="vm.POD.packedBy" maxlength="50" required/>
         </Fieldset>
         
         <Fieldset>
             <label for="numberOfCartons">{{'pointOfDeliveryManage.numberOfCartons' | message}}</label>
-            <input id="numberOfCartons" type="text" ng-model="vm.POD.numberOfCartons" maxlength="50"/>
+            <input id="numberOfCartons" type="number" min="0" step="1" oninput="validity.valid||(value='');" ng-model="vm.POD.numberOfCartons" maxlength="50" required/>
         </Fieldset>
         
         <Fieldset>
             <label for="numberOfContainers">{{'pointOfDeliveryManage.numberOfContainers' | message}}</label>
-            <input id="numberOfContainers" type="text" ng-model="vm.POD.numberOfContainers" maxlength="50"/>
+            <input id="numberOfContainers" type="number" min="0" step="1" oninput="validity.valid||(value='');" ng-model="vm.POD.numberOfContainers" maxlength="50" required/>
         </Fieldset>
                 
         <Fieldset>

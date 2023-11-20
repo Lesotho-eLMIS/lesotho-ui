@@ -25,7 +25,9 @@
      */
     angular.module('point-of-delivery', [
         'ui.router',
-        'openlmis-config'
+        'openlmis-config',
+        'openlmis-pagination',
+        'openlmis-date'
     ]);
 
 })();
