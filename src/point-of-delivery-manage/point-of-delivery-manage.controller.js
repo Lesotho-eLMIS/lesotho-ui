@@ -28,11 +28,11 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService', 
+        '$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryManageService','notificationService', 
         '$scope'];
 
     function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
-                                         confirmService, pointOfDeliveryManageService, $scope ) {
+                                         confirmService, pointOfDeliveryManageService,notificationService, $scope ) {
 
         var vm = this;
 
@@ -67,7 +67,14 @@
                     remarks:remarks
                 };
 
-            pointOfDeliveryManageService.sendPayload(payloadData);
+            var podResponse = pointOfDeliveryManageService.sendPayload(payloadData);
+            if (podResponse) {
+                // Adding success message when POD saved.
+                notificationService.success('Successfully Received');
+            } else {
+                notificationService.error('Failed to receive data');
+            }
+            
         };
         
        /*
