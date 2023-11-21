@@ -1,0 +1,15 @@
+{
+  "pointOfDeliveryQualityChecks.deliveriesAt": "View Deliveries at ${facility}",
+  "pointOfDeliveryQualityChecks.facility": "Supplying Facility",
+  "pointOfDeliveryQualityChecks.label": "Quality Checks",
+  "pointOfDeliveryQualityChecks.numberOfCartons": "Number of Cartons",  
+  "pointOfDeliveryQualityChecks.numberOfContainers": "Number of Containers",
+  "pointOfDeliveryQualityChecks.packedBy": "Packed By",
+  "pointOfDeliveryQualityChecks.packingDate": "Packing Date",  
+  "pointOfDeliveryQualityChecks.receivedBy": "Received By",
+  "pointOfDeliveryQualityChecks.receivedDate": "Receiving Date",
+  "pointOfDeliveryQualityChecks.referenceNo": "Reference Number",
+  "pointOfDeliveryQualityChecks.remarks": "Remarks",
+  "pointOfDeliveryQualityChecks.submit": "Submit",
+  "pointOfDeliveryQualityChecks.title": "Make Quality Checks"
+}
