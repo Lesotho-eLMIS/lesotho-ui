@@ -1,5 +1,22 @@
 <h2>Quality Checks<!-- {{'pointOfDeliveryView.deliveriesAt' | message: {'facility':  vm.receivingFacility} }} --></h2>
 
+<form class="sidebar" ng-submit="vm.loadOrders()">
+    <fieldset class="form-group">
+        <label for="isShipmentOkaySpan">Delivered supplies in good condition with correct documentation?</label>
+        <span id = "isShipmentOkaySpan">
+            <label>
+                <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="Yes">
+                Yes
+              </label>
+              <br>
+              <label>
+                <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="No">
+                No
+              </label>
+        </span>
+    </fieldset>
+</form>
+
 <section class="openlmis-table-container">
     <table>
         <!-- <caption ng-if="!PODEvents">

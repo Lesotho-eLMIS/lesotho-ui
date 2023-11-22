@@ -14,26 +14,24 @@
  */
 
 (function() {
-
     'use strict';
 
     angular
         .module('point-of-delivery-quality-checks')
-        .config(routes);
+        .controller('pointOfDeliveryQualityChecksController', pointOfDeliveryQualityChecksController);
 
-routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'*/];
+    pointOfDeliveryQualityChecksController.$inject = ['$scope']; // inject any dependencies here
 
-    function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
-        $stateProvider.state('openlmis.pointOfDelivery.QualityChecks', {
-            isOffline: true,
-            url: '/qualityChecks',
-            label: 'pointOfDeliveryQualityChecks.label',
-            //priority: 4,
-            showInNavigation: true,
-            templateUrl: 'point-of-delivery-quality-checks/point-of-delivery-quality-checks.html',
-            controller: 'pointOfDeliveryQualityChecksController',
-            controllerAs: 'vm'
-        });
+    function pointOfDeliveryQualityChecksController($scope) {
+        var vm = this;
+        vm.$onInit = onInit;
+        // Controller logic here
+
+        function onInit() {
+
+            console.log("Sorting state param in Controller");
+            //vm.isShipmentOkay = 'No';
+            
+          }
     }
 })();
-  
