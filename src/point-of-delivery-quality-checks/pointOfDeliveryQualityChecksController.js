@@ -30,7 +30,7 @@
         function onInit() {
 
             console.log("Sorting state param in Controller");
-            //vm.isShipmentOkay = 'No';
+            vm.isShipmentOkay = 'No';
             
           }
     }

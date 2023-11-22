@@ -8,7 +8,7 @@
                 <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="Yes">
                 Yes
               </label>
-              <br>
+              </br>
               <label>
                 <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="No">
                 No
@@ -19,24 +19,20 @@
 
 <section class="openlmis-table-container">
     <table>
-        <!-- <caption ng-if="!PODEvents">
+        <caption ng-if="!PODEvents">
             {{pointOfDeliveryView.title}}
         </caption>
         <thead>
             <tr>
-                <th>{{'pointOfDeliveryView.facility' | message}}</th>
-                <th>{{'pointOfDeliveryView.referenceNo' | message}}</th>
-                <th>{{'pointOfDeliveryView.packingDate' | message}}</th>
-                <th>{{'pointOfDeliveryView.packedBy' | message}}</th>
-				<th>{{'pointOfDeliveryView.numberOfCartons' | message}}</th>
-				<th>{{'pointOfDeliveryView.numberOfContainers' | message}}</th>
-                <th>{{'pointOfDeliveryView.receivedBy' | message}}</th>
-                <th>{{'pointOfDeliveryView.remarks' | message}}</th>
-                <th class="col-sticky sticky-right">{{'pointOfDeliveryView.receivedDate' | message}}</th>
+                <th>aaaaaaaaaa</th>
+                <th>bbbbbbbbb</th>
+                <th>ccccccccc</th>
+                <th>dddddddddd</th>
+                <th class="col-sticky sticky-right">Action</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in PODEvents">
+            <!--<tr ng-repeat="item in PODEvents">
                 <td>{{item.sourceName}}</td>
                 <td>{{item.referenceNumber}}</td>
                 <td>{{item.packingDate | openlmisDate}}</td>
@@ -46,8 +42,8 @@
                 <td>{{item.receivedBy}}</td>
                 <td>{{item.remarks}}</td>
                 <td>{{item.receivingDate | openlmisDate}}</td>
-            </tr>
-        </tbody>  -->
+            </tr>-->
+        </tbody>
     </table>
     <openlmis-pagination/>
 </section>
