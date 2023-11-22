@@ -10,41 +10,56 @@
               </label>
               </br>
               <label>
-                <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="No">
+                <input type="radio" ng-model = 'vm.isShipmentNotOkay' name="isShipmentOkay" value="No">
                 No
               </label>
         </span>
     </fieldset>
 </form>
 
-<section class="openlmis-table-container">
-    <table>
-        <caption ng-if="!PODEvents">
-            {{pointOfDeliveryView.title}}
-        </caption>
-        <thead>
-            <tr>
-                <th>aaaaaaaaaa</th>
-                <th>bbbbbbbbb</th>
-                <th>ccccccccc</th>
-                <th>dddddddddd</th>
-                <th class="col-sticky sticky-right">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!--<tr ng-repeat="item in PODEvents">
-                <td>{{item.sourceName}}</td>
-                <td>{{item.referenceNumber}}</td>
-                <td>{{item.packingDate | openlmisDate}}</td>
-                <td>{{item.packedBy}}</td>
-                <td>{{item.numberOfCartons}}</td>
-                <td>{{item.numberOfContainers}}</td>
-                <td>{{item.receivedBy}}</td>
-                <td>{{item.remarks}}</td>
-                <td>{{item.receivingDate | openlmisDate}}</td>
-            </tr>-->
-        </tbody>
-    </table>
-    <openlmis-pagination/>
-</section>
-
+<form action="">
+    <label for="referenceNo">Reference Number</label>
+    <input id="referenceNo" type="text" ng-model="somethingHere" length="20" required/>
+    <section class="openlmis-table-container">
+        <table ng-if="vm.isShipmentOkay">
+            <!-- <caption ng-if="!PODEvents">
+                {{pointOfDeliveryView.title}}
+            </caption> -->
+            <thead>
+                <tr>
+                    <th>Discrepancy</th>
+                    <th>Quantity</th>
+                    <th>Comments</th>
+                    <!-- <th class="col-sticky sticky-right">Action</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr><!-- <tr ng-repeat="item in PODEvents"> -->
+                    <td>
+                        <select name="discrepancy" id="DiscrepancyID">
+                            <option value="">Select Item</option>
+                            <option value="WrongItem">Wrong Item</option>
+                            <option value="WrongQuantity">Wrong Quantity</option>
+                            <option value="DefectiveItem">Defective Item</option>
+                            <option value="MissingItem">Missing Item</option>
+                        </select>
+                    </td>
+                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="10"></td>
+                    <td><input type="text" value=" " length="70"></td>
+                </tr>
+                <tr><!-- <tr ng-repeat="item in PODEvents"> -->
+                    <td><input type="submit" value="Add Row"/></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <openlmis-pagination/>  -->
+    </section>
+    <Fieldset>
+        <input type="submit" value="Submit"/>
+    </Fieldset>
+    <Fieldset>
+        <input type="submit" value="Proceed to POD" disabled/>
+    </Fieldset>
+</form>
