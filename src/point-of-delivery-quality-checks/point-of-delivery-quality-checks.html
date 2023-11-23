@@ -17,24 +17,55 @@
     </fieldset>
 </form>
 
-<form action="">
-    <label for="referenceNo">Reference Number</label>
-    <input id="referenceNo" type="text" ng-model="somethingHere" length="20" required/>
+<div class="stock-adjustment-creation">
     <section class="openlmis-table-container">
-        <table ng-if="vm.isShipmentOkay">
-            <!-- <caption ng-if="!PODEvents">
-                {{pointOfDeliveryView.title}}
-            </caption> -->
+        <section class="is-primary">
+            <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
+                <div>
+                    <label for="productSelect">Add discrepancy</label>
+                    <select id="productSelect" ng-model="vm.selectedOrderableGroup"
+                        ng-change="vm.orderableSelectionChanged()"
+                        required>
+                        <option value="">Select Item</option>
+                        <option value="WrongItem">Wrong Item</option>
+                        <option value="WrongQuantity">Wrong Quantity</option>
+                        <option value="DefectiveItem">Defective Item</option>
+                        <option value="MissingItem">Missing Item</option>
+                    </select>
+                </div>
+                <button type="submit" class="add">Add</button>
+            </form>
+        </section>
+        <table suppress-tr-openlmis-invalid>
             <thead>
                 <tr>
                     <th>Discrepancy</th>
                     <th>Quantity</th>
                     <th>Comments</th>
-                    <!-- <th class="col-sticky sticky-right">Action</th> -->
                 </tr>
             </thead>
             <tbody>
-                <tr><!-- <tr ng-repeat="item in PODEvents"> -->
+                <tr>
+                    <td>Wrong Quantity</td>
+                    <td><input type="number" type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="10"></td>
+                    <td><input type="text" value=" " length="70"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <!--<label for="referenceNo">Reference Number</label>
+    <input id="referenceNo" type="text" ng-model="somethingHere" length="20" required/>
+    <section class="openlmis-table-container">
+        <table ng-if="vm.isShipmentOkay">
+            <thead>
+                <tr>
+                    <th>Discrepancy</th>
+                    <th max-length="40">Quantity</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
                     <td>
                         <select name="discrepancy" id="DiscrepancyID">
                             <option value="">Select Item</option>
@@ -44,22 +75,16 @@
                             <option value="MissingItem">Missing Item</option>
                         </select>
                     </td>
-                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="10"></td>
+                    <td><input type="number" type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="10"></td>
                     <td><input type="text" value=" " length="70"></td>
                 </tr>
-                <tr><!-- <tr ng-repeat="item in PODEvents"> -->
+                <tr>
                     <td><input type="submit" value="Add Row"/></td>
                     <td></td>
                     <td></td>
                 </tr>
             </tbody>
         </table>
-        <!-- <openlmis-pagination/>  -->
-    </section>
-    <Fieldset>
-        <input type="submit" value="Submit"/>
-    </Fieldset>
-    <Fieldset>
-        <input type="submit" value="Proceed to POD" disabled/>
-    </Fieldset>
-</form>
+    </section>-->
+</div>
+<ng-include src="'point-of-delivery-quality-checks/point-of-delivery-toolbar.html'"></ng-include>
