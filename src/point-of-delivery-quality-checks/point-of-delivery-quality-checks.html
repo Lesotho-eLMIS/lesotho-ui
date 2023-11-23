@@ -16,9 +16,15 @@
         </span>
     </fieldset>
 </form>
-
 <div class="stock-adjustment-creation">
-    <section class="openlmis-table-container">
+    <section>
+        <label for="referenceNo">Reference Number</label>
+        <input id="referenceNo" type="text" ng-model="vm.referenceNo" length="20" required/>
+    </section>
+</div>
+<div class="stock-adjustment-creation">
+    
+    <section class="openlmis-table-container" ng-if="vm.isShipmentOkay == 'No'">
         <section class="is-primary">
             <form class="form-inline" ng-submit="vm.addDispency()" name="productForm">
                 <div>
