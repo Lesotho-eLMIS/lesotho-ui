@@ -10,7 +10,7 @@
               </label>
               </br>
               <label>
-                <input type="radio" ng-model = 'vm.isShipmentNotOkay' name="isShipmentOkay" value="No">
+                <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="No">
                 No
               </label>
         </span>
@@ -20,23 +20,20 @@
 <div class="stock-adjustment-creation">
     <section class="openlmis-table-container">
         <section class="is-primary">
-            <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
+            <form class="form-inline" ng-submit="vm.addDispency()" name="productForm">
                 <div>
-                    <label for="productSelect">Add discrepancy</label>
-                    <select id="productSelect" ng-model="vm.selectedOrderableGroup"
-                        ng-change="vm.orderableSelectionChanged()"
+                    <label for="discrepancySelect">Add discrepancy</label>
+                    <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy"
+                        ng-change="vm.discrepancySelectionChanged()"
+                        ng-options="discrepancy for discrepancy in vm.discrepancyOptions"
                         required>
-                        <option value="">Select Item</option>
-                        <option value="WrongItem">Wrong Item</option>
-                        <option value="WrongQuantity">Wrong Quantity</option>
-                        <option value="DefectiveItem">Defective Item</option>
-                        <option value="MissingItem">Missing Item</option>
                     </select>
                 </div>
                 <button type="submit" class="add">Add</button>
             </form>
         </section>
         <table suppress-tr-openlmis-invalid>
+            <caption ng-if="!vm.discrepancies.length">No Discrepancies</caption>
             <thead>
                 <tr>
                     <th>Discrepancy</th>
@@ -45,46 +42,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Wrong Quantity</td>
+                <tr  ng-repeat="discrepancy in vm.discrepancies">
+                    <td>{{discrepancy.name}}</td>
                     <td><input type="number" type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="10"></td>
                     <td><input type="text" value=" " length="70"></td>
                 </tr>
             </tbody>
         </table>
     </section>
-    <!--<label for="referenceNo">Reference Number</label>
-    <input id="referenceNo" type="text" ng-model="somethingHere" length="20" required/>
-    <section class="openlmis-table-container">
-        <table ng-if="vm.isShipmentOkay">
-            <thead>
-                <tr>
-                    <th>Discrepancy</th>
-                    <th max-length="40">Quantity</th>
-                    <th>Comments</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <select name="discrepancy" id="DiscrepancyID">
-                            <option value="">Select Item</option>
-                            <option value="WrongItem">Wrong Item</option>
-                            <option value="WrongQuantity">Wrong Quantity</option>
-                            <option value="DefectiveItem">Defective Item</option>
-                            <option value="MissingItem">Missing Item</option>
-                        </select>
-                    </td>
-                    <td><input type="number" type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="10"></td>
-                    <td><input type="text" value=" " length="70"></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Add Row"/></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>-->
 </div>
 <ng-include src="'point-of-delivery-quality-checks/point-of-delivery-toolbar.html'"></ng-include>

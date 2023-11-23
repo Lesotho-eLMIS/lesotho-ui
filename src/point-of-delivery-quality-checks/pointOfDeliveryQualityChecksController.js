@@ -26,12 +26,27 @@
         var vm = this;
         vm.$onInit = onInit;
         // Controller logic here
+        vm.addDispency = addDiscrepency;
+        vm.discrepancies = undefined;
+        vm.selectedDiscrepancy = undefined;
+        vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
 
         function onInit() {
 
+            vm.discrepancies = [
+                {
+                    'name': "No Nmae"
+                }
+            ];
             console.log("Sorting state param in Controller");
             vm.isShipmentOkay = 'No';
             
           }
+        // adding discrepancies to table
+        function addDiscrepency() {
+
+            console.log(vm.selectedDiscrepancy);
+            
+        }
     }
 })();
