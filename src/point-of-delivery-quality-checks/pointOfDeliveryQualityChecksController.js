@@ -29,24 +29,39 @@
         vm.addDispency = addDiscrepency;
         vm.discrepancies = undefined;
         vm.selectedDiscrepancy = undefined;
+        vm.discrepancySelectionChanged = discrepancySelectionChanged;
+        vm.submitDiscrepancy = submitDiscrepancy;
+        vm.goToPOD = goToPOD;
         vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
 
         function onInit() {
 
-            vm.discrepancies = [
-                {
-                    'name': "No Nmae"
-                }
-            ];
-            console.log("Sorting state param in Controller");
+            vm.discrepancies = [];
             vm.isShipmentOkay = 'No';
             
           }
+        
+        function goToPOD() {
+            
+        }
+
+        function submitDiscrepancy() {
+            // To Send vm.discrepancies to Backend
+            console.log(vm.discrepancies);
+        }
         // adding discrepancies to table
         function addDiscrepency() {
+            vm.discrepancies.push({
+                'name': vm.selectedDiscrepancy,
+                'quantity': '',
+                'comments': ''
+            });
 
-            console.log(vm.selectedDiscrepancy);
             
+        }
+
+        function discrepancySelectionChanged() {
+            console.log(vm.selectedDiscrepancy);
         }
     }
 })();
