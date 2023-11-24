@@ -20,9 +20,9 @@
         .module('point-of-delivery-quality-checks')
         .controller('pointOfDeliveryQualityChecksController', pointOfDeliveryQualityChecksController)
 
-    pointOfDeliveryQualityChecksController.$inject = ['$scope', 'pointOfDeliveryService']; // inject any dependencies here
+    pointOfDeliveryQualityChecksController.$inject = ['$scope', 'pointOfDeliveryService', '$state']; // inject any dependencies here
 
-    function pointOfDeliveryQualityChecksController($scope, pointOfDeliveryService) {
+    function pointOfDeliveryQualityChecksController($scope, pointOfDeliveryService, $state) {
 
         var vm = this;
         vm.$onInit = onInit;
@@ -35,10 +35,8 @@
         vm.goToPOD = goToPOD;
         vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
         vm.test = undefined;
-        
-
-       // vm.discrepancies = undefined;
-
+        vm.isQualityChecked = false;
+      
         function onInit() {
 
             vm.discrepancies = [];
@@ -47,13 +45,21 @@
           }
         
         function goToPOD() {
-            
+
+            $state.go('openlmis.pointOfDelivery.manage');            
         }
 
-       
-        function submitDiscrepancy() {
+               function submitDiscrepancy() {
             // To Send vm.discrepancies to Backend
             console.log(vm.discrepancies);
+            console.log(vm.referenceNo);
+            
+            // if (vm.referenceNo=) {
+            //     // Adding success message when POD saved.
+            //     notificationService.success('Successfully Received');
+            // } else {
+            //     notificationService.error('Failed to receive data');
+            // };
 
             var discrepancyDetails =  {};
 
@@ -66,6 +72,7 @@
             console.log(discrepancyDetails);
 
           pointOfDeliveryService.submitQualityDiscrepancies(discrepancyDetails);
+          vm.isQualityChecked = true;
         }
 
         // adding discrepancies to table

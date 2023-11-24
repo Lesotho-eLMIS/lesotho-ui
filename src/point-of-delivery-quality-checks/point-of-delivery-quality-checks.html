@@ -1,50 +1,51 @@
-<h2>Quality Checks<!-- {{'pointOfDeliveryView.deliveriesAt' | message: {'facility':  vm.receivingFacility} }} --></h2>
+<h2>{{'pointOfDeliveryQualityChecks.qualityChecks' | message}}</h2>
 
 <form class="sidebar" ng-submit="vm.loadOrders()">
     <fieldset class="form-group">
-        <label for="isShipmentOkaySpan">Delivered supplies in good condition with correct documentation?</label>
+        <label for="isShipmentOkaySpan">{{'pointOfDeliveryQualityChecks.isShipmentOkaySpan' | message}}</label>
         <span id = "isShipmentOkaySpan">
             <label>
                 <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="Yes">
-                Yes
+                {{'pointOfDeliveryQualityChecks.yes'| message}}
               </label>
               </br>
               <label>
                 <input type="radio" ng-model = 'vm.isShipmentOkay' name="isShipmentOkay" value="No">
-                No
+                {{'pointOfDeliveryQualityChecks.no'| message}}
               </label>
         </span>
     </fieldset>
 </form>
+
 <div class="stock-adjustment-creation">
-    <section>
-        <label for="referenceNo">Reference Number</label>
-        <input id="referenceNo" type="text" ng-model="vm.referenceNo" length="20" required/>
+    <section class="openlmis-table-container">
+        <label for="referenceNo">{{'pointOfDeliveryQualityChecks.referenceNumber' | message}}</label>
+        <input id="referenceNo" type="text" ng-model="vm.referenceNo" size="10em" required/>
     </section>
 </div>
-<div class="stock-adjustment-creation">
+<div>
     
     <section class="openlmis-table-container" ng-if="vm.isShipmentOkay == 'No'">
         <section class="is-primary">
             <form class="form-inline" ng-submit="vm.addDispency()" name="productForm">
                 <div>
-                    <label for="discrepancySelect">Add discrepancy</label>
+                    <label for="discrepancySelect">{{'pointOfDeliveryQualityChecks.addDiscrepancy' | message}}</label>
                     <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy"
                         ng-change="vm.discrepancySelectionChanged()"
                         ng-options="discrepancy for discrepancy in vm.discrepancyOptions"
                         required>
                     </select>
                 </div>
-                <button type="submit" class="add">Add</button>
+                <button type="submit" class="add">{{'pointOfDeliveryQualityChecks.add'| message}}</button>
             </form>
         </section>
         <table suppress-tr-openlmis-invalid>
-            <caption ng-if="!vm.discrepancies.length">No Discrepancies</caption>
+            <caption ng-if="!vm.discrepancies.length">{{'pointOfDeliveryQualityChecks.noDiscrepancies'| message}}</caption>
             <thead>
                 <tr>
-                    <th>Discrepancy</th>
-                    <th>Quantity</th>
-                    <th>Comments</th>
+                    <th>{{'pointOfDeliveryQualityChecks.discrepancy'| message}}</th>
+                    <th>{{'pointOfDeliveryQualityChecks.quality'| message}}</th>
+                    <th>{{'pointOfDeliveryQualityChecks.comments'| message}}</th>
                 </tr>
             </thead>
             <tbody>
