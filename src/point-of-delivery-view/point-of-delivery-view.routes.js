@@ -83,23 +83,23 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     }
                     return $stateParams.facility;
                 },
-                PODs: function(paginationService, pointOfDeliveryManageService, $stateParams) {
+                PODs: function(paginationService, pointOfDeliveryService, $stateParams) {
                         return paginationService.registerUrl($stateParams, function(stateParams){
                             if (stateParams.destinationId){
                                 console.log("inside pagination");
                                 //stateParams.sort = 'createdDate,desc';
-                                return pointOfDeliveryManageService.getPODs(facility.id);
+                                return pointOfDeliveryService.getPODs(facility.id);
                             }
                             return undefined;
                         });
                         // customPageParamName: 'customPage',
                         // customSizeParamName: 'customSize'
                     }
-                     // PODs: function(paginationService, pointOfDeliveryManageService, $stateParams) {
+                     // PODs: function(paginationService, pointOfDeliveryService, $stateParams) {
                 //     return paginationService.registerUrl($stateParams, function(stateParams) {
                 //         if (stateParams.supplyingFacilityId) {
                 //             stateParams.sort = 'createdDate,desc';
-                //             return pointOfDeliveryManageService.getPODs(stateParams);
+                //             return pointOfDeliveryService.getPODs(stateParams);
                 //         }
                 //         return undefined;
                 //     });

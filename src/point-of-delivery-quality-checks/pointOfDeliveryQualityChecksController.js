@@ -18,11 +18,12 @@
 
     angular
         .module('point-of-delivery-quality-checks')
-        .controller('pointOfDeliveryQualityChecksController', pointOfDeliveryQualityChecksController);
+        .controller('pointOfDeliveryQualityChecksController', pointOfDeliveryQualityChecksController)
 
-    pointOfDeliveryQualityChecksController.$inject = ['$scope']; // inject any dependencies here
+    pointOfDeliveryQualityChecksController.$inject = ['$scope', 'pointOfDeliveryService']; // inject any dependencies here
 
-    function pointOfDeliveryQualityChecksController($scope) {
+    function pointOfDeliveryQualityChecksController($scope, pointOfDeliveryService) {
+
         var vm = this;
         vm.$onInit = onInit;
         // Controller logic here
@@ -33,6 +34,10 @@
         vm.submitDiscrepancy = submitDiscrepancy;
         vm.goToPOD = goToPOD;
         vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
+        vm.test = undefined;
+        
+
+       // vm.discrepancies = undefined;
 
         function onInit() {
 
@@ -45,10 +50,24 @@
             
         }
 
+       
         function submitDiscrepancy() {
             // To Send vm.discrepancies to Backend
             console.log(vm.discrepancies);
+
+            var discrepancyDetails =  {};
+
+            vm.discrepancies.forEach((discrepancy, index) => {
+
+                discrepancyDetails[index] = discrepancy;
+            });
+                                
+            // Resulting array of objects
+            console.log(discrepancyDetails);
+
+          pointOfDeliveryService.submitQualityDiscrepancies(discrepancyDetails);
         }
+
         // adding discrepancies to table
         function addDiscrepency() {
             vm.discrepancies.push({
