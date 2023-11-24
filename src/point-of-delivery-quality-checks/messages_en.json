@@ -1,0 +1,27 @@
+{
+  "pointOfDeliveryQualityChecks.deliveriesAt": "View Deliveries at ${facility}",
+  "pointOfDeliveryQualityChecks.facility": "Supplying Facility",
+  "pointOfDeliveryQualityChecks.label": "Quality Checks",
+  "pointOfDeliveryQualityChecks.numberOfCartons": "Number of Cartons",  
+  "pointOfDeliveryQualityChecks.numberOfContainers": "Number of Containers",
+  "pointOfDeliveryQualityChecks.packedBy": "Packed By",
+  "pointOfDeliveryQualityChecks.packingDate": "Packing Date",  
+  "pointOfDeliveryQualityChecks.receivedBy": "Received By",
+  "pointOfDeliveryQualityChecks.receivedDate": "Receiving Date",
+  "pointOfDeliveryQualityChecks.referenceNo": "Reference Number",
+  "pointOfDeliveryQualityChecks.remarks": "Remarks",
+  "pointOfDeliveryQualityChecks.submit": "Submit",
+  "pointOfDeliveryQualityChecks.title": "Make Quality Checks",
+  "pointOfDeliveryQualityChecks.discrepancy": "Discrepancy",
+  "pointOfDeliveryQualityChecks.quality": "Quality",
+  "pointOfDeliveryQualityChecks.comments": "Comments",
+  "pointOfDeliveryQualityChecks.noDiscrepancies": "No Discrepancies",
+  "pointOfDeliveryQualityChecks.referenceNumber": "Reference Number",
+  "pointOfDeliveryQualityChecks.addDiscrepancy": "Add discrepancy",
+  "pointOfDeliveryQualityChecks.add": "Add",
+  "pointOfDeliveryQualityChecks.yes": "Yes",
+  "pointOfDeliveryQualityChecks.no": "No",
+  "pointOfDeliveryQualityChecks.isShipmentOkaySpan": "Delivered supplies in good condition with correct documentation?",
+  "pointOfDeliveryQualityChecks.qualityChecks":"Quality Checks"
+
+}

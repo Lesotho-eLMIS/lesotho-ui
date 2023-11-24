@@ -19,20 +19,20 @@
 
     /**
      * @ngdoc service
-     * @name point-of-delivery-manage.pointOfDeliveryManageService
+     * @name point-of-delivery-manage.pointOfDeliveryService
      *
      * @description
      * Prepares data for the Point of Delivery Manage view.
      */
     angular
         .module('requisition-search')
-        .service('pointOfDeliveryManageService', pointOfDeliveryManageService);
+        .service('pointOfDeliveryService', pointOfDeliveryService);
 
-        pointOfDeliveryManageService.$inject = ['facilityService', 'facilityFactory', 'authorizationService', '$q', '$stateParams',
+        pointOfDeliveryService.$inject = ['facilityService', 'facilityFactory', 'authorizationService', '$q', '$stateParams',
         '$state', 'localStorageService','$resource','openlmisUrlFactory','pointOfDeliveryManageResource'
     ];
 
-    function pointOfDeliveryManageService(facilityService,facilityFactory, authorizationService, $q, $stateParams, $state,
+    function pointOfDeliveryService(facilityService,facilityFactory, authorizationService, $q, $stateParams, $state,
                                        localStorageService,$resource,openlmisUrlFactory,pointOfDeliveryManageResource) {
 
         var promise,
@@ -51,7 +51,10 @@
                 }              
             });
  
-        this.sendPayload = sendPayload; // To post data 
+        this.submitPodManage = submitPodManage; // To post data POD Manage payload
+
+        this.submitQualityDiscrepancies = submitQualityDiscrepancies;
+
 
         //To fetch POD records.
         this.getPODs = function(receivingFacilityId){
@@ -74,8 +77,13 @@
                 });
             }
           
-        function sendPayload(payloadData){
+        function submitPodManage(payloadData){
             return resource.savePODEvent(payloadData);
+        }
+
+        function submitQualityDiscrepancies(discrepancyPayload){
+            console.log("discrepancyPayload in service");
+            console.log(discrepancyPayload);
         }
         
     }
