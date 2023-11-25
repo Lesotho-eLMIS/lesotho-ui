@@ -18,10 +18,13 @@
 </form>
 
 <div class="stock-adjustment-creation">
+    <form ng-submit="vm.submitDiscrepancy()">
     <section class="openlmis-table-container">
         <label for="referenceNo">{{'pointOfDeliveryQualityChecks.referenceNumber' | message}}</label>
         <input id="referenceNo" type="text" ng-model="vm.referenceNo" size="10em" required/>
     </section>
+    <button type="submit" ng-hide="true">Invisible</button>
+    </form>
 </div>
 <div>
     

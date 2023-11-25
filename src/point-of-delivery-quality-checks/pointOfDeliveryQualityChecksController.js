@@ -36,20 +36,22 @@
         vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
         vm.test = undefined;
         vm.isQualityChecked = false;
+
+        //Click Dummy Button
+        vm.clickDummy = function(){
+            console.log("clicked")
+        }
       
         function onInit() {
-
             vm.discrepancies = [];
             vm.isShipmentOkay = 'No';
-            
-          }
+        }
         
         function goToPOD() {
-
             $state.go('openlmis.pointOfDelivery.manage');            
         }
 
-               function submitDiscrepancy() {
+        function submitDiscrepancy() {
             // To Send vm.discrepancies to Backend
             console.log(vm.discrepancies);
             console.log(vm.referenceNo);
@@ -71,8 +73,8 @@
             // Resulting array of objects
             console.log(discrepancyDetails);
 
-          pointOfDeliveryService.submitQualityDiscrepancies(discrepancyDetails);
-          vm.isQualityChecked = true;
+            pointOfDeliveryService.submitQualityDiscrepancies(discrepancyDetails);
+            vm.isQualityChecked = true;
         }
 
         // adding discrepancies to table
