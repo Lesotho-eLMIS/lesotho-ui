@@ -15,15 +15,14 @@
                 ng-required="!vm.requestingFacility"
                 ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select>
     </fieldset>
+    <Fieldset>
+        <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
+        <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50" required/>
+    </Fieldset>
 </form>
 <form name="podManageForm" class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>
     <fieldset class="form-group">
         <Fieldset>
-            <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
-            <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50" required/>
-        </Fieldset>
-        
-         <Fieldset>
             <label for="receivedDate">{{'pointOfDeliveryManage.packingDate' | message}}</label>
             <input id="receivedDate" type="date" max-date="vm.maxDate" ng-model="vm.proofOfDelivery.receivedDate" required/>
          </Fieldset>      
@@ -53,7 +52,7 @@
                 
         <Fieldset>
             <label for="remarks">{{'pointOfDeliveryManage.remarks' | message}}</label>
-            <textarea id="remarks" type="text" ng-model="vm.POD.remarks" rows="3" cols="50"></textarea>
+            <textarea id="remarks" type="text" ng-model="vm.POD.remarks" rows="2" cols="50"></textarea>
         </Fieldset>      
         
         <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}"/>

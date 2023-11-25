@@ -23,5 +23,7 @@
   "pointOfDeliveryQualityChecks.no": "No",
   "pointOfDeliveryQualityChecks.isShipmentOkaySpan": "Delivered supplies in good condition with correct documentation?",
   "pointOfDeliveryQualityChecks.qualityChecks":"Quality Checks",
-  "pointOfDeliveryQualityChecks.containerType":"Type"
+  "pointOfDeliveryQualityChecks.containerType":"Type",
+  "pointOfDeliveryQualityChecks.remove": "Remove",
+  "pointOfDeliveryQualityChecks.action": "Action"
 }

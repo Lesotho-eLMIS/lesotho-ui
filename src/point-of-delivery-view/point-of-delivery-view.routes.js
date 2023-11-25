@@ -28,7 +28,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             isOffline: true,
             url: '/View',
             label: 'pointOfDeliveryView.label',
-            //priority: 4,
+            priority: 1,
             showInNavigation: true,
             views: {
                 '@openlmis': {

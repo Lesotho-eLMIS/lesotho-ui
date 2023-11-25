@@ -29,7 +29,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             url: '/Manage',
             templateUrl: 'point-of-delivery-manage/point-of-delivery-manage.html',
             label: 'pointOfDeliveryManage.title',
-            //priority: 4,
+            priority: 2,
             showInNavigation: true,
             controller: 'pointOfDeliveryManageController',
             controllerAs: 'vm',

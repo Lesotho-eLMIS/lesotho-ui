@@ -28,7 +28,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             isOffline: true,
             url: '/qualityChecks',
             label: 'pointOfDeliveryQualityChecks.label',
-            //priority: 4,
+            priority: 3,
             showInNavigation: true,
             templateUrl: 'point-of-delivery-quality-checks/point-of-delivery-quality-checks.html',
             controller: 'pointOfDeliveryQualityChecksController',
