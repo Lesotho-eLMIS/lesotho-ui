@@ -8,6 +8,8 @@
   "pointOfDeliveryManage.packedBy": "Packed By",
   "pointOfDeliveryManage.numberOfCartons": "Number of Cartons",
   "pointOfDeliveryManage.numberOfContainers": "Number of Containers",
+  "pointOfDeliveryManage.numberOfRejectedCartons": "Number of Rejected Cartons",
+  "pointOfDeliveryManage.numberOfRejectedContainers": "Number of Rejected Containers",
   "pointOfDeliveryManage.receivedBy": "Received By",
   "pointOfDeliveryManage.receivedDate": "Receiving Date",
   "pointOfDeliveryManage.submit": "Submit",

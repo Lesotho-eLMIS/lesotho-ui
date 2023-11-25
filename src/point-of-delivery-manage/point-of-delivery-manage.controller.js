@@ -136,7 +136,7 @@
             }
         };
 
-
+        // vm.viewDiscrepancies() View discrepancies from quality checks
         
         /**
          * @ngdoc property

@@ -11,5 +11,7 @@
   "pointOfDeliveryView.referenceNo": "Reference Number",
   "pointOfDeliveryView.remarks": "Remarks",
   "pointOfDeliveryView.submit": "Submit",
-  "pointOfDeliveryView.title": "View Deliveries"
+  "pointOfDeliveryView.title": "View Deliveries",
+  "pointOfDeliveryView.discrepancies": "Discrepancies",
+  "pointOfDeliveryView.noDiscrepancies": " No Discrepancies"
 }

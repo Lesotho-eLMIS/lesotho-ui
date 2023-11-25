@@ -16,6 +16,7 @@
                 <th>{{'pointOfDeliveryView.receivedBy' | message}}</th>
                 <th>{{'pointOfDeliveryView.remarks' | message}}</th>
                 <th class="col-sticky sticky-right">{{'pointOfDeliveryView.receivedDate' | message}}</th>
+                <th>{{'pointOfDeliveryView.discrepancies' | message}}</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,8 @@
                 <td>{{item.receivedBy}}</td>
                 <td>{{item.remarks}}</td>
                 <td>{{item.receivingDate | openlmisDate}}</td>
+                <td ng-if="true" ><button class="primary"  ng-click="vm.viewDiscrepancies()">{{'pointOfDeliveryView.discrepancies' | message}}</button></td>
+                <td ng-if="false" >{{'pointOfDeliveryView.noDiscrepancies' | message}}</td>
             </tr>
         </tbody>
     </table>
