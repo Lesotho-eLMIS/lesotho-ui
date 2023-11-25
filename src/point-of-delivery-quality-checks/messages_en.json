@@ -25,5 +25,6 @@
   "pointOfDeliveryQualityChecks.qualityChecks":"Quality Checks",
   "pointOfDeliveryQualityChecks.containerType":"Type",
   "pointOfDeliveryQualityChecks.remove": "Remove",
-  "pointOfDeliveryQualityChecks.action": "Action"
+  "pointOfDeliveryQualityChecks.action": "Action",
+  "pointOfDeliveryQualityChecks.proceedToPODReceive" : "Proceed to POD Receive"
 }
