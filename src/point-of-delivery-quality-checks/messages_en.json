@@ -13,7 +13,7 @@
   "pointOfDeliveryQualityChecks.submit": "Submit",
   "pointOfDeliveryQualityChecks.title": "Make Quality Checks",
   "pointOfDeliveryQualityChecks.discrepancy": "Discrepancy",
-  "pointOfDeliveryQualityChecks.quality": "Quality",
+  "pointOfDeliveryQualityChecks.quantity": "Quantity",
   "pointOfDeliveryQualityChecks.comments": "Comments",
   "pointOfDeliveryQualityChecks.noDiscrepancies": "No Discrepancies",
   "pointOfDeliveryQualityChecks.referenceNumber": "Reference Number",
@@ -22,6 +22,6 @@
   "pointOfDeliveryQualityChecks.yes": "Yes",
   "pointOfDeliveryQualityChecks.no": "No",
   "pointOfDeliveryQualityChecks.isShipmentOkaySpan": "Delivered supplies in good condition with correct documentation?",
-  "pointOfDeliveryQualityChecks.qualityChecks":"Quality Checks"
-
+  "pointOfDeliveryQualityChecks.qualityChecks":"Quality Checks",
+  "pointOfDeliveryQualityChecks.containerType":"Type"
 }

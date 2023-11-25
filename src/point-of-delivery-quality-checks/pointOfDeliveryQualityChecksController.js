@@ -34,6 +34,7 @@
         vm.submitDiscrepancy = submitDiscrepancy;
         vm.goToPOD = goToPOD;
         vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
+        vm.containersOptions = ["Cartons", "Containers"];
         vm.test = undefined;
         vm.isQualityChecked = false;
 
@@ -64,9 +65,7 @@
             // };
 
             var discrepancyDetails =  {};
-
             vm.discrepancies.forEach((discrepancy, index) => {
-
                 discrepancyDetails[index] = discrepancy;
             });
                                 

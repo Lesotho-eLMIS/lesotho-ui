@@ -37,10 +37,18 @@
             <label for="numberOfCartons">{{'pointOfDeliveryManage.numberOfCartons' | message}}</label>
             <input id="numberOfCartons" type="number" min="0" step="1" oninput="validity.valid||(value='');" ng-model="vm.POD.numberOfCartons" maxlength="50" required/>
         </Fieldset>
+        <Fieldset>
+            <label for="numberOfRejectedCartons">{{'pointOfDeliveryManage.numberOfRejectedCartons' | message}}</label>
+            <input id="numberOfRejectedCartons" type="number" min="0" step="1" oninput="validity.valid||(value='');" ng-model="vm.POD.numberOfCartons" maxlength="50" required/>
+        </Fieldset>
         
         <Fieldset>
             <label for="numberOfContainers">{{'pointOfDeliveryManage.numberOfContainers' | message}}</label>
             <input id="numberOfContainers" type="number" min="0" step="1" oninput="validity.valid||(value='');" ng-model="vm.POD.numberOfContainers" maxlength="50" required/>
+        </Fieldset>
+        <Fieldset>
+            <label for="numberOfRejectedContainers">{{'pointOfDeliveryManage.numberOfRejectedContainers' | message}}</label>
+            <input id="numberOfRejectedContainers" type="number" min="0" step="1" oninput="validity.valid||(value='');" ng-model="vm.POD.numberOfContainers" maxlength="50" required/>
         </Fieldset>
                 
         <Fieldset>
