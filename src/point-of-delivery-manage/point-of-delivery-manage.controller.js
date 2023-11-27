@@ -44,6 +44,7 @@
         vm.$onInit = onInit;
         vm.facility = facility;
      //   vm.receivingFacility = undefined;
+        
      
         vm.POD = {};
 
@@ -171,6 +172,9 @@
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
             //stateParams.sort = 'createdDate,desc';
             //console.log("Sorting state param in Controller");
+            var receivedData = $stateParams.ref;
+
+            console.log(receivedData)
           
         }
 

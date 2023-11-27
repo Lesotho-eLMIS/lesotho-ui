@@ -49,7 +49,9 @@
         }
         
         function goToPOD() {
-            $state.go('openlmis.pointOfDelivery.manage');            
+            $state.go('openlmis.pointOfDelivery.manage', {
+                ref : vm.referenceNo
+            });            
         }
 
         function submitDiscrepancy() {
