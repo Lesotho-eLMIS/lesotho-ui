@@ -28,10 +28,10 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryService', 
+        '$rootScope','$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryService', 
         '$scope', 'notificationService', 'dateUtils'];
 
-    function pointOfDeliveryManageController($state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
+    function pointOfDeliveryManageController($rootScope, $state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
                                          confirmService, pointOfDeliveryService, $scope, notificationService, dateUtils ) {
 
 
@@ -44,6 +44,7 @@
         vm.$onInit = onInit;
         vm.facility = facility;
      //   vm.receivingFacility = undefined;
+        
      
         vm.POD = {};
 
@@ -169,8 +170,12 @@
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;        
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
-            //stateParams.sort = 'createdDate,desc';
-            //console.log("Sorting state param in Controller");
+           
+            vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
+            $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope
+            console.log($rootScope.referenceNoPOD);
+
+
           
         }
 

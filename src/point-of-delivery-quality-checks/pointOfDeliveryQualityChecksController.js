@@ -20,9 +20,9 @@
         .module('point-of-delivery-quality-checks')
         .controller('pointOfDeliveryQualityChecksController', pointOfDeliveryQualityChecksController)
 
-    pointOfDeliveryQualityChecksController.$inject = ['$scope', 'pointOfDeliveryService', '$state']; // inject any dependencies here
+    pointOfDeliveryQualityChecksController.$inject = ['$rootScope', '$scope', 'pointOfDeliveryService', '$state']; // inject any dependencies here
 
-    function pointOfDeliveryQualityChecksController($scope, pointOfDeliveryService, $state) {
+    function pointOfDeliveryQualityChecksController($rootScope , $scope, pointOfDeliveryService, $state) {
 
         var vm = this;
         vm.$onInit = onInit;
@@ -49,13 +49,14 @@
         }
         
         function goToPOD() {
+            $rootScope.referenceNoPOD = vm.referenceNo; 
             $state.go('openlmis.pointOfDelivery.manage');            
         }
 
         function submitDiscrepancy() {
             // To Send vm.discrepancies to Backend
-            console.log(vm.discrepancies);
-            console.log(vm.referenceNo);
+            //console.log(vm.discrepancies);
+            //console.log(vm.referenceNo);
             
             // if (vm.referenceNo=) {
             //     // Adding success message when POD saved.
