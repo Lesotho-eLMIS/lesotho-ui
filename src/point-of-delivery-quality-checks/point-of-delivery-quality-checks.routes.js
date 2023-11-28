@@ -32,7 +32,14 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             showInNavigation: true,
             templateUrl: 'point-of-delivery-quality-checks/point-of-delivery-quality-checks.html',
             controller: 'pointOfDeliveryQualityChecksController',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            resolve: {
+                rejectionReasons: function(rejectionReasonService) {
+                        // Load rejection Reasons into the controller.
+                        return rejectionReasonService.getAll();
+                    
+                }
+            }
         });
     }
 })();
