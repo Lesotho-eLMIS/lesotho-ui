@@ -18,10 +18,10 @@
 
     /**
      * @ngdoc controller
-     * @name requisition-search.controller:RequisitionViewController
+     * @name point-of-delivery-manage.controller:pointOfDeliveryManageController
      *
      * @description
-     * Controller for requisition view page.
+     * Controller for point of delivery manage.
      */
     angular
         .module('point-of-delivery-manage')
@@ -50,25 +50,27 @@
 
         vm.submitPOD = function () {
 
-                var sourceId = vm.supplyingFacility.id;
-                var destinationId = vm.receivingFacility.id;
-                var referenceNumber = vm.POD.referenceNo;
-                var packingDate = vm.proofOfDelivery.receivedDate;
-                var packedBy = vm.POD.packedBy;
-                var numberOfCartons = vm.POD.numberOfCartons;
-                var numberOfContainers = vm.POD.numberOfContainers;
-                var remarks = vm.POD.remarks;
+                // var sourceId = vm.supplyingFacility.id;
+                // var destinationId = vm.receivingFacility.id;
+                // var referenceNumber = vm.POD.referenceNo;
+                // var packingDate = vm.proofOfDelivery.receivedDate;
+                // var packedBy = vm.POD.packedBy;
+                // var numberOfCartons = vm.POD.numberOfCartons;
+                // var numberOfContainers = vm.POD.numberOfContainers;
+                // var remarks = vm.POD.remarks;
 
               
                 var payloadData = {
-                    sourceId:sourceId,
-                    destinationId:destinationId,
-                    referenceNumber:referenceNumber,
-                    packingDate:packingDate,
-                    packedBy:packedBy,
-                    numberOfCartons:numberOfCartons,
-                    numberOfContainers:numberOfContainers,
-                    remarks:remarks
+                    sourceId:vm.supplyingFacility.id,
+                    destinationId:vm.receivingFacility.id,
+                    referenceNumber:vm.POD.referenceNo,
+                    packingDate:vm.proofOfDelivery.receivedDate,
+                    packedBy:vm.POD.packedBy,
+                    numberOfCartons:vm.POD.numberOfCartons,
+                    rejectedCartons:vm.POD.numberOfRejectedCartons,
+                    numberOfContainers:vm.POD.numberOfContainers,
+                    rejectecContainers:vm.POD.numberOfRejectedContainers,
+                    remarks:vm.POD.remarks
                 };
 
 
@@ -86,6 +88,42 @@
             $scope.podManageForm.$setUntouched();
 
         };
+
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name validateCartons
+         *
+         * @description
+         * Checks if the number of rejected cartons is greater than the total number of cartons received. If it is, 
+         * it resets the number of rejected cartons to 0
+         */
+
+        vm.validateCartons = function(){
+            
+            if(vm.POD.numberOfRejectedCartons > vm.POD.numberOfCartons){
+                vm.POD.numberOfRejectedCartons = 0;
+            }            
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name validateContainers
+         *
+         * @description
+         * Checks if the number of rejected containers is greater than the total number of containers received. If it is, 
+         * it resets the number of rejected containers to 0
+         */
+
+        vm.validateContainers = function(){
+
+            console.log(vm.POD.numberOfRejectedContainers + " && " + vm.POD.numberOfContainers)
+
+            if(vm.POD.numberOfRejectedContainers > vm.POD.numberOfContainers){
+                vm.POD.numberOfRejectedContainers = 0;
+            }           
+        }
 
 
         vm.getSupplyingFacilityName = async function(supplyingFacilityId) {
@@ -174,11 +212,9 @@
             vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
             $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope
             console.log($rootScope.referenceNoPOD);
-
-
+            console.log("Getting  Ref Number from Quality Checks");
           
         }
-
          
         var sendToView = pointOfDeliveryService.getPODs(facility.id);
 
