@@ -20,14 +20,15 @@
         .module('point-of-delivery-quality-checks')
         .controller('pointOfDeliveryQualityChecksController', pointOfDeliveryQualityChecksController)
 
-    pointOfDeliveryQualityChecksController.$inject = ['$rootScope', '$scope', 'pointOfDeliveryService', '$state']; // inject any dependencies here
+    pointOfDeliveryQualityChecksController.$inject = ['$rootScope', '$scope', 'pointOfDeliveryService', '$state', 'notificationService']; // inject any dependencies here
 
-    function pointOfDeliveryQualityChecksController($rootScope , $scope, pointOfDeliveryService, $state) {
+    function pointOfDeliveryQualityChecksController($rootScope , $scope, pointOfDeliveryService, $state, notificationService) {
 
         var vm = this;
         vm.$onInit = onInit;
         // Controller logic here
         vm.addDispency = addDiscrepency;
+        vm.removeDispency = removeDiscrepancy;
         vm.discrepancies = undefined;
         vm.selectedDiscrepancy = undefined;
         vm.discrepancySelectionChanged = discrepancySelectionChanged;
@@ -54,27 +55,29 @@
         }
 
         function submitDiscrepancy() {
-            // To Send vm.discrepancies to Backend
-            //console.log(vm.discrepancies);
-            //console.log(vm.referenceNo);
             
-            // if (vm.referenceNo=) {
-            //     // Adding success message when POD saved.
-            //     notificationService.success('Successfully Received');
-            // } else {
-            //     notificationService.error('Failed to receive data');
-            // };
+            if (vm.referenceNo) {
 
-            var discrepancyDetails =  {};
-            vm.discrepancies.forEach((discrepancy, index) => {
-                discrepancyDetails[index] = discrepancy;
-            });
-                                
-            // Resulting array of objects
-            console.log(discrepancyDetails);
+                // To Send vm.discrepancies to Backend
+                var discrepancyDetails =  {};
+                vm.discrepancies.forEach((discrepancy, index) => {
+                    discrepancyDetails[index] = discrepancy;
+                });            
+                // Resulting array of objects
+                console.log(discrepancyDetails);
+                pointOfDeliveryService.submitQualityDiscrepancies(discrepancyDetails);
+                vm.isQualityChecked = true;
+                notificationService.success('Successfully submitted.');
 
-            pointOfDeliveryService.submitQualityDiscrepancies(discrepancyDetails);
-            vm.isQualityChecked = true;
+                vm.referenceNo="";
+                vm.discrepancies={};
+                vm.selectedDiscrepancy="";
+                //$scope.discrepancyForm.$setPristine();
+                //$scope.discrepancyForm.$setUntouched();
+
+            } else {
+                 notificationService.error('Reference number required. Try again.');
+            };
         }
 
         // adding discrepancies to table
@@ -84,8 +87,11 @@
                 'quantity': '',
                 'comments': ''
             });
+        }
 
-            
+        // removing discrepancies from table
+        function removeDiscrepancy(index) {
+            vm.discrepancies.splice(index, 1);
         }
 
         function discrepancySelectionChanged() {
