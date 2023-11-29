@@ -17,7 +17,7 @@
     </fieldset>
     <Fieldset>
         <label for="referenceNo">{{'pointOfDeliveryManage.referenceNo' | message}}</label>
-        <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50" ng-disabled="true" ng-required="true"/>
+        <input id="referenceNo" type="text" ng-model="vm.POD.referenceNo" maxlength="50" ng-disabled="false" ng-required="true"/>
     </Fieldset>
 </form>
 <form name="podManageForm" class="content" ng-submit="vm.submitPOD()" openlmis-table-filter>

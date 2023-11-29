@@ -50,16 +50,8 @@
 
         vm.submitPOD = function () {
 
-                // var sourceId = vm.supplyingFacility.id;
-                // var destinationId = vm.receivingFacility.id;
-                // var referenceNumber = vm.POD.referenceNo;
-                // var packingDate = vm.proofOfDelivery.receivedDate;
-                // var packedBy = vm.POD.packedBy;
-                // var numberOfCartons = vm.POD.numberOfCartons;
-                // var numberOfContainers = vm.POD.numberOfContainers;
-                // var remarks = vm.POD.remarks;
-
-              
+            if (vm.POD.referenceNo) {
+                
                 var payloadData = {
                     sourceId:vm.supplyingFacility.id,
                     destinationId:vm.receivingFacility.id,
@@ -72,21 +64,24 @@
                     rejectecContainers:vm.POD.numberOfRejectedContainers,
                     remarks:vm.POD.remarks
                 };
+    
+    
+                var podResponse = pointOfDeliveryService.submitPodManage(payloadData);
+                if (podResponse) {
+                    // Adding success message when POD saved.
+                    notificationService.success('Successfully submitted.');
+                } else {
+                    notificationService.error('Failed to submit.');
+                };
+                   
+                vm.POD = {};
+                vm.proofOfDelivery = {};
+                $scope.podManageForm.$setPristine();
+                $scope.podManageForm.$setUntouched();
 
-
-            var podResponse = pointOfDeliveryService.submitPodManage(payloadData);
-            if (podResponse) {
-                // Adding success message when POD saved.
-                notificationService.success('Successfully Received');
             } else {
-                notificationService.error('Failed to receive data');
+                notificationService.error('Reference number required. Try again.');
             };
-               
-            vm.POD = {};
-            vm.proofOfDelivery = {};
-            $scope.podManageForm.$setPristine();
-            $scope.podManageForm.$setUntouched();
-
         };
 
         /**
