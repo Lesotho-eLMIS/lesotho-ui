@@ -34,7 +34,7 @@
         vm.discrepancySelectionChanged = discrepancySelectionChanged;
         vm.submitDiscrepancy = submitDiscrepancy;
         vm.goToPOD = goToPOD;
-        vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
+        vm.discrepancyOptions = [];// ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item"];
         vm.containersOptions = ["Cartons", "Containers"];
         vm.test = undefined;
         vm.isQualityChecked = false;
@@ -47,6 +47,16 @@
         function onInit() {
             vm.discrepancies = [];
             vm.isShipmentOkay = 'No';
+            //Loading rejection Reasons  to be displayed as options
+            vm.rejectionReasons = rejectionReasons.content;
+            vm.rejectionReasons.forEach(reason => {
+                // Load only those of type POD/Point of Delivery
+                if(reason.rejectionReasonCategory.code == "POD"){
+                    vm.discrepancyOptions.push(reason.name);
+                }
+                
+            });
+
         }
         
         function goToPOD() {
