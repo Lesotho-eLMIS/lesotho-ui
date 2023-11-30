@@ -20,9 +20,9 @@
         .module('point-of-delivery-quality-checks')
         .controller('pointOfDeliveryQualityChecksController', pointOfDeliveryQualityChecksController)
 
-    pointOfDeliveryQualityChecksController.$inject = ['$rootScope', '$scope', 'pointOfDeliveryService', '$state', 'notificationService']; // inject any dependencies here
+    pointOfDeliveryQualityChecksController.$inject = ['$rootScope', '$scope', 'pointOfDeliveryService', '$state', 'notificationService', 'rejectionReasons']; // inject any dependencies here
 
-    function pointOfDeliveryQualityChecksController($rootScope , $scope, pointOfDeliveryService, $state, notificationService) {
+    function pointOfDeliveryQualityChecksController($rootScope , $scope, pointOfDeliveryService, $state, notificationService, rejectionReasons) {
 
         var vm = this;
         vm.$onInit = onInit;
