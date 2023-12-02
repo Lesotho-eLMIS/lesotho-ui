@@ -79,8 +79,8 @@
                 <td>{{fulfills.orderable.fullProductName}}</td>
                 <td>{{fulfills.lot ? fulfills.lot.lotCode : ('stockCardSummaryList.noLotDefined' | message)}}</td>
                 <td>{{fulfills.lot ? (fulfills.lot.expirationDate | openlmisDate) : ''}}</td>
-                <td>{{fulfills.dosageForm}}</td>
-                <td>{{fulfills.unitofIssue}}</td>
+                <td>{{fulfills.orderable.dispensable.routeOfAdministration}}</td>
+                <td>{{fulfills.orderable.dispensable.sizeCode}}</td>
                 <td>{{fulfills.occurredDate | openlmisDate}}</td>
                 <td>{{fulfills.stockOnHand}}</td>
                 <td>
