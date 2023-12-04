@@ -44,8 +44,17 @@
         vm.$onInit = onInit;
         vm.facility = facility;
      //   vm.receivingFacility = undefined;
-        
-     
+        // For Displaying Recieved By Name without a comma
+        $scope.formatPODrecievedBy = function(name) {
+            if (name) {
+              var splittedName = name.split(', '); // Splitting the string by comma and space
+              return splittedName.join(' '); // Joining the array elements with a space in between 
+            } else {
+              return ''; // Handle if input is empty or undefined
+            }
+          };
+
+
         vm.POD = {};
 
         vm.submitPOD = function () {
@@ -231,79 +240,5 @@
              console.error('Error in controller:', error);
             });
                 
-
-        // /**
-        //  * @ngdoc method
-        //  * @methodOf requisition-search.controller:RequisitionViewController
-        //  * @name isOfflineDisabled
-        //  *
-        //  * @description
-        //  * Check if "Search offline" checkbox should be disabled. It will set the searchOffline
-        //  * flag to true if app goes in the offline mode.
-        //  *
-        //  * @return {Boolean} true if offline is disabled, false otherwise
-        //  */
-        // function isOfflineDisabled() {
-        //     if (offlineService.isOffline()) {
-        //         vm.offline = true;
-        //     }
-        //     return offlineService.isOffline();
-        // }
-
-        // /**
-        //  * @ngdoc method
-        //  * @methodOf requisition-search.controller:RequisitionViewController
-        //  * @name openRnr
-        //  *
-        //  * @description
-        //  * Redirect to requisition page after clicking on grid row.
-        //  *
-        //  * @param {String} requisitionId Requisition UUID
-        //  */
-        // function openRnr(requisitionId) {
-        //     $state.go('openlmis.requisitions.requisition.fullSupply', {
-        //         rnr: requisitionId
-        //     });
-        // }
-
-        // /**
-        //  * @ngdoc method
-        //  * @methodOf requisition-search.controller:RequisitionViewController
-        //  * @name removeOfflineRequisition
-        //  *
-        //  * @description
-        //  * Removes requisition from local storage.
-        //  *
-        //  * @param {Resource} requisition Requisition to remove
-        //  */
-        // function removeOfflineRequisition(requisition) {
-        //     confirmService.confirmDestroy('requisitionSearch.removeOfflineRequisition.confirm').then(function() {
-        //         offlineRequisitions.removeBy('id', requisition.id);
-        //         requisition.$availableOffline = false;
-        //     });
-        // }
-
-        // /**
-        //  * @ngdoc method
-        //  * @methodOf requisition-search.controller:RequisitionViewController
-        //  * @name search
-        //  *
-        //  * @description
-        //  * Searches requisitions by criteria selected in form.
-        //  */
-        // function search() {
-        //     var stateParams = angular.copy($stateParams);
-
-        //     stateParams.program = vm.selectedProgram ? vm.selectedProgram.id : null;
-        //     stateParams.facility = vm.selectedFacility ? vm.selectedFacility.id : null;
-        //     stateParams.initiatedDateFrom = vm.startDate ? $filter('isoDate')(vm.startDate) : null;
-        //     stateParams.initiatedDateTo = vm.endDate ? $filter('isoDate')(vm.endDate) : null;
-        //     stateParams.offline = vm.offline;
-        //     stateParams.requisitionStatus = vm.selectedStatus;
-
-        //     $state.go('openlmis.requisitions.search', stateParams, {
-        //         reload: true
-        //     });
-        // }
     }
 })();
