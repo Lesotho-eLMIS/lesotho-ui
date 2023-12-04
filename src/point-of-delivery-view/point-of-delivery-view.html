@@ -27,7 +27,7 @@
                 <td>{{item.packedBy}}</td>
                 <td>{{item.numberOfCartons}}</td>
                 <td>{{item.numberOfContainers}}</td>
-                <td>{{item.receivedBy}}</td>
+                <td>{{formatPODrecievedBy(item.receivedByUserNames)}}</td>
                 <td>{{item.remarks}}</td>
                 <td>{{item.receivingDate | openlmisDate}}</td>
                 <td ng-if="true" ><button class="primary"  ng-click="vm.viewDiscrepancies()">{{'pointOfDeliveryView.discrepancies' | message}}</button></td>
