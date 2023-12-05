@@ -52,30 +52,73 @@
             });
  
         this.submitPodManage = submitPodManage; // To post data POD Manage payload
+        this.getPODs = getPODs; //To retrieve deliveries
 
         this.submitQualityDiscrepancies = submitQualityDiscrepancies;
+        this.paginationTest = paginationTest;
 
 
         //To fetch POD records.
-        this.getPODs = function(receivingFacilityId){
+        // this.getPODs = function(receivingFacilityId){
 
-            var params = {
-                         destinationId: receivingFacilityId 
-                    }
-                return resource.get(params).$promise.then(function(response) {
-                    // Transforming the response to an object if it's an array
-                    if (Array.isArray(response)) {
+        //     var params = {
+        //                  destinationId: receivingFacilityId 
+        //             }
+        //         return resource.get(params).$promise.then(function(response) {
+        //             // Transforming the response to an object if it's an array
+        //             if (Array.isArray(response)) {
                                   
-                            var objectOfPODs = response.reduce((result, obj) => {
-                            result[obj.id] = obj;
-                            return result;
-                          }, {});                          
+        //                     var objectOfPODs = response.reduce((result, obj) => {
+        //                     result[obj.id] = obj;
+        //                     return result;
+        //                   }, {});                          
   
-                        return objectOfPODs;                         
-                    }
-                    return response; 
-                });
-            }
+        //                 return objectOfPODs;                         
+        //             }
+        //             return response; 
+        //         });
+        //     }
+       function getPODs (receivingFacilityId){
+
+                var params = {
+                             destinationId: receivingFacilityId 
+                        }
+                    return resource.get(params).$promise.then(function(response) {
+                        // Transforming the response to an object if it's an array
+                        if (Array.isArray(response)) {
+                                      
+                                var objectOfPODs = response.reduce((result, obj) => {
+                                result[obj.id] = obj;
+                                return result;
+                              }, {});                          
+      
+                            return objectOfPODs;                         
+                        }
+                        return response; 
+                    });
+                }
+
+       function paginationTest (receivingFacilityId){
+        
+    // //    var podResolved = undefined;
+         //var deferred = $q.defer();
+         var arrayOfObjects = getPODs(receivingFacilityId);
+        console.log(receivingFacilityId);
+        console.log("array of objects before resolution");
+        console.log(arrayOfObjects);
+        arrayOfObjects.then((resolvedValue) => {
+            arrayOfObjects = Array.from(Object.values(resolvedValue));
+            arrayOfObjects.then(function(resolvedObject) {             
+                podResolved = resolvedObject;  
+                console.log("podResolved"); 
+                console.log(podResolved);
+                return podResolved;
+            });
+        }); 
+        
+    }
+                
+
           
         function submitPodManage(payloadData){
             return resource.savePODEvent(payloadData);

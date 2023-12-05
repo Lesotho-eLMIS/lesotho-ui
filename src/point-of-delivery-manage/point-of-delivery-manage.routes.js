@@ -59,6 +59,31 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
+                },
+                deliveries: function(paginationService, pointOfDeliveryService, facility) {
+                    return paginationService.registerUrl(facility, function(facility){
+                        if (facility.id){
+                            console.log("inside pagination");
+                            console.log(facility.id);
+                            var test = pointOfDeliveryService.getPODs(facility.id);
+                            console.log(test);
+
+                            var arrayOfObjects = undefined;
+                            test.then((resolvedValue) => {
+                                arrayOfObjects = Array.from(Object.values(resolvedValue));
+                                console.log(arrayOfObjects);
+                              });
+
+
+
+                            //stateParams.sort = 'createdDate,desc';
+                            return arrayOfObjects; // pointOfDeliveryService.getPODs(facility.id);
+                        }
+                        //return pointOfDeliveryService.getPODs(facility.id);
+                        return undefined;
+                    });
+                    // customPageParamName: 'customPage',
+                    // customSizeParamName: 'customSize'
                 }
              
             }

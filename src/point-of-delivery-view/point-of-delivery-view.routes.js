@@ -66,35 +66,49 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     }
                     return $stateParams.facility;
                 },
-                requisitions: function(paginationService, requisitionService, $stateParams) {
-                    return paginationService.registerUrl($stateParams, function(stateParams) {
-                        if (stateParams.facility) {
-                            var offlineFlag = stateParams.offline;
-                            delete stateParams.offline;
-                            return requisitionService.search(offlineFlag === 'true', stateParams);
-                        }
-                        return undefined;
-                    });
-                },
-                facility: function($stateParams, facilityFactory) {
-                    // Load the current User's Assigned Facility
-                    if (!$stateParams.facility) {
-                        return facilityFactory.getUserHomeFacility();
-                    }
-                    return $stateParams.facility;
-                },
-                PODs: function(paginationService, pointOfDeliveryService, $stateParams) {
-                        return paginationService.registerUrl($stateParams, function(stateParams){
-                            if (stateParams.destinationId){
-                                console.log("inside pagination");
-                                //stateParams.sort = 'createdDate,desc';
-                                return pointOfDeliveryService.getPODs(facility.id);
-                            }
-                            return undefined;
-                        });
-                        // customPageParamName: 'customPage',
-                        // customSizeParamName: 'customSize'
-                    }
+                // requisitions: function(paginationService, requisitionService, $stateParams) {
+                //     return paginationService.registerUrl($stateParams, function(stateParams) {
+                //         if (stateParams.facility) {
+                //             var offlineFlag = stateParams.offline;
+                //             delete stateParams.offline;
+                //             return requisitionService.search(offlineFlag === 'true', stateParams);
+                //         }
+                //         return undefined;
+                //     });
+                // },
+                // facility: function($stateParams, facilityFactory) {
+                //     // Load the current User's Assigned Facility
+                //     if (!$stateParams.facility) {
+                //         return facilityFactory.getUserHomeFacility();
+                //     }
+                //     return $stateParams.facility;
+                // },
+                // deliveries: function(paginationService, pointOfDeliveryService, facility) {
+                //         return paginationService.registerUrl(facility, function(facility){
+                //             if (facility.id){
+                //                 console.log("inside pagination route");
+                //                 // console.log(facility.id);
+                //                 // console.log(facility);
+                //                 var test = pointOfDeliveryService.paginationTest('e5737581-1406-48f7-b0c7-c0dd6fbddd4c');
+                //                 console.log(test);
+
+                //                 // var arrayOfObjects = undefined;
+                //                 // test.then((resolvedValue) => {
+                //                 //     arrayOfObjects = Array.from(Object.values(resolvedValue));
+                //                 //     console.log(arrayOfObjects);
+                //                 //   });
+
+
+
+                //                 //stateParams.sort = 'createdDate,desc';
+                //                 return pointOfDeliveryService.paginationTest(facility.id);
+                //             }
+                //             //return pointOfDeliveryService.getPODs(facility.id);
+                //             return undefined;
+                //         });
+                //         // customPageParamName: 'customPage',
+                //         // customSizeParamName: 'customSize'
+                //     }
                      // PODs: function(paginationService, pointOfDeliveryService, $stateParams) {
                 //     return paginationService.registerUrl($stateParams, function(stateParams) {
                 //         if (stateParams.supplyingFacilityId) {
@@ -104,6 +118,29 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                 //         return undefined;
                 //     });
                 // }
+
+                deliveries: function(paginationService, pointOfDeliveryService, facility) {
+                    return paginationService.registerUrl(facility, function (facility) {
+                      if (facility.id) {
+                        console.log("inside pagination");
+                        console.log(facility.id);
+                        var test = pointOfDeliveryService.getPODs(facility.id);
+                        console.log(test);
+                        var arrayOfObjects = undefined;
+                        test.then(function (resolvedValue) {
+                          arrayOfObjects = Array.from(Object.values(resolvedValue));
+                          console.log(arrayOfObjects);
+                        });
+                        console.log("arrayOfObjects"); //stateParams.sort = 'createdDate,desc';
+                        console.log(arrayOfObjects);
+                        return arrayOfObjects; // pointOfDeliveryService.getPODs(facility.id);
+                      } //return pointOfDeliveryService.getPODs(facility.id);
+          
+          
+                      return undefined;
+                    }); // customPageParamName: 'customPage',
+                    // customSizeParamName: 'customSize'
+                  }
             }
         });
        

@@ -29,10 +29,10 @@
 
     pointOfDeliveryManageController.$inject = [
         '$rootScope','$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryService', 
-        '$scope', 'notificationService', 'dateUtils'];
+        '$scope', 'notificationService', 'dateUtils', 'deliveries'];
 
     function pointOfDeliveryManageController($rootScope, $state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
-                                         confirmService, pointOfDeliveryService, $scope, notificationService, dateUtils ) {
+                                         confirmService, pointOfDeliveryService, $scope, notificationService, dateUtils, deliveries ) {
 
 
         var vm = this;
@@ -43,6 +43,8 @@
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
+        // vm.deliveries = deliveries;
+        
      //   vm.receivingFacility = undefined;
         // For Displaying Recieved By Name without a comma
         $scope.formatPODrecievedBy = function(name) {
@@ -122,8 +124,6 @@
 
         vm.validateContainers = function(){
 
-            console.log(vm.POD.numberOfRejectedContainers + " && " + vm.POD.numberOfContainers)
-
             if(vm.POD.numberOfRejectedContainers > vm.POD.numberOfContainers){
                 vm.POD.numberOfRejectedContainers = 0;
             }           
@@ -136,8 +136,7 @@
                 var facilityObject = await facilityService.get(supplyingFacilityId);
                 
                 // Return Facility Name
-                //console.log(facilityObject.name);
-                return facilityObject.name;
+              return facilityObject.name;
             } catch (error) {
                 // Handle any errors that may occur during the query
                 console.error("Error:", error);
@@ -183,7 +182,7 @@
         
         /**
          * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
+         * @propertyOf point-of-delivery-manage.controller:pointOfDeliveryManageController
          * @name facilities
          * @type {Array}
          *
@@ -194,7 +193,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
          * @name $onInit
          *
          * @description
@@ -205,18 +204,32 @@
      
         vm.homeFacilities = [ facility ];
 
+        /**
+         * @ngdoc property
+         * @propertyOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name PODs
+         * @type {Array}
+         *
+         * @description
+         * The list of all deliveries made at a facility.
+         */
+        vm.PODs = undefined;
+
+
         function onInit() {
 
           // var stateParams = angular.copy($stateParams);
-            
+            vm.deliveries = deliveries;
+            var testpages = pointOfDeliveryService.paginationTest(facility.id);
+            console.log(testpages);
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;        
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
            
             vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
             $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope
-            console.log($rootScope.referenceNoPOD);
-            console.log("Getting  Ref Number from Quality Checks");
+            // console.log($rootScope.referenceNoPOD);
+            // console.log("Getting  Ref Number from Quality Checks");
           
         }
          
@@ -227,7 +240,8 @@
         // Assign the resolved object to a scope variable
             $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
             $scope.dataObject.then(function(resolvedObject) {             
-                $scope.PODEvents  = resolvedObject;                        
+                $scope.PODEvents  = resolvedObject;   
+                console.log($scope.PODEvents);                    
             })
                 .catch(function(error) {
                  // Handle errors
