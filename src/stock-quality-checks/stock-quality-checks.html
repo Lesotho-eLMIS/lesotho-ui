@@ -1,0 +1,61 @@
+<!-- <h2 ng-if="vm.facilityName && vm.programName">{{'proofOfDeliveryManage.managePodsForFacility' | message:{facility: vm.facilityName, program: vm.programName} }}</h2>
+<h2 ng-if="!vm.facilityName && vm.programName">{{'proofOfDeliveryManage.managePodsForProgram' | message:{program: vm.programName} }}</h2>
+<h2 ng-if="!vm.facilityName && !vm.programName">{{'proofOfDeliveryManage.managePods' | message}}</h2> -->
+<h2>Quality Checks for Receive</h2>
+<section class="openlmis-table-container">
+    <section class="is-primary">
+        <form class="form-inline" name="addProductForm" ng-submit="vm.addProduct()">
+            <div>
+                <label for="referenceNo">{{'stockQualityChecks.referenceNo'| message}}</label>
+                <input id="referenceNo"  type="text">
+                <label for="=invoiceNo">{{'stockQualityChecks.invoiceNo'| message}}</label>
+                <input id="invoiceNo"  type="text">
+                <label for="productSelect">{{'stockQualityChecks.product' | message}}</label>
+                <select id="productSelect" ng-model="vm.selectedProduct"
+                    ng-change="vm.productSelectionChanged()"
+                    ng-options="product for product in vm.discrepancyOptions"
+                    required>
+                </select>
+            </div>
+            <button type="submit" class="add">{{'stockQualityChecks.add'| message}}</button>
+        </form>
+    </section>
+</section>
+
+<section class="openlmis-table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>{{'stockQualityChecks.productCode' | message}}</th>
+                    <th>{{'stockQualityChecks.product' | message}}</th>
+                    <th>{{'stockQualityChecks.lotCode' | message}}</th>
+                    <th >{{'stockQualityChecks.expiryDate'| message}}</th>
+                    <th >{{'stockQualityChecks.soh'| message}}</th>
+                    <th >{{'stockQualityChecks.receivedFrom'| message}}</th>
+                    <th >{{'stockQualityChecks.quantityAccepted'| message}}</th>
+                    <th >{{'stockQualityChecks.quantityRejected'| message}}</th>
+                    <th >{{'stockQualityChecks.rejectionReason'| message}}</th>
+                    <th >{{'stockQualityChecks.receivedDate'| message}}</th>
+                    <th >{{'stockQualityChecks.remarks'| message}}</th>
+                    <th >{{'stockQualityChecks.action'| message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1st</td>
+                <td>1st</td>
+                <td>1st</td>
+                <td><input id="expiryDate" type="date" max-date="vm.maxDate" ng-model="vm.proofOfDelivery.expiryDate"></td>
+                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="6" ng-model="vm.soh"></td>
+                <td><input id="receivedFrom" type="text" ng-model="vm.receivedFrom" maxlength="50" ng-disabled="false"/></td>
+                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="6" ng-model="vm.quantityAccepted"></td>
+                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" value=" " length="6" ng-model="vm.quantityRejected"></td>
+                <td><input id="referenceNo" type="text" ng-model="vm.referenceNo" maxlength="50" ng-disabled="false" ng-required="true"/></td>
+                <td><input id="receivedDate" type="date" max-date="vm.maxDate" ng-model="vm.proofOfDelivery.receivedDate"></td>
+                <td><input id="remarks" type="text" ng-model="vm.remarks" maxlength="50" ng-disabled="false"></td>
+                <td><button type="submit" ng-click="vm.removeDispency($index)" class="danger">{{'stockQualityChecks.remove'| message}}</button></td>                
+            </tr>
+        </tbody>
+    </table>
+    <!-- <openlmis-pagination list="vm.pods"></openlmis-pagination> -->
+</section>

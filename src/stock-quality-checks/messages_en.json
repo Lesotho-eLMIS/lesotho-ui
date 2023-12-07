@@ -1,0 +1,20 @@
+{
+  "stockQualityChecks.label": "Check Quality",
+  "stockQualityChecks.addProduct": "Add Product",
+  "stockQualityChecks.add": "Add",
+  "stockQualityChecks.productCode":"Product Code",
+  "stockQualityChecks.product": "Product",
+  "stockQualityChecks.lotCode": "Lot Code",
+  "stockQualityChecks.expiryDate": "Expiry Date",
+  "stockQualityChecks.soh": "Stock on Hand",
+  "stockQualityChecks.receivedFrom":" Receieved From",
+  "stockQualityChecks.quantityAccepted": "Quantity Accepted",
+  "stockQualityChecks.quantityRejected": "Quantity Rejected",
+  "stockQualityChecks.rejectionReason": "Rejection Reason",
+  "stockQualityChecks.receivedDate": "Date Received",
+  "stockQualityChecks.remarks": "Remarks",
+  "stockQualityChecks.action": "Action",
+  "stockQualityChecks.remove": "Remove",
+  "stockQualityChecks.referenceNo": "Reference Number",
+  "stockQualityChecks.invoiceNo": "Invoice Number" 
+}
