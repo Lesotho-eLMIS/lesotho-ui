@@ -107,6 +107,7 @@
     vm.lotChanged = lotChanged;
     vm.addProduct = addProduct;
     vm.hasPermissionToAddNewLot = hasPermissionToAddNewLot;
+    vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item","More..."];
     //vm.UPrice;
     vm.FromSupplier = false; 
     vm.hideColumns=function(){
@@ -136,6 +137,7 @@
 
     /* eLMIS Lesotho : start */
     vm.showDeliveryNoteAttributes = false;
+    vm.showReasonsInAdjustment = false;
     /* eLMIS Lesotho : end */
 
     /**
@@ -775,6 +777,8 @@
       /* eLMIS Lesotho : start */
       vm.showDeliveryNoteAttributes =
         adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state;
+      vm.showReasonsInAdjustment =
+        adjustmentType.state === ADJUSTMENT_TYPE.ADJUSTMENT.state;
       /* eLMIS Lesotho : end */
       vm.srcDstAssignments = srcDstAssignments;
       vm.addedLineItems = $stateParams.addedLineItems || [];
