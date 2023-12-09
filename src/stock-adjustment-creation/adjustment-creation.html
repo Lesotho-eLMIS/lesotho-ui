@@ -54,14 +54,17 @@
                     <th ng-show="vm.hasLot">{{vm.key('expiryDate') | message}}</th>
                     <th>{{vm.key('soh') | message}}</th>
                     <th ng-show="vm.srcDstAssignments">{{vm.key('srcDstLabel') | message}}</th>
-                    <th ng-show="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
+                    <th ng-hide="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
                     <th ng-if="vm.showReasonDropdown">{{vm.key('reason') | message}}</th>
-                    <th ng-if="vm.showReasonDropdown">{{vm.key('reasonComments') | message}}</th>
+                    <th ng-hide="vm.showReasonDropdown">{{vm.key('reasonComments') | message}}</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">Reference Number</th>
                     <th ng-if="vm.showDeliveryNoteAttributes">Invoice Number</th>
 
                     <th>{{vm.key('quantity') | message}}</th>
+
+                    <th ng-if="vm.showDeliveryNoteAttributes">Quantity Rejected</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Rejection Reason</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">Unit Price</th>
                     <th ng-if="vm.showDeliveryNoteAttributes">Amount</th>
