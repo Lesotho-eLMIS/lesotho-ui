@@ -120,7 +120,7 @@
                     <td ng-if="vm.showDeliveryNoteAttributes">
                         <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy"
                             ng-change="vm.discrepancySelectionChanged()"
-                            ng-options="discrepancy for discrepancy in vm.discrepancyOptions">
+                            ng-options="discrepancy for discrepancy in vm.rejectionReasons">
                         </select>
                     </td>
                     <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="text" value=""></td>

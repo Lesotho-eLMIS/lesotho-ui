@@ -61,6 +61,7 @@
     '$q',
     'editLotModalService',
     'moment',
+    'rejectionReasonService',
   ];
 
   function controller(
@@ -96,7 +97,8 @@
     LotResource,
     $q,
     editLotModalService,
-    moment
+    moment,
+    rejectionReasonService
   ) {
     var vm = this,
       previousAdded = {};
@@ -108,6 +110,7 @@
     vm.addProduct = addProduct;
     vm.hasPermissionToAddNewLot = hasPermissionToAddNewLot;
     vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item","More..."];
+    vm.rejectionReasons = []; // To Store Shipment rejection Reasons
     //vm.UPrice;
     vm.FromSupplier = false; 
     vm.hideColumns=function(){
@@ -722,6 +725,24 @@
     }
 
     function onInit() {
+      //Getting Rejection Reasons
+      var rej = rejectionReasonService.getAll();
+      rej.then(function(reasons) {             
+          reasons.content.forEach(reason => {
+              // Load only those of type POD/Point of Delivery
+              if(reason.rejectionReasonCategory.code == "POD"){
+                  vm.rejectionReasons.push(reason.name);
+              }
+            
+           });                   
+        })
+        .catch(function(error) {
+         // Handle errors
+             console.error('Error getting reasons:', error);
+      });
+      
+
+
       var copiedOrderableGroups = angular.copy(orderableGroups);
       vm.allItems = _.flatten(copiedOrderableGroups);
 
