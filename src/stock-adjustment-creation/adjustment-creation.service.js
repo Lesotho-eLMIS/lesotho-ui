@@ -81,22 +81,45 @@
                 programId: programId,
                 facilityId: facilityId
             };
-            event.lineItems = _.map(lineItems, function(item) {
-                return angular.merge({
-                    orderableId: item.orderable.id,
-                    lotId: item.lot ? item.lot.id : null,
-                    quantity: item.quantity,
-                    extraData: {
-                        vvmStatus: item.vvmStatus
-                    },
-                    occurredDate: item.occurredDate,
-                    reasonId: item.reason ? item.reason.id : null,
-                    reasonFreeText: item.reasonFreeText,
-                    invoiceNumber: item.invoiceNumber,
-                    referenceNumber: item.referenceNumber,
-                    unitPrice: item.unitPrice
-                }, buildSourceDestinationInfo(item, adjustmentType));
-            });
+           
+            if(adjustmentType.state == 'receive'){
+                //Set Reason as transfer in for all recieving transactions
+                event.lineItems = _.map(lineItems, function(item) {
+                    return angular.merge({
+                        orderableId: item.orderable.id,
+                        lotId: item.lot ? item.lot.id : null,
+                        quantity: item.quantity,
+                        extraData: {
+                            vvmStatus: item.vvmStatus
+                        },
+                        occurredDate: item.occurredDate,
+                        reasonId: 'e3fc3cf3-da18-44b0-a220-77c985202e06', //
+                        reasonFreeText: item.reasonFreeText,
+                        invoiceNumber: item.invoiceNumber,
+                        referenceNumber: item.referenceNumber,
+                        unitPrice: item.unitPrice
+                    }, buildSourceDestinationInfo(item, adjustmentType));
+                });
+            }
+            else{
+                event.lineItems = _.map(lineItems, function(item) {
+                    return angular.merge({
+                        orderableId: item.orderable.id,
+                        lotId: item.lot ? item.lot.id : null,
+                        quantity: item.quantity,
+                        extraData: {
+                            vvmStatus: item.vvmStatus
+                        },
+                        occurredDate: item.occurredDate,
+                        reasonId: item.reason ? item.reason.id : null, 
+                        reasonFreeText: item.reasonFreeText,
+                        invoiceNumber: item.invoiceNumber,
+                        referenceNumber: item.referenceNumber,
+                        unitPrice: item.unitPrice
+                    }, buildSourceDestinationInfo(item, adjustmentType));
+                });
+
+            }
             return repository.create(event)
                 .then(function() {
                     $rootScope.$emit('openlmis-referencedata.offline-events-indicator');
