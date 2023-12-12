@@ -67,7 +67,7 @@
                     <th ng-if="vm.showDeliveryNoteAttributes">Quantity Rejected</th>
                     <th ng-if="vm.showDeliveryNoteAttributes">Rejection Reason</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes">Rejection Comments</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Comments</th>
                     <th ng-if="vm.showDeliveryNoteAttributes">Unit Price</th>
                     <th ng-if="vm.showDeliveryNoteAttributes">Amount</th>
 
@@ -106,7 +106,7 @@
                             ng-options="reason.name for reason in vm.reasons track by reason.id" autofocus>
                         </select>
                     </td>
-                    <td ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown">
+                    <td ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown" >
                         <input type="text" ng-show="lineItem.reason.isFreeTextAllowed" ng-model="lineItem.reasonFreeText" rows="1" cols="15"></input>
                     </td>
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.referenceNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
@@ -116,14 +116,14 @@
                             ng-class="{'error': lineItem.$errors.quantityInvalid}"
                             ng-change="vm.validateQuantity(lineItem)" ng-blur="vm.validateQuantity(lineItem)" positive-integer value="0"/>
                     </td>
-                    <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="text" value=""></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" value="" type="number" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     <td ng-if="vm.showDeliveryNoteAttributes">
-                        <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy"
+                        <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"
                             ng-change="vm.discrepancySelectionChanged()"
                             ng-options="discrepancy for discrepancy in vm.rejectionReasons">
                         </select>
                     </td>
-                    <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="text" value=""></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="text"></td>
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input class="form-control" value="{{ 0 | openlmisCurrency}}" type="text" ng-model="lineItem.unitPrice" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input type="text" readonly value="{{ (lineItem.quantity*lineItem.unitPrice) || 0 | openlmisCurrency}}" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"/></td>
                     <td ng-if="vm.showVVMStatusColumn">
