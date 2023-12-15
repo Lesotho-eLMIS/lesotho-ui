@@ -28,15 +28,45 @@
         .module('pod-add-discrepancy-modal')
         .controller('podAddDiscrepancyModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons'];
 
-    function controller( modalDeferred, $scope) {
+    function controller( modalDeferred, $scope, rejectionReasons) {
         var vm = this;
 
         vm.$onInit = onInit;
+        //vm.discrepancies = rejectionReasons;
+        vm.discrepancyOptions = [];
+        vm.discrepancies =[];
+        vm.selectedDiscrepancy = undefined;
+        vm.addDispency = addDiscrepency;
+        vm.removeDispency = removeDiscrepancy;
+
+        // adding discrepancies to table
+        function addDiscrepency() {
+            vm.discrepancies.push({
+                'name': vm.selectedDiscrepancy,
+                'quantity': '',
+                'comments': ''
+            });
+        };
+
+        // removing discrepancies from table
+        function removeDiscrepancy(index) {
+            vm.discrepancies.splice(index, 1);
+        }
         
         function onInit() {
-           console.log("Modal")
+            vm.selectedDiscrepancy = [];
+           console.log(rejectionReasons);
+
+           vm.rejectionReasons = rejectionReasons.content;
+           vm.rejectionReasons.forEach(reason => {
+               // Load only those of type POD/Point of Delivery
+               if(reason.rejectionReasonCategory.code == "POD"){
+                   vm.discrepancyOptions.push(reason.name);
+               }
+               
+           });
            /* modalDeferred.promise.catch(function() {
                 vm.addedItems.forEach(function(item) {
                     item.quantity = undefined;

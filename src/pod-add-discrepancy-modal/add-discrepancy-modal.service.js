@@ -51,7 +51,14 @@
                     controller: 'podAddDiscrepancyModalController',
                     controllerAs: 'vm',
                     templateUrl: 'pod-add-discrepancy-modal/add-discrepancy-modal.html',
-                    show: true    
+                    show: true ,
+                    resolve: {
+                        rejectionReasons: function(rejectionReasonService) {
+                                // Load rejection Reasons into the controller.
+                                return rejectionReasonService.getAll();
+                            
+                        }
+                    }   
                 }
             ).promise.finally(function() {
                 angular.element('.openlmis-popover').popover('destroy');

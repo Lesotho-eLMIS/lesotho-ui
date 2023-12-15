@@ -13,7 +13,7 @@
   "podAddDiscrepancyModal.submit": "Submit",
   "podAddDiscrepancyModal.title": "Add Quality Checks",
   "podAddDiscrepancyModal.discrepancy": "Discrepancy",
-  "podAddDiscrepancyModal.quantity": "Quantity",
+  "podAddDiscrepancyModal.quantity": "Affected Quantity",
   "podAddDiscrepancyModal.comments": "Comments",
   "podAddDiscrepancyModal.noDiscrepancies": "No Discrepancies",
   "podAddDiscrepancyModal.referenceNumber": "Reference Number",
