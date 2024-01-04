@@ -73,6 +73,7 @@
 
                     <th ng-if="vm.showVVMStatusColumn">{{vm.key('vvmStatus') | message}}</th>
                     <th>{{vm.key('date') | message}}</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Discrepancies</th>
                     <th>{{vm.key('actions') | message}}</th>
                     
                 </tr>
@@ -136,6 +137,9 @@
                     <td class="date-cell">
                         <input id="lineItem.occurredDate" type="date" ng-model="lineItem.occurredDate"
                             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+                    </td>
+                    <td> 
+                        <button type="button" class="primary" ng-click="vm.addDiscrepancyOnModal()"><b>+ </b>Add</button>
                     </td>
                     <td> <!--ng-if="lineItem.assignment.facilityTypeId=='ac1d268b-ce10-455f-bf87-9c667da8f060'"-->
                         <button type="button" class="danger" ng-click="vm.remove(lineItem)">{{vm.key('remove') | message}}</button>

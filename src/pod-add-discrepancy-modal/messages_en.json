@@ -17,7 +17,7 @@
   "podAddDiscrepancyModal.comments": "Comments",
   "podAddDiscrepancyModal.noDiscrepancies": "No Discrepancies",
   "podAddDiscrepancyModal.referenceNumber": "Reference Number",
-  "podAddDiscrepancyModal.addDiscrepancy": "Add discrepancy",
+  "podAddDiscrepancyModal.addDiscrepancy": "Discrepancy",
   "podAddDiscrepancyModal.add": "Add",
   "podAddDiscrepancyModal.yes": "Yes",
   "podAddDiscrepancyModal.no": "No",
@@ -27,5 +27,5 @@
   "podAddDiscrepancyModal.remove": "Remove",
   "podAddDiscrepancyModal.action": "Action",
   "podAddDiscrepancyModal.proceedToPODReceive" : "Proceed to POD Receive",
-  "podAddDiscrepancyModal.addDiscrepancies": "Add Discrepancies"
+  "podAddDiscrepancyModal.addDiscrepancies": "Save Discrepancies"
 }
