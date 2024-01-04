@@ -30,6 +30,7 @@
         'stock-unpack-kit',
         'stock-reasons-modal',
         'stock-edit-lot-modal',
+        'receiving-add-discrepancy-modal',
         'openlmis-currency'
     ]);
 })();
