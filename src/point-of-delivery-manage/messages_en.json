@@ -19,8 +19,8 @@
   "pointOfDeliveryManage.quantityOnWayBill": "Waybill Quantity",
   "proofOfDeliveryManage.quantityAccepted":"Quantity Accepted",
   "proofOfDeliveryManage.quantityRejected":"Quantity Rejected",
-  "proofOfDeliveryManage.action":"Action",
-  "proofOfDeliveryManage.addDiscrepancy":"Discrepancy"
+  "proofOfDeliveryManage.action":"Discrepancies",
+  "proofOfDeliveryManage.addDiscrepancy":"Add"
 
 
 }
