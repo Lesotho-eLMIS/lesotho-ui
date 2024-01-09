@@ -57,7 +57,7 @@
                 <tr  ng-repeat="discrepancy in vm.discrepancies">
                     <td>{{discrepancy.name}}</td>
                     <td>
-                        <select id="containerType" ng-model="discrepancy.containerType" 
+                        <select id="containerType" ng-model="vm.containerType" 
                             ng-options="containerTypes for containerTypes in vm.containersOptions" >
                         </select>
                     </td>

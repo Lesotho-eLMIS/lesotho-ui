@@ -66,7 +66,7 @@
                         <tr>
                             <th>{{'pointOfDeliveryManage.shipmentType'| message}}</th>
                             <th>{{'pointOfDeliveryManage.quantityOnWayBill'| message}}</th>
-                            <th>{{'pointOfDeliveryManage.quantityShipped'| message}}</th>
+                            <!-- <th>{{'pointOfDeliveryManage.quantityShipped'| message}}</th> -->
                             <th>{{'proofOfDeliveryManage.quantityAccepted'| message}}</th>
                             <th>{{'proofOfDeliveryManage.quantityRejected'| message}}</th>
                             <th>{{'proofOfDeliveryManage.action'| message}}</th>
@@ -75,18 +75,18 @@
                     <tbody>
                         <tr >
                             <td>Cartons</td>
-                            <td><input type="number"  value=" " style="width: 10px;"></td>
-                            <td><input type="number"  value=" " style="width: 10px;" ng-model="discrepancy.quantity"></td>
-                            <td><input type="number"  value=" " style="width: 10px;" ></td>
-                            <td><input type="number"  value=" " style="width: 10px;" ></td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ng-model="discrepancy.quantity"></td>
+                            <!-- <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td> -->
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td>
                             <td><button type="button" ng-click="vm.addDiscrepancyOnModal()" class="primary" >{{'proofOfDeliveryManage.addDiscrepancy'| message}}</button></td>
                         </tr>
                         <tr >
                             <td>Containers</td>
-                            <td><input type="number"  value=" " style="width: 10px;"></td>
-                            <td><input type="number"  value=" " style="width: 10px;" ng-model="discrepancy.quantity"></td>
-                            <td><input type="number"  value=" " style="width: 10px;" ></td>
-                            <td><input type="number"  value=" " style="width: 10px;" ></td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ng-model="discrepancy.ContainersQuantity"></td>
+                            <!-- <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td> -->
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td>
                             <td><button type="button" ng-click="vm.addDiscrepancyOnModal()"  class="primary" >{{'proofOfDeliveryManage.addDiscrepancy'| message}}</button></td>
                         </tr>
                     </tbody>
