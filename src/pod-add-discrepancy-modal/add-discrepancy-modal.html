@@ -14,12 +14,12 @@
       <div class="modal-body">
         <section class="openlmis-table-container">
           <section class="is-primary">
-              <form ng-class="form-inline" name="discrepancyForm" ng-submit="vm.addDiscrepancy()">
+              <form class="form-inline" name="discrepancyForm" ng-submit="vm.addDiscrepancy()">
                   <div>
                       <label for="discrepancySelect">{{'podAddDiscrepancyModal.addDiscrepancy' | message}}</label>
-                      <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy" name="discrepancySelect"
+                      <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy"
                           ng-options="discrepancy for discrepancy in vm.discrepancyOptions"
-                          ng-required="true">
+                          required>
                       </select>
                   </div>
                   <button type="submit" class="add">{{'podAddDiscrepancyModal.add'| message}}</button>
