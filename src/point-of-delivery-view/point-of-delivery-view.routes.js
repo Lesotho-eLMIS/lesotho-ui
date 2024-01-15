@@ -26,25 +26,24 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
     function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
         $stateProvider.state('openlmis.pointOfDelivery.view', {
             isOffline: true,
-            url: '/View',
+            url: '/View?facility&page&size',
             label: 'pointOfDeliveryView.label',
             priority: 1,
             showInNavigation: true,
             views: {
                 '@openlmis': {
-                    controller: 'pointOfDeliveryManageController',
+                    controller: 'pointOfDeliveryViewController',
                     controllerAs: 'vm',
                     templateUrl: 'point-of-delivery-view/point-of-delivery-view.html',
                 }
             },
-            params: {
-                sort: ['createdDate,desc']
-            },
+            // params: {
+            //     sort: ['packingDate,desc']
+            // },
 
             resolve: {
                 facilities: function(facilityService) {
-                    var paginationParams = {};
-                      
+                    var paginationParams = {};                      
                     var queryParams = {
                         "type":"warehouse"
                       };
@@ -66,31 +65,37 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     }
                     return $stateParams.facility;
                 },
-                requisitions: function(paginationService, requisitionService, $stateParams) {
-                    return paginationService.registerUrl($stateParams, function(stateParams) {
-                        if (stateParams.facility) {
-                            var offlineFlag = stateParams.offline;
-                            delete stateParams.offline;
-                            return requisitionService.search(offlineFlag === 'true', stateParams);
-                        }
-                        return undefined;
-                    });
-                },
-                facility: function($stateParams, facilityFactory) {
-                    // Load the current User's Assigned Facility
-                    if (!$stateParams.facility) {
-                        return facilityFactory.getUserHomeFacility();
-                    }
-                    return $stateParams.facility;
-                },
-                PODs: function(paginationService, pointOfDeliveryService, $stateParams) {
+                // requisitions: function(paginationService, requisitionService, $stateParams) {
+                //     return paginationService.registerUrl($stateParams, function(stateParams) {
+                //         if (stateParams.facility) {
+                //             var offlineFlag = stateParams.offline;
+                //             delete stateParams.offline;
+                //             return requisitionService.search(offlineFlag === 'true', stateParams);
+                //         }
+                //         return undefined;
+                //     });
+                // },
+                PODs: function(paginationService, pointOfDeliveryService, $stateParams, facility) {
                         return paginationService.registerUrl($stateParams, function(stateParams){
-                            if (stateParams.destinationId){
-                                console.log("inside pagination");
-                                //stateParams.sort = 'createdDate,desc';
-                                return pointOfDeliveryService.getPODs(facility.id);
+                             if (stateParams){
+                                console.log(stateParams);
+                                stateParams.facility = facility;
+                                console.log("paging POD");
+                                //console.log(facility.id);
+                                console.log(stateParams);
+                                console.log(stateParams.facility);
+                                //console.log(pointOfDeliveryService.getPODs(facility.id));
+                                //console.log(pointOfDeliveryService.getPODs(stateParams.facility.id));
+                               // var records = 
+                               // stateParams.sort = 'packingDate,desc';
+                               return pointOfDeliveryService.getPODs(stateParams.facility.id);
+                               //return undefined;
                             }
-                            return undefined;
+                           // console.log(facility.id);
+                           console. log("skipped loop");
+                            console.log(stateParams);
+                           // return pointOfDeliveryService.getPODs(facility.id);
+                           // return undefined;
                         });
                         // customPageParamName: 'customPage',
                         // customSizeParamName: 'customSize'

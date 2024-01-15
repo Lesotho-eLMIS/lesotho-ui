@@ -21,6 +21,6 @@
   "proofOfDeliveryManage.quantityRejected":"Rejected Quantity",
   "proofOfDeliveryManage.action":"Discrepancy",
   "proofOfDeliveryManage.addDiscrepancy":"Add"
-
-
+  "proofOfDeliveryManage.cartons": "Cartons",
+  "pointOfDeliveryManage.containers": "Containers"
 }

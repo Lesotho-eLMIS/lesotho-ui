@@ -18,6 +18,7 @@
 
     angular.module('pod-add-discrepancy-modal', [
         'openlmis-modal',
-        'point-of-delivery-manage'
+        'point-of-delivery-manage',
+        'openlmis-class-extender'
     ]);
 })();
