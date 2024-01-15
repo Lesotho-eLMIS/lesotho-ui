@@ -21,9 +21,9 @@
         .module('point-of-delivery-manage')
         .config(routes);
 
-routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
+routes.$inject = ['$stateProvider'];
 
-    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
+    function routes($stateProvider) {
         $stateProvider.state('openlmis.pointOfDelivery.manage', {
             isOffline: true,
             url: '/Manage',
@@ -33,7 +33,6 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
             showInNavigation: true,
             controller: 'pointOfDeliveryManageController',
             controllerAs: 'vm',
-            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
                 facilities: function(facilityService) {
                     var paginationParams = {};
