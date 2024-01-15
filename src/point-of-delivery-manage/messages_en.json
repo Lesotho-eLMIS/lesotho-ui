@@ -17,9 +17,9 @@
   "pointOfDeliveryManage.shipmentType": "Shipment Type",
   "pointOfDeliveryManage.quantityShipped": "Quantity Shipped",
   "pointOfDeliveryManage.quantityOnWayBill": "Waybill Quantity",
-  "proofOfDeliveryManage.quantityAccepted":"Quantity Accepted",
-  "proofOfDeliveryManage.quantityRejected":"Quantity Rejected",
-  "proofOfDeliveryManage.action":"Discrepancies",
+  "proofOfDeliveryManage.quantityAccepted":"Accepted Quantity",
+  "proofOfDeliveryManage.quantityRejected":"Rejected Quantity",
+  "proofOfDeliveryManage.action":"Discrepancy",
   "proofOfDeliveryManage.addDiscrepancy":"Add"
 
 

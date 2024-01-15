@@ -65,9 +65,9 @@
                     <!-- <th ng-if="vm.showDeliveryNoteAttributes">Shipped Quantity</th> -->
 
                     <th ng-show="!vm.showDeliveryNoteAttributes">{{vm.key('quantity') | message}}</th>
-                    <th ng-show="vm.showDeliveryNoteAttributes">Quantity Accepted</th>
+                    <th ng-show="vm.showDeliveryNoteAttributes">Accepted Quantity</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes">Quantity Rejected</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Rejected Quantity</th>
                     <th ng-if="vm.showDeliveryNoteAttributes">Rejection Reason</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">Comments</th>
@@ -76,7 +76,7 @@
 
                     <th ng-if="vm.showVVMStatusColumn">{{vm.key('vvmStatus') | message}}</th>
                     <th>{{vm.key('date') | message}}</th>
-                    <th ng-if="vm.showDeliveryNoteAttributes">Discrepancies</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Discrepancy</th>
                     <th>{{vm.key('actions') | message}}</th>
                     
                 </tr>
