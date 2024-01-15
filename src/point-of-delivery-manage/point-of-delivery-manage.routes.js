@@ -21,9 +21,11 @@
         .module('point-of-delivery-manage')
         .config(routes);
 
+
 routes.$inject = ['$stateProvider'];
 
     function routes($stateProvider) {
+      
         $stateProvider.state('openlmis.pointOfDelivery.manage', {
             isOffline: true,
             url: '/Manage',
