@@ -29,10 +29,10 @@
 
     pointOfDeliveryManageController.$inject = [
         '$rootScope','$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryService', 
-        '$scope', 'notificationService', 'dateUtils'];
+        '$scope', 'notificationService', 'dateUtils','podAddDiscrepancyModalService'];
 
     function pointOfDeliveryManageController($rootScope, $state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
-                                         confirmService, pointOfDeliveryService, $scope, notificationService, dateUtils ) {
+                                         confirmService, pointOfDeliveryService, $scope, notificationService, dateUtils, podAddDiscrepancyModalService ) {
 
 
         var vm = this;
@@ -54,7 +54,17 @@
             }
           };
 
-
+        vm.addDiscrepancyOnModal = function() {
+            podAddDiscrepancyModalService.show().then(function() {
+                $stateParams.noReload = true;
+                draft.$modified = true;
+                vm.cacheDraft();
+                //Only reload current state and avoid reloading parent state
+                $state.go($state.current.name, $stateParams, {
+                    reload: $state.current.name
+                });
+            }); 
+        }
         vm.POD = {};
 
         vm.submitPOD = function () {

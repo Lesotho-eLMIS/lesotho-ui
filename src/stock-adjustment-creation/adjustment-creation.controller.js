@@ -62,6 +62,7 @@
     'editLotModalService',
     'moment',
     'rejectionReasonService',
+    'receivingAddDiscrepancyModalService',
   ];
 
   function controller(
@@ -98,7 +99,8 @@
     $q,
     editLotModalService,
     moment,
-    rejectionReasonService
+    rejectionReasonService,
+    receivingAddDiscrepancyModalService
   ) {
     var vm = this,
       previousAdded = {};
@@ -164,6 +166,18 @@
      * Holds information about internet connection
      */
     vm.offline = offlineService.isOffline;
+
+    vm.addDiscrepancyOnModal = function() {
+      receivingAddDiscrepancyModalService.show().then(function() {
+          $stateParams.noReload = true;
+          draft.$modified = true;
+          vm.cacheDraft();
+          //Only reload current state and avoid reloading parent state
+          $state.go($state.current.name, $stateParams, {
+              reload: $state.current.name
+          });
+      }); 
+  }
 
     vm.key = function (secondaryKey) {
       return adjustmentType.prefix + 'Creation.' + secondaryKey;

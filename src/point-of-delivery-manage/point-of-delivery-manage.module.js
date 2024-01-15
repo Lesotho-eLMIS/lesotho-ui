@@ -33,7 +33,8 @@
         'openlmis-repository',
         'openlmis-class-extender',
         'referencedata-user',
-        'openlmis-urls'
+        'openlmis-urls',
+        'pod-add-discrepancy-modal'
     ]);
 
 })();

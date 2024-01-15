@@ -31,7 +31,7 @@
             <label for="packedBy">{{'pointOfDeliveryManage.packedBy' | message}}</label>
             <input id="packedBy" type="text" ng-model="vm.POD.packedBy" maxlength="50" required/>
         </Fieldset>
-        
+        <!--
         <Fieldset>
             <label for="numberOfCartons">{{'pointOfDeliveryManage.numberOfCartons' | message}}</label>
             <input id="numberOfCartons" type="number" min="0" step="1" oninput="validity.valid||(value='');" 
@@ -57,7 +57,42 @@
         <Fieldset>
             <label for="remarks">{{'pointOfDeliveryManage.remarks' | message}}</label>
             <textarea id="remarks" type="text" ng-model="vm.POD.remarks" rows="2" cols="50"></textarea>
-        </Fieldset>      
+        </Fieldset> -->
+        <div>
+    
+            <section class="openlmis-table-container">
+                <table suppress-tr-openlmis-invalid>
+                    <thead>
+                        <tr>
+                            <th>{{'pointOfDeliveryManage.shipmentType'| message}}</th>
+                            <th>{{'pointOfDeliveryManage.quantityOnWayBill'| message}}</th>
+                            <!-- <th>{{'pointOfDeliveryManage.quantityShipped'| message}}</th> -->
+                            <th>{{'proofOfDeliveryManage.quantityAccepted'| message}}</th>
+                            <th>{{'proofOfDeliveryManage.quantityRejected'| message}}</th>
+                            <th>{{'proofOfDeliveryManage.action'| message}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr >
+                            <td>Cartons</td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ng-model="discrepancy.quantity"></td>
+                            <!-- <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td> -->
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td>
+                            <td><button type="button" ng-click="vm.addDiscrepancyOnModal()" class="primary" ><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'| message}}</button></td>
+                        </tr>
+                        <tr >
+                            <td>Containers</td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ng-model="discrepancy.ContainersQuantity"></td>
+                            <!-- <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td> -->
+                            <td><input type="number" style="width: 60px;" min="0" step="1" oninput="validity.valid||(value='');" ></td>
+                            <td><button type="button" ng-click="vm.addDiscrepancyOnModal()"  class="primary" ><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'| message}}</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>     
         
         <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}"/>
                 

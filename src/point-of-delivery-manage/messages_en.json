@@ -13,5 +13,14 @@
   "pointOfDeliveryManage.receivedBy": "Received By",
   "pointOfDeliveryManage.receivedDate": "Receiving Date",
   "pointOfDeliveryManage.submit": "Submit",
-  "proofOfDeliveryManage.receivingFacility":"Receiving Facility"
+  "proofOfDeliveryManage.receivingFacility":"Receiving Facility",
+  "pointOfDeliveryManage.shipmentType": "Shipment Type",
+  "pointOfDeliveryManage.quantityShipped": "Quantity Shipped",
+  "pointOfDeliveryManage.quantityOnWayBill": "Waybill Quantity",
+  "proofOfDeliveryManage.quantityAccepted":"Accepted Quantity",
+  "proofOfDeliveryManage.quantityRejected":"Rejected Quantity",
+  "proofOfDeliveryManage.action":"Discrepancy",
+  "proofOfDeliveryManage.addDiscrepancy":"Add"
+
+
 }
