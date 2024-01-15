@@ -17,10 +17,12 @@
   "pointOfDeliveryManage.shipmentType": "Shipment Type",
   "pointOfDeliveryManage.quantityShipped": "Quantity Shipped",
   "pointOfDeliveryManage.quantityOnWayBill": "Waybill Quantity",
-  "proofOfDeliveryManage.quantityAccepted":"Quantity Accepted",
-  "proofOfDeliveryManage.quantityRejected":"Quantity Rejected",
-  "proofOfDeliveryManage.action":"Action",
-  "proofOfDeliveryManage.addDiscrepancy":"Discrepancy"
+  "proofOfDeliveryManage.quantityAccepted": "Quantity Accepted",
+  "proofOfDeliveryManage.quantityRejected": "Quantity Rejected",
+  "proofOfDeliveryManage.action": "Action",
+  "proofOfDeliveryManage.addDiscrepancy": "Discrepancy",
+  "proofOfDeliveryManage.cartons": "Cartons",
+  "pointOfDeliveryManage.containers": "Containers"
 
 
 }

@@ -28,34 +28,54 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$rootScope','$state', '$filter','$q', '$stateParams', 'facility','facilities','facilityService','offlineService', 'localStorageFactory', 'confirmService','pointOfDeliveryService', 
-        '$scope', 'notificationService', 'dateUtils','podAddDiscrepancyModalService'];
+        '$rootScope','$state','$stateParams', 'facility','facilities','facilityService','offlineService', 'pointOfDeliveryService', 
+        '$scope', 'notificationService', 'podAddDiscrepancyModalService'];
 
-    function pointOfDeliveryManageController($rootScope, $state, $filter,$q, $stateParams, facility,facilities,facilityService, offlineService, localStorageFactory,
-                                         confirmService, pointOfDeliveryService, $scope, notificationService, dateUtils, podAddDiscrepancyModalService ) {
+    function pointOfDeliveryManageController($rootScope, $state,$stateParams, facility,facilities,facilityService, offlineService, 
+                                        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService ) {
 
 
         var vm = this;
 
         vm.maxDate = new Date();
         vm.maxDate.setHours(23, 59, 59, 999);
+      //  vm.addDiscrepancyOnModal = addDiscrepancyOnModal;
 
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
-     //   vm.receivingFacility = undefined;
-        // For Displaying Recieved By Name without a comma
-        $scope.formatPODrecievedBy = function(name) {
-            if (name) {
-              var splittedName = name.split(', '); // Splitting the string by comma and space
-              return splittedName.join(' '); // Joining the array elements with a space in between 
-            } else {
-              return ''; // Handle if input is empty or undefined
-            }
-          };
+        vm.POD = {};
+        vm.discrepancy = [];
+        vm.Cartons = "Cartons";
+        vm.Containers = "Containers";
+                                                
+        vm.facilities = undefined;
 
-        vm.addDiscrepancyOnModal = function() {
-            podAddDiscrepancyModalService.show().then(function() {
+        vm.homeFacilities = [ facility ];
+
+     /**
+         * @ngdoc method
+         * @methodOf requisition-search.controller:RequisitionViewController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method called after the controller has been created. Responsible for
+         * setting data to be available on the view.
+         */        
+         function onInit() {
+
+        // var stateParams = angular.copy($stateParams);
+          
+            vm.receivingFacility = facility.name;
+            vm.supplyingFacilities = facilities;        
+            vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();            
+            vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
+            $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope       
+        }
+
+
+        vm.addDiscrepancyOnModal = function(shipmentType) {
+            pointOfDeliveryService.show(shipmentType).then(function() {
                 $stateParams.noReload = true;
                 draft.$modified = true;
                 vm.cacheDraft();
@@ -65,25 +85,43 @@
                 });
             }); 
         }
-        vm.POD = {};
 
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name submitPOD
+         *
+         * @description
+         * Builds POD receive payload for sending to backend
+         */
         vm.submitPOD = function () {
 
-            if (vm.POD.referenceNo) {
-                
+            //var descrepancies = podAddDiscrepancyModalService.getDiscrepancies(); 
+                var discrepancyList = pointOfDeliveryService.getDiscrepancies();
+                console.log("discrepancyList");
+                console.log(discrepancyList);
+                if (vm.POD.referenceNo) {
+             
                 var payloadData = {
                     sourceId:vm.supplyingFacility.id,
                     destinationId:vm.receivingFacility.id,
                     referenceNumber:vm.POD.referenceNo,
                     packingDate:vm.proofOfDelivery.receivedDate,
                     packedBy:vm.POD.packedBy,
-                    numberOfCartons:vm.POD.numberOfCartons,
-                    rejectedCartons:vm.POD.numberOfRejectedCartons,
-                    numberOfContainers:vm.POD.numberOfContainers,
-                    rejectecContainers:vm.POD.numberOfRejectedContainers,
-                    remarks:vm.POD.remarks
-                };
-    
+                    cartonsQuantityOnWaybill: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityOnWayBill : null,
+                    cartonsQuantityShipped: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityShipped : null,
+                    cartonsQuantityAccepted: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityAccepted : null,
+                    cartonsQuantityRejected: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityRejected : null,
+                    containersQuantityOnWaybill: vm.discrepancy.containers ? vm.discrepancy.containers.quantityOnWayBill : null,
+                    containersQuantityShipped: vm.discrepancy.containers ? vm.discrepancy.containers.quantityShipped : null,
+                    containersQuantityAccepted: vm.discrepancy.containers ? vm.discrepancy.containers.quantityAccepted : null,
+                    containersQuantityRejected: vm.discrepancy.containers ? vm.discrepancy.containers.quantityRejected : null,
+                    discrepancies: discrepancyList
+                }; 
+                
+                
+                console.log("Pay load");
+                console.log(payloadData);
     
                 var podResponse = pointOfDeliveryService.submitPodManage(payloadData);
                 if (podResponse) {
@@ -94,7 +132,9 @@
                 };
                    
                 vm.POD = {};
+                vm.discrepancy = [];
                 vm.proofOfDelivery = {};
+                pointOfDeliveryService.clearDiscrepancies();
                 $scope.podManageForm.$setPristine();
                 $scope.podManageForm.$setUntouched();
 
@@ -189,8 +229,6 @@
             }
         };
 
-        // vm.viewDiscrepancies() View discrepancies from quality checks
-        
         /**
          * @ngdoc property
          * @propertyOf requisition-search.controller:RequisitionViewController
@@ -200,55 +238,6 @@
          * @description
          * The list of all facilities available to the user.
          */
-        vm.facilities = undefined;
 
-        /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name $onInit
-         *
-         * @description
-         * Initialization method called after the controller has been created. Responsible for
-         * setting data to be available on the view.
-         */
-
-     
-        vm.homeFacilities = [ facility ];
-
-        function onInit() {
-
-          // var stateParams = angular.copy($stateParams);
-            
-            vm.receivingFacility = facility.name;
-            vm.supplyingFacilities = facilities;        
-            vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
-           
-            vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
-            $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope
-            console.log($rootScope.referenceNoPOD);
-            console.log("Getting  Ref Number from Quality Checks");
-          
-        }
-         
-        var sendToView = pointOfDeliveryService.getPODs(facility.id);
-
-       // Handle the promise resolution
-       sendToView.then(function(resolvedObject) {
-        // Assign the resolved object to a scope variable
-            $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
-            $scope.dataObject.then(function(resolvedObject) {             
-                $scope.PODEvents  = resolvedObject;                        
-            })
-                .catch(function(error) {
-                 // Handle errors
-                     console.error('Error in controller:', error);
-                });
-
-        })
-        .catch(function(error) {
-         // Handle errors
-             console.error('Error in controller:', error);
-            });
-                
     }
 })();

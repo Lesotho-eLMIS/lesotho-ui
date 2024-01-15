@@ -31,39 +31,73 @@
     service.$inject = ['openlmisModalService'];
 
     function service(openlmisModalService) {
-        this.show = show;
+      //  this.show = show;
+        //this.getDiscrepancies = getDiscrepancies;
+        // this.submitQualityDiscrepancies = submitQualityDiscrepancies;
 
-        /**
-         * @ngdoc method
-         * @methodOf pod-add-discrepancy-modal.podAddDiscrepancyModalService
-         * @name show
-         *
-         * @description
-         * Shows modal that allows users to choose products.
-         *
-         * @param  {Array}   availableItems orderable + lot items that can be selected
-         * @param  {Array}   selectedItems  orderable + lot items that were added already
-         * @return {Promise}                resolved with selected products.
-         */
-        function show(availableItems, selectedItems) {
-            return openlmisModalService.createDialog(
-                {
-                    controller: 'podAddDiscrepancyModalController',
-                    controllerAs: 'vm',
-                    templateUrl: 'pod-add-discrepancy-modal/add-discrepancy-modal.html',
-                    show: true ,
-                    resolve: {
-                        rejectionReasons: function(rejectionReasonService) {
-                                // Load rejection Reasons into the controller.
-                                return rejectionReasonService.getAll();
+        // // /**
+        // //  * @ngdoc method
+        // //  * @methodOf pod-add-discrepancy-modal.podAddDiscrepancyModalService
+        // //  * @name show
+        // //  *
+        // //  * @description
+        // //  * Shows modal that allows users to choose products.
+        // //  *
+        // //  * @param  {Array}   availableItems orderable + lot items that can be selected
+        // //  * @param  {Array}   selectedItems  orderable + lot items that were added already
+        // //  * @return {Promise}                resolved with selected products.
+        // //  */
+        // // function show() {
+        // //     return openlmisModalService.createDialog(
+        // //         {
+        // //             controller: 'podAddDiscrepancyModalController',
+        // //             controllerAs: 'vm',
+        // //             templateUrl: 'pod-add-discrepancy-modal/add-discrepancy-modal.html',
+        // //             show: true ,
+        // //             resolve: {
+        // //                 rejectionReasons: function(rejectionReasonService) {
+        // //                         // Load rejection Reasons into the controller.
+        // //                         return rejectionReasonService.getAll();
                             
-                        }
-                    }   
-                }
-            ).promise.finally(function() {
-                angular.element('.openlmis-popover').popover('destroy');
-            });
-        }
+        // //                 }, 
+        // //                 shipmentType: function () {
+        // //                     return shipmentTypeType;
+        // //                 }
+        // //             }   
+        // //         }
+        // //     ).promise.finally(function() {
+        // //         angular.element('.openlmis-popover').popover('destroy');
+        // //     });
+        // // }
+
+        // /**
+        //  * @ngdoc method
+        //  * @methodOf pod-add-discrepancy-modal.podAddDiscrepancyModalService
+        //  * @name submitQualityDiscrepancies
+        //  *
+        //  * @description
+        //  * .
+        //  */
+        // function submitQualityDiscrepancies(discrepancyPayload){
+        //     console.log("discrepancyPayload in service");
+        //     console.log(discrepancyPayload);
+        //     //return discrepancyPayload;
+        //     return 3;
+        // }
+
+        // /**
+        //  * @ngdoc method
+        //  * @methodOf pod-add-discrepancy-modal.podAddDiscrepancyModalService
+        //  * @name getDiscrepancies
+        //  *
+        //  * @description
+        //  * 
+        //  */
+        // this.getDiscrepancies = function (discrepancies){
+        //     console.log("get discrepancies in service");
+        //     console.log(discrepancies);
+        //     return discrepancies;
+        // }
     }
 
 })();

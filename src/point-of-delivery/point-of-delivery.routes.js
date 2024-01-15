@@ -21,9 +21,9 @@
         .module('point-of-delivery')
         .config(routes);
 
-routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'*/];
+routes.$inject = ['$stateProvider'];
 
-    function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
+    function routes($stateProvider) {
         $stateProvider.state('openlmis.pointOfDelivery', {
             isOffline: true,
             url: '/pointOfDelivery',

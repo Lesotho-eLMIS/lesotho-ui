@@ -28,36 +28,34 @@
         .module('pod-add-discrepancy-modal')
         .controller('podAddDiscrepancyModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons'];
+    controller.$inject = ['pointOfDeliveryService', 'rejectionReasons','$filter', 'shipmentType'];
 
-    function controller( modalDeferred, $scope, rejectionReasons) {
+    function controller( pointOfDeliveryService, rejectionReasons, $filter, shipmentType) {
         var vm = this;
 
         vm.$onInit = onInit;
         //vm.discrepancies = rejectionReasons;
         vm.discrepancyOptions = [];
-        vm.discrepancies =[];
+        vm.discrepancies = []; //undefined;
         vm.selectedDiscrepancy = undefined;
-        vm.addDispency = addDiscrepency;
+        vm.selectedDiscrepancies = []; // To hold list of selected discrepancy names
+        vm.addDiscrepancy = addDiscrepency;
         vm.removeDispency = removeDiscrepancy;
+        vm.confirmDiscrepancyList = confirmDiscrepancyList;
+       // vm.modalDiscrepancies = [];
 
-        // adding discrepancies to table
-        function addDiscrepency() {
-            vm.discrepancies.push({
-                'name': vm.selectedDiscrepancy,
-                'quantity': '',
-                'comments': ''
-            });
-        };
-
-        // removing discrepancies from table
-        function removeDiscrepancy(index) {
-            vm.discrepancies.splice(index, 1);
-        }
-        
+        /**
+         * @ngdoc method
+         * @methodOf pod-add-discrepancy-modal.controller:podAddDiscrepancyModalController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method called after the controller has been created. Responsible for
+         * setting data to be available on the view.
+         */        
         function onInit() {
-            vm.selectedDiscrepancy = [];
-           console.log(rejectionReasons);
+          
+           vm.selectedDiscrepancy = [];
 
            vm.rejectionReasons = rejectionReasons.content;
            vm.rejectionReasons.forEach(reason => {
@@ -67,12 +65,59 @@
                }
                
            });
-           /* modalDeferred.promise.catch(function() {
-                vm.addedItems.forEach(function(item) {
-                    item.quantity = undefined;
-                    item.quantityInvalid = undefined;
-                });
-            }); */
         }
+        
+        function addDiscrepency() {
+                vm.discrepancies.push({
+                    'shipmentType': shipmentType,
+                    'name': vm.selectedDiscrepancy,
+                    'quantity': '',
+                    'comments': ''
+                });  
+        }
+
+        // removing discrepancies from table
+        function removeDiscrepancy(index) {
+            vm.discrepancies.splice(index, 1);
+        }
+        
+        function confirmDiscrepancyList (){
+            // var cartonRejections = []; 
+            // var containerRejections = [];
+            var rejections = [];
+            console.log("vm.discrepancies");
+            console.log(vm.discrepancies);
+
+            console.log("Rejection Reasons");
+            console.log(vm.rejectionReasonss);
+            
+
+            angular.forEach(vm.discrepancies, function(reason){
+            // Use $filter to find the matching object in rejectionReasons
+                var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: reason.name }, true);
+                if (reasonDetails.length > 0) {
+
+                // If a match is found, add the quantity property to the rejection reason
+                    rejections.rejectionReason= angular.copy(reasonDetails[0]); 
+                    rejections.quantityAffected = reason.quantity; // Add the quantity property from vm.discrepancies
+                    rejections.shipmentType = reason.shipmentType; // Add the quantity property from vm.discrepancies
+                    rejections.remarks = reason.comments;
+                    pointOfDeliveryService.addDiscrepancies(rejections);
+                   
+                    vm.discrepancies = [];
+                    rejections =[];
+                }
+            });
+
+        //     console.log("Rejectionss");
+        //     console.log(reasonDetails);
+        //   //  var discrepancyList = cartonRejections.concat(containerRejections);
+        //     pointOfDeliveryService.addDiscrepancies(rejections);
+          
+        //     console.log("Confirming discrepancies");
+        //     console.log(rejections); 
+            
+        };
+                     
     }
 })();

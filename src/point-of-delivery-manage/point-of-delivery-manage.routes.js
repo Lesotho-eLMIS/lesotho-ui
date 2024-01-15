@@ -21,9 +21,9 @@
         .module('point-of-delivery-manage')
         .config(routes);
 
-routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'*/];
+routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
 
-    function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
+    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
         $stateProvider.state('openlmis.pointOfDelivery.manage', {
             isOffline: true,
             url: '/Manage',
@@ -33,6 +33,7 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             showInNavigation: true,
             controller: 'pointOfDeliveryManageController',
             controllerAs: 'vm',
+            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
                 facilities: function(facilityService) {
                     var paginationParams = {};
@@ -42,17 +43,14 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                       };
                       return facilityService.query(paginationParams, queryParams)
                       .then(function(result) {
-                          // Return Facilities of Type = Warehouse
-                          return result.content;
+                          return result.content; // Return Facilities of Type = Warehouse
                       })
                       .catch(function(error) {
                           // Handle any errors that may occur during the query
                           console.error("Error:", error);
                           return [];
-                      });
-
-                    
-                },
+                      });                    
+                    },
                 facility: function($stateParams, facilityFactory) {
                     // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
