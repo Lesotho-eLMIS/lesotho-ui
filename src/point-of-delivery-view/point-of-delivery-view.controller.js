@@ -39,6 +39,7 @@
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
+     //   vm.viewDiscrepancies = viewDiscrepancies;
         //vm.hasDiscrepancies = hasDiscrepancies;
 
         // vm.options = {
@@ -170,6 +171,18 @@
         // Handle errors
         console.error('Error in controller:', error);
     });
+
+    vm.viewDiscrepancies = function(discrepancies) {
+        pointOfDeliveryService.showViewModal(discrepancies).then(function() {
+            $stateParams.noReload = true;
+            draft.$modified = true;
+            vm.cacheDraft();
+            //Only reload current state and avoid reloading parent state
+            $state.go($state.current.name, $stateParams, {
+                reload: $state.current.name
+            });
+        }); 
+    }
 
         //Confirms if there are discrepancies associated with a POD.
   

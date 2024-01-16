@@ -54,6 +54,7 @@
         this.getDiscrepancies = getDiscrepancies; // To retrieve the compiled discrepancies
         this.addDiscrepancies = addDiscrepancies; // To compile the list of discrepancies
         this.clearDiscrepancies = clearDiscrepancies;
+        this.showViewModal = showViewModal;
 
         var discrepancyList = [];
 
@@ -131,6 +132,24 @@
                             return shipmentType;
                         }
                     }   
+                }
+            ).promise.finally(function() {
+                angular.element('.openlmis-popover').popover('destroy');
+            });
+        }
+
+        function showViewModal (discrepancies) {
+            return openlmisModalService.createDialog(
+                {
+                    controller: 'podViewDiscrepancyModalController',
+                    controllerAs: 'vm',
+                    templateUrl: 'pod-view-discrepancy-modal/view-discrepancy-modal.html',
+                    show: true,
+                    resolve: {
+                        discrepancies: function () {
+                            return discrepancies;
+                        }
+                    }
                 }
             ).promise.finally(function() {
                 angular.element('.openlmis-popover').popover('destroy');
