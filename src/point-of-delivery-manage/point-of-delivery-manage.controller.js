@@ -109,11 +109,12 @@
                     packingDate:vm.proofOfDelivery.receivedDate,
                     packedBy:vm.POD.packedBy,
                     cartonsQuantityOnWaybill: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityOnWayBill : null,
-                    cartonsQuantityShipped: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityShipped : null,
+                    //Quantity Shipped = Quantity Accepted + Quantity Rejected for both cartons and containers
+                    cartonsQuantityShipped: vm.discrepancy.cartons ? (vm.discrepancy.cartons.quantityRejected + vm.discrepancy.cartons.quantityAccepted) : null,
                     cartonsQuantityAccepted: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityAccepted : null,
                     cartonsQuantityRejected: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityRejected : null,
                     containersQuantityOnWaybill: vm.discrepancy.containers ? vm.discrepancy.containers.quantityOnWayBill : null,
-                    containersQuantityShipped: vm.discrepancy.containers ? vm.discrepancy.containers.quantityShipped : null,
+                    containersQuantityShipped: vm.discrepancy.containers ? (vm.discrepancy.containers.quantityAccepted + vm.discrepancy.containers.quantityRejected) : null,
                     containersQuantityAccepted: vm.discrepancy.containers ? vm.discrepancy.containers.quantityAccepted : null,
                     containersQuantityRejected: vm.discrepancy.containers ? vm.discrepancy.containers.quantityRejected : null,
                     discrepancies: discrepancyList

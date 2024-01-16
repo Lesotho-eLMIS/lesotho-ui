@@ -7,16 +7,31 @@
         </caption>
         <thead>
             <tr>
-                <th>{{'pointOfDeliveryView.facility' | message}}</th>
-                <th>{{'pointOfDeliveryView.referenceNo' | message}}</th>
-                <th>{{'pointOfDeliveryView.packingDate' | message}}</th>
-                <th>{{'pointOfDeliveryView.packedBy' | message}}</th>
-				<th>{{'pointOfDeliveryView.numberOfCartons' | message}}</th>
-				<th>{{'pointOfDeliveryView.numberOfContainers' | message}}</th>
-                <th>{{'pointOfDeliveryView.receivedBy' | message}}</th>
-                <th>{{'pointOfDeliveryView.remarks' | message}}</th>
-                <th class="col-sticky sticky-right">{{'pointOfDeliveryView.receivedDate' | message}}</th>
-                <th>{{'pointOfDeliveryView.discrepancies' | message}}</th>
+                <th rowspan="2">{{'pointOfDeliveryView.facility' | message}}</th>
+                <th rowspan="2">{{'pointOfDeliveryView.referenceNo' | message}}</th>
+                <th rowspan="2">{{'pointOfDeliveryView.packingDate' | message}}</th>
+                <th rowspan="2">{{'pointOfDeliveryView.packedBy' | message}}</th>
+
+				<th colspan="4">{{'pointOfDeliveryView.cartons' | message}}</th>
+                <th colspan="4">{{'pointOfDeliveryView.containers' | message}}</th>
+
+                <th rowspan="2">{{'pointOfDeliveryView.receivedBy' | message}}</th>
+                <!-- <th rowspan="2">{{'pointOfDeliveryView.remarks' | message}}</th> -->
+                <th rowspan="2" class="col-sticky sticky-right">{{'pointOfDeliveryView.receivedDate' | message}}</th>
+                <th rowspan="2">{{'pointOfDeliveryView.discrepancies' | message}}</th>
+            </tr>
+            <tr>
+				
+				<th>{{'pointOfDeliveryView.quantityOnWayBill' | message}}</th>
+                <th>{{'pointOfDeliveryView.quantityShipped' | message}}</th>
+                <th>{{'pointOfDeliveryView.quantityAccepted' | message}}</th>
+				<th>{{'pointOfDeliveryView.quantityRejected' | message}}</th>
+
+                
+				<th>{{'pointOfDeliveryView.quantityOnWayBill' | message}}</th>
+                <th>{{'pointOfDeliveryView.quantityShipped' | message}}</th>
+                <th>{{'pointOfDeliveryView.quantityAccepted' | message}}</th>
+				<th>{{'pointOfDeliveryView.quantityRejected' | message}}</th>
             </tr>
         </thead>
         <tbody>
@@ -25,13 +40,19 @@
                 <td>{{item.referenceNumber}}</td>
                 <td>{{item.packingDate | openlmisDate}}</td>
                 <td>{{item.packedBy}}</td>
-                <td>{{item.numberOfCartons}}</td>
-                <td>{{item.numberOfContainers}}</td>
+                <td>{{item.cartonsQuantityOnWaybill}}</td>
+                <td>{{item.cartonsQuantityShipped}}</td>
+                <td>{{item.cartonsQuantityAccepted}}</td>
+                <td>{{item.cartonsQuantityRejected}}</td>
+                <td>{{item.containersQuantityOnWaybill}}</td>
+                <td>{{item.containersQuantityShipped}}</td>
+                <td>{{item.containersQuantityAccepted}}</td>
+                <td>{{item.containersQuantityRejected}}</td>
                 <td>{{formatPODrecievedBy(item.receivedByUserNames)}}</td>
-                <td>{{item.remarks}}</td>
+                <!-- <td>{{item.remarks}}</td> -->
                 <td>{{item.receivingDate | openlmisDate}}</td>
-                <td ng-if="vm.hasDiscrepancies('item.referenceNumber')" ><button class="primary"  ng-click="vm.viewDiscrepancies()">{{'pointOfDeliveryView.discrepancies' | message}}</button></td>
-                <td ng-if="!vm.hasDiscrepancies()" >{{'pointOfDeliveryView.noDiscrepancies' | message}}</td>
+                <td ng-if="item.discrepancies.length > 0" ><button class="primary"  ng-click="vm.viewDiscrepancies()">{{'pointOfDeliveryView.discrepancies' | message}}</button></td>
+                <td ng-if="item.discrepancies.length === 0" >{{'pointOfDeliveryView.noDiscrepancies' | message}}</td>
             </tr>
         </tbody>
     </table>
