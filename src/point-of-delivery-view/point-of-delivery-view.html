@@ -51,7 +51,7 @@
                 <td>{{formatPODrecievedBy(item.receivedByUserNames)}}</td>
                 <!-- <td>{{item.remarks}}</td> -->
                 <td>{{item.receivingDate | openlmisDate}}</td>
-                <td ng-if="item.discrepancies.length > 0" ><button class="primary"  ng-click="vm.viewDiscrepancies(item.discrepancies)">{{'pointOfDeliveryView.discrepancies' | message}}</button></td>
+                <td ng-if="item.discrepancies.length > 0" ><button class="primary"  ng-click="vm.viewDiscrepancies(item.discrepancies, item.referenceNumber)">{{'pointOfDeliveryView.discrepancies' | message}}</button></td>
                 <td ng-if="item.discrepancies.length === 0" >{{'pointOfDeliveryView.noDiscrepancies' | message}}</td>
             </tr>
         </tbody>

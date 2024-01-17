@@ -172,8 +172,8 @@
         console.error('Error in controller:', error);
     });
 
-    vm.viewDiscrepancies = function(discrepancies) {
-        pointOfDeliveryService.showViewModal(discrepancies).then(function() {
+    vm.viewDiscrepancies = function(discrepancies, referenceNumber) {
+        pointOfDeliveryService.showViewModal(discrepancies, referenceNumber).then(function() {
             $stateParams.noReload = true;
             draft.$modified = true;
             vm.cacheDraft();

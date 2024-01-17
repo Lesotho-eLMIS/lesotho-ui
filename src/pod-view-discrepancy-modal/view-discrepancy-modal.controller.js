@@ -28,13 +28,14 @@
         .module('pod-view-discrepancy-modal')
         .controller('podViewDiscrepancyModalController', controller);
 
-    controller.$inject = ['pointOfDeliveryService','discrepancies'];
+    controller.$inject = ['pointOfDeliveryService','discrepancies', 'referenceNumber'];
 
-    function controller( pointOfDeliveryService, discrepancies) {
+    function controller( pointOfDeliveryService, discrepancies, referenceNumber) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.discrepancies = discrepancies;
+        vm.referenceNumber = referenceNumber;
         //vm.discrepancies = rejectionReasons;
         // vm.discrepancyOptions = [];
         //  //undefined;

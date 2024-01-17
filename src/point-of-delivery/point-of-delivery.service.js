@@ -138,7 +138,7 @@
             });
         }
 
-        function showViewModal (discrepancies) {
+        function showViewModal (discrepancies, referenceNumber) {
             return openlmisModalService.createDialog(
                 {
                     controller: 'podViewDiscrepancyModalController',
@@ -148,6 +148,9 @@
                     resolve: {
                         discrepancies: function () {
                             return discrepancies;
+                        },
+                        referenceNumber: function () {
+                            return referenceNumber;
                         }
                     }
                 }
