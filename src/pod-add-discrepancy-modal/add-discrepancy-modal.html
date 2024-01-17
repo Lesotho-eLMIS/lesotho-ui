@@ -25,8 +25,8 @@
                   <button type="submit" class="add">{{'podAddDiscrepancyModal.add'| message}}</button>
               </form>
           </section>
-          <section>
-            <form id="discrepanciesForm" ng-submit="vm.confirmDiscrepancyList()">
+          <!-- <section class="is-primary"> -->
+            <!-- <form id="discrepanciesForm" ng-submit="vm.confirmDiscrepancyList()"> -->
               <table suppress-tr-openlmis-invalid>
                   <caption ng-if="!vm.discrepancies.length">{{'podAddDiscrepancyModal.noDiscrepancies'| message}}</caption>
                   <thead>
@@ -46,14 +46,14 @@
                       </tr>
                   </tbody>
               </table>
-            </form>
-          </section>
+            <!-- </form> -->
+          <!-- </section> -->
       </section>
       </div>
 
       <div class="modal-footer">
         <button ng-click="$hide()">{{'stockAddProductsModal.cancel' | message}}</button>
-        <button type="submit" form="discrepanciesForm" class="primary">
+        <button ng-click="vm.confirmDiscrepancyList()" class="primary">
           {{'podAddDiscrepancyModal.addDiscrepancies' | message}}
         </button>
       </div>

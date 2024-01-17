@@ -99,7 +99,6 @@
                         remarks: reason.comments
                     }
                     pointOfDeliveryService.addDiscrepancies(rejection);
-                
                     vm.discrepancies = [];
                     rejection = {};
                 }
