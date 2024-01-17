@@ -28,9 +28,9 @@
         .module('pod-add-discrepancy-modal')
         .controller('podAddDiscrepancyModalController', controller);
 
-    controller.$inject = ['pointOfDeliveryService', 'rejectionReasons','$filter', 'shipmentType'];
+    controller.$inject = ['pointOfDeliveryService', 'rejectionReasons','$filter', 'shipmentType', 'notificationService'];
 
-    function controller( pointOfDeliveryService, rejectionReasons, $filter, shipmentType) {
+    function controller( pointOfDeliveryService, rejectionReasons, $filter, shipmentType, notificationService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -67,12 +67,17 @@
         }
         
         function addDiscrepency() {
+            if(vm.selectedDiscrepancy.length!=0){
                 vm.discrepancies.push({
                     'shipmentType': shipmentType,
                     'name': vm.selectedDiscrepancy,
                     'quantity': '',
                     'comments': ''
                 });  
+            }
+            else{
+                notificationService.error('Select a discrepancy before adding.');
+            }
         }
 
         // removing discrepancies from table
@@ -81,9 +86,7 @@
         }
         
         function confirmDiscrepancyList (){
-            
             var rejection = {};
-
             angular.forEach(vm.discrepancies, function(reason){
             // Use $filter to find the matching object in rejectionReasons
                 var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: reason.name }, true);
@@ -96,7 +99,6 @@
                         remarks: reason.comments
                     }
                     pointOfDeliveryService.addDiscrepancies(rejection);
-                   
                     vm.discrepancies = [];
                     rejection = {};
                 }

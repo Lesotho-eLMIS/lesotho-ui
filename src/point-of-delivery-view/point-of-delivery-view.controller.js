@@ -39,6 +39,7 @@
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
+     //   vm.viewDiscrepancies = viewDiscrepancies;
         //vm.hasDiscrepancies = hasDiscrepancies;
 
         // vm.options = {
@@ -137,39 +138,51 @@
         };
 
         
-   $scope.PODEvents = PODs; 
+   //$scope.PODEvents = PODs; 
 
      // For Displaying Recieved By Name without a comma
-     $scope.formatPODrecievedBy = function(name) {
+    $scope.formatPODrecievedBy = function(name) {
         if (name) {
           var splittedName = name.split(', '); // Splitting the string by comma and space
           return splittedName.join(' '); // Joining the array elements with a space in between 
         } else {
           return ''; // Handle if input is empty or undefined
         }
-      };
+    };
          
-    //   var sendToView = PODs;//pointOfDeliveryService.getPODs(facility.id);
+    var sendToView = pointOfDeliveryService.getPODs(facility.id);
 
-    //    // Handle the promise resolution
-    //    sendToView.then(function(resolvedObject) {
-    //     // Assign the resolved object to a scope variable
-    //         $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
-    //         $scope.dataObject.then(function(resolvedObject) {             
-    //         $scope.PODEvents  = resolvedObject;     
-    //         console.log("Resolved PODs for View:");
-    //         console.log($scope.PODEvents);                   
-    //         })
-    //             .catch(function(error) {
-    //              // Handle errors
-    //                  console.error('Error in controller:', error);
-    //             });
+    // Handle the promise resolution
+    sendToView.then(function(resolvedObject) {
+        // Assign the resolved object to a scope variable
+        $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
+        $scope.dataObject.then(function(resolvedObject) {             
+            $scope.PODEvents  = resolvedObject;     
+            console.log("Resolved PODs for View:");
+            console.log($scope.PODEvents);                   
+        })
+        .catch(function(error) {
+            // Handle errors
+            console.error('Error in controller:', error);
+        });
 
-    //     })
-    //     .catch(function(error) {
-    //      // Handle errors
-    //          console.error('Error in controller:', error);
-    //         });
+    })
+    .catch(function(error) {
+        // Handle errors
+        console.error('Error in controller:', error);
+    });
+
+    vm.viewDiscrepancies = function(discrepancies, referenceNumber) {
+        pointOfDeliveryService.showViewModal(discrepancies, referenceNumber).then(function() {
+            $stateParams.noReload = true;
+            draft.$modified = true;
+            vm.cacheDraft();
+            //Only reload current state and avoid reloading parent state
+            $state.go($state.current.name, $stateParams, {
+                reload: $state.current.name
+            });
+        }); 
+    }
 
         //Confirms if there are discrepancies associated with a POD.
   
