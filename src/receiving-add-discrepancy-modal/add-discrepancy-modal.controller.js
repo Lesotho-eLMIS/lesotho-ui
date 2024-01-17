@@ -34,6 +34,7 @@
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.confirm = confirm;
         //vm.discrepancies = rejectionReasons;
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
@@ -67,12 +68,28 @@
                }
                
            });
-           /* modalDeferred.promise.catch(function() {
-                vm.addedItems.forEach(function(item) {
-                    item.quantity = undefined;
-                    item.quantityInvalid = undefined;
-                });
-            }); */
+        }
+
+        function confirm (){
+            var rejection = {};
+            var receivingDiscrepancies = [];
+            angular.forEach(vm.discrepancies, function(reason){
+            // Use $filter to find the matching object in rejectionReasons
+                var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: reason.name }, true);
+                // If a match is found, build the rejection object
+                if (reasonDetails.length > 0) {
+                    rejection = {
+                        rejectionReason: angular.copy(reasonDetails[0]), 
+                        quantityAffected: reason.quantity, 
+                        comments: reason.comments
+                    }
+                    receivingDiscrepancies.push(rejection);
+                    //pointOfDeliveryService.addDiscrepancies(rejection);
+                    receivingDiscrepancies = [];
+                    vm.discrepancies = [];
+                    rejection = {};
+                }
+            });
         }
     }
 })();

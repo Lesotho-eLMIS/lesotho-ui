@@ -98,6 +98,7 @@
                         invoiceNumber: item.invoiceNumber,
                         referenceNumber: item.referenceNumber,
                         unitPrice: item.unitPrice
+                        //discrepancies: 
                     }, buildSourceDestinationInfo(item, adjustmentType));
                 });
             }
