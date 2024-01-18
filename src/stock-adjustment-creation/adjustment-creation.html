@@ -146,7 +146,7 @@
                             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
                     </td>
                     <td ng-if="vm.showDeliveryNoteAttributes"> 
-                        <button type="button" class="primary" ng-click="vm.addDiscrepancyOnModal()"><b>+ </b>Add</button>
+                        <button type="button" class="primary" ng-click="vm.addDiscrepancyOnModal(lineItem.timestamp)"><b>+ </b>Add</button>
                     </td>
                     <td> <!--ng-if="lineItem.assignment.facilityTypeId=='ac1d268b-ce10-455f-bf87-9c667da8f060'"-->
                         <button type="button" class="danger" ng-click="vm.remove(lineItem)">{{vm.key('remove') | message}}</button>

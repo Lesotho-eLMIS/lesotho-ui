@@ -167,8 +167,8 @@
      */
     vm.offline = offlineService.isOffline;
 
-    vm.addDiscrepancyOnModal = function() {
-      receivingAddDiscrepancyModalService.show().then(function() {
+    vm.addDiscrepancyOnModal = function(itemTimestamp) {
+      receivingAddDiscrepancyModalService.show(itemTimestamp).then(function() {
           $stateParams.noReload = true;
           draft.$modified = true;
           vm.cacheDraft();
@@ -260,6 +260,12 @@
         !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
 
       if (noErrors) {
+        
+        var timestamp = new Date().getTime();
+        console.log(timestamp);
+        selectedItem.timestamp = timestamp;
+        //console.log(selectedItem);
+        //console.log(timestamp);
         vm.addedLineItems.unshift(
           _.extend(
             {
@@ -270,6 +276,8 @@
             copyDefaultValue()
           )
         );
+       console.log(vm.addedLineItems)
+
 
         previousAdded = vm.addedLineItems[0];
 

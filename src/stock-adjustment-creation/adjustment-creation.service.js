@@ -38,6 +38,7 @@
         var repository = new StockEventRepository();
 
         this.search = search;
+        this.getReceivingDiscrepancies = getReceivingDiscrepancies;
 
         this.submitAdjustments = submitAdjustments;
 
@@ -75,6 +76,11 @@
 
             return result;
         }
+        this.receivingDiscrepancies = {};
+        
+        function getReceivingDiscrepancies (discrepancies) {
+            receivingDiscrepancies.push(discrepancies);
+    }
 
         function submitAdjustments(programId, facilityId, lineItems, adjustmentType) {
             var event = {

@@ -45,7 +45,7 @@
          * @param  {Array}   selectedItems  orderable + lot items that were added already
          * @return {Promise}                resolved with selected products.
          */
-        function show(availableItems, selectedItems) {
+        function show(itemTimestamp) {
             return openlmisModalService.createDialog(
                 {
                     controller: 'receivingAddDiscrepancyModalController',
@@ -57,7 +57,12 @@
                                 // Load rejection Reasons into the controller.
                                 return rejectionReasonService.getAll();
                             
-                        }
+                        },
+                        itemTimestamp: function() {
+                            // Load rejection Reasons into the controller.
+                            return itemTimestamp;
+                        
+                    },
                     }   
                 }
             ).promise.finally(function() {

@@ -28,9 +28,9 @@
         .module('receiving-add-discrepancy-modal')
         .controller('receivingAddDiscrepancyModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService'];
 
-    function controller( modalDeferred, $scope, rejectionReasons) {
+    function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -41,6 +41,8 @@
         vm.selectedDiscrepancy = undefined;
         vm.addDispency = addDiscrepency;
         vm.removeDispency = removeDiscrepancy;
+        
+        
 
         // adding discrepancies to table
         function addDiscrepency() {
@@ -58,8 +60,7 @@
         
         function onInit() {
             vm.selectedDiscrepancy = [];
-           console.log(rejectionReasons);
-
+           
            vm.rejectionReasons = rejectionReasons.content;
            vm.rejectionReasons.forEach(reason => {
                // Load only those of type POD/Point of Delivery
@@ -70,26 +71,14 @@
            });
         }
 
-        function confirm (){
-            var rejection = {};
-            var receivingDiscrepancies = [];
-            angular.forEach(vm.discrepancies, function(reason){
-            // Use $filter to find the matching object in rejectionReasons
-                var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: reason.name }, true);
-                // If a match is found, build the rejection object
-                if (reasonDetails.length > 0) {
-                    rejection = {
-                        rejectionReason: angular.copy(reasonDetails[0]), 
-                        quantityAffected: reason.quantity, 
-                        comments: reason.comments
-                    }
-                    receivingDiscrepancies.push(rejection);
-                    //pointOfDeliveryService.addDiscrepancies(rejection);
-                    receivingDiscrepancies = [];
-                    vm.discrepancies = [];
-                    rejection = {};
-                }
-            });
+        //builds receiving payload
+        function confirm (){  
+            var recevingDiscrepancies = {};        
+           // $scope.recevingDiscrepancies = {};
+           // $scope.recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
+            recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
+            console.log( $scope.recevingDiscrepancies);
+            stockAdjustmentCreationService.getReceivingDiscrepancies(recevingDiscrepancies);
         }
     }
 })();
