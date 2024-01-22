@@ -39,18 +39,19 @@
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
         vm.selectedDiscrepancy = undefined;
-        vm.addDispency = addDiscrepency;
+        vm.addDiscrepancy = addDiscrepancy;
         vm.removeDispency = removeDiscrepancy;
         
         
 
         // adding discrepancies to table
-        function addDiscrepency() {
+        function addDiscrepancy() {
             vm.discrepancies.push({
                 'name': vm.selectedDiscrepancy,
                 'quantity': '',
                 'comments': ''
             });
+            console.log(vm.discrepancies);
         };
 
         // removing discrepancies from table
@@ -73,12 +74,59 @@
 
         //builds receiving payload
         function confirm (){  
-            var recevingDiscrepancies = {};        
-           // $scope.recevingDiscrepancies = {};
-           // $scope.recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
-            recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
-            console.log( $scope.recevingDiscrepancies);
-            stockAdjustmentCreationService.getReceivingDiscrepancies(recevingDiscrepancies);
+        //     var recevingDiscrepancies = {};        
+        //    // $scope.recevingDiscrepancies = {};
+        //    // $scope.recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
+        //     recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
+        //     console.log( $scope.recevingDiscrepancies);
+        //     stockAdjustmentCreationService.addReceivingDiscrepancies(recevingDiscrepancies);
+         
+            // var recevingDiscrepancy = {};
+            // angular.forEach(vm.discrepancies, function(discrepancy){
+            // // Use $filter to find the matching object in rejectionReasons
+            //     var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: discrepancy.name }, true);
+            //     // If a match is found, build the rejection object
+            //     if (reasonDetails.length > 0) { 
+            //         recevingDiscrepancy = {
+            //             rejectionReason: angular.copy(reasonDetails[0]), 
+            //             quantityAffected: discrepancy.quantity, 
+            //             timestamp: itemTimestamp, 
+            //             remarks: discrepancy.comments
+            //         }
+            //         console.log(recevingDiscrepancy);
+            //         stockAdjustmentCreationService.addReceivingDiscrepancies(recevingDiscrepancy);
+            //         recevingDiscrepancy = {};
+            //     }                
+            // });
+            // vm.discrepancies = [];
+
+                var receivingDiscrepancy = {};
+                vm.discrepancies.forEach(function (discrepancy) {
+                    // Use native array method find to find the matching object in rejectionReasons
+                    var reasonDetails = vm.rejectionReasons.find(function (reason) {
+                        return reason.name === discrepancy.name;
+                    });
+
+                    // If a match is found, build the rejection object
+                    if (reasonDetails) {
+                        receivingDiscrepancy = {
+                            rejectionReason: angular.copy(reasonDetails),
+                            quantityAffected: discrepancy.quantity,
+                            timestamp: itemTimestamp,
+                            remarks: discrepancy.comments
+                        };
+                        console.log(receivingDiscrepancy);
+                        stockAdjustmentCreationService.addReceivingDiscrepancies(receivingDiscrepancy);
+                        receivingDiscrepancy = {};
+                    }
+                });
+
+                vm.discrepancies = [];
+
+
+
+
+
         }
     }
 })();

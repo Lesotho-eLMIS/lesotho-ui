@@ -39,6 +39,8 @@
 
         this.search = search;
         this.getReceivingDiscrepancies = getReceivingDiscrepancies;
+        this.addReceivingDiscrepancies = addReceivingDiscrepancies;
+        this.getDiscrepancy = getDiscrepancy;
 
         this.submitAdjustments = submitAdjustments;
 
@@ -76,11 +78,30 @@
 
             return result;
         }
-        this.receivingDiscrepancies = {};
+        //FROM RECEIVING ADD DISCREPANCY MODAL
+
+         var receivingDiscrepancies = [];
         
-        function getReceivingDiscrepancies (discrepancies) {
+        function addReceivingDiscrepancies (discrepancies) {
+            // var dsi = [];
+            // dsi.push(discrepancies);
+            //return dsi;
+            console.log (discrepancies);
             receivingDiscrepancies.push(discrepancies);
-    }
+            console.log (receivingDiscrepancies);
+ 
+        }
+        
+        //get discrepancies for view 
+        function getReceivingDiscrepancies () {
+            
+            return receivingDiscrepancies;
+        }
+
+        function getDiscrepancy(timestamp){
+
+        }
+    //----------------------------------------------
 
         function submitAdjustments(programId, facilityId, lineItems, adjustmentType) {
             var event = {
@@ -103,8 +124,8 @@
                         reasonFreeText: item.reasonFreeText,
                         invoiceNumber: item.invoiceNumber,
                         referenceNumber: item.referenceNumber,
-                        unitPrice: item.unitPrice
-                        //discrepancies: 
+                        unitPrice: item.unitPrice,
+                        discrepancies: getDiscrepancy(item.timestamp)
                     }, buildSourceDestinationInfo(item, adjustmentType));
                 });
             }
