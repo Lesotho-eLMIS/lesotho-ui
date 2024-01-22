@@ -262,27 +262,18 @@
       if (noErrors) {
         
         var timestamp = new Date().getTime();
-        console.log(timestamp);
-        selectedItem.timestamp = timestamp;
-        console.log("SELECTED ITEM");
-        console.log(selectedItem);
-        //console.log(timestamp);
+        selectedItem.timestamp = timestamp; // Add a time stamp to the selected line item
         vm.addedLineItems.unshift(
           _.extend(
             {
               $errors: {},
-              $previewSOH: selectedItem.stockOnHand,
-              descrepancies: stockAdjustmentCreationService.getReceivingDiscrepancies()
+              $previewSOH: selectedItem.stockOnHand
             },
             selectedItem,
             copyDefaultValue()
           )
         );
-        console.log("ADDED LINE ITEMS");
-        console.log(vm.addedLineItems);
-        console.log("PREVIOUS ADDED");
         previousAdded = vm.addedLineItems[0];
-        console.log(previousAdded);
         vm.search();
       }
     }
@@ -295,7 +286,7 @@
         defaultDate = dateUtils.toStringDate(new Date());
       }
 
-      var test = {
+      return{
         assignment: previousAdded.assignment,
         srcDstFreeText: previousAdded.srcDstFreeText,
         reason:
@@ -307,9 +298,6 @@
         reasonFreeText: previousAdded.reasonFreeText,
         occurredDate: defaultDate
       };
-      console.log("TEST");
-      console.log(test);
-      return test;
     }
 
     /**

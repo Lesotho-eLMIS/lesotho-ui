@@ -41,6 +41,7 @@
         this.getReceivingDiscrepancies = getReceivingDiscrepancies;
         this.addReceivingDiscrepancies = addReceivingDiscrepancies;
         this.getDiscrepancy = getDiscrepancy;
+        this.getItemDiscrepancies = getItemDiscrepancies;
 
         this.submitAdjustments = submitAdjustments;
 
@@ -94,12 +95,38 @@
         
         //get discrepancies for view 
         function getReceivingDiscrepancies () {
-            
+
             return receivingDiscrepancies;
         }
 
         function getDiscrepancy(timestamp){
+           
+            // Search for objects in discrepanciesArray with a matching timeStamp
+            var itemDiscrepancies = receivingDiscrepancies.filter(discrepancy => discrepancy.timestamp === timestamp);
+            console.log(itemDiscrepancies);
+            return itemDiscrepancies;
 
+        }
+
+        function getItemDiscrepancies(timestamp){
+           
+            var itemDiscrepancies = [];
+           
+             console.log("getting Discrepancy  "+timestamp);
+             // Search for objects with a matching timeStamp in receivingDiscrepancies array
+            receivingDiscrepancies.forEach((discrepancy) => {
+                console.log(discrepancy.timestamp);
+                if(discrepancy.timestamp === timestamp){
+                    itemDiscrepancies.push(discrepancy);
+                }
+            });
+            // Remove the matched discrepancies from receivingDiscrepancies array
+            itemDiscrepancies.forEach(index => {
+                receivingDiscrepancies.splice(index, 1);
+            });
+            console.log('Matched Discrepancies:');
+            console.log(itemDiscrepancies);
+            return itemDiscrepancies;
         }
     //----------------------------------------------
 
@@ -125,7 +152,7 @@
                         invoiceNumber: item.invoiceNumber,
                         referenceNumber: item.referenceNumber,
                         unitPrice: item.unitPrice,
-                        discrepancies: getDiscrepancy(item.timestamp)
+                        discrepancies: getItemDiscrepancies(item.timestamp)
                     }, buildSourceDestinationInfo(item, adjustmentType));
                 });
             }
