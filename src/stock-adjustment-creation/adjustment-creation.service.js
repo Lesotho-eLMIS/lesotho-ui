@@ -122,9 +122,14 @@
                 }
             });
             // Remove the matched discrepancies from receivingDiscrepancies array
-            itemDiscrepancies.forEach(index => {
-                receivingDiscrepancies.splice(index, 1);
-            });
+            // itemDiscrepancies.forEach(i => {
+            //     receivingDiscrepancies.forEach(j => {
+            //         if(i.timestamp===j.timestamp){
+            //             receivingDiscrepancies.splice(i, 1);
+            //         }
+            //     });
+            // });
+
             console.log('Matched Discrepancies:');
             console.log(itemDiscrepancies);
             return itemDiscrepancies;
@@ -143,7 +148,10 @@
                     return angular.merge({
                         orderableId: item.orderable.id,
                         lotId: item.lot ? item.lot.id : null,
+                        deliveryNoteQuantity: item.deliveryNoteQuantity,
+                        shippedQuantity: item.rejectedQuantity? (item.quantity + item.rejectedQuantity): item.quantity,
                         quantity: item.quantity,
+                        rejectedQuantity: item.rejectedQuantity,
                         extraData: {
                             vvmStatus: item.vvmStatus
                         },
@@ -162,7 +170,10 @@
                     return angular.merge({
                         orderableId: item.orderable.id,
                         lotId: item.lot ? item.lot.id : null,
+                        deliveryNoteQuantity: item.deliveryNoteQuantity,
+                        shippedQuantity: item.rejectedQuantity? (item.quantity + item.rejectedQuantity): item.quantity,
                         quantity: item.quantity,
+                        rejectedQuantity: item.rejectedQuantity,
                         extraData: {
                             vvmStatus: item.vvmStatus
                         },
