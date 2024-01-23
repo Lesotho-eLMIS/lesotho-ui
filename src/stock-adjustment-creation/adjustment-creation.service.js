@@ -118,12 +118,13 @@
                 console.log(discrepancy.timestamp);
                 if(discrepancy.timestamp === timestamp){
                     itemDiscrepancies.push(discrepancy);
+                    receivingDiscrepancies.splice(index, 1);
                 }
             });
             // Remove the matched discrepancies from receivingDiscrepancies array
-            itemDiscrepancies.forEach(index => {
-                receivingDiscrepancies.splice(index, 1);
-            });
+            // itemDiscrepancies.forEach(index => {
+            //     receivingDiscrepancies.splice(index, 1);
+            // });
             console.log('Matched Discrepancies:');
             console.log(itemDiscrepancies);
             return itemDiscrepancies;
