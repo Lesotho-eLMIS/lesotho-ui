@@ -28,9 +28,9 @@
         .module('receiving-add-discrepancy-modal')
         .controller('receivingAddDiscrepancyModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService', 'notificationService'];
 
-    function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService) {
+    function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService, notificationService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -41,7 +41,8 @@
         vm.selectedDiscrepancy = undefined;
         vm.addDiscrepancy = addDiscrepancy;
         vm.removeDispency = removeDiscrepancy;
-        
+
+        $scope.showModal=false;
         
 
         // adding discrepancies to table
@@ -73,40 +74,14 @@
         }
 
         //builds receiving payload
-        function confirm (){  
-        //     var recevingDiscrepancies = {};        
-        //    // $scope.recevingDiscrepancies = {};
-        //    // $scope.recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
-        //     recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
-        //     console.log( $scope.recevingDiscrepancies);
-        //     stockAdjustmentCreationService.addReceivingDiscrepancies(recevingDiscrepancies);
-         
-            // var recevingDiscrepancy = {};
-            // angular.forEach(vm.discrepancies, function(discrepancy){
-            // // Use $filter to find the matching object in rejectionReasons
-            //     var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: discrepancy.name }, true);
-            //     // If a match is found, build the rejection object
-            //     if (reasonDetails.length > 0) { 
-            //         recevingDiscrepancy = {
-            //             rejectionReason: angular.copy(reasonDetails[0]), 
-            //             quantityAffected: discrepancy.quantity, 
-            //             timestamp: itemTimestamp, 
-            //             remarks: discrepancy.comments
-            //         }
-            //         console.log(recevingDiscrepancy);
-            //         stockAdjustmentCreationService.addReceivingDiscrepancies(recevingDiscrepancy);
-            //         recevingDiscrepancy = {};
-            //     }                
-            // });
-            // vm.discrepancies = [];
-
+        function confirm (){
+            if(vm.discrepancies.length!=0){
                 var receivingDiscrepancy = {};
                 vm.discrepancies.forEach(function (discrepancy) {
                     // Use native array method find to find the matching object in rejectionReasons
                     var reasonDetails = vm.rejectionReasons.find(function (reason) {
                         return reason.name === discrepancy.name;
                     });
-
                     // If a match is found, build the rejection object
                     if (reasonDetails) {
                         receivingDiscrepancy = {
@@ -120,13 +95,12 @@
                         receivingDiscrepancy = {};
                     }
                 });
-
                 vm.discrepancies = [];
-
-
-
-
-
+                modalDeferred.resolve();
+            }
+            else{
+                notificationService.error('Add discrepancies before saving them.');
+            }
         }
     }
 })();

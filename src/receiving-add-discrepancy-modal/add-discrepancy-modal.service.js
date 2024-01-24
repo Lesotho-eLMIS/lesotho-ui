@@ -45,8 +45,11 @@
          * @param  {Array}   selectedItems  orderable + lot items that were added already
          * @return {Promise}                resolved with selected products.
          */
+
+        var modalDialog = null;
+
         function show(itemTimestamp) {
-            return openlmisModalService.createDialog(
+            modalDialog = openlmisModalService.createDialog(
                 {
                     controller: 'receivingAddDiscrepancyModalController',
                     controllerAs: 'vm',
@@ -68,6 +71,8 @@
             ).promise.finally(function() {
                 angular.element('.openlmis-popover').popover('destroy');
             });
+            
+            return modalDialog;
         }
     }
 
