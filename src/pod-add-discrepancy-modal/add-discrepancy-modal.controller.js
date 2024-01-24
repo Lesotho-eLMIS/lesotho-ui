@@ -28,9 +28,9 @@
         .module('pod-add-discrepancy-modal')
         .controller('podAddDiscrepancyModalController', controller);
 
-    controller.$inject = ['pointOfDeliveryService', 'rejectionReasons','$filter', 'shipmentType', 'notificationService'];
+    controller.$inject = ['pointOfDeliveryService', 'rejectionReasons','$filter', 'shipmentType', 'notificationService', 'modalDeferred'];
 
-    function controller( pointOfDeliveryService, rejectionReasons, $filter, shipmentType, notificationService) {
+    function controller( pointOfDeliveryService, rejectionReasons, $filter, shipmentType, notificationService, modalDeferred) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -41,7 +41,7 @@
         //vm.selectedDiscrepancies = []; // To hold list of selected discrepancy names
         vm.addDiscrepancy = addDiscrepency;
         vm.removeDispency = removeDiscrepancy;
-        vm.confirmDiscrepancyList = confirmDiscrepancyList;
+        vm.confirm = confirm;
        
         /**
          * @ngdoc method
@@ -85,25 +85,31 @@
             vm.discrepancies.splice(index, 1);
         }
         
-        function confirmDiscrepancyList (){
-            var rejection = {};
-            angular.forEach(vm.discrepancies, function(reason){
-            // Use $filter to find the matching object in rejectionReasons
-                var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: reason.name }, true);
-                // If a match is found, build the rejection object
-                if (reasonDetails.length > 0) {
-                    rejection = {
-                        rejectionReason: angular.copy(reasonDetails[0]), 
-                        quantityAffected: reason.quantity, 
-                        shipmentType: reason.shipmentType, 
-                        remarks: reason.comments
+        function confirm (){
+            if(vm.discrepancies.length!=0){
+                var rejection = {};
+                angular.forEach(vm.discrepancies, function(reason){
+                // Use $filter to find the matching object in rejectionReasons
+                    var reasonDetails = $filter('filter')(vm.rejectionReasons, { name: reason.name }, true);
+                    // If a match is found, build the rejection object
+                    if (reasonDetails.length > 0) {
+                        rejection = {
+                            rejectionReason: angular.copy(reasonDetails[0]), 
+                            quantityAffected: reason.quantity, 
+                            shipmentType: reason.shipmentType, 
+                            remarks: reason.comments
+                        }
+                        pointOfDeliveryService.addDiscrepancies(rejection);
+                        vm.discrepancies = [];
+                        rejection = {};
                     }
-                    pointOfDeliveryService.addDiscrepancies(rejection);
-                    vm.discrepancies = [];
-                    rejection = {};
-                }
-            });
-        };
+                });
+                modalDeferred.resolve();
+            }
+            else{
+                notificationService.error('Add discrepancies before saving them.');
+            }
+        }
                      
     }
 })();

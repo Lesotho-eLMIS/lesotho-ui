@@ -116,7 +116,7 @@
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.referenceNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="true"><input class="form-control" type="text" value="INV" ng-model="lineItem.invoiceNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     
-                    <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.deliveryNoteQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     <!-- <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td> -->
 
                     <td openlmis-invalid="{{lineItem.$errors.quantityInvalid}}" class="digit-cell">
@@ -124,7 +124,7 @@
                             ng-class="{'error': lineItem.$errors.quantityInvalid}"
                             ng-change="vm.validateQuantity(lineItem)" ng-blur="vm.validateQuantity(lineItem)" positive-integer value="0"/>
                     </td>
-                    <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.rejectedQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     <td ng-if="vm.showDeliveryNoteAttributes">
                         <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"
                             ng-change="vm.discrepancySelectionChanged()"
@@ -146,7 +146,7 @@
                             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
                     </td>
                     <td ng-if="vm.showDeliveryNoteAttributes"> 
-                        <button type="button" class="primary" ng-click="vm.addDiscrepancyOnModal(lineItem.timestamp)"><b>+ </b>Add</button>
+                        <button ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" type="button" class="primary" ng-click="vm.addDiscrepancyOnModal(lineItem.timestamp)"><b>+ </b>Add</button>
                     </td>
                     <td> <!--ng-if="lineItem.assignment.facilityTypeId=='ac1d268b-ce10-455f-bf87-9c667da8f060'"-->
                         <button type="button" class="danger" ng-click="vm.remove(lineItem)">{{vm.key('remove') | message}}</button>

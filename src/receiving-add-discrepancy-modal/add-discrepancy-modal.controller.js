@@ -28,9 +28,9 @@
         .module('receiving-add-discrepancy-modal')
         .controller('receivingAddDiscrepancyModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService', 'notificationService'];
 
-    function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService) {
+    function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService, notificationService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -39,18 +39,20 @@
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
         vm.selectedDiscrepancy = undefined;
-        vm.addDispency = addDiscrepency;
+        vm.addDiscrepancy = addDiscrepancy;
         vm.removeDispency = removeDiscrepancy;
-        
+
+        $scope.showModal=false;
         
 
         // adding discrepancies to table
-        function addDiscrepency() {
+        function addDiscrepancy() {
             vm.discrepancies.push({
                 'name': vm.selectedDiscrepancy,
                 'quantity': '',
                 'comments': ''
             });
+            console.log(vm.discrepancies);
         };
 
         // removing discrepancies from table
@@ -72,13 +74,33 @@
         }
 
         //builds receiving payload
-        function confirm (){  
-            var recevingDiscrepancies = {};        
-           // $scope.recevingDiscrepancies = {};
-           // $scope.recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
-            recevingDiscrepancies [itemTimestamp] =  vm.discrepancies;
-            console.log( $scope.recevingDiscrepancies);
-            stockAdjustmentCreationService.getReceivingDiscrepancies(recevingDiscrepancies);
+        function confirm (){
+            if(vm.discrepancies.length!=0){
+                var receivingDiscrepancy = {};
+                vm.discrepancies.forEach(function (discrepancy) {
+                    // Use native array method find to find the matching object in rejectionReasons
+                    var reasonDetails = vm.rejectionReasons.find(function (reason) {
+                        return reason.name === discrepancy.name;
+                    });
+                    // If a match is found, build the rejection object
+                    if (reasonDetails) {
+                        receivingDiscrepancy = {
+                            rejectionReason: angular.copy(reasonDetails),
+                            quantityAffected: discrepancy.quantity,
+                            timestamp: itemTimestamp,
+                            remarks: discrepancy.comments
+                        };
+                        console.log(receivingDiscrepancy);
+                        stockAdjustmentCreationService.addReceivingDiscrepancies(receivingDiscrepancy);
+                        receivingDiscrepancy = {};
+                    }
+                });
+                vm.discrepancies = [];
+                modalDeferred.resolve();
+            }
+            else{
+                notificationService.error('Add discrepancies before saving them.');
+            }
         }
     }
 })();

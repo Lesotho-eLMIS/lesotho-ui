@@ -39,6 +39,9 @@
 
         this.search = search;
         this.getReceivingDiscrepancies = getReceivingDiscrepancies;
+        this.addReceivingDiscrepancies = addReceivingDiscrepancies;
+        this.getDiscrepancy = getDiscrepancy;
+        this.getItemDiscrepancies = getItemDiscrepancies;
 
         this.submitAdjustments = submitAdjustments;
 
@@ -76,11 +79,62 @@
 
             return result;
         }
-        this.receivingDiscrepancies = {};
+        //FROM RECEIVING ADD DISCREPANCY MODAL
+
+         var receivingDiscrepancies = [];
         
-        function getReceivingDiscrepancies (discrepancies) {
+        function addReceivingDiscrepancies (discrepancies) {
+            // var dsi = [];
+            // dsi.push(discrepancies);
+            //return dsi;
+            console.log (discrepancies);
             receivingDiscrepancies.push(discrepancies);
-    }
+            console.log (receivingDiscrepancies);
+ 
+        }
+        
+        //get discrepancies for view 
+        function getReceivingDiscrepancies () {
+
+            return receivingDiscrepancies;
+        }
+
+        function getDiscrepancy(timestamp){
+           
+            // Search for objects in discrepanciesArray with a matching timeStamp
+            var itemDiscrepancies = receivingDiscrepancies.filter(discrepancy => discrepancy.timestamp === timestamp);
+            console.log(itemDiscrepancies);
+            return itemDiscrepancies;
+
+        }
+
+        function getItemDiscrepancies(timestamp){
+           
+            var itemDiscrepancies = [];
+           
+             console.log("getting Discrepancy  "+timestamp);
+             // Search for objects with a matching timeStamp in receivingDiscrepancies array
+            receivingDiscrepancies.forEach((discrepancy) => {
+                console.log(discrepancy.timestamp);
+                if(discrepancy.timestamp === timestamp){
+                    itemDiscrepancies.push(discrepancy);
+                    // receivingDiscrepancies.splice(index, 1);
+                }
+            });
+            // Remove the matched discrepancies from receivingDiscrepancies array
+            // itemDiscrepancies.forEach(i => {
+            //     receivingDiscrepancies.forEach(j => {
+            //         if(i.timestamp===j.timestamp){
+            //             receivingDiscrepancies.splice(i, 1);
+            //         }
+            //     });
+            // });
+
+            console.log('Matched Discrepancies:');
+            console.log(itemDiscrepancies);
+            return itemDiscrepancies;
+        }
+    //----------------------------------------------
 
         function submitAdjustments(programId, facilityId, lineItems, adjustmentType) {
             var event = {
@@ -94,7 +148,10 @@
                     return angular.merge({
                         orderableId: item.orderable.id,
                         lotId: item.lot ? item.lot.id : null,
+                        deliveryNoteQuantity: item.deliveryNoteQuantity,
+                        shippedQuantity: item.rejectedQuantity? (item.quantity + item.rejectedQuantity): item.quantity,
                         quantity: item.quantity,
+                        rejectedQuantity: item.rejectedQuantity,
                         extraData: {
                             vvmStatus: item.vvmStatus
                         },
@@ -103,8 +160,8 @@
                         reasonFreeText: item.reasonFreeText,
                         invoiceNumber: item.invoiceNumber,
                         referenceNumber: item.referenceNumber,
-                        unitPrice: item.unitPrice
-                        //discrepancies: 
+                        unitPrice: item.unitPrice,
+                        discrepancies: getItemDiscrepancies(item.timestamp)
                     }, buildSourceDestinationInfo(item, adjustmentType));
                 });
             }
@@ -113,7 +170,10 @@
                     return angular.merge({
                         orderableId: item.orderable.id,
                         lotId: item.lot ? item.lot.id : null,
+                        deliveryNoteQuantity: item.deliveryNoteQuantity,
+                        shippedQuantity: item.rejectedQuantity? (item.quantity + item.rejectedQuantity): item.quantity,
                         quantity: item.quantity,
+                        rejectedQuantity: item.rejectedQuantity,
                         extraData: {
                             vvmStatus: item.vvmStatus
                         },
