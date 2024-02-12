@@ -156,11 +156,13 @@
                             vvmStatus: item.vvmStatus
                         },
                         occurredDate: item.occurredDate,
-                        reasonId: 'e3fc3cf3-da18-44b0-a220-77c985202e06', //
+                        //reasonId: 'e3fc3cf3-da18-44b0-a220-77c985202e06', //
+                        reasonId: item.reason ? item.reason.id : null, 
                         reasonFreeText: item.reasonFreeText,
                         invoiceNumber: item.invoiceNumber,
                         referenceNumber: item.referenceNumber,
                         unitPrice: item.unitPrice,
+                        selectedDiscrepancy: item.selectedDiscrepancy,
                         discrepancies: getItemDiscrepancies(item.timestamp)
                     }, buildSourceDestinationInfo(item, adjustmentType));
                 });
@@ -182,7 +184,8 @@
                         reasonFreeText: item.reasonFreeText,
                         invoiceNumber: item.invoiceNumber,
                         referenceNumber: item.referenceNumber,
-                        unitPrice: item.unitPrice
+                        unitPrice: item.unitPrice,
+                        selectedDiscrepancy: item.selectedDiscrepancy
                     }, buildSourceDestinationInfo(item, adjustmentType));
                 });
 
