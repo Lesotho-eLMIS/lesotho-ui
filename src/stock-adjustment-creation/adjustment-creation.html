@@ -55,8 +55,8 @@
                     <th>{{vm.key('soh') | message}}</th>
                     <th ng-show="vm.srcDstAssignments">{{vm.key('srcDstLabel') | message}}</th>
                     <th ng-hide="vm.showDeliveryNoteAttributes || vm.showReasonsInAdjustment" ng-show="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
-                    <th ng-show="vm.showReasonsInAdjustment" ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown">{{vm.key('reason') | message}}</th>
-                    <th ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown">{{vm.key('reasonComments') | message}}</th>
+                    <th ng-if="vm.showReasonDropdown">{{vm.key('reason') | message}}</th>
+                    <th ng-if="vm.showReasonDropdown">{{vm.key('reasonComments') | message}}</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">Reference Number</th>
                     <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="true">Invoice Number</th>
@@ -104,13 +104,13 @@
                     <td ng-hide="vm.showDeliveryNoteAttributes || vm.showReasonsInAdjustment" ng-show="vm.srcDstAssignments">
                         <textarea ng-show="lineItem.assignment.isFreeTextAllowed" ng-model="lineItem.srcDstFreeText" rows="1" cols="15"></textarea>
                     </td>
-                    <td ng-show="vm.showReasonsInAdjustment" ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown" openlmis-invalid="{{lineItem.$errors.reasonInvalid ? 'openlmisForm.required' : '' | message}}" class="digit-cell">
+                    <td ng-if="vm.showReasonDropdown" openlmis-invalid="{{lineItem.$errors.reasonInvalid ? 'openlmisForm.required' : '' | message}}" class="digit-cell">
                         <select ng-model="lineItem.reason"
                             ng-change="vm.validateReason(lineItem);vm.clearFreeText(lineItem, 'reasonFreeText')"
                             ng-options="reason.name for reason in vm.reasons track by reason.id" autofocus>
                         </select>
                     </td>
-                    <td ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown" >
+                    <td ng-if="vm.showReasonDropdown" >
                         <input type="text" ng-show="lineItem.reason.isFreeTextAllowed" ng-model="lineItem.reasonFreeText" rows="1" cols="15"></input>
                     </td>
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.referenceNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
@@ -126,7 +126,7 @@
                     </td>
                     <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.rejectedQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     <td ng-if="vm.showDeliveryNoteAttributes">
-                        <select id="discrepancySelect" ng-model="vm.selectedDiscrepancy" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"
+                        <select id="discrepancySelect" ng-model="lineItem.selectedDiscrepancy" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"
                             ng-change="vm.discrepancySelectionChanged()"
                             ng-options="discrepancy for discrepancy in vm.rejectionReasons">
                         </select>
