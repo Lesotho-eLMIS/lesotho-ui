@@ -36,7 +36,7 @@
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
         'rejectionReasonModalService', '$q'
     ];
-
+       
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
                                        loadingModalService, alertService, notificationService, confirmService,
                                        offlineService, $window, requisitionUrlFactory, $filter, $scope,
