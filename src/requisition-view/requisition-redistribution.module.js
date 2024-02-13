@@ -18,12 +18,12 @@
     'use strict';
 
     /**
-     * @module requisition-view
+     * @module requisition-redistribution
      *
      * @description
-     * Responsible for requisition view screen.
+     * Responsible for requisition redistribution screen.
      */
-    angular.module('requisition-view', [
+    angular.module('requisition-redistribution', [
         'openlmis-templates',
         'openlmis-i18n',
         'openlmis-state-tracker',
@@ -36,7 +36,6 @@
         'requisition-validation',
         'requisition-status-messages',
         'requisition-view-tab',
-        'requisition-redistribution',
         'ui.router'
     ]);
 
