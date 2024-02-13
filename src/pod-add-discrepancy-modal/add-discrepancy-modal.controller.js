@@ -97,7 +97,7 @@
                             rejectionReason: angular.copy(reasonDetails[0]), 
                             quantityAffected: reason.quantity, 
                             shipmentType: reason.shipmentType, 
-                            remarks: reason.comments
+                            comments: reason.comments
                         }
                         pointOfDeliveryService.addDiscrepancies(rejection);
                         vm.discrepancies = [];
