@@ -18,25 +18,22 @@
     'use strict';
 
     /**
-     * @module requisition-redistribution
+     * @module redistribution
      *
      * @description
-     * Responsible for requisition redistribution screen.
+     * Provides redistribution state and controller.
      */
     angular.module('requisition-redistribution', [
-        'openlmis-templates',
-        'openlmis-i18n',
-        'openlmis-state-tracker',
-        'openlmis-modal',
-        'openlmis-date',
-        'openlmis-invalid',
-        'openlmis-permissions',
-        'requisition',
-        'requisition-summary',
-        'requisition-validation',
-        'requisition-status-messages',
-        'requisition-view-tab',
-        'ui.router'
+        'ui.router',
+        'openlmis-config',
+        'referencedata-facility',
+        'ngResource',
+        'stockmanagement',
+        'openlmis-repository',
+        'openlmis-class-extender',
+        'referencedata-user',
+        'openlmis-urls',
+        'openlmis-pagination'
     ]);
 
 })();

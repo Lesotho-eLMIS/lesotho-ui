@@ -384,10 +384,10 @@
             
             );
               // To Test
-    
-              $state.go('openlmis.requisitions.requisition.redistribution', {
-                // rnr: requisitionId
-             });
+              $state.go('openlmis.redistribution', {
+               // rnr: requisitionId
+             });    
+
             function saveThenSubmit() {
                 var loadingPromise = loadingModalService.open();
                 vm.requisition.$save().then(function() {
