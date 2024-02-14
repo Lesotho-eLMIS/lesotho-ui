@@ -19,16 +19,16 @@
 
     /**
      * @ngdoc controller
-     * @name requisition-view.controller:RequisitionViewController
+     * @name requisition-redistribution.controller:RequisitionRedistributionController
      *
      * @description
-     * Controller for managing requisitions.
+     * Controller for managing redistribution.
      */
     angular
-        .module('requisition-view')
-        .controller('RequisitionViewController', RequisitionViewController);
+        .module('requisition-redistribution')
+        .controller('RequisitionRedistributionController', RequisitionRedistributionController);
 
-    RequisitionViewController.$inject = [
+    RequisitionRedistributionController.$inject = [
         '$state', 'requisition', 'requisitionValidator', 'requisitionService', 'loadingModalService', 'alertService',
         'notificationService', 'confirmService', 'offlineService', '$window', 'requisitionUrlFactory', '$filter',
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
@@ -36,8 +36,8 @@
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
         'rejectionReasonModalService', '$q'
     ];
-       
-    function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
+
+    function RequisitionRedistributionController($state, requisition, requisitionValidator, requisitionService,
                                        loadingModalService, alertService, notificationService, confirmService,
                                        offlineService, $window, requisitionUrlFactory, $filter, $scope,
                                        RequisitionWatcher, accessTokenFactory, messageService, stateTrackerService,
@@ -254,14 +254,6 @@
             vm.displaySyncButton = canSync;
         }
 
-        function goToRedistribution() {
-            // To Test
-        $state.go('openlmis.redistribution', {
-            // rnr: requisitionId
-          });   
-
-        } 
-
         function setTypeAndClass() {
             if (vm.requisition.emergency) {
                 vm.requisitionType = 'requisitionView.emergency';
@@ -389,9 +381,14 @@
                     $scope.$broadcast('openlmis-form-submit');
                     failWithMessage('requisitionView.rnrHasErrors')();
                 }
-            });
-                
-
+            }
+            
+            );
+              // To Test
+    
+              $state.go('openlmis.requisitions.requisition.redistribution', {
+                // rnr: requisitionId
+             });
             function saveThenSubmit() {
                 var loadingPromise = loadingModalService.open();
                 vm.requisition.$save().then(function() {
