@@ -1,11 +1,16 @@
 angular.module('requisition-redistribution')
-    .controller('RequisitionRedistributionController', ['$scope', function ($scope) {
-        // Your controller logic goes here
+    .controller('RequisitionRedistributionController', ['$scope','requisition', function ($scope, requisition) {
 
         vm = this;
 
-        vm.goToRedistribution = goToRedistribution;
+        vm.$onInit = onInit;
+        //vm.goToRedistribution = goToRedistribution;
+        vm.requisition = requisition;
 
+        
+        function onInit() {
+           console.log(vm.requisition);
+        }
         
 
     }]);

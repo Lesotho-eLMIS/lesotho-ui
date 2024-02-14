@@ -33,7 +33,8 @@
         'openlmis-class-extender',
         'referencedata-user',
         'openlmis-urls',
-        'openlmis-pagination'
+        'openlmis-pagination',
+        'requisition-view'
     ]);
 
 })();

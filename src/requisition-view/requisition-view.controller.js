@@ -254,11 +254,12 @@
             vm.displaySyncButton = canSync;
         }
 
-        function goToRedistribution() {
-            // To Test
-        $state.go('openlmis.redistribution', {
-            // rnr: requisitionId
-          });   
+        function goToRedistribution(requisitionId) {
+            console.log(requisitionId);
+            $state.go('openlmis.redistribution', {
+                rnr: requisitionId,
+                //requisition: vm.requisition
+            });   
 
         } 
 
