@@ -9,42 +9,37 @@
 <ng-include src="'requisition-view/header.html'"></ng-include>
 <status-messages requisition="vm.requisition"></status-messages>
 
-<!-- <div>
-    <span>
-        <input type="checkbox" id="redistributionRadio">
-        <label for="redistributionRadio">Mark for redistribution</label>
-    </span>
+<div>
     
-    <span>
-        <fieldset class="form-group">
-            <label for="requestingFacility">Supplying Facility</label>
-            <select id="requestingFacility"
-                    ng-model="vm.requestingFacility"
-                    ng-required="!vm.supplyingFacility"
-                    ng-options="facility.name for facility in vm.requestingFacilities | orderBy:'name'"></select>
-        </fieldset>
-    </span>
+    <section class="openlmis-table-container">
+        <table suppress-tr-openlmis-invalid>
+            <thead>
+                <tr>
+                    <th>Prodcut Code</th>
+                    <th>Product</th>
+                    <th>Requested Quantity</th>
+                    <th>Requested Quantity Explanation</th>
+                    <th>Approved Quantity</th>
+                    <th>Supplying Facility</th>
+                    <th>Quantity to Issue</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>  
+                <tr>
+                    <td><input id="productCode" type="text" maxlength="50" required/></td>
+                    <td><input id="product" type="text" maxlength="50" required/></td>
+                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityOnWayBill"></td>
+                    <td><input id="explanation" type="text" maxlength="50" required/></td>
+                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityAccepted" ></td>
+                    <td><input id="supplyingFacility" type="text" maxlength="50" required/></td>
+                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityRejected"></td>
+                    <td><input id="remarks" type="text" maxlength="50" required/></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>  
 
-</div> -->
-
-<nav>
-    <ul>
-        <li ui-sref-active="active" role="presentation"
-            ng-class="{'is-invalid': !vm.isFullSupplyTabValid()}"
-            openlmis-popover="{{vm.invalidFullSupply}}">
-            <a ui-sref="openlmis.requisitions.requisition.fullSupply">
-                {{'requisitionRedistribution.fullSupplyProducts' | message}}
-            </a>
-        </li>
-        <li ui-sref-active="active" ng-if="vm.program.showNonFullSupplyTab"
-            role="presentation" ng-class="{'is-invalid': !vm.isNonFullSupplyTabValid()}"
-            openlmis-popover="{{vm.invalidNonFullSupply}}">
-            <a ui-sref="openlmis.requisitions.requisition.nonFullSupply">
-                {{'requisitionRedistribution.nonFullSupplyProducts' | message}}
-            </a>
-        </li>
-    </ul>
-</nav>
-<div ui-view=""></div>
-<requisition-summary requisition="vm.requisition"></requisition-summary>
 <ng-include src="'requisition-view/requisition-toolbar.html'"></ng-include>
+
