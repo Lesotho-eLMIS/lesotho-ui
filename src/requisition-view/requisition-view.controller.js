@@ -258,7 +258,7 @@
             console.log(requisitionId);
             $state.go('openlmis.redistribution', {
                 rnr: requisitionId,
-                //requisition: vm.requisition
+                requisition: vm.requisition
             });   
 
         } 

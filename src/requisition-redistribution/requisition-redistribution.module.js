@@ -34,7 +34,8 @@
         'referencedata-user',
         'openlmis-urls',
         'openlmis-pagination',
-        'requisition-view'
+        'requisition-view',
+        'requisition',
     ]);
 
 })();

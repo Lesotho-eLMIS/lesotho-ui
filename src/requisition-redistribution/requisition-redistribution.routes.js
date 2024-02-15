@@ -25,24 +25,15 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
 
     function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
         $stateProvider.state('openlmis.redistribution', {
+            url: '/redistribution/:rnr', 
             isOffline: true,
             controller: 'RequisitionRedistributionController',
             controllerAs: 'vm',
             templateUrl: 'requisition-redistribution/requisition-redistribution.html',
             resolve: {
-                requisition: function($stateParams, requisitionService) {
-                    console.log($stateParams.rnr);
-                    // To resolve the Requisition
-                    return [];//requisitionService.get($stateParams.rnr);
+                requisition: function($stateParams,requisitionService) {
+                    return requisitionService.get($stateParams.rnr);
                 }}
-            /*views: {
-                '@openlmis': {
-                    controller: 'RequisitionViewController',
-                    controllerAs: 'vm',
-                    templateUrl: 'requisition-redistribution/requisition-redistribution.html',
-                }
-            } */
-
         });
        
      }
