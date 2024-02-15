@@ -31,9 +31,52 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
             controllerAs: 'vm',
             templateUrl: 'requisition-redistribution/requisition-redistribution.html',
             resolve: {
+                user: function(currentUserService) {
+                    return currentUserService.getUserInfo();
+                },
                 requisition: function($stateParams,requisitionService) {
                     return requisitionService.get($stateParams.rnr);
-                }}
+                },
+                facility: function(facilityService, requisition) {
+                    return facilityService.get(requisition.facility.id);
+                },
+                program: function(programService, requisition) {
+                    return programService.get(requisition.program.id);
+                },
+                processingPeriod: function(periodService, requisition) {
+                    return periodService.get(requisition.processingPeriod.id);
+                }
+            }/*,
+                program: function(programService, requisition) {
+                    return programService.get(requisition.program.id);
+                },
+                processingPeriod: function(periodService, requisition) {
+                    return periodService.get(requisition.processingPeriod.id);
+                },
+                facility: function(facilityService, requisition) {
+                    return facilityService.get(requisition.facility.id);
+                },
+                canSubmit: function(requisitionViewFactory, user, requisition) {
+                    return requisitionViewFactory.canSubmit(user.id, requisition);
+                },
+                canAuthorize: function(requisitionViewFactory, user, requisition) {
+                    return requisitionViewFactory.canAuthorize(user.id, requisition);
+                },
+                canApproveAndReject: function(requisitionViewFactory, user, requisition) {
+                    return requisitionViewFactory.canApproveAndReject(user, requisition);
+                },
+                canDelete: function(requisitionViewFactory, user, requisition) {
+                    return requisitionViewFactory.canDelete(user.id, requisition);
+                },
+                canSkip: function(requisitionViewFactory, user, requisition, program) {
+                    return requisitionViewFactory.canSkip(user.id, requisition, program);
+                },
+                canSync: function(canSubmit, canAuthorize, canApproveAndReject) {
+                    return canSubmit || canAuthorize || canApproveAndReject;
+                },
+                canUnskipRequisitionItemWhenApproving: function(requisitionViewFactory, requisition) {
+                    return requisitionViewFactory.canUnskipRequisitionItemWhenApproving(requisition);
+                } */
         });
        
      }

@@ -36,6 +36,17 @@
         'openlmis-pagination',
         'requisition-view',
         'requisition',
+        'requisition-summary',
+        'requisition-validation',
+        'requisition-status-messages',
+        'requisition-view-tab',
+        'openlmis-templates',
+        'openlmis-i18n',
+        'openlmis-state-tracker',
+        'openlmis-modal',
+        'openlmis-date',
+        'openlmis-invalid',
+        'openlmis-permissions',
     ]);
 
 })();
