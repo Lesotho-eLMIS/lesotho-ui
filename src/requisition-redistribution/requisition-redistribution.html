@@ -32,9 +32,12 @@
                     <td>{{item.requestedQuantity}}</td>
                     <td>{{item.requestedQuantityExplanation}}</td>
                     <td>{{item.approvedQuantity}}</td>
-                    <td><input id="supplyingFacility" type="text" maxlength="50" required/></td>
-                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityRejected"></td>
-                    <td><input id="remarks" type="text" maxlength="50" required/></td>
+                    <td><select id="supplyingFacility"
+                        ng-model="item.supplyingFacility"
+                        ng-required="true"
+                        ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select></td>
+                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="item.quantityToIssue"></td>
+                    <td><input id="remarks" type="text" maxlength="50" ng-model="item.remarks"/></td>
                 </tr>
             </tbody>
         </table>

@@ -1,5 +1,5 @@
 angular.module('requisition-redistribution')
-    .controller('RequisitionRedistributionController', ['$scope','$stateParams','requisition','user','facility','program','processingPeriod', function ($scope,$stateParams,requisition,user,facility,program,processingPeriod) {
+    .controller('RequisitionRedistributionController', ['$scope','$stateParams','requisition','user','facility','facilities','program','processingPeriod', function ($scope,$stateParams,requisition,user,facility,facilities,program,processingPeriod) {
 
         vm = this;
 
@@ -18,13 +18,15 @@ angular.module('requisition-redistribution')
         vm.displaySkipButton = undefined;
         vm.displaySyncButton = undefined;
         vm.requisitionType = undefined;
+        vm.supplyingFacilities = undefined;
 
         
         function onInit() {
-           console.log(requisition);
-           console.log(facility); 
-           console.log(program);
+           //console.log(requisition);
+           //console.log(facilities); 
+           //console.log(program);
            vm.facility = facility;
+           vm.supplyingFacilities = facilities
            vm.program = program;
            vm.processingPeriod = processingPeriod;
            vm.requisitionLineItems = requisition.requisitionLineItems;
