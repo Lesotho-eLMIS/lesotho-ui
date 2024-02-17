@@ -5,6 +5,7 @@ angular.module('requisition-redistribution')
 
         vm.$onInit = onInit;
         vm.requisition = requisition;
+        vm.requisitionLineItems = undefined;
         vm.program = undefined;
         vm.facility = undefined;
         vm.processingPeriod = undefined;
@@ -26,6 +27,7 @@ angular.module('requisition-redistribution')
            vm.facility = facility;
            vm.program = program;
            vm.processingPeriod = processingPeriod;
+           vm.requisitionLineItems = requisition.requisitionLineItems;
            vm.requisitionType = 'requisitionView.emergency';
            vm.requisitionTypeClass = 'emergency';
            

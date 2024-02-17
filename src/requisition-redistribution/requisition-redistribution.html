@@ -26,12 +26,12 @@
                 </tr>
             </thead>
             <tbody>  
-                <tr>
-                    <td><input id="productCode" type="text" maxlength="50" required/></td>
-                    <td><input id="product" type="text" maxlength="50" required/></td>
-                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityOnWayBill"></td>
-                    <td><input id="explanation" type="text" maxlength="50" required/></td>
-                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityAccepted" ></td>
+                <tr ng-repeat="item in vm.requisitionLineItems">
+                    <td>{{item.orderable.productCode}}</td>
+                    <td>{{item.orderable.fullProductName}}</td>
+                    <td>{{item.requestedQuantity}}</td>
+                    <td>{{item.requestedQuantityExplanation}}</td>
+                    <td>{{item.approvedQuantity}}</td>
                     <td><input id="supplyingFacility" type="text" maxlength="50" required/></td>
                     <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityRejected"></td>
                     <td><input id="remarks" type="text" maxlength="50" required/></td>
