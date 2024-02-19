@@ -1,5 +1,5 @@
 angular.module('requisition-redistribution')
-    .controller('RequisitionRedistributionController', ['$scope','$stateParams','requisition','user','facility','facilities','program','processingPeriod', function ($scope,$stateParams,requisition,user,facility,facilities,program,processingPeriod) {
+    .controller('RequisitionRedistributionController', ['supplyingFacilities','$scope','$stateParams','requisition','user','facility','facilities','program','processingPeriod', function (supplyingFacilities, $scope, $stateParams, requisition,user,facility,facilities,program,processingPeriod) {
 
         vm = this;
 
@@ -18,22 +18,81 @@ angular.module('requisition-redistribution')
         vm.displaySkipButton = undefined;
         vm.displaySyncButton = undefined;
         vm.requisitionType = undefined;
-        vm.supplyingFacilities = undefined;
-
+        vm.supplyingFacilities = undefined; 
         
         function onInit() {
-           //console.log(requisition);
-           //console.log(facilities); 
+          // console.log(requisition);
+          // console.log(facilities); 
+           //console.log(facility.type); 
            //console.log(program);
            vm.facility = facility;
-           vm.supplyingFacilities = facilities
+           vm.supplyingFacilities = supplyingFacilities; //facilities;
            vm.program = program;
            vm.processingPeriod = processingPeriod;
            vm.requisitionLineItems = requisition.requisitionLineItems;
            vm.requisitionType = 'requisitionView.emergency';
            vm.requisitionTypeClass = 'emergency';
-           
+           vm.requisitionLineItems.forEach(item => {
+            item.addRowButton = true;
+           });
         }
+
+        function submitRedistribution(){
+
+        }
+
+        vm.showAddButton = function(index) {
+            var sum = 0;
+            var approvedQuantity = vm.requisitionLineItems[index].approvedQuantity;
+            
+            for (var i = 0; i < vm.requisitionLineItems.length; i++) {
+                if(vm.requisitionLineItems[index].orderable.productCode === vm.requisitionLineItems[i].orderable.productCode){
+                    sum += vm.requisitionLineItems[i].quantityToIssue;
+                    if (sum >= approvedQuantity) {
+                        vm.requisitionLineItems.forEach(item => {
+                            if(vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode)
+                            {
+                                item.addRowButton = false;
+                            }
+                        });
+                        console.log(sum + " || " + approvedQuantity); 
+                        //vm.requisitionLineItems[i].addRowButton = false; 
+                        //vm.addRowButton = false;
+                        sum = 0;
+                        return; 
+                    }
+
+                }
+            }  
+            console.log(sum + " || " + approvedQuantity);          
+            // If the loop completes without meeting the condition, show the button
+            vm.requisitionLineItems[index].addRowButton = true;
+        };
+
+       // $scope.removeSelectedFacility: if a facility has already been chosen as a supplier for this line item.
+        // remove it from the pool 
+    
+        vm.addRow = function(index, item) {
+            // Create a new item object with default values
+            var newItem = {
+                orderable: {productCode: item.orderable.productCode, fullProductName: item.orderable.fullProductName },                
+                requestedQuantity: item.requestedQuantity,
+                requestedQuantityExplanation: item.requestedQuantityExplanation,
+                approvedQuantity: item.approvedQuantity,
+                supplyingFacility: null,
+                quantityToIssue: 0,
+                remarks: '',
+                addRowButton: true
+            };
+        
+            // Insert the new item into the array at the specified index
+            vm.requisitionLineItems.splice(index + 1, 0, newItem);
+        };
+
+        /////REMOVE LINE ITEM FROM REDISTRIBUTION TABLE
+        // vm.removeLineItem = function (index) {
+        //     vm.requisitionLineItems.splice(index, 1);
+        // }
         
 
     }]);

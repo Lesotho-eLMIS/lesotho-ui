@@ -1,1 +1,7 @@
-<button class="primary" ng-disabled="vm.isOffline()">Submit</button>
+<div class="openlmis-toolbar button-group">
+	<!-- <button ng-if="vm.displaySyncButton" ng-disabled="vm.isOffline()" ng-click="vm.syncRnr()">{{'requisitionView.sync.label' | message}}</button> -->
+    <div class="button-group primary">
+	    <button class="primary" ng-disabled="vm.isOffline()" ngf-click="submitRedistribution()">{{'requisitionRedistribution.submit.label'|message}}</button>
+    </div>
+</div>
+

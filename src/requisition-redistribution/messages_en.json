@@ -35,7 +35,6 @@
     "requisitionRedistribution.skip.success": "Requisition has been skipped!",
     "requisitionRedistribution.submit.confirm": "Are you sure you want to submit this R&R?",
     "requisitionRedistribution.submit.failure": "Failed to submit requisition!",
-    "requisitionRedistribution.submit.label": "Submit",
     "requisitionRedistribution.submitAndAuthorize.label": "Submit & Authorize",
     "requisitionRedistribution.submit.success": "Requisition has been submitted!",
     "requisitionRedistribution.sync.failure": "Failed to synchronize requisition!",
@@ -54,7 +53,6 @@
     "requisitionRedistribution.authorizeRequisition": "Authorize Requisition",
     "requisitionRedistribution.datePhysicalStockCountCompleted": "Date physical stock count completed",
     "requisitionRedistribution.datePhysicalStockCountCompleted.inFuture": "You cannot record date for the future",
-    "requisitionRedistribution.cancel": "Cancel",
     "requisitionRedistribution.rejection.reason.title" : "Rejection Reason",
     "requisitionRedistribution.rejection.reason.message" : "Add Reason(s) for Rejection",
     "requisitionRedistribution.rejection.reason.category" : "Category",
@@ -65,5 +63,16 @@
     "requisitionRedistribution.rejection.reason.warning.message" : "There is no reason",
     "requisitionRedistribution.rejection.reason.action" : "Action",
     "requisitionRedistribution.rejection.reason.action.remove" : "Remove",
-    "requisitionRedistribution.redistribution.label": "Redistribution"
+    "requisitionRedistribution.approvedQuantity": "Approved Quantity",
+    "requisitionRedistribution.cancel": "Cancel",
+    "requisitionRedistribution.redistribution.label": "Redistribution",
+    "requisitionRedistribution.remove" : "Remove",
+    "requisitionRedistribution.productName": "Product",
+    "requisitionRedistribution.productCode": "Product Code",
+    "requisitionRedistribution.quantityToIssue": "Quantity To Issue",
+    "requisitionRedistribution.requestedQuantity": "Requested Quantity",
+    "requisitionRedistribution.remarks": "Remarks",
+    "requisitionRedistribution.requestedQuantityExplanation": "Requested Quantity Explanation",
+    "requisitionRedistribution.submit.label": "Submit",
+    "requisitionRedistribution.supplyingFacility": "Supplying Facility"
 }

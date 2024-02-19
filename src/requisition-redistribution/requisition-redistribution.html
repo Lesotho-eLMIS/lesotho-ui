@@ -15,14 +15,15 @@
         <table suppress-tr-openlmis-invalid>
             <thead>
                 <tr>
-                    <th>Prodcut Code</th>
-                    <th>Product</th>
-                    <th>Requested Quantity</th>
-                    <th>Requested Quantity Explanation</th>
-                    <th>Approved Quantity</th>
-                    <th>Supplying Facility</th>
-                    <th>Quantity to Issue</th>
-                    <th>Remarks</th>
+                    <th>{{'requisitionRedistribution.productCode'|message}}</th>
+                    <th>{{'requisitionRedistribution.productName'|message}}</th>
+                    <th>{{'requisitionRedistribution.requestedQuantity'|message}}</th>
+                    <th>{{'requisitionRedistribution.requestedQuantityExplanation'|message}}</th>
+                    <th>{{'requisitionRedistribution.approvedQuantity'|message}}</th>
+                    <th>{{'requisitionRedistribution.supplyingFacility'|message}}</th>
+                    <th>{{'requisitionRedistribution.quantityToIssue'|message}}</th>
+                    <th>{{'requisitionRedistribution.remarks'|message}}</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>  
@@ -36,13 +37,17 @@
                         ng-model="item.supplyingFacility"
                         ng-required="true"
                         ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select></td>
-                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="item.quantityToIssue"></td>
+                    <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" 
+                        ng-model="item.quantityToIssue" ng-change="vm.showAddButton($index)"></td>
                     <td><input id="remarks" type="text" maxlength="50" ng-model="item.remarks"/></td>
+                    <td><button ng-show="item.addRowButton" ng-click="vm.addRow($index, item)">+Add</button>
+                    <!-- <button ng-click="vm.removeLineItem($index)" class="danger">{{'requisitionRedistribution.remove'| message}}</button> -->
+                    </td>
                 </tr>
             </tbody>
         </table>
     </section>
 </div>  
 
-<ng-include src="'requisition-view/requisition-toolbar.html'"></ng-include>
+<ng-include src="'requisition-redistribution/redistribution-toolbar.html'"></ng-include>
 

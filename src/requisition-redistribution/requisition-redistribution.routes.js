@@ -48,6 +48,23 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                 },
                 processingPeriod: function(periodService, requisition) {
                     return periodService.get(requisition.processingPeriod.id);
+                },
+                supplyingFacilities: function(facilityService) {
+                    var paginationParams = {};                      
+                    var queryParams = {
+                        "type":"health_center"
+                      };
+                      return facilityService.query(paginationParams, queryParams)
+                      .then(function(result) {
+                          return result.content;
+                      })
+                      .catch(function(error) {
+                          // Handle any errors that may occur during the query
+                          console.error("Error:", error);
+                          return [];
+                      });
+
+                    
                 }
             }/*,
                 program: function(programService, requisition) {
