@@ -1,5 +1,5 @@
 angular.module('requisition-redistribution')
-    .controller('RequisitionRedistributionController', ['supplyingFacilities','$scope','$stateParams','requisition','user','facility','facilities','program','processingPeriod', function (supplyingFacilities, $scope, $stateParams, requisition,user,facility,facilities,program,processingPeriod) {
+    .controller('RequisitionRedistributionController', ['supplyingFacilities','$scope','$stateParams','requisition','user','facility','facilities','program','processingPeriod','orderCreateService', function (supplyingFacilities, $scope, $stateParams, requisition,user,facility,facilities,program,processingPeriod,orderCreateService) {
 
         vm = this;
 
@@ -18,7 +18,8 @@ angular.module('requisition-redistribution')
         vm.displaySkipButton = undefined;
         vm.displaySyncButton = undefined;
         vm.requisitionType = undefined;
-        vm.supplyingFacilities = undefined; 
+        vm.supplyingFacilities = undefined;
+        vm.submitRedistribution = submitRedistribution; 
         
         function onInit() {
           // console.log(requisition);
@@ -32,13 +33,52 @@ angular.module('requisition-redistribution')
            vm.requisitionLineItems = requisition.requisitionLineItems;
            vm.requisitionType = 'requisitionView.emergency';
            vm.requisitionTypeClass = 'emergency';
+           // Starting Each Row with Add Row Button Visible
            vm.requisitionLineItems.forEach(item => {
             item.addRowButton = true;
            });
         }
 
         function submitRedistribution(){
+            const order = {
+                emergency: true,
+                createdBy: { id: user.id },
+                program: { id: program.id },
+                requestingFacility: { id: facility.id },
+                receivingFacility: { id: facility.id },
+                supplyingFacility: { id: vm.requisitionLineItems[0].supplyingFacility.id },
+                facility: { id: facility.id }
+            };
 
+            //Create an order
+            orderCreateService.create(order)
+            .then((createdOrder) => {
+                //Get the order we just created
+                orderCreateService.get(createdOrder.id)
+                    .then((fetchedOrder) => {
+                        console.log(fetchedOrder); 
+                        //Push LineItems into the order object.
+                        console.log(vm.requisitionLineItems[0]);
+                        fetchedOrder.orderLineItems.push({orderable : vm.requisitionLineItems[0].orderable, orderedQuantity : vm.requisitionLineItems[0].quantityToIssue, soh: 45
+                            });
+                        //Send the order with lineItems
+                        orderCreateService.send(fetchedOrder)
+                            .then(() => {
+                                console.log('Order Sent')
+                            });
+                    });
+               
+
+                //Send the order with lineItems
+                
+                /*
+                orderCreateService.send(order)
+                .then(() => {
+                    console.log('Order Sent')
+                }); */
+            });
+
+            
         }
 
         vm.showAddButton = function(index) {

@@ -47,6 +47,7 @@
         'openlmis-date',
         'openlmis-invalid',
         'openlmis-permissions',
+        'requisition-order-create'
     ]);
 
 })();
