@@ -40,45 +40,51 @@ angular.module('requisition-redistribution')
         }
 
         function submitRedistribution(){
-            const order = {
-                emergency: true,
-                createdBy: { id: user.id },
-                program: { id: program.id },
-                requestingFacility: { id: facility.id },
-                receivingFacility: { id: facility.id },
-                supplyingFacility: { id: vm.requisitionLineItems[0].supplyingFacility.id },
-                facility: { id: facility.id }
-            };
 
-            //Create an order
-            orderCreateService.create(order)
-            .then((createdOrder) => {
-                //Get the order we just created
-                orderCreateService.get(createdOrder.id)
-                    .then((fetchedOrder) => {
-                        console.log(fetchedOrder); 
-                        //Push LineItems into the order object.
-                        console.log(vm.requisitionLineItems[0]);
-                        fetchedOrder.orderLineItems.push({orderable : vm.requisitionLineItems[0].orderable, orderedQuantity : vm.requisitionLineItems[0].quantityToIssue, soh: 45
-                            });
-                        //Send the order with lineItems
-                        orderCreateService.send(fetchedOrder)
-                            .then(() => {
-                                console.log('Order Sent')
-                            });
-                    });
-               
+            vm.requisitionLineItems.forEach((lineItem)=>{
 
-                //Send the order with lineItems
-                
-                /*
-                orderCreateService.send(order)
-                .then(() => {
-                    console.log('Order Sent')
-                }); */
+                console.log("lineItem");
+
+                const order = {
+                    emergency: true,
+                    createdBy: { id: user.id },
+                    program: { id: program.id },
+                    requestingFacility: { id: facility.id },
+                    receivingFacility: { id: facility.id },
+                    supplyingFacility: { id: lineItem.supplyingFacility.id },
+                    facility: { id: facility.id }
+                };
+    
+                //Create an order
+                orderCreateService.create(order)
+                .then((createdOrder) => {
+                    //Get the order we just created
+                    orderCreateService.get(createdOrder.id)
+                        .then((fetchedOrder) => {
+                            console.log(fetchedOrder); 
+                            //Push LineItems into the order object.
+                            console.log(lineItem);
+                            fetchedOrder.orderLineItems.push({orderable : lineItem.orderable, orderedQuantity : lineItem.quantityToIssue, soh: 45
+                                });
+                            //Send the order with lineItems
+                            orderCreateService.send(fetchedOrder)
+                                .then(() => {
+                                    console.log('Order Sent')
+                                });
+                        });
+                   
+    
+                    //Send the order with lineItems
+                    
+                    /*
+                    orderCreateService.send(order)
+                    .then(() => {
+                        console.log('Order Sent')
+                    }); */
+                });
+
             });
-
-            
+                      
         }
 
         vm.showAddButton = function(index) {
@@ -114,19 +120,15 @@ angular.module('requisition-redistribution')
     
         vm.addRow = function(index, item) {
             // Create a new item object with default values
-            var newItem = {
-                orderable: {productCode: item.orderable.productCode, fullProductName: item.orderable.fullProductName },                
-                requestedQuantity: item.requestedQuantity,
-                requestedQuantityExplanation: item.requestedQuantityExplanation,
-                approvedQuantity: item.approvedQuantity,
-                supplyingFacility: null,
-                quantityToIssue: 0,
-                remarks: '',
-                addRowButton: true
-            };
+            var newLineItem = angular.copy(item);
+            
+            newLineItem.supplyingFacility = null;
+            newLineItem.quantityToIssue = 0;
+            newLineItem.remarks = '';
+            newLineItem.addRowButton = true;
         
             // Insert the new item into the array at the specified index
-            vm.requisitionLineItems.splice(index + 1, 0, newItem);
+            vm.requisitionLineItems.splice(index + 1, 0, newLineItem);
         };
 
         /////REMOVE LINE ITEM FROM REDISTRIBUTION TABLE
