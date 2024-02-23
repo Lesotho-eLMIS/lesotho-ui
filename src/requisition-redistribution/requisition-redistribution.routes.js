@@ -51,10 +51,10 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                 },
                 supplyingFacilities: function(facilityService) {
                     var paginationParams = {};                      
-                    var queryParams = {
-                        "type":"health_center"
-                      };
-                      return facilityService.query(paginationParams, queryParams)
+                    // var queryParams = {
+                    //     "type":"health_center"
+                    //   };
+                      return facilityService.query(paginationParams)//, queryParams)
                       .then(function(result) {
                           return result.content;
                       })

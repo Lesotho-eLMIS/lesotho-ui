@@ -26,8 +26,10 @@ angular.module('requisition-redistribution')
           // console.log(facilities); 
            //console.log(facility.type); 
            //console.log(program);
+           //console.log(supplyingFacilities);
            vm.facility = facility;
-           vm.supplyingFacilities = supplyingFacilities; //facilities;
+           vm.supplyingFacilities = supplyingFacilities.filter(item => item.type.code === "health_center" || item.type.code === "hospital"); //facilities;
+           //console.log(vm.supplyingFacilities);
            vm.program = program;
            vm.processingPeriod = processingPeriod;
            vm.requisitionLineItems = requisition.requisitionLineItems;
@@ -72,22 +74,15 @@ angular.module('requisition-redistribution')
                                     console.log('Order Sent')
                                 });
                         });
-                   
-    
-                    //Send the order with lineItems
-                    
-                    /*
-                    orderCreateService.send(order)
-                    .then(() => {
-                        console.log('Order Sent')
-                    }); */
                 });
 
             });
                       
         }
 
-        vm.showAddButton = function(index) {
+        
+       vm.showAddButton = function(index) {
+           
             var sum = 0;
             var approvedQuantity = vm.requisitionLineItems[index].approvedQuantity;
             
@@ -95,22 +90,36 @@ angular.module('requisition-redistribution')
                 if(vm.requisitionLineItems[index].orderable.productCode === vm.requisitionLineItems[i].orderable.productCode){
                     sum += vm.requisitionLineItems[i].quantityToIssue;
                     if (sum >= approvedQuantity) {
+                        console.log("INDEX:  " + i + "| |" + index);
                         vm.requisitionLineItems.forEach(item => {
+
+                           // item.addRowButton = vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode ? false : item.addRowButton;
+
                             if(vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode)
                             {
                                 item.addRowButton = false;
                             }
                         });
-                        console.log(sum + " || " + approvedQuantity); 
+                        console.log(sum + " |if ONLY| " + approvedQuantity); 
+                      //  sum = 0;
+                      //  return; 
+                    }
+                    else if (sum < approvedQuantity){
+                        vm.requisitionLineItems.forEach(item => {
+                            item.addRowButton = true;
+                            //item.addRowButton = vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode ? true : item.addRowButton;
+                        });
+                        console.log(sum + " |else| " + approvedQuantity); 
                         //vm.requisitionLineItems[i].addRowButton = false; 
                         //vm.addRowButton = false;
-                        sum = 0;
-                        return; 
+                       // sum = 0;
+                        //return; 
                     }
-
                 }
-            }  
-            console.log(sum + " || " + approvedQuantity);          
+
+            }
+        
+            //console.log(sum + " || " + approvedQuantity);          
             // If the loop completes without meeting the condition, show the button
             vm.requisitionLineItems[index].addRowButton = true;
         };
@@ -121,7 +130,7 @@ angular.module('requisition-redistribution')
         vm.addRow = function(index, item) {
             // Create a new item object with default values
             var newLineItem = angular.copy(item);
-            
+
             newLineItem.supplyingFacility = null;
             newLineItem.quantityToIssue = 0;
             newLineItem.remarks = '';
