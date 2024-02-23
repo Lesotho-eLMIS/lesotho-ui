@@ -1,5 +1,5 @@
 angular.module('requisition-redistribution')
-    .controller('RequisitionRedistributionController', ['supplyingFacilities','$scope','$stateParams','requisition','user','facility','facilities','program','processingPeriod','orderCreateService', function (supplyingFacilities, $scope, $stateParams, requisition,user,facility,facilities,program,processingPeriod,orderCreateService) {
+    .controller('RequisitionRedistributionController', ['supplyingFacilities','$scope','stateTrackerService','$stateParams','requisition','user','facility','facilities','program','processingPeriod','orderCreateService', function (supplyingFacilities, $scope, stateTrackerService, $stateParams, requisition,user,facility,facilities,program,processingPeriod,orderCreateService) {
 
         vm = this;
 
@@ -20,6 +20,7 @@ angular.module('requisition-redistribution')
         vm.requisitionType = undefined;
         vm.supplyingFacilities = undefined;
         vm.submitRedistribution = submitRedistribution; 
+      //  vm.createOrder = createOrder;
         
         function onInit() {
           // console.log(requisition);
@@ -43,42 +44,100 @@ angular.module('requisition-redistribution')
 
         function submitRedistribution(){
 
-            vm.requisitionLineItems.forEach((lineItem)=>{
+            for(var i = 0; i < vm.requisitionLineItems.length; i++){
 
-                console.log("lineItem");
-
+                //build the order object
                 const order = {
                     emergency: true,
                     createdBy: { id: user.id },
                     program: { id: program.id },
                     requestingFacility: { id: facility.id },
                     receivingFacility: { id: facility.id },
-                    supplyingFacility: { id: lineItem.supplyingFacility.id },
+                    supplyingFacility: { id: vm.requisitionLineItems[i].supplyingFacility.id },
                     facility: { id: facility.id }
-                };
-    
-                //Create an order
-                orderCreateService.create(order)
-                .then((createdOrder) => {
-                    //Get the order we just created
-                    orderCreateService.get(createdOrder.id)
-                        .then((fetchedOrder) => {
-                            console.log(fetchedOrder); 
-                            //Push LineItems into the order object.
-                            console.log(lineItem);
-                            fetchedOrder.orderLineItems.push({orderable : lineItem.orderable, orderedQuantity : lineItem.quantityToIssue, soh: 45
-                                });
-                            //Send the order with lineItems
-                            orderCreateService.send(fetchedOrder)
-                                .then(() => {
-                                    console.log('Order Sent')
-                                });
-                        });
-                });
+                }; 
 
+                //create and Order
+                orderCreateService.create(order).then((createdOrder) => {
+                    
+                 //Get the order we just created
+                 orderCreateService.get(createdOrder.id)
+                     .then((fetchedOrder) => {
+
+                        console.log(fetchedOrder); 
+
+                        //get requisition line items of the same supplying facility to build order line items
+                        var ordersArray = [];
+                        ordersArray = vm.requisitionLineItems.filter((lineItem) => lineItem.supplyingFacility.id === fetchedOrder.supplyingFacility.id);
+                        
+                         //Push LineItems into the order object.
+                         console.log(ordersArray);
+
+                         ordersArray.forEach((lineItem) => {fetchedOrder.orderLineItems.push({orderable : lineItem.orderable, orderedQuantity : lineItem.quantityToIssue, soh: 45
+                        });                         
+                      });
+                         //Send the order with lineItems
+                         orderCreateService.send(fetchedOrder)
+                             .then(() => {
+                                 console.log('Order Sent')
+                             });
+                     });
+             });
+            }
+            //Mark Current requisition as redistributed
+            vm.requisition.extraData = {isRedistributed: true};
+            vm.requisition.$save().then(function() {
+                vm.requisition.$approve().then(function() {
+                    stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
+                });
             });
-                      
+
         }
+            
+            
+            // vm.requisitionLineItems.forEach((lineItem)=>{
+
+            //     console.log("lineItem");
+
+            //     const order = {
+            //         emergency: true,
+            //         createdBy: { id: user.id },
+            //         program: { id: program.id },
+            //         requestingFacility: { id: facility.id },
+            //         receivingFacility: { id: facility.id },
+            //         supplyingFacility: { id: lineItem.supplyingFacility.id },
+            //         facility: { id: facility.id }
+            //     }; 
+                
+                
+                
+          //  }); 
+            
+            //  //Create an order
+            //  orderCreateService.create(order)
+            //  .then((createdOrder) => {
+            //      //Get the order we just created
+            //      orderCreateService.get(createdOrder.id)
+            //          .then((fetchedOrder) => {
+            //              console.log(fetchedOrder); 
+            //              //Push LineItems into the order object.
+            //              console.log(lineItem);
+            //              fetchedOrder.orderLineItems.push({orderable : lineItem.orderable, orderedQuantity : lineItem.quantityToIssue, soh: 45
+            //                  });
+            //              //Send the order with lineItems
+            //              orderCreateService.send(fetchedOrder)
+            //                  .then(() => {
+            //                      console.log('Order Sent')
+            //                  });
+            //          });
+            //  });
+     
+
+        // function createOrder(order){
+
+        //      //Create an order
+             
+        // }
 
         
        vm.showAddButton = function(index) {
