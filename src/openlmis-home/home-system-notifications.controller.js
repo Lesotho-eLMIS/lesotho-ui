@@ -28,9 +28,9 @@
         .module('openlmis-home')
         .controller('HomeSystemNotificationsController', controller);
 
-    controller.$inject = ['homePageSystemNotifications', 'offlineService'];
+    controller.$inject = ['homePageSystemNotifications', 'offlineService','user'];
 
-    function controller(homePageSystemNotifications, offlineService) {
+    function controller(homePageSystemNotifications, offlineService,user) {
 
         var vm = this;
 
@@ -68,7 +68,17 @@
          */
         function onInit() {
             vm.isOffline = offlineService.isOffline();
-            vm.homePageSystemNotifications = homePageSystemNotifications;
+           // vm.homePageSystemNotifications = homePageSystemNotifications;
+           // Studying the system Notifications view
+            vm.homePageSystemNotifications = [{
+                title: 'StockOut Alert',
+                author: {
+                    firstName: 'flo',
+                    lastName: 'User'
+                },
+                message: 'Chehe. Re felletsoe ke DTG'
+            }];
+
         }
     }
 
