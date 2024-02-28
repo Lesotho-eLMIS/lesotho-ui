@@ -28,9 +28,9 @@
         .module('openlmis-home')
         .controller('HomeSystemNotificationsController', controller);
 
-    controller.$inject = ['homePageSystemNotifications', 'offlineService','user'];
+    controller.$inject = ['homePageSystemNotifications', 'offlineService','user','homeService'];
 
-    function controller(homePageSystemNotifications, offlineService,user) {
+    function controller(homePageSystemNotifications, offlineService,user,homeService) {
 
         var vm = this;
 
@@ -78,6 +78,15 @@
                 },
                 message: 'Chehe. Re felletsoe ke DTG'
             }];
+
+            homeService.getNotifications(user.id).then(function(notifications) {
+                // Handle the notifications here
+                console.log(notifications);
+            })
+            .catch(function(error) {
+                // Handle any errors that occurred during the resource request
+                console.error(error);
+            });
 
         }
     }

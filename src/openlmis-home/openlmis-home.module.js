@@ -29,7 +29,9 @@
         'openlmis-pagination',
         'referencedata-system-notification',
         'openlmis-message',
-        'ui.router'
+        'ui.router',
+        'openlmis-config',
+        'openlmis-date'
     ]);
 
 })();
