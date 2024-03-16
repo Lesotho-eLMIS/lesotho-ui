@@ -1,5 +1,8 @@
 angular.module('requisition-redistribution')
-    .controller('RequisitionRedistributionController', ['supplyingFacilities','$scope','stateTrackerService','$stateParams','requisition','user','facility','facilities','program','processingPeriod','orderCreateService', function (supplyingFacilities, $scope, stateTrackerService, $stateParams, requisition,user,facility,facilities,program,processingPeriod,orderCreateService) {
+    .controller('RequisitionRedistributionController', ['supplyingFacilities','$scope','stateTrackerService','$stateParams',
+                'requisition','user','facility','facilities','program','processingPeriod','orderCreateService', 'notificationService',
+                function (supplyingFacilities, $scope, stateTrackerService, $stateParams, requisition, user, facility, facilities, program, processingPeriod, 
+                          orderCreateService, notificationService) {
 
         vm = this;
 
@@ -20,20 +23,17 @@ angular.module('requisition-redistribution')
         vm.requisitionType = undefined;
         vm.supplyingFacilities = undefined;
         vm.submitRedistribution = submitRedistribution; 
-      //  vm.createOrder = createOrder;
+        vm.createProcessAndSendOrder = createProcessAndSendOrder;
+        vm.redistributeRequisition = redistributeRequisition;
+        vm.submitOrders = submitOrders;
         
         function onInit() {
-          // console.log(requisition);
-          // console.log(facilities); 
-           //console.log(facility.type); 
-           //console.log(program);
-           //console.log(supplyingFacilities);
            vm.facility = facility;
            vm.supplyingFacilities = supplyingFacilities.filter(item => item.type.code === "health_center" || item.type.code === "hospital"); //facilities;
-           //console.log(vm.supplyingFacilities);
            vm.program = program;
            vm.processingPeriod = processingPeriod;
            vm.requisitionLineItems = requisition.requisitionLineItems;
+           vm.redistributedRequisition = angular.copy(requisition);//Keep the requisition copy for processing in redistributeRequisition
            vm.requisitionType = 'requisitionView.emergency';
            vm.requisitionTypeClass = 'emergency';
            // Starting Each Row with Add Row Button Visible
@@ -42,106 +42,76 @@ angular.module('requisition-redistribution')
            });
         }
 
-        function submitRedistribution(){
-
-            for(var i = 0; i < vm.requisitionLineItems.length; i++){
-
-                //build the order object
+        function submitRedistribution () {
+            let request = requisition;
+            let orderLineItems = [];
+            vm.requisitionLineItems.forEach(lineItem => {
                 const order = {
                     emergency: true,
                     createdBy: { id: user.id },
                     program: { id: program.id },
                     requestingFacility: { id: facility.id },
                     receivingFacility: { id: facility.id },
-                    supplyingFacility: { id: vm.requisitionLineItems[i].supplyingFacility.id },
+                    supplyingFacility: { id: lineItem.supplyingFacility.id },
                     facility: { id: facility.id }
-                }; 
-
-                //create and Order
-                orderCreateService.create(order).then((createdOrder) => {
-                    
-                 //Get the order we just created
-                 orderCreateService.get(createdOrder.id)
-                     .then((fetchedOrder) => {
-
-                        console.log(fetchedOrder); 
-
-                        //get requisition line items of the same supplying facility to build order line items
-                        var ordersArray = [];
-                        ordersArray = vm.requisitionLineItems.filter((lineItem) => lineItem.supplyingFacility.id === fetchedOrder.supplyingFacility.id);
-                        
-                         //Push LineItems into the order object.
-                         console.log(ordersArray);
-
-                         ordersArray.forEach((lineItem) => {fetchedOrder.orderLineItems.push({orderable : lineItem.orderable, orderedQuantity : lineItem.quantityToIssue, soh: 45
-                        });                         
-                      });
-                         //Send the order with lineItems
-                         orderCreateService.send(fetchedOrder)
-                             .then(() => {
-                                 console.log('Order Sent')
-                             });
-                     });
-             });
-            }
-            //Mark Current requisition as redistributed
-            vm.requisition.extraData = {isRedistributed: true};
-            vm.requisition.$save().then(function() {
-                vm.requisition.$approve().then(function() {
-                    stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
-                });
+                };
+                orderLineItems.push(order); 
             });
-
+            let requestedItems = vm.requisitionLineItems;
+            submitOrders(requestedItems, orderLineItems );
         }
-            
-            
-            // vm.requisitionLineItems.forEach((lineItem)=>{
 
-            //     console.log("lineItem");
+       
+        function submitOrders(requisitionItems, orderItems) {
+            let orderLineItems = orderItems;
+            while (orderLineItems.length > 0) {
+                let supplyingFacilityId = orderLineItems[0].supplyingFacility.id;
+                let ordersArray = orderLineItems.filter((lineItem) => lineItem.supplyingFacility.id === supplyingFacilityId);
+                orderLineItems = orderLineItems.filter(item => !ordersArray.includes(item));
+                let requestedItems = requisitionItems.filter((lineItem) => lineItem.supplyingFacility.id === supplyingFacilityId);
+                if (ordersArray.length > 0) {
+                    let ordersForProcessing = ordersArray;
+                    let order = ordersForProcessing[0];
+                    createProcessAndSendOrder(order, requestedItems);
+                }
+            }
+            redistributeRequisition();
+        }
 
-            //     const order = {
-            //         emergency: true,
-            //         createdBy: { id: user.id },
-            //         program: { id: program.id },
-            //         requestingFacility: { id: facility.id },
-            //         receivingFacility: { id: facility.id },
-            //         supplyingFacility: { id: lineItem.supplyingFacility.id },
-            //         facility: { id: facility.id }
-            //     }; 
-                
-                
-                
-          //  }); 
-            
-            //  //Create an order
-            //  orderCreateService.create(order)
-            //  .then((createdOrder) => {
-            //      //Get the order we just created
-            //      orderCreateService.get(createdOrder.id)
-            //          .then((fetchedOrder) => {
-            //              console.log(fetchedOrder); 
-            //              //Push LineItems into the order object.
-            //              console.log(lineItem);
-            //              fetchedOrder.orderLineItems.push({orderable : lineItem.orderable, orderedQuantity : lineItem.quantityToIssue, soh: 45
-            //                  });
-            //              //Send the order with lineItems
-            //              orderCreateService.send(fetchedOrder)
-            //                  .then(() => {
-            //                      console.log('Order Sent')
-            //                  });
-            //          });
-            //  });
-     
+        function createProcessAndSendOrder(order, requestedItems) {
+            orderCreateService.create(order)
+                .then((createdOrder) => {
+                    return orderCreateService.get(createdOrder.id);
+                })
+                .then((fetchedOrder) => {
+                    requestedItems.forEach((lineItem) => {
+                        fetchedOrder.orderLineItems.push({                                    
+                            orderable: lineItem.orderable,
+                            orderedQuantity: lineItem.quantityToIssue,
+                            soh: 45
+                        });
+                    });                  
+                    return orderCreateService.send(fetchedOrder);
+                })
+                .then(() => {
+                    notificationService.success('Successfully submitted.');
+                    console.log('Order Sent');
+                })
+                .catch((error) => {
+                    console.error('Error processing order:', error);
+                });
+        }
 
-        // function createOrder(order){
-
-        //      //Create an order
-             
-        // }
-
-        
-       vm.showAddButton = function(index) {
-           
+        function redistributeRequisition() {
+          
+            vm.requisition = angular.copy(vm.redistributedRequisition);
+                vm.requisition .extraData = { isRedistributed: true };
+                     return vm.requisition .$save()
+                        .then(() => vm.requisition .$approve()
+                            .then(() => stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList')));
+        }      
+       
+       vm.showAddButton = function(index) {           
             var sum = 0;
             var approvedQuantity = vm.requisitionLineItems[index].approvedQuantity;
             
@@ -152,39 +122,22 @@ angular.module('requisition-redistribution')
                         console.log("INDEX:  " + i + "| |" + index);
                         vm.requisitionLineItems.forEach(item => {
 
-                           // item.addRowButton = vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode ? false : item.addRowButton;
-
-                            if(vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode)
+                        if(vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode)
                             {
                                 item.addRowButton = false;
                             }
                         });
-                        console.log(sum + " |if ONLY| " + approvedQuantity); 
-                      //  sum = 0;
-                      //  return; 
                     }
                     else if (sum < approvedQuantity){
                         vm.requisitionLineItems.forEach(item => {
                             item.addRowButton = true;
-                            //item.addRowButton = vm.requisitionLineItems[index].orderable.productCode === item.orderable.productCode ? true : item.addRowButton;
                         });
-                        console.log(sum + " |else| " + approvedQuantity); 
-                        //vm.requisitionLineItems[i].addRowButton = false; 
-                        //vm.addRowButton = false;
-                       // sum = 0;
-                        //return; 
                     }
                 }
 
             }
-        
-            //console.log(sum + " || " + approvedQuantity);          
-            // If the loop completes without meeting the condition, show the button
             vm.requisitionLineItems[index].addRowButton = true;
         };
-
-       // $scope.removeSelectedFacility: if a facility has already been chosen as a supplier for this line item.
-        // remove it from the pool 
     
         vm.addRow = function(index, item) {
             // Create a new item object with default values
@@ -200,9 +153,9 @@ angular.module('requisition-redistribution')
         };
 
         /////REMOVE LINE ITEM FROM REDISTRIBUTION TABLE
-        // vm.removeLineItem = function (index) {
-        //     vm.requisitionLineItems.splice(index, 1);
-        // }
+        vm.removeLineItem = function (index) {
+            vm.requisitionLineItems.splice(index, 1);
+        }
         
 
     }]);

@@ -41,7 +41,7 @@
                         ng-model="item.quantityToIssue" ng-change="vm.showAddButton($index)"></td>
                     <td><input id="remarks" type="text" maxlength="50" ng-model="item.remarks"/></td>
                     <td><button ng-show="item.addRowButton" ng-click="vm.addRow($index, item)">+Add</button>
-                    <!-- <button ng-click="vm.removeLineItem($index)" class="danger">{{'requisitionRedistribution.remove'| message}}</button> -->
+                    <button ng-click="vm.removeLineItem($index)" class="danger">{{'requisitionRedistribution.remove'| message}}</button>
                     </td>
                 </tr>
             </tbody>

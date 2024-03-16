@@ -1,6 +1,5 @@
 {
     "order.orders": "Supply Requests",
-
     "orderStatus.ORDERED": "Requested",
     "orderStatus.FULFILLING": "Fulfilling",
     "orderStatus.SHIPPED": "Served",
