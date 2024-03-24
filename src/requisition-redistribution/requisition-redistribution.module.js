@@ -18,7 +18,7 @@
     'use strict';
 
     /**
-     * @module redistribution
+     * @module requisition-redistribution
      *
      * @description
      * Provides redistribution state and controller.

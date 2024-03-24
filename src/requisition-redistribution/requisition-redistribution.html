@@ -38,10 +38,10 @@
                         ng-required="true"
                         ng-options="facility.name for facility in vm.supplyingFacilities | orderBy:'name'"></select></td>
                     <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" 
-                        ng-model="item.quantityToIssue" ng-change="vm.showAddButton($index)"></td>
+                        ng-model="item.quantityToIssue" ng-change="vm.showAddButton($index)" ng-required="true"></td>
                     <td><input id="remarks" type="text" maxlength="50" ng-model="item.remarks"/></td>
-                    <td><button ng-show="item.addRowButton" ng-click="vm.addRow($index, item)">+Add</button>
-                    <button ng-click="vm.removeLineItem($index)" class="danger">{{'requisitionRedistribution.remove'| message}}</button>
+                    <td><button ng-show="item.addRowButton" ng-click="vm.addRow($index, item)">+{{'requisitionRedistribution.addRow'| message}}</button>
+                    <button ng-show="item.removeRowButton" ng-click="vm.removeLineItem($index)" class="danger">{{'requisitionRedistribution.removeRow'| message}}</button>
                     </td>
                 </tr>
             </tbody>

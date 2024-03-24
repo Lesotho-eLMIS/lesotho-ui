@@ -255,7 +255,6 @@
         }
 
         function goToRedistribution(requisitionId) {
-            console.log(requisitionId);
             $state.go('openlmis.redistribution', {
                 rnr: requisitionId,
                 requisition: vm.requisition

@@ -21,9 +21,9 @@
         .module('requisition-redistribution')
         .config(routes);
 
-routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'*/];
+routes.$inject = ['$stateProvider'];
 
-    function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
+    function routes($stateProvider) {
         $stateProvider.state('openlmis.redistribution', {
             url: '/redistribution/:rnr', 
             isOffline: true,
@@ -50,11 +50,8 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     return periodService.get(requisition.processingPeriod.id);
                 },
                 supplyingFacilities: function(facilityService) {
-                    var paginationParams = {};                      
-                    // var queryParams = {
-                    //     "type":"health_center"
-                    //   };
-                      return facilityService.query(paginationParams)//, queryParams)
+                    var paginationParams = {};   
+                      return facilityService.query(paginationParams)
                       .then(function(result) {
                           return result.content;
                       })
@@ -62,41 +59,9 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                           // Handle any errors that may occur during the query
                           console.error("Error:", error);
                           return [];
-                      });
-
-                    
+                      });                    
                 }
-            }/*,
-                program: function(programService, requisition) {
-                    return programService.get(requisition.program.id);
-                },
-                processingPeriod: function(periodService, requisition) {
-                    return periodService.get(requisition.processingPeriod.id);
-                },
-                facility: function(facilityService, requisition) {
-                    return facilityService.get(requisition.facility.id);
-                },
-                canSubmit: function(requisitionViewFactory, user, requisition) {
-                    return requisitionViewFactory.canSubmit(user.id, requisition);
-                },
-                canAuthorize: function(requisitionViewFactory, user, requisition) {
-                    return requisitionViewFactory.canAuthorize(user.id, requisition);
-                },
-                canApproveAndReject: function(requisitionViewFactory, user, requisition) {
-                    return requisitionViewFactory.canApproveAndReject(user, requisition);
-                },
-                canDelete: function(requisitionViewFactory, user, requisition) {
-                    return requisitionViewFactory.canDelete(user.id, requisition);
-                },
-                canSkip: function(requisitionViewFactory, user, requisition, program) {
-                    return requisitionViewFactory.canSkip(user.id, requisition, program);
-                },
-                canSync: function(canSubmit, canAuthorize, canApproveAndReject) {
-                    return canSubmit || canAuthorize || canApproveAndReject;
-                },
-                canUnskipRequisitionItemWhenApproving: function(requisitionViewFactory, requisition) {
-                    return requisitionViewFactory.canUnskipRequisitionItemWhenApproving(requisition);
-                } */
+            }
         });
        
      }
