@@ -141,6 +141,7 @@
     vm.showReasonDropdown = true;
 
     /* eLMIS Lesotho : start */
+    vm.showPrepackingAttributes = false;
     vm.showDeliveryNoteAttributes = false;
     vm.showReasonsInAdjustment = false;
     /* eLMIS Lesotho : end */
@@ -811,6 +812,8 @@
         adjustmentType.state !== ADJUSTMENT_TYPE.KIT_UNPACK.state;
 
       /* eLMIS Lesotho : start */
+      vm.showPrepackingAttributes =
+        adjustmentType.state === ADJUSTMENT_TYPE.KIT_UNPACK.state;
       vm.showDeliveryNoteAttributes =
         adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state;
       vm.showReasonsInAdjustment =

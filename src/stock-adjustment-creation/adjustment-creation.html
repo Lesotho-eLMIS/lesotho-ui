@@ -50,11 +50,15 @@
                 <tr>
                     <th>{{vm.key('productCode') | message}}</th>
                     <th>{{vm.key('product') | message}}</th>
-                    <th ng-show="vm.hasLot">{{vm.key('lotCode') | message}}</th>
-                    <th ng-show="vm.hasLot">{{vm.key('expiryDate') | message}}</th>
+                    <th ng-show="vm.hasLot || vm.showPrepackingAttributes">{{vm.key('lotCode') | message}}</th>
+                    <th ng-show="vm.hasLot || vm.showPrepackingAttributes">{{vm.key('expiryDate') | message}}</th>
                     <th>{{vm.key('soh') | message}}</th>
+
+                    <th ng-if="vm.showPrepackingAttributes">Prepack Size</th>
+                    <th ng-if="vm.showPrepackingAttributes">Number of Prepacks</th>
+
                     <th ng-show="vm.srcDstAssignments">{{vm.key('srcDstLabel') | message}}</th>
-                    <th ng-hide="vm.showDeliveryNoteAttributes || vm.showReasonsInAdjustment" ng-show="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
+                    <th ng-hide="vm.showDeliveryNoteAttributes || vm.showReasonsInAdjustment || vm.showPrepackingAttributes" ng-show="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
                     <th ng-if="vm.showReasonDropdown">{{vm.key('reason') | message}}</th>
                     <th ng-if="vm.showReasonDropdown">{{vm.key('reasonComments') | message}}</th>
 

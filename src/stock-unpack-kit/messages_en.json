@@ -1,0 +1,8 @@
+{
+  "stockUnpackKit.unpack": "Prepack",
+  "stockUnpackKit.proceed": "Create Prepacks",
+  "stockUnpackKit.program": "Program",
+  "stockUnpackKit.action": "Action",
+  "stockUnpackKit.title": "Prepacking for ${facility}",
+  "stockUnpackKit.noProgramAvailable": "There are no programs for this facility. Please contact the Admin."
+}
