@@ -17,24 +17,25 @@
     'use strict';
 
     angular
-        .module('stock-unpack-kit')
+        .module('stock-prepack')
         .config(routes);
 
     routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'];
 
     function routes($stateProvider, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE) {
-        $stateProvider.state('openlmis.stockmanagement.kitunpack', {
-            url: '/unpack',
-            label: 'stockUnpackKit.unpack',
+        $stateProvider.state('openlmis.stockmanagement.prepack', {
+            url: '/prepack',
+            label: 'stockPrepack.prepack',
             priority: 7,
-            showInNavigation: false,
+            showInNavigation: true,
             views: {
                 '@openlmis': {
                     controller: 'StockAdjustmentController',
                     controllerAs: 'vm',
                     templateUrl: 'stock-adjustment/stock-adjustment.html'
                 }
-            },
+             }
+            ,
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
                 facility: function(facilityFactory) {
@@ -47,7 +48,7 @@
                     return stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
                 },
                 adjustmentType: function() {
-                    return ADJUSTMENT_TYPE.KIT_UNPACK;
+                    return ADJUSTMENT_TYPE.PREPACK;
                 },
                 hasPermissionToAddNewLot: function() {
                     return false;

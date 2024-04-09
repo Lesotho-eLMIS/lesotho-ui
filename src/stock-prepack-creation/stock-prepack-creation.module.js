@@ -14,18 +14,16 @@
  */
 
 (function() {
-
     'use strict';
 
     /**
-     * @module stock-unpack-kit
+     * @module stock-prepack-creation
      *
      * @description
-     * Provides stock unpack kit state and controller.
+     * Provides stock prepack creation state and controller.
      */
-    angular.module('stock-unpack-kit', [
-        'stock-adjustment'
+    angular.module('stock-prepack-creation', [
+        'stock-adjustment-creation',
+        'stock-prepack'
     ]);
-
 })();
-

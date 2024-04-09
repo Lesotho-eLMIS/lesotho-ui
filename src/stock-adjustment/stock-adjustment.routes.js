@@ -17,17 +17,18 @@
     'use strict';
 
     angular
-        .module('stock-unpack-kit')
+        .module('stock-adjustment')
         .config(routes);
 
     routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'];
 
     function routes($stateProvider, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE) {
-        $stateProvider.state('openlmis.stockmanagement.kitunpack', {
-            url: '/unpack',
-            label: 'stockUnpackKit.unpack',
-            priority: 7,
-            showInNavigation: false,
+        $stateProvider.state('openlmis.stockmanagement.adjustment', {
+            isOffline: true,
+            url: '/adjustment',
+            label: 'stockAdjustment.adjustments',
+            priority: 2,
+            showInNavigation: true,
             views: {
                 '@openlmis': {
                     controller: 'StockAdjustmentController',
@@ -47,10 +48,7 @@
                     return stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
                 },
                 adjustmentType: function() {
-                    return ADJUSTMENT_TYPE.KIT_UNPACK;
-                },
-                hasPermissionToAddNewLot: function() {
-                    return false;
+                    return ADJUSTMENT_TYPE.ADJUSTMENT;
                 }
             }
         });

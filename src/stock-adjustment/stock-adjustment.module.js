@@ -17,20 +17,15 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name stock-unpack-kit.KIT_UNPACK_REASON_ID
-     *
-     * @description
-     * Provides default reason ids for unpack and unpacked from kit.
-     */
-    angular
-        .module('stock-unpack-kit')
-        .constant('UNPACK_REASONS', reasons());
-
-    function reasons() {
-        return {
-            KIT_UNPACK_REASON_ID: '@@KIT_UNPACK_REASON_ID',
-            UNPACKED_FROM_KIT_REASON_ID: '@@UNPACKED_FROM_KIT_REASON_ID'
-        };
-    }
+   * @module stock-adjustment
+   *
+   * @description
+   * Responsible for make adjustment list screen.
+   */
+    angular.module('stock-adjustment', [
+        'stockmanagement',
+        'stock-program-util',
+        'referencedata-facility',
+        'referencedata-program'
+    ]);
 })();

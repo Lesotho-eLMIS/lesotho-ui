@@ -17,18 +17,18 @@
     'use strict';
 
     angular
-        .module('stock-unpack-kit-creation')
+        .module('stock-prepack-creation')
         .config(routes);
 
     routes.$inject = ['$stateProvider', 'SEARCH_OPTIONS',  'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'];
 
     function routes($stateProvider, SEARCH_OPTIONS, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE) {
-        $stateProvider.state('openlmis.stockmanagement.kitunpack.creation', {
+        $stateProvider.state('openlmis.stockmanagement.prepack.creation', {
             url: '/:programId/create?page&size&keyword',
             views: {
                 '@openlmis': {
-                    controller: 'StockAdjustmentCreationController',
-                    templateUrl: 'stock-adjustment-creation/adjustment-creation.html',
+                    controller: 'StockPrepackCreationController',
+                    templateUrl: 'stock-prepack-creation/stock-prepack-creation.html',
                     controllerAs: 'vm'
                 }
             },
@@ -39,7 +39,7 @@
                 facility: undefined,
                 stockCardSummaries: undefined,
                 displayItems: undefined,
-                reasons: undefined
+                // reasons: undefined
             },
             resolve: {
                 facility: function(facilityFactory, $stateParams) {
@@ -65,21 +65,22 @@
                 user: function(authorizationService) {
                     return authorizationService.getUser();
                 },
-                reasons: function($stateParams, facility, stockReasonsFactory) {
-                    if (!$stateParams.reasons) {
-                        return stockReasonsFactory.getUnpackReasons($stateParams.programId, facility.type.id);
-                    }
-                    return $stateParams.reasons;
-                },
+                // reasons: function($stateParams, facility, stockReasonsFactory) {
+                //     if (!$stateParams.reasons) {
+                //         return stockReasonsFactory.getUnpackReasons($stateParams.programId, facility.type.id);
+                //     }
+                //     return $stateParams.reasons;
+                // },
                 displayItems: function(registerDisplayItemsService, $stateParams) {
                     return registerDisplayItemsService($stateParams);
-                },
-                srcDstAssignments: function() {
-                    return null;
-                },
-                adjustmentType: function() {
-                    return ADJUSTMENT_TYPE.KIT_UNPACK;
                 }
+                // ,
+                // srcDstAssignments: function() {
+                //     return null;
+                // },
+                // adjustmentType: function() {
+                //     return ADJUSTMENT_TYPE.KIT_UNPACK;
+                // }
             }
         });
     }

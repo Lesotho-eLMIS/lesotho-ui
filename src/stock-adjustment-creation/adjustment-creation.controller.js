@@ -181,6 +181,7 @@
   }
 
     vm.key = function (secondaryKey) {
+      console.log(secondaryKey+'AdjustCreate');
       return adjustmentType.prefix + 'Creation.' + secondaryKey;
     };
 
@@ -812,8 +813,6 @@
         adjustmentType.state !== ADJUSTMENT_TYPE.KIT_UNPACK.state;
 
       /* eLMIS Lesotho : start */
-      vm.showPrepackingAttributes =
-        adjustmentType.state === ADJUSTMENT_TYPE.KIT_UNPACK.state;
       vm.showDeliveryNoteAttributes =
         adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state;
       vm.showReasonsInAdjustment =
