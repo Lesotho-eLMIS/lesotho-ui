@@ -71,26 +71,15 @@
         vm.goToPendingOfflineEventsPage = goToPendingOfflineEventsPage;
 
         vm.key = function(secondaryKey) {
-            //console.log(secondaryKey+ ' REAL');
             return adjustmentType.prefix + '.' + secondaryKey;
         };
 
         vm.proceed = function(program) {
-            if(adjustmentType.prefix==="stockPrepack"){
-                //console.log("proceed to prepack");
-                $state.go('openlmis.stockmanagement.prepack.creation', {
-                    programId: program.id,
-                    program: program,
-                    facility: facility
-                });
-            }
-            else{
-                $state.go('openlmis.stockmanagement.' + adjustmentType.state + '.creation', {
-                    programId: program.id,
-                    program: program,
-                    facility: facility
-                });
-            }
+            $state.go('openlmis.stockmanagement.' + adjustmentType.state + '.creation', {
+                        programId: program.id,
+                        program: program,
+                        facility: facility
+                    });
         };
 
         /**

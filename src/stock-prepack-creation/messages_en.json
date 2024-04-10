@@ -1,5 +1,4 @@
 {
-  "stockPrepack.title": "Prepacking for ${facilityName}",
   "stockPrepackCreation.title": "${facilityCode} - ${facilityName} - ${program}",
   "stockPrepack.keyword": "Keywords",
   "stockPrepack.search": "Search",

@@ -39,6 +39,8 @@
                 facility: undefined,
                 stockCardSummaries: undefined,
                 displayItems: undefined,
+                addedLineItems: undefined,
+                orderableGroups: undefined
                 // reasons: undefined
             },
             resolve: {
@@ -54,13 +56,22 @@
                     }
                     return $stateParams.program;
                 },
-                orderableGroups: function($stateParams, existingStockOrderableGroupsFactory, program, facility,
-                    orderableGroupService) {
-                    return existingStockOrderableGroupsFactory
-                        .getGroupsWithNotZeroSoh($stateParams, program, facility)
-                        .then(function(orderableGroups) {
-                            return orderableGroupService.getKitOnlyOrderablegroup(orderableGroups);
-                        });
+                // orderableGroups: function($stateParams, existingStockOrderableGroupsFactory, program, facility,
+                //     orderableGroupService) {
+                //         console.log();
+                //     return existingStockOrderableGroupsFactory
+                //         .getGroupsWithNotZeroSoh($stateParams, program, facility)
+                //         .then(function(orderableGroups) {
+                //             return orderableGroupService.getKitOnlyOrderablegroup(orderableGroups);
+                //         });
+                // },
+                orderableGroups: function($stateParams, program, facility, existingStockOrderableGroupsFactory) {
+                    if (!$stateParams.orderableGroups) {
+                        $stateParams.orderableGroups = existingStockOrderableGroupsFactory
+                            .getGroupsWithNotZeroSoh($stateParams, program, facility);
+                    }
+
+                    return $stateParams.orderableGroups;
                 },
                 user: function(authorizationService) {
                     return authorizationService.getUser();

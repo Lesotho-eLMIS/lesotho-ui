@@ -181,7 +181,6 @@
   }
 
     vm.key = function (secondaryKey) {
-      console.log(secondaryKey+'AdjustCreate');
       return adjustmentType.prefix + 'Creation.' + secondaryKey;
     };
 

@@ -1,5 +1,5 @@
 {
-  
+  "stockPrepack.title": "Prepack for ${facility}",
   "stockPrepack.prepack": "Prepack",
   "stockPrepack.proceed": "Create Prepacks",
   "stockPrepack.program": "Program",

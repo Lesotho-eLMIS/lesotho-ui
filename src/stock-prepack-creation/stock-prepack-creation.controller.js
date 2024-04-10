@@ -28,15 +28,22 @@
         .module('stock-prepack-creation')
         .controller('StockPrepackCreationController', controller);
 
-    controller.$inject = ['facility', 'programs', 'adjustmentType', '$state', 'offlineService',
-        'localStorageService', 'ADJUSTMENT_TYPE'];
+    controller.$inject = ['facility', 'program', 'adjustmentType', '$state', 'offlineService',
+        'localStorageService', 'ADJUSTMENT_TYPE', 'orderableGroups', 'orderableGroupService', '$scope', '$stateParams'];
 
-    function controller(facility, programs, adjustmentType, $state, offlineService, localStorageService,
-                        ADJUSTMENT_TYPE) {
+    function controller(facility, program, adjustmentType, $state, offlineService, localStorageService,
+                        ADJUSTMENT_TYPE, orderableGroups, orderableGroupService, $scope, $stateParams) {
         var vm = this;
 
+        vm.addProduct = addProduct;
+        vm.initiateNewLotObject = initiateNewLotObject;
+        vm.lotChanged = lotChanged;
+        vm.validateLotCode = validateLotCode;
+        vm.addedLineItems = $stateParams.addedLineItems || [];
+        console.log('ADDED LINE ITEMS');
+        console.log(vm.addedLineItems);
+
         vm.key = function (secondaryKey) {
-            console.log("Creation here...");
             return adjustmentType.prefix + 'Creation.' + secondaryKey;
           };
 
@@ -60,7 +67,146 @@
          * @description
          * Holds available programs for home facility.
          */
-        vm.programs = programs;
+        vm.program = program;
+
+         // //-------------------------------ADD PRODUCT-----------------
+       
+         vm.orderableGroups = orderableGroups;
+
+        /**
+     * @ngdoc method
+     * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+     * @name orderableSelectionChanged
+     *
+     * @description
+     * Reset form status and change content inside lots drop down list.
+     */
+    vm.orderableSelectionChanged = function () {
+        //reset selected lot, so that lot field has no default value
+        vm.selectedLot = null;
+  
+        initiateNewLotObject();
+        vm.canAddNewLot = false;
+  
+        //same as above
+        $scope.productForm.$setUntouched();
+  
+        //make form good as new, so errors won't persist
+        $scope.productForm.$setPristine();
+  
+        vm.lots = orderableGroupService.lotsOf(
+          vm.selectedOrderableGroup,
+          vm.hasPermissionToAddNewLot
+        );
+        vm.selectedOrderableHasLots = vm.lots.length > 0;
+      };
+
+      function lotChanged() {
+        vm.canAddNewLot =
+          vm.selectedLot &&
+          vm.selectedLot.lotCode ===
+            messageService.get('orderableGroupService.addMissingLot');
+        initiateNewLotObject();
+      }
+
+      function initiateNewLotObject() {
+        vm.newLot = {
+          active: true,
+        };
+      }
+         function addProduct() {
+            var selectedItem;
+      
+            if (vm.selectedOrderableGroup && vm.selectedOrderableGroup.length) {
+              vm.newLot.tradeItemId =
+                vm.selectedOrderableGroup[0].orderable.identifiers.tradeItem;
+            }
+      
+            if (vm.newLot.lotCode) {
+              var createdLot = angular.copy(vm.newLot);
+              selectedItem = orderableGroupService.findByLotInOrderableGroup(
+                vm.selectedOrderableGroup,
+                createdLot,
+                true
+              );
+              selectedItem.$isNewItem = true;
+            } else {
+              selectedItem = orderableGroupService.findByLotInOrderableGroup(
+                vm.selectedOrderableGroup,
+                vm.selectedLot
+              );
+            }
+      
+            vm.newLot.expirationDateInvalid = undefined;
+            vm.newLot.lotCodeInvalid = undefined;
+            validateExpirationDate();
+            validateLotCode(vm.addedLineItems, selectedItem);
+            validateLotCode(vm.allItems, selectedItem);
+            var noErrors =
+              !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
+      
+            if (noErrors) {
+              
+              var timestamp = new Date().getTime();
+              selectedItem.timestamp = timestamp; // Add a time stamp to the selected line item
+              vm.addedLineItems.unshift(
+                _.extend(
+                  {
+                    $errors: {},
+                    $previewSOH: selectedItem.stockOnHand
+                  },
+                  selectedItem
+                  //copyDefaultValue()
+                )
+              );
+              previousAdded = vm.addedLineItems[0];
+              vm.search();
+            }
+          }
+
+          function validateLotCode(listItems, selectedItem) {
+            if (selectedItem && selectedItem.$isNewItem) {
+              listItems.forEach(function (lineItem) {
+                if (
+                  lineItem.orderable &&
+                  lineItem.lot &&
+                  selectedItem.lot &&
+                  lineItem.orderable.productCode ===
+                    selectedItem.orderable.productCode &&
+                  selectedItem.lot.lotCode === lineItem.lot.lotCode &&
+                  (!lineItem.$isNewItem ||
+                    (lineItem.$isNewItem &&
+                      selectedItem.lot.expirationDate !==
+                        lineItem.lot.expirationDate))
+                ) {
+                  vm.newLot.lotCodeInvalid = messageService.get(
+                    'stockEditLotModal.lotCodeInvalid'
+                  );
+                }
+              });
+            }
+          }
+
+           /**
+     * @ngdoc method
+     * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+     * @name validateExpirationDate
+     *
+     * @description
+     * Validate if expirationDate is a future date.
+     */
+    function validateExpirationDate() {
+        var currentDate = moment(new Date()).format('YYYY-MM-DD');
+  
+        if (vm.newLot.expirationDate && vm.newLot.expirationDate < currentDate) {
+          vm.newLot.expirationDateInvalid = messageService.get(
+            'stockEditLotModal.expirationDateInvalid'
+          );
+        }
+      }
+
+         //----------------------------------------------------------------------------
+ 
 
         /**
          * @ngdoc property
@@ -97,6 +243,7 @@
             }
         };
 
+   
         /**
          * @ngdoc property
          * @propertyOf stock-prepack-creation.controller:StockPrepackCreationController
