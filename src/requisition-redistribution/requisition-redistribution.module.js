@@ -18,12 +18,28 @@
     'use strict';
 
     /**
-     * @module requisition-view
+     * @module requisition-redistribution
      *
      * @description
-     * Responsible for requisition view screen.
+     * Provides redistribution state and controller.
      */
-    angular.module('requisition-view', [
+    angular.module('requisition-redistribution', [
+        'ui.router',
+        'openlmis-config',
+        'referencedata-facility',
+        'ngResource',
+        'stockmanagement',
+        'openlmis-repository',
+        'openlmis-class-extender',
+        'referencedata-user',
+        'openlmis-urls',
+        'openlmis-pagination',
+        'requisition-view',
+        'requisition',
+        'requisition-summary',
+        'requisition-validation',
+        'requisition-status-messages',
+        'requisition-view-tab',
         'openlmis-templates',
         'openlmis-i18n',
         'openlmis-state-tracker',
@@ -31,13 +47,7 @@
         'openlmis-date',
         'openlmis-invalid',
         'openlmis-permissions',
-        'requisition',
-        'requisition-summary',
-        'requisition-validation',
-        'requisition-status-messages',
-        'requisition-view-tab',
-        'requisition-redistribution',
-        'ui.router'
+        'requisition-order-create'
     ]);
 
 })();

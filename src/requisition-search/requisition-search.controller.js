@@ -170,6 +170,11 @@
          */
         function onInit() {
             vm.requisitions = requisitions;
+            vm.requisitions.forEach(item => {
+                if(item.extraData.isRedistributed){
+                    item.status = 'REDISTRIBUTED';
+                }
+               });
             vm.facilities = facilities;
             vm.statuses = REQUISITION_STATUS.$toList();
 

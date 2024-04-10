@@ -36,7 +36,7 @@
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
         'rejectionReasonModalService', '$q'
     ];
-
+       
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
                                        loadingModalService, alertService, notificationService, confirmService,
                                        offlineService, $window, requisitionUrlFactory, $filter, $scope,
@@ -229,6 +229,7 @@
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
         vm.close = close;
         vm.loadRejectionReasonModal = loadRejectionReasonModal;
+        vm.goToRedistribution = goToRedistribution;
 
         /**
          * @ngdoc method
@@ -252,6 +253,14 @@
             vm.displaySkipButton = canSkip;
             vm.displaySyncButton = canSync;
         }
+
+        function goToRedistribution(requisitionId) {
+            $state.go('openlmis.redistribution', {
+                rnr: requisitionId,
+                requisition: vm.requisition
+            });   
+
+        } 
 
         function setTypeAndClass() {
             if (vm.requisition.emergency) {
@@ -381,6 +390,7 @@
                     failWithMessage('requisitionView.rnrHasErrors')();
                 }
             });
+                
 
             function saveThenSubmit() {
                 var loadingPromise = loadingModalService.open();
