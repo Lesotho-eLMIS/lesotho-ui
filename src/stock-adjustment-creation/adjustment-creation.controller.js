@@ -416,7 +416,7 @@
      */
      vm.fixQuantityWhenExpired = function (lineItem) {
       if (adjustmentType.state === 'adjustment') {
-        console.log(lineItem);
+       // console.log(lineItem);
         lineItem.$errors.reasonInvalid = isEmpty(lineItem.reason);
         if(lineItem.reason.name === 'Expired'){
           lineItem.quantity = lineItem.$previewSOH;
