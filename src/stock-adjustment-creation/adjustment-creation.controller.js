@@ -812,6 +812,8 @@
         adjustmentType.state !== ADJUSTMENT_TYPE.KIT_UNPACK.state;
 
       /* eLMIS Lesotho : start */
+      vm.showPrepackingAttributes =
+        adjustmentType.state === ADJUSTMENT_TYPE.PREPACK.state;
       vm.showDeliveryNoteAttributes =
         adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state;
       vm.showReasonsInAdjustment =
