@@ -27,7 +27,7 @@
             url: '/unpack',
             label: 'stockUnpackKit.unpack',
             priority: 7,
-            showInNavigation: false, //Removing unpack from stock management for Lesotho eLMIS
+            showInNavigation: false,
             views: {
                 '@openlmis': {
                     controller: 'StockAdjustmentController',

@@ -141,6 +141,7 @@
     vm.showReasonDropdown = true;
 
     /* eLMIS Lesotho : start */
+    vm.showPrepackingAttributes = false;
     vm.showDeliveryNoteAttributes = false;
     vm.showReasonsInAdjustment = false;
     /* eLMIS Lesotho : end */

@@ -53,6 +53,7 @@
                     <th ng-show="vm.hasLot">{{vm.key('lotCode') | message}}</th>
                     <th ng-show="vm.hasLot">{{vm.key('expiryDate') | message}}</th>
                     <th>{{vm.key('soh') | message}}</th>
+
                     <th ng-show="vm.srcDstAssignments">{{vm.key('srcDstLabel') | message}}</th>
                     <th ng-hide="vm.showDeliveryNoteAttributes || vm.showReasonsInAdjustment" ng-show="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
                     <th ng-if="vm.showReasonDropdown">{{vm.key('reason') | message}}</th>
