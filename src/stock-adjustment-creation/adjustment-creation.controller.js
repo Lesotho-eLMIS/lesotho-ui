@@ -404,6 +404,32 @@
       return lineItem;
     };
 
+     /**
+     * @ngdoc method
+     * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+     * @name fixQuantityWhenExpired
+     *
+     * @description
+     * Set Quantity Expired As SOH if the adjustment reason = Expired
+     *
+     * @param {Object} lineItem line item to be validated.
+     */
+     vm.fixQuantityWhenExpired = function (lineItem) {
+      if (adjustmentType.state === 'adjustment') {
+        console.log(lineItem);
+        lineItem.$errors.reasonInvalid = isEmpty(lineItem.reason);
+        if(lineItem.reason.name === 'Expired'){
+          lineItem.quantity = lineItem.$previewSOH;
+          lineItem.expired = true;
+        }
+        else{
+          lineItem.quantity = undefined;
+          lineItem.expired = false;
+        } 
+      }
+      return lineItem;
+    };
+
     /**
      * @ngdoc method
      * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
