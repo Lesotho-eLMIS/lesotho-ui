@@ -117,7 +117,7 @@
     vm.FromSupplier = false; 
     vm.hideColumns=function(){
       //vm.FromSupplier = true;
-      console.log($scope);vm.addedLineItems[0].assignment.name
+     vm.addedLineItems[0].assignment.name
       vm.UPrice=$scope.lineItem.assignment.name;
     }
 
@@ -371,13 +371,16 @@
     //-----LESOTHO ELMIS-----
 
     vm.validatePrepack = function(lineItem){
+
+      $scope.lineItem.prepackQuantity = $scope.lineItem.prepackSize*$scope.lineItem.numberOfPrepacks;
       console.log(lineItem);
-      //if(lineItem.prepackQuantity > lineItem.$previewSOH){ 
-        if((lineItem.prepackSize*lineItem.numberOfPrepacks) > lineItem.$previewSOH){    
+      if((lineItem.prepackSize*lineItem.numberOfPrepacks) > lineItem.$previewSOH){
 
         lineItem.$errors.prepackQuantityInvalid = messageService.get(
           'stockPrepackCreation.validatePrepackQuantity');
-
+      }
+      else{
+        lineItem.$errors.prepackQuantityInvalid = false;
       }
     }
 
@@ -475,6 +478,8 @@
      * Submit all added items.
      */
     vm.submit = function () {
+      console.log("LINE ITEMS ADDED!!");
+      console.log(vm.addedLineItems);
       $scope.$broadcast('openlmis-form-submit');
       if (validateAllAddedItems()) {
         var confirmMessage = messageService.get(vm.key('confirmInfo'), {
