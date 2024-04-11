@@ -71,20 +71,21 @@
                     <th ng-if="vm.showPrepackingAttributes">{{vm.key('numberOfPrepacks') | message}}</th>
 
                     <th ng-show="vm.showPrepackingAttributes">{{vm.key('quantityToPrepack') | message}}</th>
+                    <th ng-show="vm.showPrepackingAttributes">{{vm.key('stockRemaining') | message}}</th>
 
                     
-                    <th ng-show="vm.showDeliveryNoteAttributes">Accepted Quantity</th>
+                    <th ng-show="vm.showDeliveryNoteAttributes">{{vm.key('acceptedQuantity') | message}}</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes">Rejected Quantity</th>
-                    <th ng-if="vm.showDeliveryNoteAttributes">Rejection Reason</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('rejectedQuantity') | message}}</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('rejectionReason') | message}}</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes">Comments</th>
-                    <th ng-if="vm.showDeliveryNoteAttributes">Unit Price</th>
-                    <th ng-if="vm.showDeliveryNoteAttributes">Amount</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('comments') | message}}</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('unitPrice') | message}}</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('amount') | message}}</th>
 
                     <th ng-if="vm.showVVMStatusColumn">{{vm.key('vvmStatus') | message}}</th>
                     <th>{{vm.key('date') | message}}</th>
-                    <th ng-if="vm.showDeliveryNoteAttributes">Discrepancy</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('discrepancy') | message}}</th>
                     <th>{{vm.key('actions') | message}}</th>
                     
                 </tr>
@@ -130,13 +131,22 @@
                     
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.prepackSize" type="number" min="0" style="width: 70px;"></td>
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.numberOfPrepacks" type="number" style="width: 120px;"></td>
+                    <td ng-if="vm.showPrepackingAttributes" openlmis-invalid="{{lineItem.$errors.prepackQuantityInvalid}}" class="digit-cell">
+                        <input class="form-control" ng-model="lineItem.prepackQuantity" ng-class="{'error': lineItem.$errors.prepackQuantityInvalid}"   
+                        ng-change="vm.validatePrepack(lineItem)" ng-blur="vm.validatePrepack(lineItem)"                      
+                        value="{{(lineItem.prepackSize*lineItem.numberOfPrepacks)}}" 
+                        type="number" style="width: 120px;">
+                    </td>
+                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.stockRemaining" readonly value="{{ lineItem.$previewSOH - (lineItem.prepackSize*lineItem.numberOfPrepacks)}}" 
+                        type="number" style="width: 120px;">
+                    </td>
 
                     <td ng-if="!vm.showPrepackingAttributes" openlmis-invalid="{{lineItem.$errors.quantityInvalid}}" class="digit-cell">
                         <input class="form-control" ng-model="lineItem.quantity"
                             ng-class="{'error': lineItem.$errors.quantityInvalid}"
                             ng-change="vm.validateQuantity(lineItem)" ng-blur="vm.validateQuantity(lineItem)" positive-integer value="0"/>
                     </td>
-                    <td ng-if="vm.showPrepackingAttributes"><input type="text" readonly value="{{ (lineItem.prepackSize*lineItem.numberOfPrepacks)}}"/></td>
+                   
                     
                     
                     <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.rejectedQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>

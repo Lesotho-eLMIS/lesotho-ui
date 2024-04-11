@@ -7,6 +7,8 @@
   "stockPrepackCreation.numberOfPrepacks": "Number Of Prepacks",
   "stockPrepackCreation.prepackSize": "Prepack Size",
   "stockPrepackCreation.date": "Date",
+  "stockPrepackCreation.stockRemaining" : "Remaining Stock",
+  "stockPrepackCreation.validatePrepackQuantity": "Quantity Prepacked should not be greater than Stock on hand",
   "stockPrepackCreation.add": "Add",
   "stockPrepackCreation.noProducts": "Add a products to prepack. You have not added any products yet.",
   "stockPrepackCreation.productCode": "Product Code",

@@ -368,6 +368,21 @@
       return lineItem;
     };
 
+    //-----LESOTHO ELMIS-----
+
+    vm.validatePrepack = function(lineItem){
+      console.log(lineItem);
+      //if(lineItem.prepackQuantity > lineItem.$previewSOH){ 
+        if((lineItem.prepackSize*lineItem.numberOfPrepacks) > lineItem.$previewSOH){    
+
+        lineItem.$errors.prepackQuantityInvalid = messageService.get(
+          'stockPrepackCreation.validatePrepackQuantity');
+
+      }
+    }
+
+    //-----LESOTHO ELMIS-----
+
     /**
      * @ngdoc method
      * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
