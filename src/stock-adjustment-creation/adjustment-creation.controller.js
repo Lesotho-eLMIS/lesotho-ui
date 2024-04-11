@@ -372,8 +372,8 @@
 
     vm.validatePrepack = function(lineItem){
 
-      $scope.lineItem.prepackQuantity = $scope.lineItem.prepackSize*$scope.lineItem.numberOfPrepacks;
-      console.log(lineItem);
+      // $scope.lineItem.prepackQuantity = $scope.lineItem.prepackSize*$scope.lineItem.numberOfPrepacks;
+      // console.log(lineItem);
       if((lineItem.prepackSize*lineItem.numberOfPrepacks) > lineItem.$previewSOH){
 
         lineItem.$errors.prepackQuantityInvalid = messageService.get(
