@@ -1,6 +1,6 @@
 <!--<h2>{{ 'dispensingPatients.title' | message }}</h2>-->
 <h2 ng-if="vm.orderingFacility">{{'orderFulfillment.fulfillOrdersAt' | message: {'facility':  vm.orderingFacility.name} }}</h2>
-<h2 ng-if="!vm.orderingFacility">{{'orderFulfillment.fulfillOrders' | message}}</h2>
+<h2 ng-if="!vm.orderingFacility">Patients</h2>
 <section class="openlmis-table-container">
   <openlmis-sort options="vm.options"/>
   <form ng-submit="vm.loadOrders()" >
