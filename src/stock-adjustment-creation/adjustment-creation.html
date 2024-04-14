@@ -129,15 +129,15 @@
                     <!-- <td ng-if="vm.showDeliveryNoteAttributes"><input class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td> -->
                    
                     
-                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.prepackSize" ng-change="vm.validatePrepack(lineItem)" type="number" min="0" style="width: 70px;"></td>
-                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.numberOfPrepacks" ng-change="vm.validatePrepack(lineItem)" type="number" style="width: 120px;"></td>
+                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.prepackSize" ng-change="vm.validatePrepackQuantity(lineItem)" type="number" min="0" style="width: 70px;"></td>
+                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.numberOfPrepacks" ng-change="vm.validatePrepackQuantity(lineItem)" type="number" style="width: 120px;"></td>
                     <td ng-if="vm.showPrepackingAttributes" openlmis-invalid="{{lineItem.$errors.prepackQuantityInvalid}}" class="digit-cell">
                         <input class="form-control" ng-model="lineItem.prepackQuantity" ng-class="{'error': lineItem.$errors.prepackQuantityInvalid}"   
-                        ng-change="vm.validatePrepack(lineItem)" ng-blur="vm.validatePrepack(lineItem)"                      
+                        ng-blur="vm.validatePrepackQuantity(lineItem)"                      
                         readonly value="{{(lineItem.prepackSize*lineItem.numberOfPrepacks)}}" 
                         type="number" style="width: 120px;" min="0"> 
                     </td>
-                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.stockRemaining" readonly value="{{ lineItem.$previewSOH - (lineItem.prepackSize*lineItem.numberOfPrepacks)}}" 
+                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.remainingStock" readonly  
                         type="number" style="width: 120px;" min="0">
                     </td>
 
