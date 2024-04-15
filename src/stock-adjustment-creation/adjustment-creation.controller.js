@@ -117,9 +117,10 @@
     vm.FromSupplier = false; 
     vm.hideColumns=function(){
       //vm.FromSupplier = true;
-      console.log($scope);vm.addedLineItems[0].assignment.name
+     vm.addedLineItems[0].assignment.name
       vm.UPrice=$scope.lineItem.assignment.name;
-    }
+    };
+    vm.calculateRemainingStock = calculateRemainingStock;
 
     /**
      * @ngdoc property
@@ -368,6 +369,37 @@
       return lineItem;
     };
 
+    //-----LESOTHO ELMIS-----
+
+    vm.validatePrepackQuantity = function(lineItem){
+      let remainingStock = calculateRemainingStock(lineItem);
+      if(remainingStock <= 0){
+        lineItem.$errors.prepackQuantityInvalid = messageService.get(
+          'stockPrepackCreation.validatePrepackQuantity');
+      }
+      else{
+        lineItem.$errors.prepackQuantityInvalid = false;
+      }
+    }
+
+    function calculateRemainingStock(lineItem){    
+      if(vm.addedLineItems.length === 1){
+        return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+      }
+      else{
+        let productType = vm.addedLineItems.filter( item => item.lot.lotCode === lineItem.lot.lotCode && 
+          item.orderable.productCode === lineItem.orderable.productCode);
+        let total = 0;
+        productType.forEach(product => {
+          let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+          total += quantityToPrepack;
+        });
+        return lineItem.remainingStock = lineItem.stockOnHand - total;
+      }
+    }
+
+    //-----LESOTHO ELMIS-----
+
     /**
      * @ngdoc method
      * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
@@ -486,6 +518,8 @@
      * Submit all added items.
      */
     vm.submit = function () {
+      console.log("LINE ITEMS ADDED!!");
+      console.log(vm.addedLineItems);
       $scope.$broadcast('openlmis-form-submit');
       if (validateAllAddedItems()) {
         var confirmMessage = messageService.get(vm.key('confirmInfo'), {
@@ -838,6 +872,8 @@
         adjustmentType.state !== ADJUSTMENT_TYPE.KIT_UNPACK.state;
 
       /* eLMIS Lesotho : start */
+      vm.showPrepackingAttributes =
+        adjustmentType.state === ADJUSTMENT_TYPE.PREPACK.state;
       vm.showDeliveryNoteAttributes =
         adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state;
       vm.showReasonsInAdjustment =
