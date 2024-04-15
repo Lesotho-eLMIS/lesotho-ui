@@ -119,7 +119,8 @@
       //vm.FromSupplier = true;
      vm.addedLineItems[0].assignment.name
       vm.UPrice=$scope.lineItem.assignment.name;
-    }
+    };
+    vm.calculateRemainingStock = calculateRemainingStock;
 
     /**
      * @ngdoc property
@@ -370,17 +371,30 @@
 
     //-----LESOTHO ELMIS-----
 
-    vm.validatePrepack = function(lineItem){
-
-      // $scope.lineItem.prepackQuantity = $scope.lineItem.prepackSize*$scope.lineItem.numberOfPrepacks;
-      // console.log(lineItem);
-      if((lineItem.prepackSize*lineItem.numberOfPrepacks) > lineItem.$previewSOH){
-
+    vm.validatePrepackQuantity = function(lineItem){
+      let remainingStock = calculateRemainingStock(lineItem);
+      if(remainingStock <= 0){
         lineItem.$errors.prepackQuantityInvalid = messageService.get(
           'stockPrepackCreation.validatePrepackQuantity');
       }
       else{
         lineItem.$errors.prepackQuantityInvalid = false;
+      }
+    }
+
+    function calculateRemainingStock(lineItem){    
+      if(vm.addedLineItems.length === 1){
+        return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+      }
+      else{
+        let productType = vm.addedLineItems.filter( item => item.lot.lotCode === lineItem.lot.lotCode && 
+          item.orderable.productCode === lineItem.orderable.productCode);
+        let total = 0;
+        productType.forEach(product => {
+          let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+          total += quantityToPrepack;
+        });
+        return lineItem.remainingStock = lineItem.stockOnHand - total;
       }
     }
 
