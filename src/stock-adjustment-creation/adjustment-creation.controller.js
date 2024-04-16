@@ -63,6 +63,7 @@
     'moment',
     'rejectionReasonService',
     'receivingAddDiscrepancyModalService',
+    'prepackingService'
   ];
 
   function controller(
@@ -100,7 +101,8 @@
     editLotModalService,
     moment,
     rejectionReasonService,
-    receivingAddDiscrepancyModalService
+    receivingAddDiscrepancyModalService,
+    prepackingService
   ) {
     var vm = this,
       previousAdded = {};
@@ -518,8 +520,10 @@
      * Submit all added items.
      */
     vm.submit = function () {
-      console.log("LINE ITEMS ADDED!!");
-      console.log(vm.addedLineItems);
+      var test = prepackingService.getPrepacks();
+
+      //console.log("LINE ITEMS ADDED!!");
+      console.log(test);
       $scope.$broadcast('openlmis-form-submit');
       if (validateAllAddedItems()) {
         var confirmMessage = messageService.get(vm.key('confirmInfo'), {
