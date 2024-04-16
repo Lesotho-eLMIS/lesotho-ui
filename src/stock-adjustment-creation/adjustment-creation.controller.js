@@ -313,8 +313,14 @@
      * @param {Object} lineItem line item to be removed.
      */
     vm.remove = function (lineItem) {
-      var index = vm.addedLineItems.indexOf(lineItem);
-      vm.addedLineItems.splice(index, 1);
+
+      if(lineItem.prepackSize || lineItem.numberOfPrepacks){
+        lineItem.prepackSize = 0;
+        lineItem.numberOfPrepacks = 0;
+       vm.validatePrepackQuantity(lineItem);
+     }
+      var index = vm.addedLineItems.indexOf(lineItem);      
+      vm.addedLineItems.splice(index, 1);   
 
       vm.search();
     };
@@ -394,7 +400,7 @@
           let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
           total += quantityToPrepack;
         });
-        return lineItem.remainingStock = lineItem.stockOnHand - total;
+        productType.forEach( item => item.remainingStock = item.stockOnHand - total);
       }
     }
 
