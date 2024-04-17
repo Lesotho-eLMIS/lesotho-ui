@@ -22,44 +22,50 @@
         .config(routes);
 
 
-routes.$inject = ['$stateProvider'];
+routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
 
-    function routes($stateProvider) {
+    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
       
         $stateProvider.state('openlmis.prepacking.view', {
             isOffline: true,
-            url: '/Manage',
+            url: '/view',
             templateUrl: 'prepacking-view/prepacking-view.html',
-            label: 'prepackingView.title',
+            label: 'prepackingView.label',
             priority: 1,
             showInNavigation: true,
             controller: 'prepackingViewController',
             controllerAs: 'vm',
+            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
-                facilities: function(facilityService) {
-                    var paginationParams = {};
+                // facilities: function(facilityService) {
+                //     var paginationParams = {};
                       
-                    var queryParams = {
-                        "type":"warehouse"
-                      };
-                      return facilityService.query(paginationParams, queryParams)
-                      .then(function(result) {
-                          return result.content; // Return Facilities of Type = Warehouse
-                      })
-                      .catch(function(error) {
-                          // Handle any errors that may occur during the query
-                          console.error("Error:", error);
-                          return [];
-                      });                    
-                    },
+                //     var queryParams = {
+                //         "type":"warehouse"
+                //       };
+                //       return facilityService.query(paginationParams, queryParams)
+                //       .then(function(result) {
+                //           return result.content; // Return Facilities of Type = Warehouse
+                //       })
+                //       .catch(function(error) {
+                //           // Handle any errors that may occur during the query
+                //           console.error("Error:", error);
+                //           return [];
+                //       });                    
+                //     },
                 facility: function($stateParams, facilityFactory) {
                     // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
-                }
-             
+                },
+                user: function(authorizationService) {
+                    return authorizationService.getUser();
+                },
+                programs: function(user, stockProgramUtilService) {
+                    return stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
+                }            
             }
         });
     }

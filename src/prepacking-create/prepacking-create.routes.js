@@ -18,12 +18,21 @@
 
     angular
         .module('prepacking-create')
-        .factory( function($state) {
-    return {
-        changeState: function(newStateName) {
-        $state.go(newStateName);
-        }
-    };
-    });
-    
+        .config(routes);
+
+    routes.$inject = ['$stateProvider', 'SEARCH_OPTIONS',  'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'];
+
+    function routes($stateProvider, SEARCH_OPTIONS, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE) {
+
+        $stateProvider.state('openlmis.prepacking.create', {
+            isOffline: true,
+            url: '/create',
+            label: 'prepackingCreate.title',
+            priority: 3,
+            showInNavigation: true,
+            controller: 'prepackingCreateController',
+            controllerAs: 'vm',
+            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST]
+        });
+    }
 })();
