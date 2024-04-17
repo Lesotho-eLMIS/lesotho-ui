@@ -520,10 +520,8 @@
      * Submit all added items.
      */
     vm.submit = function () {
-      var test = prepackingService.getPrepacks();
-
-      //console.log("LINE ITEMS ADDED!!");
-      console.log(test);
+      prepackingService.updatePrepacks();
+      
       $scope.$broadcast('openlmis-form-submit');
       if (validateAllAddedItems()) {
         var confirmMessage = messageService.get(vm.key('confirmInfo'), {
@@ -806,6 +804,7 @@
 
     function onInit() {
       //Getting Rejection Reasons
+      console.log(adjustmentType);
       var rej = rejectionReasonService.getAll();
       rej.then(function(reasons) {             
           reasons.content.forEach(reason => {

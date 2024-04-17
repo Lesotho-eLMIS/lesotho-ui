@@ -44,15 +44,38 @@
                 postPrepackingEvent: {
                     url: openlmisUrlFactory('/api/prepackingEvents'),
                     method: 'POST'
-                }             
+                },
+                updatePrepackingEvent: {
+                    url: openlmisUrlFactory('/api/prepackingEvents/:id'),
+                    method: 'PUT'
+                }            
         });
 
-        this.test = test;
+        this.updatePrepacks = updatePrepacks;
         this.getPrepacks = getPrepacks;
         this.savePrepacks = savePrepacks;
 
-        function test() {
-            console.log("prepack");
+        function updatePrepacks(id,prepackingEvent) {
+            var params = {
+                facilityId: "3499a089-55b2-45b7-a065-1df2d27d888c",
+                programId: "bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8",
+                supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b",
+                userId: "3499a089-55b2-45b7-a065-1df2d27d888e",
+                status: "initiated",
+                comments: "Updated",
+                lineItems: [
+                        {
+                            orderableId: "cf41da7d-07d3-47bc-929e-03331fdfacf4",
+                            numberofprepacks: "2",
+                            prepackSize: "60",
+                            lotId: "3499a089-55b2-45b7-a065-1df2d27d888d",
+                            remarks: "V1"  // Ensure this is a normal space
+                        }
+                    ]
+                    
+
+            };
+            return resource.updatePrepackingEvent({ id: "41886bb6-27dc-4c83-a75b-a5ba8386dc0d"/*id*/ }, params /*prepackingEvent*/).$promise;
         };
 
         function getPrepacks() {
@@ -77,6 +100,22 @@
 
         function savePrepacks(params) {
             var params = {
+                facilityId: "3499a089-55b2-45b7-a065-1df2d27d888c",
+                programId: "bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8",
+                supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b",
+                userId: "3499a089-55b2-45b7-a065-1df2d27d888e",
+                status: "initiated",
+                comments: "From Code",
+                lineItems: [
+                        {
+                            orderableId: "cf41da7d-07d3-47bc-929e-03331fdfacf4",
+                            numberofprepacks: "2",
+                            prepackSize: "60",
+                            lotId: "3499a089-55b2-45b7-a065-1df2d27d888d",
+                            remarks: "V1"  // Ensure this is a normal space
+                        }
+                    ]
+                    
 
             };
 
