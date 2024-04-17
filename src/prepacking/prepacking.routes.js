@@ -17,15 +17,22 @@
 
     'use strict';
 
-    /**
-     * @module stock-prepack
-     *
-     * @description
-     * Provides stock prepack state and controller.
-     */
-    angular.module('stock-prepack', [
-        'stock-adjustment'
-    ]);
+    angular
+        .module('prepacking')
+        .config(routes);
 
+routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
+
+    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
+        $stateProvider.state('openlmis.prepacking', {
+            isOffline: true,
+            url: '/prepacking',
+            label: 'prepacking.title',
+            priority: 9,
+            showInNavigation: true,
+            abstract: true,
+            template: '<div ui-view></div>',
+            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST]
+        });
+    }
 })();
-

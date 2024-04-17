@@ -18,13 +18,23 @@
     'use strict';
 
     /**
-     * @module stock-prepack
+     * @module prepacking-view
      *
      * @description
-     * Provides stock prepack state and controller.
+     * Provides prepacking-view state and controller.
      */
-    angular.module('stock-prepack', [
-        'stock-adjustment'
+    angular.module('prepacking-view', [
+        'ngResource',
+        'openlmis-date',
+        'ui.router',
+        'openlmis-config',
+        'referencedata-facility',
+        'stockmanagement',
+        'openlmis-repository',
+        'openlmis-class-extender',
+        'referencedata-user',
+        'openlmis-urls',
+        'openlmis-modal'
     ]);
 
 })();

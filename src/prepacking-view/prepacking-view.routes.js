@@ -18,52 +18,49 @@
     'use strict';
 
     angular
-        .module('requisition-redistribution')
+        .module('prepacking-view')
         .config(routes);
+
 
 routes.$inject = ['$stateProvider'];
 
     function routes($stateProvider) {
-        $stateProvider.state('openlmis.redistribution', {
-            url: '/redistribution/:rnr', 
+      
+        $stateProvider.state('openlmis.prepacking.view', {
             isOffline: true,
-            controller: 'RequisitionRedistributionController',
+            url: '/Manage',
+            templateUrl: 'prepacking-view/prepacking-view.html',
+            label: 'prepackingView.title',
+            priority: 1,
+            showInNavigation: true,
+            controller: 'prepackingViewController',
             controllerAs: 'vm',
-            templateUrl: 'requisition-redistribution/requisition-redistribution.html',
             resolve: {
-                user: function(currentUserService) {
-                    return currentUserService.getUserInfo();
-                },
-                requisition: function($stateParams,requisitionService) {
-                    return requisitionService.get($stateParams.rnr);
-                },
                 facilities: function(facilityService) {
-                    return facilityService.getAllMinimal();
-                },
-                facility: function(facilityService, requisition) {
-                    return facilityService.get(requisition.facility.id);
-                },
-                program: function(programService, requisition) {
-                    return programService.get(requisition.program.id);
-                },
-                processingPeriod: function(periodService, requisition) {
-                    return periodService.get(requisition.processingPeriod.id);
-                },
-                supplyingFacilities: function(facilityService) {
-                    var paginationParams = {};   
-                      return facilityService.query(paginationParams)
+                    var paginationParams = {};
+                      
+                    var queryParams = {
+                        "type":"warehouse"
+                      };
+                      return facilityService.query(paginationParams, queryParams)
                       .then(function(result) {
-                          return result.content;
+                          return result.content; // Return Facilities of Type = Warehouse
                       })
                       .catch(function(error) {
                           // Handle any errors that may occur during the query
                           console.error("Error:", error);
                           return [];
                       });                    
+                    },
+                facility: function($stateParams, facilityFactory) {
+                    // Load the current User's Assigned Facility
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
                 }
+             
             }
         });
-       
-     }
+    }
 })();
-  

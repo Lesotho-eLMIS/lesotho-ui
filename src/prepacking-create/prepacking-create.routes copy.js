@@ -17,21 +17,25 @@
     'use strict';
 
     angular
-        .module('stock-prepack-creation')
+        .module('prepacking-create')
         .config(routes);
 
     routes.$inject = ['$stateProvider', 'SEARCH_OPTIONS',  'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'];
 
     function routes($stateProvider, SEARCH_OPTIONS, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE) {
-        $stateProvider.state('openlmis.stockmanagement.prepack.creation', {
+
+        $stateProvider.state('openlmis.stockmanagement.prepacking.create', {
+            //isOffline: true,
             url: '/:programId/create?page&size&keyword',
-            // views: {
-            //     '@openlmis': {
-            //         controller: 'StockPrepackCreationController',
-            //         templateUrl: 'stock-prepack-creation/stock-prepack-creation.html',
-            //         controllerAs: 'vm'
-            //     }
-            // },
+            // templateUrl: 'prepacking-create/prepacking-create.html',
+            label: 'prepackingCreate.title',
+            priority: 3,
+            showInNavigation: true,
+            // controller: 'prepackingCreateController',
+            // controllerAs: 'vm',
+
+        // $stateProvider.state('openlmis.stockmanagement.prepacking.create', {
+        //     url: '/:programId/create?page&size&keyword',
             views: {
                 '@openlmis': {
                     controller: 'StockAdjustmentCreationController',

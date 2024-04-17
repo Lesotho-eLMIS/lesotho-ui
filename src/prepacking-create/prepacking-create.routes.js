@@ -14,18 +14,16 @@
  */
 
 (function() {
-
     'use strict';
 
-    /**
-     * @module stock-prepack
-     *
-     * @description
-     * Provides stock prepack state and controller.
-     */
-    angular.module('stock-prepack', [
-        'stock-adjustment'
-    ]);
-
+    angular
+        .module('prepacking-create')
+        .factory( function($state) {
+    return {
+        changeState: function(newStateName) {
+        $state.go(newStateName);
+        }
+    };
+    });
+    
 })();
-

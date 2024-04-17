@@ -34,8 +34,12 @@
         'openlmis-class-extender',
         'referencedata-user',
         'openlmis-urls',
-        'pod-add-discrepancy-modal',
-        'openlmis-modal'
+        'openlmis-modal',
+        'dispensing-add-patient-form',
+        'dispensing',
+        'referencedata-user',
+        'ui.router',
+        'admin-user-form'
     ]);
 
 })();
