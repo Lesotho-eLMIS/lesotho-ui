@@ -520,22 +520,68 @@
      * Submit all added items.
      */
     vm.submit = function () {
-      prepackingService.updatePrepacks();
-      
-      $scope.$broadcast('openlmis-form-submit');
-      if (validateAllAddedItems()) {
-        var confirmMessage = messageService.get(vm.key('confirmInfo'), {
-          username: user.username,
-          number: vm.addedLineItems.length,
+      if(adjustmentType.state == "prepack"){
+        // Handle prepacking logic
+        vm.addedLineItems.forEach((lineItem) => {
+          lineItem.orderableId = lineItem.orderable.id;
+          lineItem.lotId = lineItem.lot.id;
         });
+
+        var prepackingEvent = {
+        facilityId: facility.id,
+        programId: program.id,
+        supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
+        userId: user.user_id,
+        status: "Initiated",
+        comments: "", //To be used when there is need
+        lineItems:vm.addedLineItems
+          };
+
+
+        var confirmMessage = messageService.get(vm.key('confirmInfo'), {
+            username: user.username,
+            number: vm.addedLineItems.length,
+        });
+
         confirmService
-          .confirm(confirmMessage, vm.key('confirm'))
-          .then(confirmSubmit);
-      } else {
-        vm.keyword = null;
-        reorderItems();
-        alertService.error('stockAdjustmentCreation.submitInvalid');
+            .confirm(confirmMessage, vm.key('confirm'))
+            .then(function () {
+              prepackingService.savePrepacks(prepackingEvent).$promise
+              .then(function(response) {
+                // Success callback
+                vm.addedLineItems =[]; // clear added lineItems
+                notificationService.success('Prepacking Event Saved Sucessfully.');
+                $state.go('openlmis.stockmanagement.prepack');
+                }
+              )
+              .catch(function(error) {
+                  // Error callback
+                  notificationService.error('Failed to submit.');
+                  console.error('Error occurred:', error);
+              
+              });
+            });
+
+       
+      }else{
+
+          $scope.$broadcast('openlmis-form-submit');
+          if (validateAllAddedItems()) {
+            var confirmMessage = messageService.get(vm.key('confirmInfo'), {
+              username: user.username,
+              number: vm.addedLineItems.length,
+            });
+            confirmService
+              .confirm(confirmMessage, vm.key('confirm'))
+              .then(confirmSubmit);
+          } else {
+            vm.keyword = null;
+            reorderItems();
+            alertService.error('stockAdjustmentCreation.submitInvalid');
+          }
+
       }
+      
     };
 
     /**
@@ -857,7 +903,7 @@
         $scope,
         'openlmis.stockmanagement.stockCardSummaries'
       );
-
+      
       $scope.$on('$stateChangeStart', function () {
         angular.element('.popover').popover('destroy');
       });
