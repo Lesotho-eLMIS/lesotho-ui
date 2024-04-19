@@ -99,52 +99,6 @@
         };
 
         function savePrepacks(params) {
-            var params = {
-                facilityId: "3499a089-55b2-45b7-a065-1df2d27d888c",
-                programId: "bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8",
-                supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b",
-                userId: "3499a089-55b2-45b7-a065-1df2d27d888e",
-                status: "initiated",
-                comments: "From Code",
-                lineItems: [
-                        {
-                            orderableId: "cf41da7d-07d3-47bc-929e-03331fdfacf4",
-                            numberofprepacks: "2",
-                            prepackSize: "60",
-                            lotId: "3499a089-55b2-45b7-a065-1df2d27d888d",
-                            remarks: "V1"  // Ensure this is a normal space
-                        }
-                    ]
-                    
-
-            };
-
-            /*
-            {
-                    "facilityId": "3499a089-55b2-45b7-a065-1df2d27d888c",
-                    "programId": "bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8",
-                    "supervisoryNodeId": "953c7ccf-7a02-4161-b4f6-abb796fa5e3b",
-                    "userId": "3499a089-55b2-45b7-a065-1df2d27d888e",
-                    "status": "initiated",
-                    "comments": "New On Staging",
-                    "lineItems": [
-                        {
-                            "orderableId": "bf41da7d-07d3-47bc-929e-03331fdfacf5",
-                            "numberofprepacks": "2",
-                            "prepackSize": "60",
-                            "lotId": "3499a089-55b2-45b7-a065-1df2d27d888f",
-                            "remarks": "V1"  // Ensure this is a normal space
-                        },
-                        {
-                            "orderableId": "cf41da7d-07d3-47bc-929e-03331fdfacf4",
-                            "numberofprepacks": "2",
-                            "prepackSize": "60",
-                            "lotId": "3499a089-55b2-45b7-a065-1df2d27d888d",
-                            "remarks": "V1"  // Ensure this is a normal space
-                        }
-                        ]
-                    }                   
-            */
             return resource.postPrepackingEvent(params);
         };
              
