@@ -15,14 +15,14 @@
             </tr>
         </thead>
         <tbody>  
-            <caption ng-if="!vm.prepackLineItems.length">Dispalay Available Prepacks here</caption>
+            <caption ng-if="!vm.prepackLineItems.length">Display Available Prepacks here</caption>
             <tr ng-repeat="item in vm.prepackLineItems">
                 <td>{{item.programId}}</td>
                 <td>{{item.facilityId}}</td>
-                <td>{{item.dateCreated}}</td>
+                <td>{{item.dateCreated | openlmisDate}}</td>
                 <td>{{item.status}}</td>
                 <td>{{item.userId}}</td>
-                <td><button ng-click="">{{'prepackingView.view'| message}}</button> </td>
+                <td><button ng-click="vm.prepackDetails(item)">{{'prepackingView.view'| message}}</button> </td>
             </tr>
         </tbody>
     </table>

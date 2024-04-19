@@ -37,22 +37,6 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
             controllerAs: 'vm',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
-                // facilities: function(facilityService) {
-                //     var paginationParams = {};
-                      
-                //     var queryParams = {
-                //         "type":"warehouse"
-                //       };
-                //       return facilityService.query(paginationParams, queryParams)
-                //       .then(function(result) {
-                //           return result.content; // Return Facilities of Type = Warehouse
-                //       })
-                //       .catch(function(error) {
-                //           // Handle any errors that may occur during the query
-                //           console.error("Error:", error);
-                //           return [];
-                //       });                    
-                //     },
                 facility: function($stateParams, facilityFactory) {
                     // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
@@ -63,10 +47,21 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                 user: function(authorizationService) {
                     return authorizationService.getUser();
                 },
+                // detailedUser: function(authorizationService) {
+                //     return authorizationService.getUser();
+                // },
                 programs: function(user, stockProgramUtilService) {
-                    return stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
-                }            
-            }
+                    var programs =  stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
+                    console.log(programs);
+                    return programs;
+                },
+                Prepacks: function(facility, programs, prepackingService ) {
+                    // return prepackingService.getPrepacks(facility.id, programs[0].id);
+                   
+                   return prepackingService.getPrepacks('3499a089-55b2-45b7-a065-1df2d27d888c', 'bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8' );
+                }
+            }           
+      
         });
     }
 })();
