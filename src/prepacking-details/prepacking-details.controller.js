@@ -18,18 +18,18 @@
   
     /**
      * @ngdoc controller
-     * @name prepacking-view.controller:prepackingViewController
+     * @name prepacking-details.controller:prepackingDetailsController
      *
      * @description
-     * Controller for managing stock adjustment creation.
+     * Controller for managing prepack Details Viewhd.
      */
     angular
-      .module('prepacking-view')
-      .controller('prepackingViewController', controller);
+      .module('prepacking-details')
+      .controller('prepackingDetailsController', prepackingDetailsController);
   
-    controller.$inject = ['facility', 'user', 'programs', 'prepackingService', 'Prepacks', 'facilityService', '$state'];
+      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepackingService', 'facilityService','$stateParams','$state'];
 
-    function controller(facility, user, programs, prepackingService, Prepacks, facilityService, $state){
+    function prepackingDetailsController(facility, user, programs, prepackingService, facilityService,$stateParams, $state){
         var vm = this;
        // vm.facility = undefined;
 
@@ -43,8 +43,9 @@
             vm.facility = facility;            
             vm.user = user;
             vm.programs = programs;
-            vm.prepackLineItems = Prepacks;
-            formatPrepacks();
+            console.log($stateParams.id);
+           // vm.prepackLineItems = Prepacks;
+           // formatPrepacks();
         }
         onInit();
 
@@ -81,10 +82,9 @@
 
         vm.prepackDetails = function(item){
             $state.go('openlmis.' + 'prepacking'+ '.details', {
-                id: item.id,
-                // programId: item.programId,
+                programId: item.programId,
                 program:  vm.programs.find(item => item.name === item.programId),
-                // facility: facility
+                facility: facility
             });
         }
     }
