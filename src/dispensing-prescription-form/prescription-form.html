@@ -1,0 +1,129 @@
+<h2>{{'dispensingPrescriptionForm.title' | message}}</h2>
+
+<form class="sidebar">
+
+    <fieldset class="form-group">
+        <label for="PrescriptionNumber">Follow up date</label>
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+    </fieldset>
+    <fieldset class="form-group">
+        <label for="firstName">Created date</label>
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+    </fieldset>
+    <fieldset class="form-group">
+        <legend>Patient type</legend>
+        <label class="radio">
+            <input type="radio" ng-model="vm.Prescription.sex"
+                ng-value="true" required/>
+            In Patient
+        </label>
+        <label class="radio">
+            <input type="radio" ng-model="vm.Prescription.sex"
+                ng-value="false" required/>
+            Out Patient
+        </label>
+    </fieldset>
+    <fieldset class="form-group">
+        <label for="nationalID">Issue date</label>
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+    </fieldset>
+    <!-- <fieldset class="form-group">
+        <label for="lastName">Last updated</label>
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+    </fieldset>
+    <fieldset class="form-group">
+        <label for="nickName">Captured date</label>
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+    </fieldset> -->
+    <fieldset class="form-group">
+        <label>
+            <input type="checkbox" ng-model="vm.Prescription.allowNotify"/>
+            Voided
+        </label>
+    </fieldset>
+</form>
+
+<section id="newPrescriptionForm">
+    <fieldset class="openlmis-table-container">
+        Status : <input class="form-control" type="text" disabled>
+        <section class="is-primary">
+            <form class="form-inline" name="productForm">
+                <button type="button" ng-click="vm.addContact()" class="add">Add item</button>
+            </form>
+        </section>
+        <table>
+            <thead>
+                <tr>
+                    <th>Prescribed Product</th>
+                    <th>Substitude Product</th>
+                    <th>Dosage</th>
+                    <th>Period</th>
+                    <th>Batch</th>
+                    <th>Quantity Prescribed</th>
+                    <th>Quantity Dispensed</th>
+                    <th>Served Internally</th>
+                    <th>Comments</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="contact in vm.contacts">
+                    <td>
+                        <label for="contactType">Select Product:</label>
+                        <select id="contactType" name="contactType">
+                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <option ng-model="contact.phone" value="phone">Panado</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="contactType">Select Product:</label>
+                        <select id="contactType" name="contactType">
+                            <option ng-model="contact.phon" value="phone"> </option>
+                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <option ng-model="contact.phone" value="phone">Panado</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                    </td>
+                    <td>
+                        <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                    </td>
+                    <td>
+                        <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                    </td>
+                    <td>
+                        <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                    </td>
+                    <td>
+                        <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" ng-model="vm.Prescription.allowNotify"/>
+                    </td>
+                    <td>
+                        <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                    </td>
+                    <td>
+                        <button type="button" class="danger" ng-click="removeContact($index)">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</section>
+
+<div class="openlmis-toolbar">
+    <button ui-sref="^">{{'dispensingPrescriptionForm.cancel' | message}}</button>
+    <div class="button-group primary">
+        <button class="primary" form="newPrescriptionForm" type="submit">{{(vm.updateMode ? 'dispensingPrescriptionForm.updatePrescription' : 'dispensingPrescriptionForm.createPrescription') | message}}</button>
+        <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{ 'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button>
+    </div>
+</div>
