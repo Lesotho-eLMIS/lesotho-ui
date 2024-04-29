@@ -27,11 +27,10 @@
       .module('prepacking-view')
       .controller('prepackingViewController', controller);
   
-    controller.$inject = ['facility', 'user', 'programs', 'prepackingService', 'Prepacks', 'facilityService', '$state'];
+    controller.$inject = ['facility', 'user', 'programs', 'Prepacks', 'facilityService', '$state'];
 
-    function controller(facility, user, programs, prepackingService, Prepacks, facilityService, $state){
+    function controller(facility, user, programs, Prepacks, facilityService, $state){
         var vm = this;
-       // vm.facility = undefined;
 
         vm.onInit = onInit;
         vm.prepackLineItems = [];
@@ -48,31 +47,26 @@
         }
         onInit();
 
-        //Returns the Name of the facility
-       function getFacilityName(facilityId) {
-            return facilityService.get(facilityId)
-                .then(function(facilityObject) {
-                    var facilityName = facilityObject.name;
-                    return facilityName ;
-                })
-                .catch(function(error) {
-                    // Handle any errors that may occur during the query
-                    console.error("Error:", error);
-                    return ""; // Or handle the error appropriately
-                });
-        };
+        async function getFacilityName(facilityId) {
+            try {
+                const facilityObject = await facilityService.get(facilityId);
+                return facilityObject;
+            } catch (error) {
+                console.error("Error:", error);
+                return ""; // Or handle the error appropriately
+            }
+        }
 
        function getProgramName(programId){
             let program = vm.programs.find(item => item.id === programId);
             return program.name;
-        }
-   
+        }   
 
-        function formatPrepacks() {
+        async function formatPrepacks() {
             for (let key in vm.prepackLineItems) {
                 if (vm.prepackLineItems.hasOwnProperty(key)) {
                     const pack = vm.prepackLineItems[key];                   
-                    pack.facilityId = getFacilityName('cf3a1192-abe6-44db-98a9-9167e2d24511')//getFacilityName(pack.facilityId);
+                    pack.facility = await getFacilityName('cf3a1192-abe6-44db-98a9-9167e2d24511');//getFacilityName(pack.facilityId);
                     pack.programId = getProgramName('bab14d97-1f33-4e10-b589-46b8f0a74477');//getProgramName(pack.programId);
                     console.log(pack);                    
                 }
@@ -80,11 +74,11 @@
         }
 
         vm.prepackDetails = function(item){
-            $state.go('openlmis.' + 'prepacking'+ '.details', {
+            console.log(item);
+            $state.go('openlmis.prepacking.details', {
                 id: item.id,
-                // programId: item.programId,
-                program:  vm.programs.find(item => item.name === item.programId),
-                // facility: facility
+                programId: item.programId,
+                facilityId: item.facility.id
             });
         }
     }

@@ -18,7 +18,7 @@
             <caption ng-if="!vm.prepackLineItems.length">Display Available Prepacks here</caption>
             <tr ng-repeat="item in vm.prepackLineItems">
                 <td>{{item.programId}}</td>
-                <td>{{item.facilityId}}</td>
+                <td>{{item.facility.name}}</td>
                 <td>{{item.dateCreated | openlmisDate}}</td>
                 <td>{{item.status}}</td>
                 <td>{{item.userId}}</td>

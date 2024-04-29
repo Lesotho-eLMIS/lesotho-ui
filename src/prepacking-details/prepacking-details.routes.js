@@ -28,7 +28,7 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
       
         $stateProvider.state('openlmis.prepacking.details', {
             isOffline: true,
-            url: '/details/:id', // To include prepack id 
+            url: '/details/:facilityId?programId?id', // To include prepack id 
             templateUrl: 'prepacking-details/prepacking-details.html',
             controller: 'prepackingDetailsController',
             controllerAs: 'vm',
@@ -59,9 +59,6 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                 user: function(authorizationService) {
                     return authorizationService.getUser();
                 },
-                // detailedUser: function(authorizationService) {
-                //     return authorizationService.getUser();
-                // },
                 programs: function(user, stockProgramUtilService) {
                     
                     var programs =  stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);

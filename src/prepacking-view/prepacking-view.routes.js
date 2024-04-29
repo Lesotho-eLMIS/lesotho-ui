@@ -47,17 +47,11 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                 user: function(authorizationService) {
                     return authorizationService.getUser();
                 },
-                // detailedUser: function(authorizationService) {
-                //     return authorizationService.getUser();
-                // },
                 programs: function(user, stockProgramUtilService) {
                     var programs =  stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
-                    console.log(programs);
                     return programs;
                 },
-                Prepacks: function(facility, programs, prepackingService ) {
-                    // return prepackingService.getPrepacks(facility.id, programs[0].id);
-                   
+                Prepacks: function(facility, programs, prepackingService ) {                   
                    return prepackingService.getPrepacks('3499a089-55b2-45b7-a065-1df2d27d888c', 'bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8' );
                 }
             }           
