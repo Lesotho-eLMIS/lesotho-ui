@@ -69,8 +69,9 @@
 
         vm.addPatientForm = function(){
             console.log("Go...");
-            // $state.go('openlmis.dispensing.add.patient.form');
-            $state.go('openlmis.dispensing.add.patient.form', {});
+            //$state.go('openlmis.stockmanagement.prepack');
+            //$state.go('openlmis.dispensing.patientsform');
+            $state.go('openlmis.dispensing.patients.form');
         }
 
 

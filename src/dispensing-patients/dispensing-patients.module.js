@@ -35,10 +35,8 @@
         'referencedata-user',
         'openlmis-urls',
         'openlmis-modal',
-        'dispensing-add-patient-form',
         'dispensing',
         'referencedata-user',
-        'ui.router',
         'admin-user-form'
     ]);
 
