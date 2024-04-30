@@ -43,6 +43,8 @@
             vm.user = user;
             vm.programs = programs;
             vm.prepackLineItems = Prepacks;
+
+            console.log(vm.prepackLineItems)
             formatPrepacks();
         }
         onInit();
@@ -68,7 +70,7 @@
                     const pack = vm.prepackLineItems[key];                   
                     pack.facility = await getFacilityName('cf3a1192-abe6-44db-98a9-9167e2d24511');//getFacilityName(pack.facilityId);
                     pack.programId = getProgramName('bab14d97-1f33-4e10-b589-46b8f0a74477');//getProgramName(pack.programId);
-                    console.log(pack);                    
+                   // console.log(pack);                    
                 }
             }
         }
