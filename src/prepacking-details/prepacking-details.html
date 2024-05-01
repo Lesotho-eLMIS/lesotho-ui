@@ -16,7 +16,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in vm.prepackLineItems.lineItems">
+                <tr ng-repeat="item in vm.prepackLineItems">
+                    <td>{{item.orderableId}}</td>
+                    <td>{{item.orderableId}}</td>
+                    <td>{{item.orderableId}}</td>
+                    <td>{{item.orderableId}}</td>
+                    <td>{{item.orderableId}}</td>
+                    <td>{{item.prepackSize}}</td>
+                    <td>{{item.numberOfPrepacks}}</td>
+                    <td>{{item.orderableId}}</td>
                     <td>{{item.orderableId}}</td>
                     <td></td>
                 </tr>
@@ -26,5 +34,5 @@
     </section>
 
 
-<ng-include src="'stock-adjustment-creation/adjustment-creation-toolbar.html'"></ng-include>
+<ng-include src="'prepacking-details/prepacking-details-toolbar.html'"></ng-include>
 

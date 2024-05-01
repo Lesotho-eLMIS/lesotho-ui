@@ -42,8 +42,14 @@
             vm.user = user;
             vm.programs = programs;
             console.log(prepack);
+            vm.prepackLineItems = prepack.lineItems;
+            console.log(vm.prepackLineItems);
         }
 
         onInit();
+
+        function getLineItemsDetails(){
+            
+        }
     }
 })()
