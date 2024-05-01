@@ -65,13 +65,8 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                     console.log(programs);
                     return programs;
                 },
-                prepack: function($stateParams, prepackingService, programs) {
-                    let program = programs.find(item => item.name === $stateParams.programId);
-                    var prepacks = prepackingService.getPrepacks($stateParams.facilityId, program.id);
-                    
-                    console.log(prepacks);
-
-                    return "Coming";
+                prepacks: function($stateParams, prepackingService, facility) {
+                    return prepackingService.getPrepacks(facility.id, $stateParams.programId);
                 }
              
             }

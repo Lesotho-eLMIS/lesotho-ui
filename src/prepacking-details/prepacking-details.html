@@ -1,1 +1,30 @@
-<h2>Prepacking Details</h2>
+<h2>Facility Prepack Details - Program</h2>
+
+<section class="openlmis-table-container">
+    <table suppress-tr-openlmis-invalid>
+        <thead>
+                <tr>
+                    <th>Product Code</th>
+                    <th>Product</th>
+                    <th>Batch Number</th>
+                    <th>Expiry Date</th>
+                    <th>Stock on Hand</th>
+                    <th>Prepack Size</th>
+                    <th>Number of Prepacks</th>
+                    <th>Remaining Stock</th>
+                    <th>Date Authorised</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in vm.prepackLineItems.lineItems">
+                    <td>{{item.orderableId}}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <openlmis-pagination list="vm.lineItems" paged-list="vm.lineItems"/>
+    </section>
+
+
+<ng-include src="'stock-adjustment-creation/adjustment-creation-toolbar.html'"></ng-include>
+

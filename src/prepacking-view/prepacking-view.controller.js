@@ -33,7 +33,7 @@
         var vm = this;
 
         vm.onInit = onInit;
-        vm.prepackLineItems = [];
+        vm.prepackDetails = [];
         vm.formatPrepacks = formatPrepacks;
         vm.getFacilityName = getFacilityName;
         vm.getProgramName = getProgramName;
@@ -42,9 +42,9 @@
             vm.facility = facility;            
             vm.user = user;
             vm.programs = programs;
-            vm.prepackLineItems = Prepacks;
+            vm.prepackDetails = Prepacks;
 
-            console.log(vm.prepackLineItems)
+            console.log(vm.prepackDetails)
             formatPrepacks();
         }
         onInit();
@@ -65,9 +65,9 @@
         }   
 
         async function formatPrepacks() {
-            for (let key in vm.prepackLineItems) {
+            for (let key in vm.prepackDetails) {
                 if (vm.prepackLineItems.hasOwnProperty(key)) {
-                    const pack = vm.prepackLineItems[key];                   
+                    const pack =vm.prepackDetails[key];                   
                     pack.facility = await getFacilityName('cf3a1192-abe6-44db-98a9-9167e2d24511');//getFacilityName(pack.facilityId);
                     pack.programId = getProgramName('bab14d97-1f33-4e10-b589-46b8f0a74477');//getProgramName(pack.programId);
                    // console.log(pack);                    
@@ -75,12 +75,12 @@
             }
         }
 
-        vm.prepackDetails = function(item){
+        vm.getPrepackLineItems = function(item){
             console.log(item);
             $state.go('openlmis.prepacking.details', {
                 id: item.id,
                 programId: item.programId,
-                facilityId: item.facility.id
+                facilityId: item.facilityId
             });
         }
     }

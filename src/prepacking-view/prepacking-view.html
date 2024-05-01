@@ -16,13 +16,13 @@
         </thead>
         <tbody>  
             <caption ng-if="!vm.prepackLineItems.length">Display Available Prepacks here</caption>
-            <tr ng-repeat="item in vm.prepackLineItems">
+            <tr ng-repeat="item in vm.prepackDetails">
                 <td>{{item.programId}}</td>
                 <td>{{item.facility.name}}</td>
                 <td>{{item.dateCreated | openlmisDate}}</td>
                 <td>{{item.status}}</td>
                 <td>{{item.userId}}</td>
-                <td><button class="btn btn-primary" ng-click="vm.prepackDetails(item)">{{'prepackingView.view'| message}}</button> </td>
+                <td><button class="btn btn-primary" ng-click="vm.getPrepackLineItems(item)">{{'prepackingView.view'| message}}</button> </td>
             </tr>
         </tbody>
     </table>

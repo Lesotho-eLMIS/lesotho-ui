@@ -27,26 +27,25 @@
       .module('prepacking-details')
       .controller('prepackingDetailsController', prepackingDetailsController);
   
-      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepackingService', 'facilityService','$stateParams','$state'];
+      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepacks'];
 
-    function prepackingDetailsController(facility, user, programs, prepackingService, facilityService,$stateParams, $state){
+    function prepackingDetailsController(facility, user, programs,  prepacks){
         var vm = this;
        // vm.facility = undefined;
 
         vm.onInit = onInit;
         vm.prepackLineItems = [];
-       // vm.formatPrepacks = formatPrepacks;
-       // vm.getFacilityName = getFacilityName;
-       // vm.getProgramName = getProgramName;
+        //vm.getLineItems = getLineItems;
         
         function onInit(){
             vm.facility = facility;            
             vm.user = user;
             vm.programs = programs;
-            console.log($stateParams);
-           // vm.prepackLineItems = Prepacks;
+            console.log(prepacks);
+            vm.prepackLineItems = prepacks;
            // formatPrepacks();
         }
+
         onInit();
     }
 })()
