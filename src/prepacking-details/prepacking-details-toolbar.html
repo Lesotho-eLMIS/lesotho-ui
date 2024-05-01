@@ -1,13 +1,13 @@
 <div class="openlmis-toolbar">
   <div class="button-group">
     <button class="danger" ng-disabled="!vm.prepackLineItems.length" ng-click="vm.removeDisplayItems()">
-      Clear
+      {{'prepackingDetails.clear'|message}}
     </button>
   </div>
   <button class="primary" ng-class="{'is-offline':vm.offline()}" ng-disabled="!vm.prepackLineItems.length" ng-click="vm.submit()">
-    Authorise
+    {{'prepackingDetails.authorise'|message}}
   </button>
   <button class="primary" ng-class="{'is-offline':vm.offline()}" ng-disabled="!vm.prepackLineItems.length" ng-click="vm.submit()">
-    Cancel
+    {{'prepackingDetails.cancel'|message}}
   </button>
 </div>

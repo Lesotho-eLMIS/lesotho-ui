@@ -62,11 +62,15 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                 programs: function(user, stockProgramUtilService) {
                     
                     var programs =  stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
-                    console.log(programs);
                     return programs;
                 },
-                prepack: function($stateParams, prepackingService, facility) {
+                prepack: function($stateParams, prepackingService) {
                     return prepackingService.getPrepack($stateParams.id);
+                },
+                products: function($stateParams, orderableGroupService){
+                    console.log($stateParams);
+                        return orderableGroupService
+                            .findAvailableProductsAndCreateOrderableGroups($stateParams.programId, $stateParams.facilityId, false);
                 }
              
             }

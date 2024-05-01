@@ -4,33 +4,30 @@
     <table suppress-tr-openlmis-invalid>
         <thead>
                 <tr>
-                    <th>Product Code</th>
-                    <th>Product</th>
-                    <th>Batch Number</th>
-                    <th>Expiry Date</th>
-                    <th>Stock on Hand</th>
-                    <th>Prepack Size</th>
-                    <th>Number of Prepacks</th>
-                    <th>Remaining Stock</th>
-                    <th>Date Authorised</th>                    
+                    <th>{{'prepackingDetails.productCode'|message}}</th>
+                    <th>{{'prepackingDetails.product'|message}}</th>
+                    <th>{{'prepackingDetails.batchNumber'|message}}</th>
+                    <th>{{'prepackingDetails.expiryDate'|message}}</th>
+                    <th>{{'prepackingDetails.soh'|message}}</th>
+                    <th>{{'prepackingDetails.prepackSize'|message}}</th>
+                    <th>{{'prepackingDetails.numberOfPrepacks'|message}}</th>
+                    <th>{{'prepackingDetails.remainingStock'|message}}</th>                   
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in vm.prepackLineItems">
-                    <td>{{item.orderableId}}</td>
-                    <td>{{item.orderableId}}</td>
-                    <td>{{item.orderableId}}</td>
-                    <td>{{item.orderableId}}</td>
-                    <td>{{item.orderableId}}</td>
+                <tr ng-repeat="item in vm.prepackedProducts">
+                    <td>{{item.productCode}}</td>
+                    <td>{{item.productName}}</td>
+                    <td>{{item.batchNumber}}</td>
+                    <td>{{item.expiryDate | openlmisDate}}</td>
+                    <td>{{item.soh}}</td>
                     <td>{{item.prepackSize}}</td>
                     <td>{{item.numberOfPrepacks}}</td>
-                    <td>{{item.orderableId}}</td>
-                    <td>{{item.orderableId}}</td>
-                    <td></td>
+                    <td>Compute</td>
                 </tr>
             </tbody>
         </table>
-        <openlmis-pagination list="vm.lineItems" paged-list="vm.lineItems"/>
+        <openlmis-pagination list="vm.prepackLineItems" paged-list="vm.prepackLineItems"/>
     </section>
 
 

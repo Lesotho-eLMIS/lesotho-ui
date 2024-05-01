@@ -42,9 +42,7 @@
             vm.facility = facility;            
             vm.user = user;
             vm.programs = programs;
-            vm.prepackDetails = Prepacks;
-
-            console.log(vm.prepackDetails)
+            vm.prepackDetails = Prepacks;            
             formatPrepacks();
         }
         onInit();
@@ -52,7 +50,7 @@
         async function getFacilityName(facilityId) {
             try {
                 const facilityObject = await facilityService.get(facilityId);
-                return facilityObject;
+                return facilityObject.name;
             } catch (error) {
                 console.error("Error:", error);
                 return ""; // Or handle the error appropriately
@@ -66,21 +64,19 @@
 
         async function formatPrepacks() {
             for (let key in vm.prepackDetails) {
-                if (vm.prepackLineItems.hasOwnProperty(key)) {
-                    const pack =vm.prepackDetails[key];                   
-                    pack.facility = await getFacilityName('cf3a1192-abe6-44db-98a9-9167e2d24511');//getFacilityName(pack.facilityId);
-                    pack.programId = getProgramName('bab14d97-1f33-4e10-b589-46b8f0a74477');//getProgramName(pack.programId);
-                   // console.log(pack);                    
+                if (vm.prepackDetails.hasOwnProperty(key)) {
+                    const pack =vm.prepackDetails[key];                  
+                    pack.facilityName = await getFacilityName(pack.facilityId);
+                    pack.programName = getProgramName(pack.programId);                   
                 }
             }
         }
 
         vm.getPrepackLineItems = function(item){
-            console.log(item);
             $state.go('openlmis.prepacking.details', {
-                id: item.id
-                //programId: item.programId,
-                //facilityId: item.facilityId
+                id: item.id,
+                programId: item.programId,
+                facilityId: item.facilityId
             });
         }
     }

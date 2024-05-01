@@ -27,15 +27,15 @@
       .module('prepacking-details')
       .controller('prepackingDetailsController', prepackingDetailsController);
   
-      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepack'];
+      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepack', 'products'];
 
-    function prepackingDetailsController(facility, user, programs,  prepack){
+    function prepackingDetailsController(facility, user, programs,  prepack, products){
         var vm = this;
-       // vm.facility = undefined;
 
         vm.onInit = onInit;
         vm.prepackLineItems = [];
-        //vm.getLineItems = getLineItems;
+        vm.getLineItemsDetails = getLineItemsDetails;
+        vm.filterProductByLot = filterProductByLot;
         
         function onInit(){
             vm.facility = facility;            
@@ -43,13 +43,42 @@
             vm.programs = programs;
             console.log(prepack);
             vm.prepackLineItems = prepack.lineItems;
-            console.log(vm.prepackLineItems);
+            vm.productInfo = products;
+            vm.prepackedProducts = getLineItemsDetails();
         }
 
         onInit();
 
         function getLineItemsDetails(){
-            
+
+            var productsArray = _.flatten(vm.productInfo);            
+            var haslots = undefined;
+            vm.prepackLineItems.forEach(item => {
+                
+                item.lotId === null ? haslots = true: haslots = false;              
+                var productDetails = filterProductByLot(productsArray, haslots).find(lineItem => ((lineItem.orderable.id === item.orderableId
+                            && lineItem.lot.id === item.lotId))); 
+                item.productName = productDetails.orderable.fullProductName;
+                item.productCode = productDetails.orderable.productCode;
+                item.batchNumber = productDetails.lot.lotCode;
+                item.expiryDate = productDetails.lot.expirationDate;
+                item.soh = productDetails.stockOnHand;
+            });             
+            return(vm.prepackLineItems);  
         }
+
+        function filterProductByLot (productsList, lotIsNull){
+
+            if(!lotIsNull)
+            {
+                return productsList.filter(item => !(item.lot === null));
+            }
+            else{
+                return productsList.filter(item => item.lot === null);
+            }
+        }
+
+        
+
     }
 })()
