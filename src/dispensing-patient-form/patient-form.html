@@ -38,14 +38,16 @@
         <label>{{'dispensingPatientForm.dateOfBirth' | message}}</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
-            <label>
-                <input type="checkbox" ng-model="vm.patient.allowNotify"/>
-                {{'dispensingPatientForm.DOBestimated' | message}}
-            </label>
+    </fieldset>
+    <fieldset class="form-group">
+        <label for="radio">
+            <input type="checkbox" ng-model="vm.patient.allowNotify"/>
+            <label>{{'dispensingPatientForm.DOBestimated' | message}}</label>
+        </label>
     </fieldset>
 </form>
 
-<section id="newPatientForm">
+<form id="newPatientForm">
     <fieldset class="form-group">
         <label for="physicalAddress">{{'dispensingPatientForm.physicalAddress' | message}}</label>
         <input id="physicalAddress" ng-model="vm.patient.physicalAddress" type="text"/>
@@ -64,9 +66,9 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <label>
-            <input type="checkbox" ng-model="vm.patient.allowNotify"/>
-            {{'dispensingPatientForm.deceased' | message}}
+        <label for="radio">
+            <input type="checkbox" ng-model="vm.patient.allowNotify2"/>
+            <label>{{'dispensingPatientForm.deceased' | message}}</label>
         </label>
     </fieldset>
     <fieldset class="openlmis-table-container">
@@ -102,7 +104,7 @@
             </tbody>
         </table>
     </fieldset>
-</section>
+</form>
 
 <div class="openlmis-toolbar">
     <button ui-sref="^">{{'dispensingPatientForm.cancel' | message}}</button>

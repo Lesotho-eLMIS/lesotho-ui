@@ -3,6 +3,10 @@
 <form class="sidebar">
 
     <fieldset class="form-group">
+        <label for="lastName">Status</label>
+        <input class="form-control" type="text" disabled>
+    </fieldset>
+    <fieldset class="form-group">
         <label for="PrescriptionNumber">Follow up date</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
@@ -26,31 +30,25 @@
         </label>
     </fieldset>
     <fieldset class="form-group">
-        <label for="nationalID">Issue date</label>
+        <label for="nationalID">Dispensing date</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
     </fieldset>
     <!-- <fieldset class="form-group">
-        <label for="lastName">Last updated</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
-            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
-    </fieldset>
-    <fieldset class="form-group">
         <label for="nickName">Captured date</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
     </fieldset> -->
-    <fieldset class="form-group">
+    <!-- <fieldset class="form-group">
         <label>
             <input type="checkbox" ng-model="vm.Prescription.allowNotify"/>
             Voided
         </label>
-    </fieldset>
+    </fieldset> -->
 </form>
 
 <section id="newPrescriptionForm">
     <fieldset class="openlmis-table-container">
-        Status : <input class="form-control" type="text" disabled>
         <section class="is-primary">
             <form class="form-inline" name="productForm">
                 <button type="button" ng-click="vm.addContact()" class="add">Add item</button>
@@ -60,7 +58,7 @@
             <thead>
                 <tr>
                     <th>Prescribed Product</th>
-                    <th>Substitude Product</th>
+                    <th>Substitute Product</th>
                     <th>Dosage</th>
                     <th>Period</th>
                     <th>Batch</th>
