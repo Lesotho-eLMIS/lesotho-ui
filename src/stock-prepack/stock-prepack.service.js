@@ -48,7 +48,12 @@
                 updatePrepackingEvent: {
                     url: openlmisUrlFactory('/api/prepackingEvents/:id'),
                     method: 'PUT'
-                }            
+                },
+                getPrepackingEvent: {
+                    url: openlmisUrlFactory('/api/prepackingEvents/:id'),
+                    method: 'GET'
+                }
+
         });
 
         this.updatePrepacks = updatePrepacks;
@@ -99,22 +104,7 @@
         };
 
         function getPrepack(prepackId) {
-            var params = {
-                prepackId: prepackId 
-                };
-            return resource.get(params).$promise.then(function(response) {
-                // Transforming the response to an object if it's an array
-                    if (Array.isArray(response)) {
-                                    
-                        var objectOfPrepacks = response.reduce((result, obj) => {
-                        result[obj.id] = obj;
-                       
-                        return result;
-                        }, {});                        
-                        return objectOfPrepacks;                         
-                    }
-               return response; 
-             });
+            return resource.getPrepackingEvent({ id: prepackId }).$promise;         
         };
 
         function savePrepacks(params) {

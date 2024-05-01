@@ -27,9 +27,9 @@
       .module('prepacking-details')
       .controller('prepackingDetailsController', prepackingDetailsController);
   
-      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepacks'];
+      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepack'];
 
-    function prepackingDetailsController(facility, user, programs,  prepacks){
+    function prepackingDetailsController(facility, user, programs,  prepack){
         var vm = this;
        // vm.facility = undefined;
 
@@ -41,9 +41,7 @@
             vm.facility = facility;            
             vm.user = user;
             vm.programs = programs;
-            console.log(prepacks);
-            vm.prepackLineItems = prepacks;
-           // formatPrepacks();
+            console.log(prepack);
         }
 
         onInit();

@@ -78,9 +78,9 @@
         vm.getPrepackLineItems = function(item){
             console.log(item);
             $state.go('openlmis.prepacking.details', {
-                id: item.id,
-                programId: item.programId,
-                facilityId: item.facilityId
+                id: item.id
+                //programId: item.programId,
+                //facilityId: item.facilityId
             });
         }
     }
