@@ -45,7 +45,6 @@
             vm.user = user;
             vm.prepack = prepack;
             vm.programs = programs;
-            console.log(prepack);
             vm.prepackLineItems = prepack.lineItems;
             vm.productInfo = products;
             vm.prepackedProducts = getLineItemsDetails();

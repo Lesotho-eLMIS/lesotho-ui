@@ -52,9 +52,12 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                     var programs =  stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
                     return programs;
                 },
-                Prepacks: function(facility, prepackingService ) {      
-       
-                   return prepackingService.getPrepacks(facility.id);
+                Prepacks: function(facility, programs, prepackingService ) {      
+                   // Make this dynamic         
+                   return prepackingService.getPrepacks(facility.id, 'bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8')//'3499a089-55b2-45b7-a065-1df2d27d888c', 'bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8' );
+                },
+                prepackStage: function() {
+                    return 'view';
                 }
             }           
       

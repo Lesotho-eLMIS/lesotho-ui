@@ -27,9 +27,9 @@
       .module('prepacking-view')
       .controller('prepackingViewController', controller);
   
-    controller.$inject = ['facility', 'user', 'programs', 'Prepacks', 'facilityService', '$state'];
+    controller.$inject = ['facility', 'user', 'programs', 'Prepacks', 'facilityService', '$state', 'prepackStage'];
 
-    function controller(facility, user, programs, Prepacks, facilityService, $state){
+    function controller(facility, user, programs, Prepacks, facilityService, $state, prepackStage){
         var vm = this;
 
         vm.onInit = onInit;
@@ -37,12 +37,13 @@
         vm.formatPrepacks = formatPrepacks;
         vm.getFacilityName = getFacilityName;
         vm.getProgramName = getProgramName;
+        vm.filterPrepacksForAuthorisation = filterPrepacksForAuthorisation;
         
         function onInit(){
             vm.facility = facility;            
             vm.user = user;
             vm.programs = programs;
-            vm.prepackDetails = Prepacks;            
+            vm.prepackDetails = (prepackStage === "authorise") ? vm.filterPrepacksForAuthorisation(Prepacks) : Prepacks;            
             formatPrepacks();
         }
         onInit();
@@ -79,5 +80,16 @@
                 facilityId: item.facilityId
             });
         }
+
+        function filterPrepacksForAuthorisation (prepacksObj) {
+            const prepacks = Object.values(prepacksObj);
+            // Filter out authorised and cancelled prepacking Jobs.
+            var filteredPrepacks =  prepacks.filter(prepack => (prepack.status === "Initiated") || (prepack.status === "Edited") ); 
+            const prepacksObject = {};
+            filteredPrepacks.forEach(prepack => {
+            prepacksObject[prepack.id] = prepack;
+            });
+            return prepacksObject;
+            }
     }
 })()
