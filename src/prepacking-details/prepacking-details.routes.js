@@ -68,7 +68,6 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                     return prepackingService.getPrepack($stateParams.id);
                 },
                 products: function($stateParams, orderableGroupService){
-                    console.log($stateParams);
                         return orderableGroupService
                             .findAvailableProductsAndCreateOrderableGroups($stateParams.programId, $stateParams.facilityId, false);
                 }

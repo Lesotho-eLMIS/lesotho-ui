@@ -65,10 +65,9 @@
             return resource.updatePrepackingEvent({ id:id }, prepackingEvent).$promise;
         };
 
-        function getPrepacks(facilityId, programId) {
+        function getPrepacks(facilityId) {
             var params = {
-                facilityId: facilityId, //"3499a089-55b2-45b7-a065-1df2d27d888c",
-                programId: programId//"bc5cdc9a-ab05-4f59-8329-b92fcb7eb0c8" 
+                facilityId: facilityId
                 };
             return resource.get(params).$promise.then(function(response) {
                 // Transforming the response to an object if it's an array

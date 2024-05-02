@@ -38,6 +38,7 @@
         vm.filterProductByLot = filterProductByLot;
         vm.authorisePrepack = authorisePrepack;
         vm.prepack = undefined;
+        vm.calculateRemainingStock = calculateRemainingStock;
         
         function onInit(){
             vm.facility = facility;            
@@ -79,7 +80,6 @@
             var productsArray = _.flatten(vm.productInfo);            
             var haslots = undefined;
             vm.prepackLineItems.forEach(item => {
-                
                 item.lotId === null ? haslots = true: haslots = false;              
                 var productDetails = filterProductByLot(productsArray, haslots).find(lineItem => ((lineItem.orderable.id === item.orderableId
                             && lineItem.lot.id === item.lotId))); 
@@ -88,7 +88,8 @@
                 item.batchNumber = productDetails.lot.lotCode;
                 item.expiryDate = productDetails.lot.expirationDate;
                 item.soh = productDetails.stockOnHand;
-            });             
+                item.remainingStock = calculateRemainingStock(productsArray, haslots, item);
+            });         
             return(vm.prepackLineItems);  
         }
 
@@ -104,6 +105,11 @@
         }
 
         
-
+        function calculateRemainingStock(productsList, lotIsNull, lineItem){   
+            var productType = filterProductByLot(productsList, lotIsNull).find(product => ((product.orderable.id === lineItem.orderableId
+                && product.lot.id === lineItem.lotId)));  
+                return lineItem.remainingStock = productType.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+            
+          }
     }
 })()
