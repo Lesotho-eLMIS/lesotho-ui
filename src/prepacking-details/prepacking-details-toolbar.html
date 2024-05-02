@@ -4,7 +4,7 @@
       {{'prepackingDetails.clear'|message}}
     </button>
   </div>
-  <button class="primary" ng-class="{'is-offline':vm.offline()}" ng-disabled="!vm.prepackLineItems.length" ng-click="vm.submit()">
+  <button class="primary" ng-class="{'is-offline':vm.offline()}"  ng-click="vm.authorisePrepack()">
     {{'prepackingDetails.authorise'|message}}
   </button>
   <button class="primary" ng-class="{'is-offline':vm.offline()}" ng-disabled="!vm.prepackLineItems.length" ng-click="vm.submit()">

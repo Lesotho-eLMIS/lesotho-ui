@@ -27,19 +27,22 @@
       .module('prepacking-details')
       .controller('prepackingDetailsController', prepackingDetailsController);
   
-      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepack', 'products'];
+      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepack', 'products','$state', 'prepackingService', 'notificationService', 'confirmService', 'messageService'];
 
-    function prepackingDetailsController(facility, user, programs,  prepack, products){
+    function prepackingDetailsController(facility, user, programs,  prepack, products, $state, prepackingService,notificationService, confirmService, messageService){
         var vm = this;
 
         vm.onInit = onInit;
         vm.prepackLineItems = [];
         vm.getLineItemsDetails = getLineItemsDetails;
         vm.filterProductByLot = filterProductByLot;
+        vm.authorisePrepack = authorisePrepack;
+        vm.prepack = undefined;
         
         function onInit(){
             vm.facility = facility;            
             vm.user = user;
+            vm.prepack = prepack;
             vm.programs = programs;
             console.log(prepack);
             vm.prepackLineItems = prepack.lineItems;
@@ -48,6 +51,28 @@
         }
 
         onInit();
+
+        function authorisePrepack() {
+            vm.prepack.status = "Authorised";
+            confirmService
+                .confirm("Are you sure you want to authorise this prepacking job?", "Authorise")
+                .then(function () {
+                   prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
+                  .then(function(response) {
+                    // Success callback
+                    notificationService.success('Prepacking job authorised.');
+                    $state.go('openlmis.prepacking.view');
+                    }
+                  )
+                  .catch(function(error) {
+                      // Error callback
+                      notificationService.error('Failed to Authorise.');
+                      console.error('Error occurred:', error);
+                  
+                  });
+                });
+    
+        }
 
         function getLineItemsDetails(){
 
