@@ -1,4 +1,4 @@
-<div class="openlmis-toolbar">
+<div class="openlmis-toolbar" ng-hide='vm.prepack.status === "Authorised" || vm.prepack.status === "Cancelled"' >
   <div class="button-group">
     <button class="danger" ng-disabled="!vm.prepackLineItems.length" ng-click="vm.removeDisplayItems()">
       {{'prepackingDetails.clear'|message}}
