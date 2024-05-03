@@ -27,65 +27,69 @@
       .module('prepacking-view')
       .controller('prepackingViewController', controller);
   
-    controller.$inject = ['facility', 'user', 'programs', 'prepackingService', 'Prepacks', 'facilityService', '$state'];
+    controller.$inject = ['facility', 'user', 'programs', 'Prepacks', 'facilityService', '$state', 'prepackStage'];
 
-    function controller(facility, user, programs, prepackingService, Prepacks, facilityService, $state){
+    function controller(facility, user, programs, Prepacks, facilityService, $state, prepackStage){
         var vm = this;
-       // vm.facility = undefined;
 
         vm.onInit = onInit;
-        vm.prepackLineItems = [];
+        vm.prepackDetails = [];
         vm.formatPrepacks = formatPrepacks;
         vm.getFacilityName = getFacilityName;
         vm.getProgramName = getProgramName;
+        vm.filterPrepacksForAuthorisation = filterPrepacksForAuthorisation;
         
         function onInit(){
             vm.facility = facility;            
             vm.user = user;
             vm.programs = programs;
-            vm.prepackLineItems = Prepacks;
+            vm.prepackDetails = (prepackStage === "authorise") ? vm.filterPrepacksForAuthorisation(Prepacks) : Prepacks;            
             formatPrepacks();
         }
         onInit();
 
-        //Returns the Name of the facility
-       function getFacilityName(facilityId) {
-            return facilityService.get(facilityId)
-                .then(function(facilityObject) {
-                    var facilityName = facilityObject.name;
-                    return facilityName ;
-                })
-                .catch(function(error) {
-                    // Handle any errors that may occur during the query
-                    console.error("Error:", error);
-                    return ""; // Or handle the error appropriately
-                });
-        };
+        async function getFacilityName(facilityId) {
+            try {
+                const facilityObject = await facilityService.get(facilityId);
+                return facilityObject.name;
+            } catch (error) {
+                console.error("Error:", error);
+                return ""; // Or handle the error appropriately
+            }
+        }
 
        function getProgramName(programId){
             let program = vm.programs.find(item => item.id === programId);
             return program.name;
-        }
-   
+        }   
 
-        function formatPrepacks() {
-            for (let key in vm.prepackLineItems) {
-                if (vm.prepackLineItems.hasOwnProperty(key)) {
-                    const pack = vm.prepackLineItems[key];                   
-                    pack.facilityId = getFacilityName('cf3a1192-abe6-44db-98a9-9167e2d24511')//getFacilityName(pack.facilityId);
-                    pack.programId = getProgramName('bab14d97-1f33-4e10-b589-46b8f0a74477');//getProgramName(pack.programId);
-                    console.log(pack);                    
+        async function formatPrepacks() {
+            for (let key in vm.prepackDetails) {
+                if (vm.prepackDetails.hasOwnProperty(key)) {
+                    const pack =vm.prepackDetails[key];                  
+                    pack.facilityName = await getFacilityName(pack.facilityId);
+                    pack.programName = getProgramName(pack.programId);                   
                 }
             }
         }
 
-        vm.prepackDetails = function(item){
-            $state.go('openlmis.' + 'prepacking'+ '.details', {
+        vm.getPrepackLineItems = function(item){
+            $state.go('openlmis.prepacking.details', {
                 id: item.id,
-                // programId: item.programId,
-                program:  vm.programs.find(item => item.name === item.programId),
-                // facility: facility
+                programId: item.programId,
+                facilityId: item.facilityId
             });
         }
+
+        function filterPrepacksForAuthorisation (prepacksObj) {
+            const prepacks = Object.values(prepacksObj);
+            // Filter out authorised and cancelled prepacking Jobs.
+            var filteredPrepacks =  prepacks.filter(prepack => (prepack.status === "Initiated") || (prepack.status === "Edited") ); 
+            const prepacksObject = {};
+            filteredPrepacks.forEach(prepack => {
+            prepacksObject[prepack.id] = prepack;
+            });
+            return prepacksObject;
+            }
     }
 })()

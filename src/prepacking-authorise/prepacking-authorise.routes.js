@@ -22,43 +22,43 @@
         .config(routes);
 
 
-routes.$inject = ['$stateProvider'];
+routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
 
-    function routes($stateProvider) {
+    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
       
         $stateProvider.state('openlmis.prepacking.authorise', {
             isOffline: true,
-            url: '/Manage',
-            templateUrl: 'prepacking-authorise/prepacking-authorise.html',
+            url: '/authorise',
+            templateUrl: 'prepacking-view/prepacking-view.html',
             label: 'prepackingAuthorise.title',
             priority: 2,
             showInNavigation: true,
-            controller: 'prepackingAuthoriseController',
+            controller: 'prepackingViewController',
             controllerAs: 'vm',
             resolve: {
-                facilities: function(facilityService) {
-                    var paginationParams = {};
-                      
-                    var queryParams = {
-                        "type":"warehouse"
-                      };
-                      return facilityService.query(paginationParams, queryParams)
-                      .then(function(result) {
-                          return result.content; // Return Facilities of Type = Warehouse
-                      })
-                      .catch(function(error) {
-                          // Handle any errors that may occur during the query
-                          console.error("Error:", error);
-                          return [];
-                      });                    
-                    },
                 facility: function($stateParams, facilityFactory) {
                     // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
+                },
+                user: function(authorizationService) {
+                    return authorizationService.getUser();
+                },
+                programs: function(user, stockProgramUtilService) {
+                    var programs =  stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
+                    return programs;
+                },
+                Prepacks: function(facility, programs, prepackingService ) {              
+                    
+                    
+                    return prepackingService.getPrepacks(facility.id);
+                },
+                prepackStage: function() {
+                    return 'authorise';
                 }
+                
              
             }
         });

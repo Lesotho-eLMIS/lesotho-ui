@@ -27,65 +27,109 @@
       .module('prepacking-details')
       .controller('prepackingDetailsController', prepackingDetailsController);
   
-      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepackingService', 'facilityService','$stateParams','$state'];
+      prepackingDetailsController.$inject = ['facility', 'user', 'programs', 'prepack', 'products','$state', 'prepackingService', 'notificationService', 'confirmService', 'messageService'];
 
-    function prepackingDetailsController(facility, user, programs, prepackingService, facilityService,$stateParams, $state){
+    function prepackingDetailsController(facility, user, programs,  prepack, products, $state, prepackingService,notificationService, confirmService, messageService){
         var vm = this;
-       // vm.facility = undefined;
 
         vm.onInit = onInit;
         vm.prepackLineItems = [];
-        vm.formatPrepacks = formatPrepacks;
-        vm.getFacilityName = getFacilityName;
-        vm.getProgramName = getProgramName;
+        vm.getLineItemsDetails = getLineItemsDetails;
+        vm.filterProductByLot = filterProductByLot;
+        vm.changePrepackStatus = changePrepackStatus;  
+        vm.prepack = undefined;
+        vm.calculateRemainingStock = calculateRemainingStock;
         
         function onInit(){
             vm.facility = facility;            
             vm.user = user;
+            vm.prepack = prepack;
             vm.programs = programs;
-            console.log($stateParams.id);
-           // vm.prepackLineItems = Prepacks;
-           // formatPrepacks();
+            vm.prepackLineItems = prepack.lineItems;
+            vm.productInfo = products;
+            vm.prepackedProducts = getLineItemsDetails();
         }
+
         onInit();
+        function changePrepackStatus(newStatus) {
+            vm.prepack.status = newStatus;
+           
+            var buttonContext = "";
+            var questionContext = "";
+            var successMsgContext = "";
 
-        //Returns the Name of the facility
-       function getFacilityName(facilityId) {
-            return facilityService.get(facilityId)
-                .then(function(facilityObject) {
-                    var facilityName = facilityObject.name;
-                    return facilityName ;
-                })
-                .catch(function(error) {
-                    // Handle any errors that may occur during the query
-                    console.error("Error:", error);
-                    return ""; // Or handle the error appropriately
+            if(newStatus === "Authorised"){
+                buttonContext = "Authorise";
+                questionContext = "authorise";
+                successMsgContext = "authorised"
+            }else if(newStatus === "Cancelled"){
+                buttonContext = "Cancel";
+                questionContext = "cancel";
+                successMsgContext = "cancelled"
+            }else if(newStatus === "Rejected"){
+                buttonContext = "Reject";
+                questionContext = "reject";
+                successMsgContext = "rejected"
+            }
+            else{
+                notificationService.error('Unknown Prepack Status Detected.');
+                console.error("Unknown Prepack Status Detected");
+            }
+            confirmService
+                .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
+                .then(function () {
+                   prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
+                  .then(function(response) {
+                    // Success callback
+                    notificationService.success('Prepacking job '+successMsgContext+'.');
+                    $state.go('openlmis.prepacking.view');
+                    }
+                  )
+                  .catch(function(error) {
+                      // Error callback
+                      notificationService.error('Failed to '+questionContext+'.');
+                      console.error('Error occurred:', error);
+                  
+                  });
                 });
-        };
-
-       function getProgramName(programId){
-            let program = vm.programs.find(item => item.id === programId);
-            return program.name;
+    
         }
-   
 
-        function formatPrepacks() {
-            for (let key in vm.prepackLineItems) {
-                if (vm.prepackLineItems.hasOwnProperty(key)) {
-                    const pack = vm.prepackLineItems[key];                   
-                    pack.facilityId = getFacilityName('cf3a1192-abe6-44db-98a9-9167e2d24511')//getFacilityName(pack.facilityId);
-                    pack.programId = getProgramName('bab14d97-1f33-4e10-b589-46b8f0a74477');//getProgramName(pack.programId);
-                    console.log(pack);                    
-                }
+        function getLineItemsDetails(){
+
+            var productsArray = _.flatten(vm.productInfo);            
+            var haslots = undefined;
+            vm.prepackLineItems.forEach(item => {
+                item.lotId === null ? haslots = true: haslots = false;              
+                var productDetails = filterProductByLot(productsArray, haslots).find(lineItem => ((lineItem.orderable.id === item.orderableId
+                            && lineItem.lot.id === item.lotId))); 
+                item.productName = productDetails.orderable.fullProductName;
+                item.productCode = productDetails.orderable.productCode;
+                item.batchNumber = productDetails.lot.lotCode;
+                item.expiryDate = productDetails.lot.expirationDate;
+                item.soh = productDetails.stockOnHand;
+                item.remainingStock = calculateRemainingStock(productsArray, haslots, item);
+            });         
+            return(vm.prepackLineItems);  
+        }
+
+        function filterProductByLot (productsList, lotIsNull){
+
+            if(!lotIsNull)
+            {
+                return productsList.filter(item => !(item.lot === null));
+            }
+            else{
+                return productsList.filter(item => item.lot === null);
             }
         }
 
-        vm.prepackDetails = function(item){
-            $state.go('openlmis.' + 'prepacking'+ '.details', {
-                programId: item.programId,
-                program:  vm.programs.find(item => item.name === item.programId),
-                facility: facility
-            });
-        }
+        
+        function calculateRemainingStock(productsList, lotIsNull, lineItem){   
+            var productType = filterProductByLot(productsList, lotIsNull).find(product => ((product.orderable.id === lineItem.orderableId
+                && product.lot.id === lineItem.lotId)));  
+                return lineItem.remainingStock = productType.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+            
+          }
     }
 })()

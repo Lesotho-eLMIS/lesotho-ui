@@ -1,27 +1,14 @@
 {
   "pointOfDeliveryView.deliveriesAt": "View Deliveries at ${facility}",
-  "pointOfDeliveryView.facility": "Supplying Facility",
-  "pointOfDeliveryView.label": "View",
-
-  "pointOfDeliveryView.numberOfCartons": "Number of Cartons",  
-  "pointOfDeliveryView.numberOfContainers": "Number of Containers",
-
-  "pointOfDeliveryView.cartons":"Cartons",
-  "pointOfDeliveryView.containers":"Containers",
-
-  "pointOfDeliveryView.quantityShipped": "Quantity Shipped",
-  "pointOfDeliveryView.quantityOnWayBill": "Waybill Quantity",
-  "pointOfDeliveryView.quantityAccepted":"Accepted Quantity",
-  "pointOfDeliveryView.quantityRejected":"Rejected Quantity",
-
-  "pointOfDeliveryView.packedBy": "Packed By",
-  "pointOfDeliveryView.packingDate": "Packing Date",  
-  "pointOfDeliveryView.receivedBy": "Received By",
-  "pointOfDeliveryView.receivedDate": "Receiving Date",
-  "pointOfDeliveryView.referenceNo": "Reference Number",
-  "pointOfDeliveryView.remarks": "Remarks",
-  "pointOfDeliveryView.submit": "Submit",
-  "pointOfDeliveryView.title": "View Deliveries",
-  "pointOfDeliveryView.discrepancies": "Discrepancies",
-  "pointOfDeliveryView.noDiscrepancies": " No Discrepancies"
+  "prepackingDetails.cancel": "Cancel",
+  "prepackingDetails.clear": "Clear",
+  "prepackingDetails.authorise": "Authorise",
+  "prepackingDetails.productCode": "Product Code",
+  "prepackingDetails.product": "Product",
+  "prepackingDetails.batchNumber": "Batch Number",
+  "prepackingDetails.expiryDate": "Expiry Date",
+  "prepackingDetails.soh": "Stock on Hand",
+  "prepackingDetails.prepackSize": "Prepack Size",
+  "prepackingDetails.numberOfPrepacks": "Number of Prepacks",
+  "prepackingDetails.remainingStock": "Remaining Stock"
 }
