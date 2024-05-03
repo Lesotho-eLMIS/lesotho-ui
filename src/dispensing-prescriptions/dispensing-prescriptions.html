@@ -35,7 +35,7 @@
   </form> -->
   <section class="is-primary">
     <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
-        <button type="submit" class="add">Add Prescription</button>
+        <button type="button" ui-sref="openlmis.dispensing.patients.form" class="add">Add Patient</button>
     </form>
   </section>
   <table>
@@ -74,6 +74,27 @@
         </button>
       </td>
     </tr>
+
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>
+        <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">
+          Add prescription
+        </button>
+        <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form">
+          View prescription
+        </button>
+      </td>
+    </tr>
+
     </tbody>
   </table>
   <openlmis-pagination/>

@@ -1,9 +1,9 @@
 <!--<h2>{{ 'dispensingPatients.title' | message }}</h2>-->
-<h2 ng-if="vm.orderingFacility">{{'orderFulfillment.fulfillOrdersAt' | message: {'facility':  vm.orderingFacility.name} }}</h2>
+<h2 ng-if="vm.orderingFacility">{{'dispensingPatients.fulfillOrdersAt' | message: {'facility':  vm.orderingFacility.name} }}</h2>
 <h2 ng-if="!vm.orderingFacility">Patients</h2>
 
 <form class="sidebar">
-  <label for="orderingFacility">Patient Number</label>
+  <label for="orderingFacility">{{'dispensingPatients.patientNumber' | message}}</label>
   <input class="form-control" type="text" style="width: 150px;">
   <label>Last Name</label>
   <input class="form-control" type="text" style="width: 150px;">
@@ -16,35 +16,19 @@
     ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
   <label>Contact Number</label>
   <input class="form-control" value="+266 " type="text" style="width: 150px;">
-  <input type="submit" class="btn btn-primary" value="{{'orderFulfillment.search' | message}}"/>
+  <input type="submit" class="btn btn-primary" value="{{'dispensingPatients.search' | message}}"/>
 
 </form>
 
 <section class="openlmis-table-container">
   <openlmis-sort options="vm.options"/>
-  <!-- <form ng-submit="vm.loadOrders()" >
-    <label for="orderingFacility">Patient Number</label>
-    <input class="form-control" type="text" style="width: 150px;">
-    <label>Last Name</label>
-    <input class="form-control" type="text" style="width: 150px;">
-    <label>First Name</label>
-    <input class="form-control" type="text" style="width: 150px;">
-    <label>Nation ID Number</label>
-    <input class="form-control" type="text" style="width: 150px;">
-    <label>Date of Birth</label>
-    <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
-      ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
-    <label>Contact Number</label>
-    <input class="form-control" value="+266 " type="text" style="width: 150px;">
-    <input type="submit" class="btn btn-primary" value="{{'orderFulfillment.search' | message}}"/>
-  </form> -->
   <section class="is-primary">
-    <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
-        <button type="submit" class="add">Add Patient</button>
+    <form class="form-inline" name="productForm"> <!-- ng-submit="vm.addProduct()"-->
+        <button type="button" ng-click="vm.addPatientForm()" class="add">Add Patient</button> <!--ui-sref="openlmis.dispensing.add.patient.form"-->
     </form>
   </section>
   <table>
-    <caption ng-if="!vm.orders.length">{{'orderFulfillment.noOrdersFound' | message}}</caption>
+    <caption ng-if="!vm.orders.length">{{'dispensingPatients.noOrdersFound' | message}}</caption>
     <thead>
     <tr>
       <th>Patient Number</th>
@@ -53,8 +37,8 @@
       <th>Nation ID Number</th>
       <th>Date of Birth</th>
       <th>Contact Number</th>
-      <th>{{'orderFulfillment.createdDate' | message}}</th>
-      <th class="col-sticky sticky-right">{{'orderFulfillment.actions' | message}}</th>
+      <th>{{'dispensingPatients.createdDate' | message}}</th>
+      <th class="col-sticky sticky-right">{{'dispensingPatients.actions' | message}}</th>
     </tr>
     </thead>
     <tbody>
@@ -70,10 +54,10 @@
       <td>{{order.createdDate | openlmisDate}}</td>
       <td>
         <button ng-if="order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
-          {{'orderFulfillment.continueFulfillment' | message}}
+          {{'dispensingPatients.continueFulfillment' | message}}
         </button>
         <button ng-if="!order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
-          {{'orderFulfillment.startFulfillment' | message}}
+          {{'dispensingPatients.startFulfillment' | message}}
         </button>
       </td>
     </tr>
