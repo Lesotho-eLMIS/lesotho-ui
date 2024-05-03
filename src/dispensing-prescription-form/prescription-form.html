@@ -51,7 +51,7 @@
     <fieldset class="openlmis-table-container">
         <section class="is-primary">
             <form class="form-inline" name="productForm">
-                <button type="button" ng-click="vm.addContact()" class="add">Add item</button>
+                <button type="button" ng-click="vm.addContact()" class="add">Add Product</button>
             </form>
         </section>
         <table>
@@ -59,9 +59,17 @@
                 <tr>
                     <th>Prescribed Product</th>
                     <th>Substitute Product</th>
-                    <th>Dosage</th>
-                    <th>Period</th>
-                    <th>Batch</th>
+                    <th>Batch Number</th>
+                    <th>Dose</th>
+
+                    <th>Dose Units</th>
+                    <th>Frequency</th>
+                    <th>Route</th>
+                    <th>Duration</th>
+                    <th>Duration Units</th>
+                    <th>Instructions</th>
+
+                    
                     <th>Quantity Prescribed</th>
                     <th>Quantity Dispensed</th>
                     <th>Served Internally</th>
@@ -80,7 +88,7 @@
                         </select>
                     </td>
                     <td>
-                        <label for="contactType">Select Product:</label>
+                        <label for="contactType">Select Substitute Product:</label>
                         <select id="contactType" name="contactType">
                             <option ng-model="contact.phon" value="phone"> </option>
                             <option ng-model="contact.email" value="email">Abacavier</option>
@@ -94,8 +102,55 @@
                     <td>
                         <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
                     </td>
+
+                    <td>
+                        <label for="contactType">Select Units:</label>
+                        <select id="contactType" name="contactType">
+                            <option ng-model="contact.phon" value="phone"> </option>
+                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <option ng-model="contact.phone" value="phone">Panado</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="contactType">Select Frequency:</label>
+                        <select id="contactType" name="contactType">
+                            <option ng-model="contact.phon" value="phone"> </option>
+                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <option ng-model="contact.phone" value="phone">Panado</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="contactType">Select Route:</label>
+                        <select id="contactType" name="contactType">
+                            <option ng-model="contact.phon" value="phone"> </option>
+                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <option ng-model="contact.phone" value="phone">Panado</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                        </select>
+                    </td>
                     <td>
                         <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                    </td>
+                    <td>
+                        <label for="contactType">Select Duration Units:</label>
+                        <select id="contactType" name="contactType">
+                            <option ng-model="contact.phon" value="phone"> </option>
+                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <option ng-model="contact.phone" value="phone">Panado</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <label for="contactType">Select Instructions:</label>
+                        <select id="contactType" name="contactType">
+                            <option ng-model="contact.phon" value="phone"> </option>
+                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <option ng-model="contact.phone" value="phone">Panado</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                        </select>
                     </td>
                     <td>
                         <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
