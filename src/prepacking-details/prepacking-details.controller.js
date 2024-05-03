@@ -36,7 +36,7 @@
         vm.prepackLineItems = [];
         vm.getLineItemsDetails = getLineItemsDetails;
         vm.filterProductByLot = filterProductByLot;
-        vm.authorisePrepack = authorisePrepack;
+        vm.changePrepackStatus = changePrepackStatus;  
         vm.prepack = undefined;
         vm.calculateRemainingStock = calculateRemainingStock;
         
@@ -51,22 +51,43 @@
         }
 
         onInit();
+        function changePrepackStatus(newStatus) {
+            vm.prepack.status = newStatus;
+           
+            var buttonContext = "";
+            var questionContext = "";
+            var successMsgContext = "";
 
-        function authorisePrepack() {
-            vm.prepack.status = "Authorised";
+            if(newStatus === "Authorised"){
+                buttonContext = "Authorise";
+                questionContext = "authorise";
+                successMsgContext = "authorised"
+            }else if(newStatus === "Cancelled"){
+                buttonContext = "Cancel";
+                questionContext = "cancel";
+                successMsgContext = "cancelled"
+            }else if(newStatus === "Rejected"){
+                buttonContext = "Reject";
+                questionContext = "reject";
+                successMsgContext = "rejected"
+            }
+            else{
+                notificationService.error('Unknown Prepack Status Detected.');
+                console.error("Unknown Prepack Status Detected");
+            }
             confirmService
-                .confirm("Are you sure you want to authorise this prepacking job?", "Authorise")
+                .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
                 .then(function () {
                    prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
                   .then(function(response) {
                     // Success callback
-                    notificationService.success('Prepacking job authorised.');
+                    notificationService.success('Prepacking job '+successMsgContext+'.');
                     $state.go('openlmis.prepacking.view');
                     }
                   )
                   .catch(function(error) {
                       // Error callback
-                      notificationService.error('Failed to Authorise.');
+                      notificationService.error('Failed to '+questionContext+'.');
                       console.error('Error occurred:', error);
                   
                   });
