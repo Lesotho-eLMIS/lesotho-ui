@@ -28,16 +28,18 @@
         .module('dispensing-patient-form')
         .controller('patientFormController', controller);
 
-    controller.$inject = ['$filter', '$state'];
+    controller.$inject = ['dispensingService', '$scope', 'facility'];
 
-    function controller($filter, $state) {
+    function controller(dispensingService, $scope, facility) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.contacts = []; 
+        vm.patient = {};
         vm.addContact = addContact;
         vm.removeContact = removeContact;
+       // vm.submitPatientData = submitPatientData;
 
         /**
          * @ngdoc method
@@ -48,6 +50,8 @@
          * Initialization method of the PatientFormModalController.
          */
         function onInit() {
+
+            vm.contactOptions = ["email", "phone"];
 
             console.log("...In init...")
         }
@@ -62,11 +66,13 @@
          *
          */
         function addContact() {
-            console.log("Add line item...");
-            vm.contacts.push({
-                'phone': '',
-                'email': ''
-            });  
+            console.log("Add line item..."); 
+                vm.contacts.push({
+                    contactType: '',
+                    contactValue: ''
+                }); 
+           // }
+             
         }
 
         // removing discrepancies from table
@@ -74,6 +80,13 @@
             console.log("Remove...");
             console.log(index);
             vm.contacts.splice(index, 1);
+        }
+
+        vm.submitPatientData = function(){
+            
+            var patientInfo = vm.patient;
+            patientInfo.homeFacility = facility.id;
+            dispensingService.submitPatientInfo(patientInfo);
         }
     }
 })();

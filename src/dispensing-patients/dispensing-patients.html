@@ -1,19 +1,19 @@
 <h2>{{'dispensingPatients.patients.label' | message}}</h2>
-<section class="openlmis-table-container"></section>
-<form class="sidebar">
+
+<form class="sidebar" ng-submit="vm.searchPatients()">
   <label for="orderingFacility">{{'dispensingPatients.patientNumber' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.patientNumber">
   <label for="lastName">{{'dispensingPatients.lastName' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.lastName">
   <label for="firstName">{{'dispensingPatients.firstName' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.firstName">
   <label for="nationalidNumber">{{'dispensingPatients.nationalidNumber' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.nationalId">
   <label for="dateofBirth">{{'dispensingPatients.dateofBirth' | message}}</label>
-  <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
-    ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+  <input id="dateOfBirth" type="date" style="width: 90px;" ng-model="vm.patientParams.dateOfBirth"
+   max-date="vm.maxDate" inputmode="none"/>
   <label for="contactNumber">{{'dispensingPatients.contactNumber' | message}}</label>
-  <input class="form-control" value="+266 " type="text" style="width: 150px;">
+  <input class="form-control" value="+266 " type="text" style="width: 150px;" ng-model="vm.patientParams.contactNumber">
   <input type="submit" class="btn btn-primary" value="{{'dispensingPatients.search' | message}}"/>
   
 </form>
@@ -42,12 +42,20 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="patient in vm.patients">
-            <td>{{patient.firstName}} {{patient.lastName}}</td>
-            <td>{{patient.nationalidNumber}}</td>
-            <td>{{patient.contactNumber}}</td>
-        </tr>
-    </tbody>
+    <tr ng-repeat="patient in vm.patientsData">
+      
+      <td>{{patient.patientNumber}}</td>
+      <td>{{patient.personDto.lastName}}</td>
+      <td>{{patient.personDto.firstName}}</td>
+      <td>{{patient.personDto.nationalId}}</td>
+      <td>{{patient.personDto.dateOfBirth}}</td>
+      <td>{{patient.personDto.contacts[0].contactValue}}</td>
+      <td>{{patient.registrationDate | openlmisDate}}</td>
+      <td>
+        <button>{{'dispensingPatients.startFulfillment' | message}}</button>
+      </td>
+    </tr>
+  </tbody>
 </table>
 <openlmis-pagination/>
 </section>
