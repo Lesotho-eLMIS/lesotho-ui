@@ -2,20 +2,20 @@
 <h2 ng-if="vm.orderingFacility">{{'dispensingPatients.fulfillOrdersAt' | message: {'facility':  vm.orderingFacility.name} }}</h2>
 <h2 ng-if="!vm.orderingFacility">Patients</h2>
 
-<form class="sidebar">
+<form class="sidebar" ng-submit="vm.searchPatients()">
   <label for="orderingFacility">{{'dispensingPatients.patientNumber' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.patientNumber">
   <label>Last Name</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.lastName">
   <label>First Name</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.firstName">
   <label>Nation ID Number</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.nationalId">
   <label>Date of Birth</label>
-  <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
-    ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
+  <input id="dateOfBirth" type="date" style="width: 90px;" ng-model="vm.patientParams.dateOfBirth"
+   max-date="vm.maxDate" inputmode="none"/>
   <label>Contact Number</label>
-  <input class="form-control" value="+266 " type="text" style="width: 150px;">
+  <input class="form-control" value="+266 " type="text" style="width: 150px;" ng-model="vm.patientParams.contactNumber">
   <input type="submit" class="btn btn-primary" value="{{'dispensingPatients.search' | message}}"/>
 
 </form>
@@ -42,16 +42,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="order in vm.orders">
-      <td class="col-emergency">
-        <i ng-class="{'icon-ok': order.emergency}"></i>
-      </td>
-      <td>{{order.orderCode}}</td>
-      <td>{{order.status}}</td>
-      <td>{{order.facility | facility}}</td>
-      <td>{{order.program.name}}</td>
-      <td>{{order.processingPeriod.name}}</td>
-      <td>{{order.createdDate | openlmisDate}}</td>
+    <tr ng-repeat="patient in vm.patientsData">
+      
+      <td>{{patient.patientNumber}}</td>
+      <td>{{patient.personDto.lastName}}</td>
+      <td>{{patient.personDto.firstName}}</td>
+      <td>{{patient.personDto.nationalId}}</td>
+      <td>{{patient.personDto.dateOfBirth}}</td>
+      <td>{{patient.personDto.contacts[0].contactValue}}</td>
+      <td>{{patient.registrationDate | openlmisDate}}</td>
       <td>
         <button ng-if="order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
           {{'dispensingPatients.continueFulfillment' | message}}

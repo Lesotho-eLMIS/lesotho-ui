@@ -34,6 +34,12 @@
                 // patient: function(patientService, $stateParams) {
                 //     return new patientService().get($stateParams.id);
                 // }
+                facility: function(facilityFactory, $stateParams) {
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
+                }
             },
             views: {
                 '@openlmis': {
