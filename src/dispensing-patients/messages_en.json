@@ -11,6 +11,7 @@
   "dispensingPatients.view": "View",
   "dispensingPatients.nationalidNumber": "National Id Number",
   "dispensingPatients.edit": "Edit",
+  "dispensingPatients.addPrescription": "Add Prescription",
   "dispensingPatients.patients.error": "There are no matches for patient.",
   "dispensingPatients.dateofBirth": "Date of Birth",
   "dispensingPatients.contactNumber": "Contact Number"

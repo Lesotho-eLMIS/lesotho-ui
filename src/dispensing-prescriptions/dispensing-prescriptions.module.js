@@ -32,7 +32,7 @@
         'stockmanagement',
         'openlmis-repository',
         'openlmis-class-extender',
-        'referencedata-user',
+        // 'referencedata-user',
         'openlmis-urls',
         'pod-add-discrepancy-modal',
         'openlmis-modal'

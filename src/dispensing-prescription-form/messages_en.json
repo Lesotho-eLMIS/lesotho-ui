@@ -17,6 +17,14 @@
     "dispensingPrescriptionForm.comments": "Comments",
     "dispensingPrescriptionForm.action": "Action",
 
+    "dispensingPrescriptionForm.status": "Status",
+    "dispensingPrescriptionForm.followupDate": "Follow up date",
+    "dispensingPrescriptionForm.createdDate": "Created date",
+    "dispensingPrescriptionForm.patientType": "Patient type",
+    "dispensingPrescriptionForm.inPatient": "In Patient",
+    "dispensingPrescriptionForm.outPatient": "Out Patient",
+    "dispensingPrescriptionForm.dispensingDate": "Dispensing date",
+
     "dispensingPrescriptionForm.addprescription": "Add prescription",
     "dispensingPrescriptionForm.prescriptionNumber": "Prescription Number",
     "dispensingPrescriptionForm.nationalID": "National ID",
