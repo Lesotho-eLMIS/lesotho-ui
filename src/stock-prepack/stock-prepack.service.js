@@ -60,6 +60,10 @@
         this.getPrepacks = getPrepacks;
         this.getPrepack = getPrepack;
         this.savePrepacks = savePrepacks;
+        this.validatePrepackQuantity = validatePrepackQuantity;
+        this.filterProductByLot = filterProductByLot;
+        this.calculateRemainingStock = calculateRemainingStock;
+        this.prepackCalculation = prepackCalculation;
 
         function updatePrepacks(id,prepackingEvent) {
             return resource.updatePrepackingEvent({ id:id }, prepackingEvent).$promise;
@@ -91,6 +95,125 @@
         function savePrepacks(params) {
             return resource.postPrepackingEvent(params);
         };
-             
+
+
+        function  validatePrepackQuantity(lineItem, prepackLineItems){
+            let remainingStock = calculateRemainingStock(prepackLineItems, lineItem);
+            if(remainingStock <= 0){
+            lineItem.$errors.prepackQuantityInvalid = messageService.get(
+                'stockPrepackCreation.validatePrepackQuantity');
+            }
+            else{
+            lineItem.$errors.prepackQuantityInvalid = false;
+            }
+            console.log(prepackLineItems);
+            return remainingStock;
+        };
+
+        // Takes all the prepack line items and returns only those with product id and lot id same as the those of the current line item
+        function filterProductByLot (productsList, lineItem){
+
+            var hasLots = undefined;
+            lineItem.lot === null ? hasLots = false: hasLots = true;
+            console.log(hasLots);
+
+            console.log("PRODUCT LIST");
+            console.log(productsList);
+
+            console.log("Line Item");
+            console.log(lineItem);
+
+            if(lineItem.prepackingEventId){
+                if(!hasLots)
+                    {
+                        console.log(hasLots);
+                        return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderableId);
+                    }
+                    else{
+                        console.log(hasLots);
+                        return productsList.filter(item => !(item.lot === null) && item.lot.id=== lineItem.lotId
+                                            && item.orderable.id === lineItem.orderableId);
+                    }
+            }
+            else{
+                if(!hasLots)
+                    {
+                        console.log(hasLots);
+                        return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderable.id);
+                    }
+                    else{
+                        console.log(hasLots);
+                        return productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lot.id
+                                            && item.orderable.id === lineItem.orderable.id);
+                    }
+            }         
+        };
+        
+        //Calculates the remaining stock after a prepack of the lineItems' product type and lot has been created
+        function calculateRemainingStock(productsList, lineItem){  
+            
+            //find line items with the same lot id and product id
+            var productType = filterProductByLot(productsList, lineItem);
+
+            console.log("PRODUCT LIST");
+            console.log(productType);
+
+            if(productsList.length === 1){
+                return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+            }
+            else{
+                    let total = 0;
+                    productType.forEach(product => {
+                        let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+                        total += quantityToPrepack;
+                    });
+                    productType.forEach( item => item.remainingStock = item.stockOnHand - total);
+                    return total;
+                }               
+        };
+        
+        function prepackCalculation(productsList, lineItem){
+            var hasLots = undefined;
+            lineItem.lot === null ? hasLots = false: hasLots = true;
+            var productType = undefined;
+            var remaining = undefined;
+            console.log(productsList);
+            if(!hasLots){
+                console.log(hasLots);
+                productType =productsList.filter(item => (item.lot === null) && item.orderableId=== lineItem.orderableId);
+                console.log(productType);
+            }
+            else{
+                console.log(hasLots);
+                productType = productsList.filter(item => !(item.lot === null) && item.lotId=== lineItem.lotId
+                    && item.orderableId === lineItem.orderableId);
+                    console.log(productType);
+            }
+
+            if(productType.length === 1){
+                   // return lineItem.remainingStock = 
+                remaining = lineItem.soh - (lineItem.prepackSize*lineItem.numberOfPrepacks); 
+                console.log(lineItem.soh );
+                console.log(lineItem.prepackSize);
+                console.log(lineItem.numberOfPrepacks); 
+                return remaining;
+                    //return remaining = productType.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+            }
+            else{
+                let total = 0;
+                        
+                productType.forEach(product => {
+                    let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+                    total += quantityToPrepack;
+                });
+                console.log("TOTAL " + total);
+                remaining = lineItem.soh - total;
+                return remaining;
+                        //productType.forEach( item => item.remainingStock = item.stockOnHand - total);
+                       // return lineItem.remainingStock = lineItem.soh - total;
+                        //return remaining;
+                } 
+        }
+        
     }
 })();

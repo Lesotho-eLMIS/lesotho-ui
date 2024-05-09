@@ -35,10 +35,10 @@
         vm.onInit = onInit;
         vm.prepackLineItems = [];
         vm.getLineItemsDetails = getLineItemsDetails;
-        vm.filterProductByLot = filterProductByLot;
+      //  vm.filterProductByLot = filterProductByLot;
         vm.changePrepackStatus = changePrepackStatus;  
         vm.prepack = undefined;
-        vm.calculateRemainingStock = calculateRemainingStock;
+      //  vm.calculateRemainingStock = calculateRemainingStock;
         
         function onInit(){
             vm.facility = facility;            
@@ -98,38 +98,27 @@
         function getLineItemsDetails(){
 
             var productsArray = _.flatten(vm.productInfo);            
-            var haslots = undefined;
+          //  var haslots = undefined;
+            console.log("PREPACK LINE ITEMS");
+            console.log(vm.prepackLineItems);
+            console.log("PRODUCT ITEMS");
+            console.log(productsArray);
             vm.prepackLineItems.forEach(item => {
-                item.lotId === null ? haslots = true: haslots = false;              
-                var productDetails = filterProductByLot(productsArray, haslots).find(lineItem => ((lineItem.orderable.id === item.orderableId
-                            && lineItem.lot.id === item.lotId))); 
-                item.productName = productDetails.orderable.fullProductName;
-                item.productCode = productDetails.orderable.productCode;
-                item.batchNumber = productDetails.lot.lotCode;
-                item.expiryDate = productDetails.lot.expirationDate;
-                item.soh = productDetails.stockOnHand;
-                item.remainingStock = calculateRemainingStock(productsArray, haslots, item);
+                //item.lotId === null ? haslots = true: haslots = false;              
+                var productDetails = prepackingService.filterProductByLot(productsArray, item);
+                // .find(lineItem => ((lineItem.orderable.id === item.orderableId
+                //             && lineItem.lot.id === item.lotId))); 
+                console.log("GET LINE ITEMS");
+                console.log(productDetails);
+                item.productName = productDetails[0].orderable.fullProductName;
+                item.productCode = productDetails[0].orderable.productCode;
+                item.batchNumber = productDetails[0].lot.lotCode;
+                item.expiryDate = productDetails[0].lot.expirationDate;
+                item.soh = productDetails[0].stockOnHand;
+                item.remainingStock = prepackingService.prepackCalculation(vm.prepackLineItems, item);
             });         
             return(vm.prepackLineItems);  
         }
 
-        function filterProductByLot (productsList, lotIsNull){
-
-            if(!lotIsNull)
-            {
-                return productsList.filter(item => !(item.lot === null));
-            }
-            else{
-                return productsList.filter(item => item.lot === null);
-            }
-        }
-
-        
-        function calculateRemainingStock(productsList, lotIsNull, lineItem){   
-            var productType = filterProductByLot(productsList, lotIsNull).find(product => ((product.orderable.id === lineItem.orderableId
-                && product.lot.id === lineItem.lotId)));  
-                return lineItem.remainingStock = productType.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
-            
-          }
     }
 })()
