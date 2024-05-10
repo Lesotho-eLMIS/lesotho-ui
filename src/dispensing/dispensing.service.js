@@ -28,52 +28,43 @@
         .module('requisition-search')
         .service('dispensingService', dispensingService);
 
-        dispensingService.$inject = ['$resource','openlmisUrlFactory','pointOfDeliveryManageResource', 'openlmisModalService'];
+        dispensingService.$inject = ['$resource','openlmisUrlFactory', 'notificationService', 'confirmService',];
 
-    function dispensingService($resource,openlmisUrlFactory, pointOfDeliveryManageResource, openlmisModalService ) {
+    function dispensingService($resource,openlmisUrlFactory, notificationService, confirmService ) {
 
         var promise,
             POD_FACILITIES = 'dispensingPatientsFacilities';
            // Using Resource to Communicate with dispensing Endpoints
 
-            var resource = $resource(openlmisUrlFactory('/api/podEvents:id'), {}, {
+            var resource = $resource(openlmisUrlFactory('/api/patient:id'), {}, {
                 get: {
-                    url: openlmisUrlFactory('/api/podEvents'),
+                    url: openlmisUrlFactory('/api/patient'),
                     method: 'GET',
                     isArray: true
                 }, 
-                savePODEvent: {
-                    url: openlmisUrlFactory('/api/podEvents'),
+                postPatientEvent: {
+                    url: openlmisUrlFactory('/api/patient'),
                     method: 'POST'
-                }             
+                },
+                updatePatientEvent: {
+                    url: openlmisUrlFactory('/api/patient:id'),
+                    method: 'PUT'
+                }, 
+                search: {
+                    url: openlmisUrlFactory('/api/patient'),
+                    method: 'GET'
+                },            
             });
  
-        this.submitPodManage = submitPodManage; // To post data POD Manage payload
-        this.getPODs = getPODs; //To retrieve PODs from the database
-        this.show = show;
-        this.getDiscrepancies = getDiscrepancies; // To retrieve the compiled discrepancies
-        this.addDiscrepancies = addDiscrepancies; // To compile the list of discrepancies
-        this.clearDiscrepancies = clearDiscrepancies;
-        this.showViewModal = showViewModal;
-
-        var discrepancyList = [];
-
-        function getDiscrepancies() {
-            return discrepancyList;
-        }
-
-        function addDiscrepancies (discrepancies) {
-                discrepancyList.push(discrepancies);
-        }
-        function clearDiscrepancies() {
-                discrepancyList = [];
-        }
-       
+        this.submitPatientInfo = submitPatientInfo; // To post data POD Manage payload
+        this.getPatients = getPatients; //To retrieve PODs from the database
+        
+        var patients = [];     
 
         /**
          * @ngdoc method
          * @methodOf point-of-delivery.pointOfDeliveryService
-         * @name getPODs
+         * @name getPatients
          *
          * @description
          * Retrieves POD records from the server.
@@ -81,82 +72,70 @@
          * @param  {String}     Facility UUID
          * @return {Promise}    POD promise
          */
-        function getPODs(receivingFacilityId){
-            var params = {
-                         destinationId: receivingFacilityId 
-                         }
-            return resource.get(params).$promise.then(function(response) {
-                    // Transforming the response to an object if it's an array
-                if (Array.isArray(response)) {
-                                  
-                    var objectOfPODs = response.reduce((result, obj) => {
-                    result[obj.id] = obj;
-                    return result;
-                }, {});                          
-                return objectOfPODs;                         
-                }
-            return response; 
-            });
-        }
-    
-        function submitPodManage(payloadData){
-            return resource.savePODEvent(payloadData);
-        }
-        
-        /**
-         * @ngdoc method
-         * @methodOf point-of-delivery.pointOfDeliveryService
-         * @name show
-         *
-         * @description
-         * Shows modal that allows users to add discrepancies.
-         *
-         * @param  {Array}   rejectionReasons 
-         * @param  {String}   shipmentType  
-         * @return {Promise}                resolved with discrepancies.
-         */
-        function show (shipmentType) {
-            return openlmisModalService.createDialog(
-                {
-                    controller: 'podAddDiscrepancyModalController',
-                    controllerAs: 'vm',
-                    templateUrl: 'pod-add-discrepancy-modal/add-discrepancy-modal.html',
-                    show: true ,
-                    resolve: {
-                        rejectionReasons: function(rejectionReasonService) {
-                                // Load rejection Reasons into the controller.
-                                return rejectionReasonService.getAll();
-                            
-                        }, 
-                        shipmentType: function () {
-                            return shipmentType;
-                        }
-                    }   
-                }
-            ).promise.finally(function() {
-                angular.element('.openlmis-popover').popover('destroy');
-            });
-        }
 
-        function showViewModal (discrepancies, referenceNumber) {
-            return openlmisModalService.createDialog(
-                {
-                    controller: 'podViewDiscrepancyModalController',
-                    controllerAs: 'vm',
-                    templateUrl: 'pod-view-discrepancy-modal/view-discrepancy-modal.html',
-                    show: true,
-                    resolve: {
-                        discrepancies: function () {
-                            return discrepancies;
-                        },
-                        referenceNumber: function () {
-                            return referenceNumber;
-                        }
+        function getPatients(patientParams) {
+            var params = {
+                patientNumber: patientParams.patientNumber,
+                firstName: patientParams.firstName,
+                lastName: patientParams.lastName,
+                dateOfBirth: patientParams.dateOfBirth,
+                nationalId: patientParams.nationalId,
+                facilityId:"cf3a1192-abe6-44db-98a9-9167e2d24511"
+            };
+            console.log("Dispensing Service");
+            console.log(params);
+            return resource.get(params).$promise.then(function(response) {
+                // Transforming the response to an object if it's an array
+                    if (Array.isArray(response)) {
+                                    
+                        var objectOfPatients = response.reduce((result, obj) => {
+                        result[obj.id] = obj;
+                       
+                        return result;
+                        }, {});                        
+                        return objectOfPatients;                         
                     }
-                }
-            ).promise.finally(function() {
-                angular.element('.openlmis-popover').popover('destroy');
-            });
+               return response; 
+             });
+        };
+    
+        function submitPatientInfo(patientInfo){
+            
+            var payload = {
+                "facilityId": patientInfo.homeFacility,
+                "personDto": {
+                    "nationalId": patientInfo.nationalID,
+                    "firstName": patientInfo.firstName,
+                    "lastName": patientInfo.lastName,
+                    "nickName": patientInfo.nickName,
+                    "sex": patientInfo.sex,
+                    "dateOfBirth": patientInfo.DOB,
+                    "isDobEstimated": patientInfo.isDobEstimated,
+                    "physicalAddress": patientInfo.physicalAddress,
+                    "nextOfKinFullName": patientInfo.nextOfKinNames,
+                    "nextOfKinContact": patientInfo.nextOfKinContact,
+                    "motherMaidenName": patientInfo.motherMaidenName,
+                    "deceased": patientInfo.deceased,
+                    "retired": patientInfo.retired,
+                    "contacts": [
+                        {
+                            "contactType": patientInfo.contact.contactType,
+                            "contactValue": patientInfo.contact.contactValue
+                        }
+                    ]
+                },
+                "medicalHistory": [
+                    {
+                        "type": "Diagnosis",
+                        "history": "Diagnosed with letsoejane."
+                    },
+                    {
+                        "type": "Treatment",
+                        "history": "O sebelisa hloella-hape (iphinde futhi)."
+                    }
+                ]
+            }
+            return resource.postPatientEvent(payload);
         }
         
     }

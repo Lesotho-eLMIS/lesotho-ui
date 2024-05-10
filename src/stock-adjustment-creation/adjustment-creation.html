@@ -150,7 +150,8 @@
                    
                     
                     
-                    <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.rejectedQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.rejectedQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'">
+                    </td>
                     <td ng-if="vm.showDeliveryNoteAttributes">
                         <select id="discrepancySelect" ng-model="lineItem.selectedDiscrepancy" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"
                             ng-change="vm.discrepancySelectionChanged()"

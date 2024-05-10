@@ -17,34 +17,28 @@
 
     'use strict';
 
-    angular.module('dispensing-patient-form').config(routes);
+    angular.module('dispensing-prescription-form').config(routes);
 
     routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
 
     function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
 
-        $stateProvider.state('openlmis.dispensing.patients.form', {
-            label: 'dispensingPatientForm.title',
+        $stateProvider.state('openlmis.dispensing.prescriptions.form', {
+            label: 'dispensingPrescriptionForm.title',
             url: '/form/:id',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
                 // facilities: function(facilityService) {
                 //     return facilityService.getAllMinimal();
                 // },
-                // patient: function(patientService, $stateParams) {
-                //     return new patientService().get($stateParams.id);
+                // prescription: function(prescriptionService, $stateParams) {
+                //     return new prescriptionService().get($stateParams.id);
                 // }
-                facility: function(facilityFactory, $stateParams) {
-                    if (!$stateParams.facility) {
-                        return facilityFactory.getUserHomeFacility();
-                    }
-                    return $stateParams.facility;
-                }
             },
             views: {
                 '@openlmis': {
-                    controller: 'patientFormController',
-                    templateUrl: 'dispensing-patient-form/patient-form.html',
+                    controller: 'prescriptionFormController',
+                    templateUrl: 'dispensing-prescription-form/prescription-form.html',
                     controllerAs: 'vm'
                 }
             }

@@ -122,7 +122,7 @@
      vm.addedLineItems[0].assignment.name
       vm.UPrice=$scope.lineItem.assignment.name;
     };
-    vm.calculateRemainingStock = calculateRemainingStock;
+  //  vm.calculateRemainingStock = calculateRemainingStock;
 
     /**
      * @ngdoc property
@@ -315,8 +315,14 @@
      * @param {Object} lineItem line item to be removed.
      */
     vm.remove = function (lineItem) {
-      var index = vm.addedLineItems.indexOf(lineItem);
-      vm.addedLineItems.splice(index, 1);
+
+      if(lineItem.prepackSize || lineItem.numberOfPrepacks){
+        lineItem.prepackSize = 0;
+        lineItem.numberOfPrepacks = 0;
+       vm.validatePrepackQuantity(lineItem);
+     }
+      var index = vm.addedLineItems.indexOf(lineItem);      
+      vm.addedLineItems.splice(index, 1);   
 
       vm.search();
     };
@@ -374,31 +380,35 @@
     //-----LESOTHO ELMIS-----
 
     vm.validatePrepackQuantity = function(lineItem){
-      let remainingStock = calculateRemainingStock(lineItem);
-      if(remainingStock <= 0){
-        lineItem.$errors.prepackQuantityInvalid = messageService.get(
-          'stockPrepackCreation.validatePrepackQuantity');
-      }
-      else{
-        lineItem.$errors.prepackQuantityInvalid = false;
-      }
+      console.log(vm.addedLineItems);
+      return prepackingService.validatePrepackQuantity(lineItem, vm.addedLineItems);
     }
+    // vm.validatePrepackQuantity = function(lineItem){
+    //   let remainingStock = calculateRemainingStock(lineItem);
+    //   if(remainingStock <= 0){
+    //     lineItem.$errors.prepackQuantityInvalid = messageService.get(
+    //       'stockPrepackCreation.validatePrepackQuantity');
+    //   }
+    //   else{
+    //     lineItem.$errors.prepackQuantityInvalid = false;
+    //   }
+    // }
 
-    function calculateRemainingStock(lineItem){    
-      if(vm.addedLineItems.length === 1){
-        return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
-      }
-      else{
-        let productType = vm.addedLineItems.filter( item => item.lot.lotCode === lineItem.lot.lotCode && 
-          item.orderable.productCode === lineItem.orderable.productCode);
-        let total = 0;
-        productType.forEach(product => {
-          let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
-          total += quantityToPrepack;
-        });
-        return lineItem.remainingStock = lineItem.stockOnHand - total;
-      }
-    }
+    // function calculateRemainingStock(lineItem){    
+    //   if(vm.addedLineItems.length === 1){
+    //     return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+    //   }
+    //   else{
+    //     let productType = vm.addedLineItems.filter( item => item.lot.lotCode === lineItem.lot.lotCode && 
+    //       item.orderable.productCode === lineItem.orderable.productCode);
+    //     let total = 0;
+    //     productType.forEach(product => {
+    //       let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+    //       total += quantityToPrepack;
+    //     });
+    //     productType.forEach( item => item.remainingStock = item.stockOnHand - total);
+    //   }
+    // }
 
     //-----LESOTHO ELMIS-----
 
@@ -451,7 +461,6 @@
      */
      vm.fixQuantityWhenExpired = function (lineItem) {
       if (adjustmentType.state === 'adjustment') {
-       // console.log(lineItem);
         lineItem.$errors.reasonInvalid = isEmpty(lineItem.reason);
         if(lineItem.reason.name === 'Expired'){
           lineItem.quantity = lineItem.$previewSOH;
@@ -850,7 +859,6 @@
 
     function onInit() {
       //Getting Rejection Reasons
-      console.log(adjustmentType);
       var rej = rejectionReasonService.getAll();
       rej.then(function(reasons) {             
           reasons.content.forEach(reason => {

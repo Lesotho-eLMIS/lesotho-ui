@@ -27,27 +27,44 @@
         .module('dispensing-patients')
         .controller('dispensingPatientsController', dispensingPatientsController);
 
-        dispensingPatientsController.$inject = [
-        '$rootScope','$state','$stateParams', 'facility','facilities','facilityService','offlineService', 'dispensingService', 
-        '$scope', 'notificationService', 'podAddDiscrepancyModalService'];
+        dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 
+        'offlineService', 'dispensingService'];
 
-    function dispensingPatientsController($rootScope, $state,$stateParams, facility,facilities,facilityService, offlineService, 
-        dispensingService, $scope, notificationService, podAddDiscrepancyModalService ) {
+    function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, 
+        dispensingService) {
 
             
 
         var vm = this;
         vm.addPatientForm = undefined;
-
-      //  vm.addDiscrepancyOnModal = addDiscrepancyOnModal;
-
-        vm.supplyingFacilities = facilities;
+        vm.searchPatients = searchPatients;
         vm.$onInit = onInit;
-        vm.facility = facility;
-                                                
-        vm.facilities = undefined;
 
-        vm.homeFacilities = [ facility ];
+        // /**
+        //  * @ngdoc property
+        //  * @propertyOf dispensing-patients.controller:dispensingPatientsController
+        //  * @name patients
+        //  * @type {Array}
+        //  *
+        //  * @description
+        //  * Holds patient list.
+        //  */
+        // vm.patients = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf dispensing-patients.controller:dispensingPatientsController
+         * @name options
+         * @type {Object}
+         *
+         * @description
+         * Holds options for sorting patient list.
+         */
+        vm.options = {
+            'dispensingPatients.firstName': ['firstName'],
+            'dispensingPatients.lastName': ['lastName'],
+            'dispensingPatients.patientNumber': ['patientNumber']
+        };
 
      /**
          * @ngdoc method
@@ -60,81 +77,32 @@
          */        
          function onInit() {
 
-        // var stateParams = angular.copy($stateParams);
-          
-            vm.receivingFacility = facility.name;
-            vm.supplyingFacilities = facilities;        
-            vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();     
+            vm.fetchPatients = undefined;
+            vm.patientsData = undefined;
+            vm.patientParams = {};
+
         }
 
         vm.addPatientForm = function(){
-            console.log("Go...");
-            //$state.go('openlmis.stockmanagement.prepack');
-            //$state.go('openlmis.dispensing.patientsform');
+
             $state.go('openlmis.dispensing.patients.form');
         }
 
-
-        vm.addDiscrepancyOnModal = function(shipmentType) {
-            console.log("SHOW MODAL")
-            pointOfDeliveryService.show(shipmentType).then(function() {
-                $stateParams.noReload = true;
-                draft.$modified = true;
-                vm.cacheDraft();
-                //Only reload current state and avoid reloading parent state
-                $state.go($state.current.name, $stateParams, {
-                    reload: $state.current.name
-                });
-            }); 
+        function searchPatients(){
+            console.log(vm.patientParams);
+            var getPatientParams = vm.patientParams;
+            vm.fetchPatients = dispensingService.getPatients(getPatientParams);
+            vm.fetchPatients.then(function(resolvedObject) {
+            // Assign the resolved object to a scope variable            
+                vm.patientsData = resolvedObject;   
+                console.log("Resolved Patients for View:");
+                console.log(vm.patientsData);   
+                //return patientsData;                
+            })
+            .catch(function(error) {
+                // Handle errors
+                console.error('Error in controller:', error);
+            });
         }
-
-        vm.getSupplyingFacilityName = async function(supplyingFacilityId) {
-            try {
-               
-                var facilityObject = await facilityService.get(supplyingFacilityId);
-                
-                // Return Facility Name
-                //console.log(facilityObject.name);
-                return facilityObject.name;
-            } catch (error) {
-                // Handle any errors that may occur during the query
-                console.error("Error:", error);
-                return ""; // Or handle the error appropriately
-            }
-        };
-     
-        vm.addSupplyingFacility = async function(eventPODs) {
-            try {
-                // Create an array of Promises
-                const promises = Object.keys(eventPODs).map(async key => {
-                    const singlePODEvent = eventPODs[key];
-        
-                    // Check whether SourceId has a value before calling
-                    if (singlePODEvent.sourceId) {
-                        try {
-                            const resolvedObject = await vm.getSupplyingFacilityName(singlePODEvent.sourceId);
-                            singlePODEvent.sourceName = resolvedObject;
-                        } catch (error) {
-                            // Handle errors
-                            console.error('Error in controller:', error);
-                        }
-                    }
-        
-                    return singlePODEvent;
-                });
-        
-                // Await all Promises to resolve
-                const eventPODsWithSupplierNames = await Promise.all(promises);
-        
-                return eventPODsWithSupplierNames.reduce((acc, curr, index) => {
-                    acc[index] = curr;
-                    return acc;
-                }, {});
-            } catch (error) {
-                // Handle any errors that may occur during processing
-                console.error('Error:', error);
-                return {};
-            }
-        };
     }
 })();

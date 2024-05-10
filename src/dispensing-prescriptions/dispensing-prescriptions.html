@@ -1,16 +1,16 @@
 <!--<h2>{{ 'dispensingPatients.title' | message }}</h2>-->
 <h2 ng-if="vm.orderingFacility">{{'orderFulfillment.fulfillOrdersAt' | message: {'facility':  vm.orderingFacility.name} }}</h2>
-<h2 ng-if="!vm.orderingFacility">Prescriptions</h2>
+<h2 ng-if="!vm.orderingFacility">{{ 'dispensingPrescriptions.title' | message }}</h2>
 
 <form class="sidebar">
-  <label for="orderingFacility">Patient ID</label>
-  <input class="form-control" type="text" style="width: 150px;">
-  <label>Patient Type</label>
-  <input class="form-control" type="text" style="width: 150px;">
-  <label>Last Name</label>
-  <input class="form-control" type="text" style="width: 150px;">
-  <label>First Name</label>
-  <input class="form-control" type="text" style="width: 150px;">
+  <label for="patientId">{{ 'dispensingPrescriptions.patientId' | message }}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientId">
+  <label for="patientType">{{ 'dispensingPrescriptions.patientType' | message }}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientType">
+  <label for="lastName">{{ 'dispensingPrescriptions.lastName' | message }}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.lastName">
+  <label for="firstName">{{ 'dispensingPrescriptions.firstName' | message }}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.firstName">
   <input type="submit" class="btn btn-primary" value="{{'orderFulfillment.search' | message}}"/>
 
 </form>
@@ -35,45 +35,66 @@
   </form> -->
   <section class="is-primary">
     <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
-        <button type="submit" class="add">Add Prescription</button>
+        <button type="button" ui-sref="openlmis.dispensing.patients.form" class="add">Add Patient</button>
     </form>
   </section>
   <table>
-    <caption ng-if="!vm.orders.length">{{'orderFulfillment.noOrdersFound' | message}}</caption>
+    <caption ng-if="!vm.prescriptions.length">{{'dispensingPrescriptions.prescriptions.error' | message}}</caption>
     <thead>
     <tr>
-      <th>Patient Number</th>
-      <th>Last Name</th>
-      <th>First Name</th>
-      <th>Patient Type</th>
-      <th>Follow up Date</th>
-      <th>Date Created</th>
-      <th>Date Captured</th>
-      <th>Issue Date</th>
-      <th>Status</th>
-      <th class="col-sticky sticky-right">{{'orderFulfillment.actions' | message}}</th>
+      <th>{{'dispensingPrescriptions.patientNumber' | message}}</th>
+      <th>{{'dispensingPrescriptions.lastName' | message}}</th>
+      <th>{{'dispensingPrescriptions.firstName' | message}}</th>
+      <th>{{'dispensingPrescriptions.patientType' | message}}</th>
+      <th>{{'dispensingPrescriptions.followUpDate' | message}}</th>
+      <th>{{'dispensingPrescriptions.createdDate' | message}}</th>
+      <th>{{'dispensingPrescriptions.dateCaptured' | message}}</th>
+      <th>{{'dispensingPrescriptions.issueDate' | message}}</th>
+      <th>{{'dispensingPrescriptions.status' | message}}</th>
+      <th class="col-sticky sticky-right">{{'dispensingPrescriptions.actions' | message}}</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="order in vm.orders">
-      <td class="col-emergency">
+    <tr ng-repeat="prescription in vm.prescriptions">
+      <!-- <td class="col-emergency">
         <i ng-class="{'icon-ok': order.emergency}"></i>
-      </td>
-      <td>{{order.orderCode}}</td>
-      <td>{{order.status}}</td>
-      <td>{{order.facility | facility}}</td>
-      <td>{{order.program.name}}</td>
-      <td>{{order.processingPeriod.name}}</td>
-      <td>{{order.createdDate | openlmisDate}}</td>
-      <td>
-        <button ng-if="order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
+      </td> -->
+      <td>{{patient.patientId}}</td>
+      <td>{{prescription.status}}</td>
+      <!-- <td>{{order.facility | facility}}</td> -->
+      <td>{{prescription.program.name}}</td>
+      <td>{{prescription.dateCaptured | openlmisDate}}</td>
+      <td>{{prescription.createdDate | openlmisDate}}</td>
+      <!-- <td> -->
+        <!-- <button ng-if="order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
           {{'orderFulfillment.continueFulfillment' | message}}
         </button>
         <button ng-if="!order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
           {{'orderFulfillment.startFulfillment' | message}}
+        </button> -->
+      <!-- </td> -->
+    </tr>
+
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>
+        <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">
+          {{'dispensingPrescriptions.addPrescription' | message}}
+        </button>
+        <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form">
+          {{'dispensingPrescriptions.viewPrescription' | message}}
         </button>
       </td>
     </tr>
+
     </tbody>
   </table>
   <openlmis-pagination/>

@@ -18,25 +18,18 @@
     'use strict';
 
     /**
-     * @module dispensing-prescriptions
+     * @module dispensing-prescription-form
      *
      * @description
-     * Provides dispensing-prescriptions state and controller.
+     * Provides edit/add prescription screen for user.
      */
-    angular.module('dispensing-prescriptions', [
-        'ngResource',
-        'openlmis-date',
-        'ui.router',
-        'openlmis-config',
+    angular.module('dispensing-prescription-form', [
+        'openlmis-modal',
+        'openlmis-rights',
         'referencedata-facility',
-        'stockmanagement',
-        'openlmis-repository',
-        'openlmis-class-extender',
-        // 'referencedata-user',
-        'openlmis-urls',
-        'pod-add-discrepancy-modal',
-        'openlmis-modal'
+        'ui.router',
+        'dispensing',
+        'stockmanagement'
     ]);
 
 })();
-

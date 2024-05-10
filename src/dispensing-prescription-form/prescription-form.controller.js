@@ -19,46 +19,42 @@
 
     /**
      * @ngdoc controller
-     * @name dispensing-patient-form.controller:patientFormController
+     * @name dispensing-prescription-form.controller:prescriptionFormController
      *
      * @description
-     * Exposes method for creating/updating patient to the modal view.
+     * Exposes method for creating/updating prescription to the modal view.
      */
     angular
-        .module('dispensing-patient-form')
-        .controller('patientFormController', controller);
+        .module('dispensing-prescription-form')
+        .controller('prescriptionFormController', controller);
 
-    controller.$inject = ['dispensingService', '$scope', 'facility'];
+    controller.$inject = ['$filter', '$state'];
 
-    function controller(dispensingService, $scope, facility) {
+    function controller($filter, $state) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.contacts = []; 
-        vm.patient = {};
         vm.addContact = addContact;
         vm.removeContact = removeContact;
-       // vm.submitPatientData = submitPatientData;
 
         /**
          * @ngdoc method
-         * @methodOf dispensing-patient-form.controller:patientFormController
+         * @methodOf dispensing-prescription-form.controller:prescriptionFormController
          * @name $onInit
          *
          * @description
-         * Initialization method of the PatientFormModalController.
+         * Initialization method of the prescriptionFormModalController.
          */
         function onInit() {
-
-            vm.contactOptions = ["email", "phone"];
 
             console.log("...In init...")
         }
 
         /**
          * @ngdoc method
-         * @methodOf dispensing-patient-form.controller:patientFormController
+         * @methodOf dispensing-prescription-form.controller:prescriptionFormController
          * @name addContact
          *
          * @description
@@ -66,13 +62,11 @@
          *
          */
         function addContact() {
-            console.log("Add line item..."); 
-                vm.contacts.push({
-                    contactType: '',
-                    contactValue: ''
-                }); 
-           // }
-             
+            console.log("Add line item...");
+            vm.contacts.push({
+                'phone': '',
+                'email': ''
+            });  
         }
 
         // removing discrepancies from table
@@ -80,13 +74,6 @@
             console.log("Remove...");
             console.log(index);
             vm.contacts.splice(index, 1);
-        }
-
-        vm.submitPatientData = function(){
-            
-            var patientInfo = vm.patient;
-            patientInfo.homeFacility = facility.id;
-            dispensingService.submitPatientInfo(patientInfo);
         }
     }
 })();
