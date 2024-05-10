@@ -52,7 +52,10 @@
                         readonly value="{{(lineItem.prepackSize*lineItem.numberOfPrepacks)}}" 
                         type="number" style="width: 120px;" min="0"> 
                     </td>
-                    <td>{{lineItem.remainingStock}}</td>
+                    <!-- <td>{{lineItem.remainingStock}}</td> -->
+                    <td><input class="form-control" ng-model="lineItem.remainingStock" readonly  
+                        type="number" style="width: 120px;" min="0">
+                    </td>
                     <td>
                         <button type="button" class="danger" ng-click="vm.remove(lineItem)">{{'prepackUpdate.remove'| message}}</button>
                     </td>

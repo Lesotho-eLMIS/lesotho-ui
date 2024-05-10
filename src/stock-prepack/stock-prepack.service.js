@@ -196,7 +196,8 @@
                 console.log(lineItem.soh );
                 console.log(lineItem.prepackSize);
                 console.log(lineItem.numberOfPrepacks); 
-                return remaining;
+                lineItem.remainingStock = remaining;
+                //return remaining;
                     //return remaining = productType.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
             }
             else{
@@ -208,8 +209,10 @@
                 });
                 console.log("TOTAL " + total);
                 remaining = lineItem.soh - total;
+                productType.forEach( item => item.remainingStock = remaining);
+                console.log(productType);
                 return remaining;
-                        //productType.forEach( item => item.remainingStock = item.stockOnHand - total);
+                   
                        // return lineItem.remainingStock = lineItem.soh - total;
                         //return remaining;
                 } 

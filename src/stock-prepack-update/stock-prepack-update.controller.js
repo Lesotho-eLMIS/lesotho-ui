@@ -75,7 +75,8 @@
                     expiryDate : selectedItem.lot.expirationDate,
                     productName: selectedItem.orderable.fullProductName,
                     productCode: selectedItem.orderable.productCode,
-                    soh: selectedItem.stockOnHand
+                    soh: selectedItem.stockOnHand,
+                    lotId: selectedItem.lot.id
                   },
                   selectedItem
                   //copyDefaultValue()
@@ -87,6 +88,12 @@
 
             console.log(vm.prepackedProducts)
           }
+
+        vm.validatePrepackQuantity = function(lineItem){
+            console.log("VALIDATING")
+            console.log(vm.prepackedProducts);
+            return prepackingService.prepackCalculation(vm.prepackedProducts, lineItem);
+        }
 
         vm.orderableSelectionChanged = function () {
             //reset selected lot, so that lot field has no default value
@@ -108,7 +115,8 @@
             vm.selectedOrderableHasLots = vm.lots.length > 0;
             console.log();
             console.log()
-          };
+        };
+
         function changePrepackStatus(newStatus) {
             vm.prepack.status = newStatus;
            
@@ -152,6 +160,7 @@
                 });
     
         }
+
         vm.remove = function (lineItem) {
             var index = vm.prepackedProducts.indexOf(lineItem);
             vm.prepackedProducts.splice(index, 1);
@@ -172,7 +181,7 @@
                 item.batchNumber = productDetails.lot.lotCode;
                 item.expiryDate = productDetails.lot.expirationDate;
                 item.soh = productDetails.stockOnHand;
-                item.remainingStock = calculateRemainingStock(productsArray, haslots, item);
+                item.remainingStock = prepackingService.prepackCalculation(vm.prepackLineItems, item);
             });         
             return(vm.prepackLineItems);  
         }
