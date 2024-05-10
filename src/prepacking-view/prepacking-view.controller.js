@@ -74,11 +74,20 @@
         }
 
         vm.getPrepackLineItems = function(item){
-            $state.go('openlmis.prepacking.details', {
-                id: item.id,
-                programId: item.programId,
-                facilityId: item.facilityId
-            });
+            if(item.status === 'Rejected'){
+                $state.go('openlmis.stockmanagement.prepack.update', {
+                    prepackId: item.id,
+                    programId: item.programId,
+                    facilityId: item.facilityId
+                });
+
+            }else{
+                $state.go('openlmis.prepacking.details', {
+                    id: item.id,
+                    programId: item.programId,
+                    facilityId: item.facilityId
+                });
+            }
         }
 
         function filterPrepacksForAuthorisation (prepacksObj) {
