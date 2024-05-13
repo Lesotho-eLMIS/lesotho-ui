@@ -25,6 +25,13 @@
     "dispensingPrescriptionForm.outPatient": "Out Patient",
     "dispensingPrescriptionForm.dispensingDate": "Dispensing date",
 
+    "dispensingPrescriptionForm.product": "Prescribed Product",
+    "dispensingPrescriptionForm.add": "Add",
+    "dispensingPrescriptionForm.productCode": "Product Code",
+    "dispensingPrescriptionForm.lotCode": "Batch Number",
+    "dispensingPrescriptionForm.expiryDate": "Expiry Date",
+    "dispensingPrescriptionForm.soh": "Stock on Hand",
+
     "dispensingPrescriptionForm.addprescription": "Add prescription",
     "dispensingPrescriptionForm.prescriptionNumber": "Prescription Number",
     "dispensingPrescriptionForm.nationalID": "National ID",
