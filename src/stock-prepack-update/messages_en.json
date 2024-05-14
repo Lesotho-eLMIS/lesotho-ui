@@ -2,7 +2,7 @@
   "pointOfDeliveryView.deliveriesAt": "View Deliveries at ${facility}",
   "prepackUpdate.cancel": "Cancel",
   "prepackUpdate.clear": "Clear",
-  "prepackUpdate.authorise": "Authorise",
+  "prepackUpdate.save": "Save",
   "prepackUpdate.productCode": "Product Code",
   "prepackUpdate.product": "Product",
   "prepackUpdate.batchNumber": "Batch Number",
@@ -15,4 +15,5 @@
   "prepackUpdate.lotCode": "Batch Number",
   "prepackUpdate.action": "Action",
   "prepackUpdate.remove": "Remove"
+  
 }

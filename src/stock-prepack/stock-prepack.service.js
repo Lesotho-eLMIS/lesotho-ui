@@ -197,6 +197,7 @@
                 console.log(lineItem.prepackSize);
                 console.log(lineItem.numberOfPrepacks); 
                 lineItem.remainingStock = remaining;
+                return remaining;
                 //return remaining;
                     //return remaining = productType.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
             }

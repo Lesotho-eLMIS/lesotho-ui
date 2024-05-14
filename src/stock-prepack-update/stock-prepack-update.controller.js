@@ -137,6 +137,11 @@
                 buttonContext = "Reject";
                 questionContext = "reject";
                 successMsgContext = "rejected"
+            }else if(newStatus === "Edited"){
+                buttonContext = "Edit";
+                questionContext = "edit";
+                successMsgContext = "edited"
+                vm.prepack.lineItems = vm.prepackedProducts;
             }
             else{
                 notificationService.error('Unknown Prepack Status Detected.');
@@ -163,6 +168,10 @@
         }
 
         vm.remove = function (lineItem) {
+            lineItem.prepackSize = 0;
+            lineItem.numberOfPrepacks = 0;
+            prepackingService.prepackCalculation(vm.prepackedProducts, lineItem);
+            console.log(vm.prepackedProducts)
             var index = vm.prepackedProducts.indexOf(lineItem);
             vm.prepackedProducts.splice(index, 1);
       
