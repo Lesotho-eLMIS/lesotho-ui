@@ -52,7 +52,6 @@
 
         onInit();
         function changePrepackStatus(newStatus) {
-            vm.prepack.status = newStatus;
            
             var buttonContext = "";
             var questionContext = "";
@@ -78,7 +77,8 @@
             confirmService
                 .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
                 .then(function () {
-                   prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
+                  vm.prepack.status = newStatus;
+                  prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
                   .then(function(response) {
                     // Success callback
                     notificationService.success('Prepacking job '+successMsgContext+'.');

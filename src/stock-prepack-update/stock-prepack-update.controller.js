@@ -118,9 +118,7 @@
             console.log()
         };
 
-        function changePrepackStatus(newStatus) {
-            vm.prepack.status = newStatus;
-           
+        function changePrepackStatus(newStatus) {           
             var buttonContext = "";
             var questionContext = "";
             var successMsgContext = "";
@@ -150,6 +148,7 @@
             confirmService
                 .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
                 .then(function () {
+                   vm.prepack.status = newStatus;
                    prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
                   .then(function(response) {
                     // Success callback
