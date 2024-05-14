@@ -76,7 +76,8 @@
                     productName: selectedItem.orderable.fullProductName,
                     productCode: selectedItem.orderable.productCode,
                     soh: selectedItem.stockOnHand,
-                    lotId: selectedItem.lot.id
+                    lotId: selectedItem.lot.id,
+                    orderableId: selectedItem.orderable.id
                   },
                   selectedItem
                   //copyDefaultValue()
