@@ -53,10 +53,13 @@
       <td>{{patient.registrationDate | openlmisDate}}</td>
       <td>
         <button ng-if="order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
-          {{'dispensingPatients.continueFulfillment' | message}}
+          {{'dispensingPatients.continueDispensing' | message}}
         </button>
         <button ng-if="!order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
-          {{'dispensingPatients.startFulfillment' | message}}
+          {{'dispensingPatients.startDispensing' | message}}
+        </button>
+        <button class="btn-primary" ng-click="vm.editPatient(patient)">
+          {{'dispensingPatients.edit' | message}}
         </button>
       </td>
     </tr>

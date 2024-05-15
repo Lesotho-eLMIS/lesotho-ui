@@ -80,7 +80,7 @@
                 lastName: patientParams.lastName,
                 dateOfBirth: patientParams.dateOfBirth,
                 nationalId: patientParams.nationalId,
-                facilityId:"cf3a1192-abe6-44db-98a9-9167e2d24511"
+                facilityId:"054b4356-3875-49cb-aa81-bf4876c5327e"
             };
             console.log("Dispensing Service");
             console.log(params);

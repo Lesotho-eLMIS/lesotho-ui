@@ -4,5 +4,8 @@
   "dispensingPatients.search": "Search",
   "dispensingPatients.createdDate": "Created Date",
   "dispensingPatients.actions": "Action",
-  "dispensingPatients.patientNumber": "Patient Number"
+  "dispensingPatients.patientNumber": "Patient Number",
+  "dispensingPatients.edit": "Edit",
+  "dispensingPatients.startDispensing": "Dispense",
+   "dispensingPatients.continueDispensing": "Continue Dispensing"
 }
