@@ -28,9 +28,9 @@
         .module('dispensing-patient-form')
         .controller('patientFormController', controller);
 
-    controller.$inject = ['dispensingService', '$scope', 'facility'];
+    controller.$inject = ['dispensingService', '$scope', 'facility','patient','patientState'];
 
-    function controller(dispensingService, $scope, facility) {
+    function controller(dispensingService, $scope, facility, patient, patientState) {
 
         var vm = this;
 
@@ -39,6 +39,7 @@
         vm.patient = {};
         vm.addContact = addContact;
         vm.removeContact = removeContact;
+        vm.viewTitle = undefined;
        // vm.submitPatientData = submitPatientData;
 
         /**
@@ -50,10 +51,11 @@
          * Initialization method of the PatientFormModalController.
          */
         function onInit() {
-
+            console.log(patient);
+            vm.viewTitle = (patientState === "New") ? "Add Patient" : "Edit Patient";
             vm.contactOptions = ["email", "phone"];
 
-            console.log("...In init...")
+           // console.log("...In init...")
         }
 
         /**

@@ -52,7 +52,7 @@
       <td>{{patient.personDto.contacts[0].contactValue}}</td>
       <td>{{patient.registrationDate | openlmisDate}}</td>
       <td>
-        <button class="primary" ui-sref="openlmis.dispensing.patients.form">{{'dispensingPatients.edit' | message}}</button>
+        <button class="primary" ng-click="vm.editPatient(patient)">{{'dispensingPatients.edit' | message}}</button>
         <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">{{'dispensingPatients.addPrescription' | message}}</button>
         <!-- <button ng-click="vm.resetUserPassword(user)">{{'adminUserList.resetPassword' | message}}</button> -->
       </td>

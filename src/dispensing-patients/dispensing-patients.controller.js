@@ -38,6 +38,7 @@
         var vm = this;
         vm.addPatientForm = undefined;
         vm.searchPatients = searchPatients;
+        vm.editPatient = editPatient;
         vm.$onInit = onInit;
 
         // /**
@@ -86,6 +87,12 @@
         vm.addPatientForm = function(){
 
             $state.go('openlmis.dispensing.patients.form');
+        }
+
+        function editPatient (patient) {
+            $state.go('openlmis.dispensing.patients.form',{
+                id: patient.patientNumber
+            });
         }
 
         function searchPatients(){

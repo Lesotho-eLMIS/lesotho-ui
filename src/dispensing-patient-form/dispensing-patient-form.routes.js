@@ -25,21 +25,26 @@
 
         $stateProvider.state('openlmis.dispensing.patients.form', {
             label: 'dispensingPatientForm.title',
-            url: '/form/:id',
+            url: '/:id',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
-                // facilities: function(facilityService) {
-                //     return facilityService.getAllMinimal();
-                // },
-                // patient: function(patientService, $stateParams) {
-                //     return new patientService().get($stateParams.id);
-                // }
                 facility: function(facilityFactory, $stateParams) {
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
-                }
+                },
+                patient: function(dispensingService,$stateParams) {
+                    return dispensingService.getPatients({patientNumber:$stateParams.id})
+                },
+                patientState: function($stateParams) {      
+                    if ($stateParams.id) {
+                        return "Created";      
+                    } else {
+                        return "New";
+                    }
+                },
+
             },
             views: {
                 '@openlmis': {
