@@ -1,5 +1,5 @@
 {
-    "dispensingPatientForm.addpatient": "Add patient",
+    "dispensingPatientForm.addPatient": "Add Patient",
     "dispensingPatientForm.title": "Add Patient Form",
     "dispensingPatientForm.patientNumber": "Patient Number",
     "dispensingPatientForm.nationalID": "National ID",
@@ -18,7 +18,12 @@
     "dispensingPatientForm.deceased": "Deceased",
     "dispensingPatientForm.yes": "Yes",
     "dispensingPatientForm.no": "No",
-
+    "dispensingPatientForm.addContact": "Add Contact",
+    "dispensingPatientForm.contactType": "Contact Type",
+    "dispensingPatientForm.contact": "Contact",
+    "dispensingPatientForm.actions": "Actions",
+    "dispensingPatientForm.edit": "Edit",
+    "dispensingPatientForm.Remove": "Remove",
     "dispensingPatientForm.updatePatient": "Update patient",
     "dispensingPatientForm.createPatient": "Create patient",
     "dispensingPatientForm.patientCreatedSuccessfully": "patient created successfully!",

@@ -14,29 +14,16 @@
  */
 
 (function() {
-
     'use strict';
 
     /**
-     * @module dispensing-prescriptions
+     * @module stock-prepack-update
      *
      * @description
-     * Provides dispensing-prescriptions state and controller.
+     * Provides stock prepack update state and controller.
      */
-    angular.module('dispensing-prescriptions', [
-        'ngResource',
-        'openlmis-date',
-        'ui.router',
-        'openlmis-config',
-        'referencedata-facility',
-        'stockmanagement',
-        'openlmis-repository',
-        'openlmis-class-extender',
-        // 'referencedata-user',
-        'openlmis-urls',
-        'pod-add-discrepancy-modal',
-        'openlmis-modal'
+    angular.module('stock-prepack-update', [
+        'stock-adjustment-creation',
+        'stock-prepack'
     ]);
-
 })();
-

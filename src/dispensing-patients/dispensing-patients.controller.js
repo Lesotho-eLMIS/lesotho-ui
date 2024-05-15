@@ -27,10 +27,10 @@
         .module('dispensing-patients')
         .controller('dispensingPatientsController', dispensingPatientsController);
 
-        dispensingPatientsController.$inject = ['$state','$stateParams', 'facility','facilities', 
+        dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 
         'offlineService', 'dispensingService'];
 
-    function dispensingPatientsController($state,$stateParams, facility,facilities,offlineService, 
+    function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, 
         dispensingService) {
 
             
@@ -39,6 +39,32 @@
         vm.addPatientForm = undefined;
         vm.searchPatients = searchPatients;
         vm.$onInit = onInit;
+
+        // /**
+        //  * @ngdoc property
+        //  * @propertyOf dispensing-patients.controller:dispensingPatientsController
+        //  * @name patients
+        //  * @type {Array}
+        //  *
+        //  * @description
+        //  * Holds patient list.
+        //  */
+        // vm.patients = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf dispensing-patients.controller:dispensingPatientsController
+         * @name options
+         * @type {Object}
+         *
+         * @description
+         * Holds options for sorting patient list.
+         */
+        vm.options = {
+            'dispensingPatients.firstName': ['firstName'],
+            'dispensingPatients.lastName': ['lastName'],
+            'dispensingPatients.patientNumber': ['patientNumber']
+        };
 
      /**
          * @ngdoc method
