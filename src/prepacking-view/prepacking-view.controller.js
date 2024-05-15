@@ -38,6 +38,7 @@
         vm.getFacilityName = getFacilityName;
         vm.getProgramName = getProgramName;
         vm.filterPrepacksForAuthorisation = filterPrepacksForAuthorisation;
+        vm.prepackDetailsLength = 0;
         
         function onInit(){
             vm.facility = facility;            
@@ -45,6 +46,7 @@
             vm.programs = programs;
             vm.prepackDetails = (prepackStage === "authorise") ? vm.filterPrepacksForAuthorisation(Prepacks) : Prepacks;            
             formatPrepacks();
+            vm.prepackDetailsLength = Object.keys(vm.prepackDetails).length;
         }
         onInit();
 
