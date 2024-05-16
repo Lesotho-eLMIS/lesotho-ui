@@ -79,11 +79,10 @@
          function onInit() {
 
             vm.fetchPatients = undefined;
-            vm.patientsData = {};//undefined;
+            vm.patientsData = undefined;
             vm.patientParams = {};
             vm.facility = facility;
             vm.facilities = facilities;
-            console.log(vm.facilities);
 
         }
 
@@ -103,54 +102,21 @@
                 getPatientParams.facilityId = undefined;
             }    
             viewPatients(getPatientParams);   
-            //vm.fetchPatients = dispensingService.getPatients(getPatientParams);
         }
 
-        // async function getFacilityName(facilityId) {
-        //     try {
-        //         const facilityObject = await facilityService.get(facilityId);
-        //         return facilityObject.name;
-        //     } catch (error) {
-        //         console.error("Error:", error);
-        //         return ""; // Or handle the error appropriately
-        //     }
-        // }
-
         function viewPatients(patientSearchParams){
-            return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {
-                          
-               
-               // vm.patientsData =  resolvedObject;
-               // vm.patientsData.facilityName = "FACILITY";
-                //getFacilityName(vm.patientsData.facilityId);
-               // console.log(vm.patientsData.facilityId);
-                console.log(vm.patientsData);
+            return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {               
                 for (var key in patientsObject) {
                         if (patientsObject.hasOwnProperty(key)) {
-                            // Access each value and modify it as needed
+                            // Access each patient object to modify its facilityId
                             var patient = patientsObject[key];
-                            patient.facilityId = 'modifiedValue1';                        // Modify other keys as needed
+                            //Find the Patient's home facility
+                            let facility = vm.facilities.filter(item => item.id === patient.facilityId);
+                            patient.facilityId = facility[0].name;                      
                         }
                     }
                     vm.patientsData =  patientsObject;
-                    console.log(vm.patientsData);
             });
         }
-
-       
-
-        //     vm.fetchPatients.then(function(resolvedObject) {
-        //     // Assign the resolved object to a scope variable            
-        //         vm.patientsData = resolvedObject;   
-        //         console.log("Resolved Patients for View:");                 
-        //       //  vm.patientsData.facilityId = "FACILITY" 
-        //         console.log(vm.patientsData.facilityId);
-        //         //return patientsData;                
-        //     })
-        //     .catch(function(error) {
-        //         // Handle errors
-        //         console.error('Error in controller:', error);
-        //     });
-        // }
     }
 })();

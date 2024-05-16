@@ -32,7 +32,7 @@
 <section class="openlmis-table-container">
     <openlmis-sort options="vm.options"/>
     <section class="is-primary">
-      <form class="form-inline" name="productForm"> <!-- ng-submit="vm.addProduct()"-->
+      <form class="form-inline" name="productForm"> 
           <button type="button" ng-click="vm.addPatientForm()" class="add">{{'dispensingPatients.addPatient' | message}}</button> <!--ui-sref="openlmis.dispensing.add.patient.form"-->
       </form>
     </section>
@@ -67,7 +67,6 @@
       <td>
         <button class="primary" ui-sref="openlmis.dispensing.patients.form">{{'dispensingPatients.edit' | message}}</button>
         <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">{{'dispensingPatients.addPrescription' | message}}</button>
-        <!-- <button ng-click="vm.resetUserPassword(user)">{{'adminUserList.resetPassword' | message}}</button> -->
       </td>
     </tr>
   </tbody>
