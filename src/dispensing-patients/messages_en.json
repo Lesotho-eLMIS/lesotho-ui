@@ -14,5 +14,8 @@
   "dispensingPatients.addPrescription": "Add Prescription",
   "dispensingPatients.patients.error": "There are no matches for patient.",
   "dispensingPatients.dateofBirth": "Date of Birth",
-  "dispensingPatients.contactNumber": "Contact Number"
+  "dispensingPatients.facility": "Facility",
+  "dispensingPatients.facilityLocal": "Local",
+  "dispensingPatients.facilityNational" :" National",
+  "dispensingPatients.contactNumber" :" Contact Number"
 }

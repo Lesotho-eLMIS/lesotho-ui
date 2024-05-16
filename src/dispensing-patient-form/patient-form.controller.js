@@ -28,9 +28,9 @@
         .module('dispensing-patient-form')
         .controller('patientFormController', controller);
 
-    controller.$inject = ['dispensingService', '$scope', 'facility'];
+    controller.$inject = ['dispensingService', 'notificationService', 'facility', '$scope'];
 
-    function controller(dispensingService, $scope, facility) {
+    function controller(dispensingService, notificationService, facility, $scope) {
 
         var vm = this;
 
@@ -86,7 +86,19 @@
             
             var patientInfo = vm.patient;
             patientInfo.homeFacility = facility.id;
-            dispensingService.submitPatientInfo(patientInfo);
+            var response = dispensingService.submitPatientInfo(patientInfo);
+            if (response) {
+                    // Adding success message when POD saved.
+                notificationService.success('Successfully submitted.');
+            } else {
+                notificationService.error('Failed to submit.');
+            }
+            
+            $scope.newPatientForm1.$setUntouched();
+            $scope.newPatientForm1.$setPristine();
+            
+            $scope.newPatientForm2.$setUntouched();
+            $scope.newPatientForm2.$setPristine();
         }
     }
 })();
