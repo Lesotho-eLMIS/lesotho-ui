@@ -28,9 +28,9 @@
         .module('requisition-search')
         .service('dispensingService', dispensingService);
 
-        dispensingService.$inject = ['$resource','openlmisUrlFactory', 'notificationService', 'confirmService',];
+        dispensingService.$inject = ['$resource','openlmisUrlFactory', '$q', 'notificationService', 'confirmService',];
 
-    function dispensingService($resource,openlmisUrlFactory, notificationService, confirmService ) {
+    function dispensingService($resource,openlmisUrlFactory, $q, notificationService, confirmService ) {
 
         var promise,
             POD_FACILITIES = 'dispensingPatientsFacilities';
@@ -80,12 +80,12 @@
                 lastName: patientParams.lastName,
                 dateOfBirth: patientParams.dateOfBirth,
                 nationalId: patientParams.nationalId,
-                facilityId:"cf3a1192-abe6-44db-98a9-9167e2d24511"
+                facilityId:patientParams.facilityId
             };
             console.log("Dispensing Service");
             console.log(params);
             return resource.get(params).$promise.then(function(response) {
-                // Transforming the response to an object if it's an array
+                //Transforming the response to an object if it's an array
                     if (Array.isArray(response)) {
                                     
                         var objectOfPatients = response.reduce((result, obj) => {
@@ -98,7 +98,7 @@
                return response; 
              });
         };
-    
+ 
         function submitPatientInfo(patientInfo){
             
             var payload = {
