@@ -75,16 +75,16 @@
                     <tbody>  
                         <tr>
                             <td>{{vm.Cartons}}</td>
-                            <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityOnWayBill"></td>
-                            <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityAccepted" ></td>
-                            <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartons.quantityRejected"></td>
+                            <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartonsQuantityOnWaybill"></td>
+                            <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartonsQuantityAccepted" ></td>
+                            <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.cartonsQuantityRejected"></td>
                             <td><button type="button" ng-click="vm.addDiscrepancyOnModal('carton')" class="primary" ><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'| message}}</button></td>
                         </tr>
                         <tr>
                             <td>{{vm.Containers}}</td>
-                            <td><input type="number"  min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.containers.quantityOnWayBill"></td>
-                            <td><input type="number"  min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.containers.quantityAccepted"></td>
-                            <td><input type="number"  min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.containers.quantityRejected"></td>
+                            <td><input type="number"  min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.containersQuantityOnWayBill"></td>
+                            <td><input type="number"  min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.containersQuantityAccepted"></td>
+                            <td><input type="number"  min="0" step="1" oninput="validity.valid||(value='');" style="width: 60px;" ng-model="vm.discrepancy.containersQuantityRejected"></td>
                             <td><button type="button" ng-click="vm.addDiscrepancyOnModal('container')" class="primary" ><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'| message}}</button></td>
                         </tr>
                     </tbody>

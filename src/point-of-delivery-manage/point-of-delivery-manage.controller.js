@@ -29,10 +29,10 @@
 
     pointOfDeliveryManageController.$inject = [
         '$rootScope','$state','$stateParams', 'facility','facilities','facilityService','offlineService', 'pointOfDeliveryService', 
-        '$scope', 'notificationService', 'podAddDiscrepancyModalService'];
+        '$scope', 'notificationService', 'podAddDiscrepancyModalService', 'podEvents'];
 
     function pointOfDeliveryManageController($rootScope, $state,$stateParams, facility,facilities,facilityService, offlineService, 
-                                        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService ) {
+                                        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService, podEvents ) {
 
 
         var vm = this;
@@ -45,7 +45,9 @@
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.POD = {};
-        vm.discrepancy = [];
+        vm.discrepancy = {};
+        vm.tempPOD = undefined;
+        vm.proofOfDelivery ={};
         vm.Cartons = "Cartons";
         vm.Containers = "Containers";
                                                 
@@ -70,9 +72,23 @@
             vm.supplyingFacilities = facilities;        
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();            
             vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
-            $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope       
-        }
+            $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope 
+            //productsList.filter(item => (item.lot === null)
+            if($stateParams.podId){
+                vm.tempPOD = filterShipmentById(podEvents, $stateParams.podId);
+                console.log(vm.tempPOD);
+                populatePODView(vm.tempPOD);
+            }
 
+        }
+    
+        function filterShipmentById(shipments, id) {
+            if (shipments.hasOwnProperty(id)) {
+                return shipments[id];
+            } else {
+                return null; // or handle the case where the id is not found
+            }
+        }
 
         vm.addDiscrepancyOnModal = function(shipmentType) {
             pointOfDeliveryService.show(shipmentType).then(function() {
@@ -84,6 +100,18 @@
                     reload: $state.current.name
                 });
             }); 
+        }
+        function populatePODView(podObject) {
+            vm.POD.referenceNo = podObject.referenceNumber;
+            vm.proofOfDelivery.receivedDate = podObject.packingDate;
+            vm.POD.packedBy = podObject.packedBy;
+            vm.discrepancy.cartonsQuantityOnWaybill = podObject.cartonsQuantityOnWaybill;
+            vm.discrepancy.cartonsQuantityAccepted = podObject.cartonsQuantityAccepted;
+            vm.discrepancy.cartonsQuantityRejected = podObject.cartonsQuantityRejected;
+            vm.discrepancy.containersQuantityOnWayBill = podObject.containersQuantityOnWaybill;
+            vm.discrepancy.containersQuantityAccepted = podObject.containersQuantityAccepted;
+            vm.discrepancy.containersQuantityRejected = podObject.containersQuantityRejected;
+            console.log( vm.discrepancy);
         }
 
         /**
@@ -108,15 +136,15 @@
                     referenceNumber:vm.POD.referenceNo,
                     packingDate:vm.proofOfDelivery.receivedDate,
                     packedBy:vm.POD.packedBy,
-                    cartonsQuantityOnWaybill: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityOnWayBill : null,
+                    cartonsQuantityOnWaybill: vm.discrepancy? vm.discrepancy.cartonsQuantityOnWaybill : null,
                     //Quantity Shipped = Quantity Accepted + Quantity Rejected for both cartons and containers
-                    cartonsQuantityShipped: vm.discrepancy.cartons ? (vm.discrepancy.cartons.quantityRejected + vm.discrepancy.cartons.quantityAccepted) : null,
-                    cartonsQuantityAccepted: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityAccepted : null,
-                    cartonsQuantityRejected: vm.discrepancy.cartons ? vm.discrepancy.cartons.quantityRejected : null,
-                    containersQuantityOnWaybill: vm.discrepancy.containers ? vm.discrepancy.containers.quantityOnWayBill : null,
-                    containersQuantityShipped: vm.discrepancy.containers ? (vm.discrepancy.containers.quantityAccepted + vm.discrepancy.containers.quantityRejected) : null,
-                    containersQuantityAccepted: vm.discrepancy.containers ? vm.discrepancy.containers.quantityAccepted : null,
-                    containersQuantityRejected: vm.discrepancy.containers ? vm.discrepancy.containers.quantityRejected : null,
+                    cartonsQuantityShipped: vm.discrepancy? (vm.discrepancy.cartonsQuantityRejected + vm.discrepancy.cartonsQuantityAccepted) : null,
+                    cartonsQuantityAccepted: vm.discrepancy ? vm.discrepancy.cartonsQuantityAccepted : null,
+                    cartonsQuantityRejected: vm.discrepancy ? vm.discrepancy.cartonsQuantityRejected : null,
+                    containersQuantityOnWaybill: vm.discrepancy ? vm.discrepancy.containersQuantityOnWayBill : null,
+                    containersQuantityShipped: vm.discrepancy ? (vm.discrepancy.containersQuantityAccepted + vm.discrepancy.containersQuantityRejected) : null,
+                    containersQuantityAccepted: vm.discrepancy? vm.discrepancy.containersQuantityAccepted : null,
+                    containersQuantityRejected: vm.discrepancy? vm.discrepancy.containersQuantityRejected : null,
                     discrepancies: discrepancyList
                 }; 
                 
