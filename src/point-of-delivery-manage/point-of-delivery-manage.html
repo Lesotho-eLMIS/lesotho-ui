@@ -92,7 +92,8 @@
             </section>
         </div>     
         
-        <input type="submit" value="{{'pointOfDeliveryManage.submit' | message}}"/>
+        <input ng-if="!vm.tempPOD" type="submit" value="{{'pointOfDeliveryManage.submit' | message}}"/>
+        <input ng-if="vm.tempPOD" type="submit" value="{{'pointOfDeliveryManage.save' | message}}"/>
                 
     </fieldset>
 </form>

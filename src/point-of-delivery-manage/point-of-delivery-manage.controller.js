@@ -29,10 +29,10 @@
 
     pointOfDeliveryManageController.$inject = [
         '$rootScope','$state','$stateParams', 'facility','facilities','facilityService','offlineService', 'pointOfDeliveryService', 
-        '$scope', 'notificationService', 'podAddDiscrepancyModalService', 'podEvents'];
+        '$scope', 'notificationService', 'podAddDiscrepancyModalService', 'podEvents','confirmService', 'messageService'];
 
     function pointOfDeliveryManageController($rootScope, $state,$stateParams, facility,facilities,facilityService, offlineService, 
-                                        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService, podEvents ) {
+                                        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService, podEvents,  confirmService, messageService ) {
 
 
         var vm = this;
@@ -151,22 +151,60 @@
                 
                 console.log("Pay load");
                 console.log(payloadData);
-    
-                var podResponse = pointOfDeliveryService.submitPodManage(payloadData);
-                if (podResponse) {
-                    // Adding success message when POD saved.
-                    notificationService.success('Successfully submitted.');
-                } else {
-                    notificationService.error('Failed to submit.');
-                };
-                   
-                vm.POD = {};
-                vm.discrepancy = [];
-                vm.proofOfDelivery = {};
-                pointOfDeliveryService.clearDiscrepancies();
-                $scope.podManageForm.$setPristine();
-                $scope.podManageForm.$setUntouched();
 
+                if (vm.tempPOD) {
+                    // call the edit POD method here    
+                    confirmService
+                        .confirm("Are you sure you want to edit this point of delivery event?", 'Edit')
+                        .then(function () {
+                        pointOfDeliveryService.editPOD(vm.tempPOD.id,payloadData)
+                        .then(function(response) {
+                            // Success callback
+                            vm.tempPOD = undefined;
+                            vm.POD = {};
+                            vm.discrepancy = [];
+                            vm.proofOfDelivery = {};
+                            pointOfDeliveryService.clearDiscrepancies();
+                            $scope.podManageForm.$setPristine();
+                            $scope.podManageForm.$setUntouched();
+                            notificationService.success('point of delivery event Edited.');
+                            $state.go('openlmis.pointOfDelivery.view');
+                            }
+                        )
+                        .catch(function(error) {
+                            // Error callback
+                            notificationService.error('Failed to edit.');
+                            console.error('Error occurred:', error);
+                        
+                        });
+                        });
+                }else{
+                    //Saving New POD event
+                    confirmService
+                        .confirm("Are you sure you want to submit this point of delivery event?", 'Submit')
+                        .then(function () {
+                         pointOfDeliveryService.submitPodManage(payloadData)
+                        .then(function(response) {
+                            // Success callback
+                            vm.POD = {};
+                            vm.discrepancy = [];
+                            vm.proofOfDelivery = {};
+                            pointOfDeliveryService.clearDiscrepancies();
+                            $scope.podManageForm.$setPristine();
+                            $scope.podManageForm.$setUntouched();
+                            notificationService.success('point of delivery event Submitted.');
+                            $state.go('openlmis.pointOfDelivery.view');
+                            }
+                        )
+                        .catch(function(error) {
+                            // Error callback
+                            notificationService.error('Failed to submit.');
+                            console.error('Error occurred:', error);
+                        
+                        });
+                        });
+
+                }
             } else {
                 notificationService.error('Reference number required. Try again.');
             };
