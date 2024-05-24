@@ -122,7 +122,7 @@
          * @param  {String}   shipmentType  
          * @return {Promise}                resolved with discrepancies.
          */
-        function show (shipmentType) {
+        function show (shipmentType, currentDiscrepancies) {
             return openlmisModalService.createDialog(
                 {
                     controller: 'podAddDiscrepancyModalController',
@@ -137,6 +137,14 @@
                         }, 
                         shipmentType: function () {
                             return shipmentType;
+                        },
+                        discrepancies: function () {
+                            if (currentDiscrepancies) {
+                                return currentDiscrepancies;
+                            }else{
+                                return [];
+                            }
+                            
                         }
                     }   
                 }

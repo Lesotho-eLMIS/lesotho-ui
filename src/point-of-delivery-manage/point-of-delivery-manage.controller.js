@@ -49,8 +49,7 @@
         vm.tempPOD = undefined;
         vm.proofOfDelivery ={};
         vm.Cartons = "Cartons";
-        vm.Containers = "Containers";
-                                                
+        vm.Containers = "Containers";                                        
         vm.facilities = undefined;
 
         vm.homeFacilities = [ facility ];
@@ -73,10 +72,9 @@
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();            
             vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
             $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope 
-            //productsList.filter(item => (item.lot === null)
             if($stateParams.podId){
                 vm.tempPOD = filterShipmentById(podEvents, $stateParams.podId);
-                console.log(vm.tempPOD);
+                console.log(vm.tempPOD.discrepancies);
                 populatePODView(vm.tempPOD);
             }
 
@@ -86,12 +84,12 @@
             if (shipments.hasOwnProperty(id)) {
                 return shipments[id];
             } else {
-                return null; // or handle the case where the id is not found
+                return null;
             }
         }
 
-        vm.addDiscrepancyOnModal = function(shipmentType) {
-            pointOfDeliveryService.show(shipmentType).then(function() {
+        vm.addDiscrepancyOnModal = function(shipmentType, currentDiscrepancies) {
+            pointOfDeliveryService.show(shipmentType,currentDiscrepancies ).then(function() {
                 $stateParams.noReload = true;
                 draft.$modified = true;
                 vm.cacheDraft();
