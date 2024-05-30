@@ -38,7 +38,9 @@
         'stockmanagement',
         'referencedata-lot',
         'stock-reasons-modal',
-        'stock-edit-lot-modal'
+        'stock-edit-lot-modal',
+        'openlmis-urls',
+        'dispensing-prescription-details-modal'
     ]);
 
 })();

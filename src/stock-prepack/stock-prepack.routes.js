@@ -27,7 +27,7 @@
             url: '/prepack',
             label: 'stockPrepack.prepack',
             priority: 7,
-            showInNavigation: true,
+            showInNavigation: false,
             views: {
                 '@openlmis': {
                     controller: 'StockAdjustmentController',

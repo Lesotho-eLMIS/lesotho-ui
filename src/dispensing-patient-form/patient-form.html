@@ -22,20 +22,20 @@
                     </fieldset>
                     <fieldset class="form-group">
                         <label for="nickName">{{'dispensingPatientForm.nickName' | message}}</label>
-                        <input id="nickName" ng-model="vm.patient.nickName" type="text" required />
+                        <input id="nickName" ng-model="vm.patient.nickName" type="text"/>
                     </fieldset>
                     <fieldset class="form-group">
                         <legend>{{'dispensingPatientForm.sex' | message}}</legend>
                         <label class="radio">
-                            <input type="radio" ng-model="vm.patient.sex" ng-value="'M'" required />
+                            <input type="radio" ng-model="vm.patient.sex" ng-value="true" required/>
+                            <!-- <input type="radio" ng-model="vm.patientParams.facilityLocation" ng-value="true" ng-required="vm.facilityLocation === undefined"/> -->
                             {{'dispensingPatientForm.male' | message}}
                         </label>
                         <label class="radio">
-                            <input type="radio" ng-model="vm.patient.sex" ng-value="'F'" required />
+                            <input type="radio" ng-model="vm.patient.sex" ng-value="false" required/>
                             {{'dispensingPatientForm.female' | message}}
                         </label>
                     </fieldset>
-
                     <fieldset class="form-group">
                         <label>{{'dispensingPatientForm.dateOfBirth' | message}}</label>
                         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="vm.patient.DOB"

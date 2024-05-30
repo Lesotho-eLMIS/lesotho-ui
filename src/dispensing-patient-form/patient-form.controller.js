@@ -34,6 +34,9 @@
 
         var vm = this;
 
+        vm.maxDate = new Date();
+        vm.maxDate.setHours(23, 59, 59, 999);
+
         vm.$onInit = onInit;
         vm.contacts = []; 
         vm.patient = {};

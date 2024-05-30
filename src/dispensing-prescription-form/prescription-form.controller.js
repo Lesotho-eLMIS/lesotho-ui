@@ -28,16 +28,16 @@
         .module('dispensing-prescription-form')
         .controller('prescriptionFormController', controller);
 
-    controller.$inject = ['$filter', '$state'];
+    controller.$inject = ['$filter', '$state', 'pointOfDeliveryService', '$scope', 'notificationService', 'dispensingService', 'dispensingPrescriptionDetailsModalService'];
 
-    function controller($filter, $state) {
+    function controller($filter, $state, pointOfDeliveryService, $scope, notificationService, dispensingService, dispensingPrescriptionDetailsModalService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.contacts = []; 
-        vm.addContact = addContact;
-        vm.removeContact = removeContact;
+        vm.prescriptions = []; 
+        vm.addPrescription = addPrescription;
+        vm.removePrescription= removePrescription;
 
         /**
          * @ngdoc method
@@ -61,19 +61,31 @@
          * Add another line item for a Contact
          *
          */
-        function addContact() {
+        function addPrescription() {
             console.log("Add line item...");
-            vm.contacts.push({
-                'phone': '',
-                'email': ''
+            vm.prescriptions.push({
+                //'phone': '',
+                //'email': ''
             });  
         }
 
-        // removing discrepancies from table
-        function removeContact(index) {
+        // removing prescription from table
+        function removePrescription(index) {
             console.log("Remove...");
             console.log(index);
-            vm.contacts.splice(index, 1);
+            vm.prescriptions.splice(index, 1);
+        }
+
+        vm.addDiscrepancyOnModal = function(shipmentType) {
+            dispensingService.show(shipmentType).then(function() {
+                $stateParams.noReload = true;
+                draft.$modified = true;
+                vm.cacheDraft();
+                //Only reload current state and avoid reloading parent state
+                $state.go($state.current.name, $stateParams, {
+                    reload: $state.current.name
+                });
+            }); 
         }
     }
 })();
