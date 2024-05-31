@@ -28,10 +28,10 @@
         .controller('pointOfDeliveryViewController', pointOfDeliveryViewController);
 
     pointOfDeliveryViewController.$inject = ['$stateParams', 'facility','facilities','facilityService','offlineService', 
-                                            '$scope', 'PODs', 'pointOfDeliveryService'];
+                                            '$scope', 'PODs', 'pointOfDeliveryService','$state', 'podEventsWithSuppliers'];
 
     function pointOfDeliveryViewController($stateParams, facility,facilities,facilityService, offlineService, 
-        $scope, PODs, pointOfDeliveryService) {
+        $scope, PODs, pointOfDeliveryService,$state, podEventsWithSuppliers) {
 
 
         var vm = this;
@@ -39,6 +39,7 @@
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
+        vm.PODEvents = podEventsWithSuppliers;
      //   vm.viewDiscrepancies = viewDiscrepancies;
         //vm.hasDiscrepancies = hasDiscrepancies;
 
@@ -62,7 +63,7 @@
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
            // vm.hasDiscrepancies = pointOfDeliveryService.submitQualityDiscrepancies();
            //var pods = PODs; 
-          // console.log(pods);
+           //console.log(podEvents);
         }
 
 
@@ -113,7 +114,7 @@
                     // Check whether SourceId has a value before calling
                     if (singlePODEvent.sourceId) {
                         try {
-                            const resolvedObject = await vm.getSupplyingFacilityName(singlePODEvent.sourceId);
+                            const resolvedObject = await pointOfDeliveryService.getSupplyingFacilityName(singlePODEvent.sourceId);
                             singlePODEvent.sourceName = resolvedObject;
                         } catch (error) {
                             // Handle errors
@@ -171,7 +172,13 @@
         // Handle errors
         console.error('Error in controller:', error);
     });
+    vm.viewPOD = function(id) {
+        /*Function for view single POD event*/
+        $state.go('openlmis.pointOfDelivery.manage', {
+            podId: id,
 
+        }); 
+    }
     vm.viewDiscrepancies = function(discrepancies, referenceNumber) {
         pointOfDeliveryService.showViewModal(discrepancies, referenceNumber).then(function() {
             $stateParams.noReload = true;

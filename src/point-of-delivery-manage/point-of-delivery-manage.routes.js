@@ -28,7 +28,7 @@ routes.$inject = ['$stateProvider'];
       
         $stateProvider.state('openlmis.pointOfDelivery.manage', {
             isOffline: true,
-            url: '/Manage',
+            url: '/Manage/:podId',
             templateUrl: 'point-of-delivery-manage/point-of-delivery-manage.html',
             label: 'pointOfDeliveryManage.title',
             priority: 2,
@@ -58,6 +58,9 @@ routes.$inject = ['$stateProvider'];
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
+                },
+                podEvents: function(facility, pointOfDeliveryService) {
+                    return pointOfDeliveryService.getPODs(facility.id);
                 }
              
             }

@@ -45,6 +45,10 @@
                 savePODEvent: {
                     url: openlmisUrlFactory('/api/podEvents'),
                     method: 'POST'
+                },
+                editPODEvent: {
+                    url: openlmisUrlFactory('/api/podEvents/:id'),
+                    method: 'PUT'
                 }             
             });
  
@@ -55,6 +59,7 @@
         this.addDiscrepancies = addDiscrepancies; // To compile the list of discrepancies
         this.clearDiscrepancies = clearDiscrepancies;
         this.showViewModal = showViewModal;
+        this.editPOD = editPOD;
 
         var discrepancyList = [];
 
@@ -100,9 +105,11 @@
         }
     
         function submitPodManage(payloadData){
-            return resource.savePODEvent(payloadData);
+            return resource.savePODEvent(payloadData).$promise;
         }
-        
+        function editPOD(podId, payloadData) {
+            return resource.editPODEvent({ id:podId },payloadData).$promise;
+        }
         /**
          * @ngdoc method
          * @methodOf point-of-delivery.pointOfDeliveryService
@@ -115,7 +122,7 @@
          * @param  {String}   shipmentType  
          * @return {Promise}                resolved with discrepancies.
          */
-        function show (shipmentType) {
+        function show (shipmentType, currentDiscrepancies) {
             return openlmisModalService.createDialog(
                 {
                     controller: 'podAddDiscrepancyModalController',
@@ -130,6 +137,14 @@
                         }, 
                         shipmentType: function () {
                             return shipmentType;
+                        },
+                        discrepancies: function () {
+                            if (currentDiscrepancies) {
+                                return currentDiscrepancies;
+                            }else{
+                                return [];
+                            }
+                            
                         }
                     }   
                 }

@@ -28,13 +28,14 @@
         .module('pod-add-discrepancy-modal')
         .controller('podAddDiscrepancyModalController', controller);
 
-    controller.$inject = ['pointOfDeliveryService', 'rejectionReasons','$filter', 'shipmentType', 'notificationService', 'modalDeferred'];
+    controller.$inject = ['pointOfDeliveryService', 'rejectionReasons','$filter', 'shipmentType', 'notificationService', 'modalDeferred','discrepancies'];
 
-    function controller( pointOfDeliveryService, rejectionReasons, $filter, shipmentType, notificationService, modalDeferred) {
+    function controller( pointOfDeliveryService, rejectionReasons, $filter, shipmentType, notificationService, modalDeferred, discrepancies) {
         var vm = this;
 
         vm.$onInit = onInit;
         //vm.discrepancies = rejectionReasons;
+        vm.currentShipmentType = shipmentType; //Storing Selected ShipmentType
         vm.discrepancyOptions = [];
         vm.discrepancies = []; //undefined;
         vm.selectedDiscrepancy = undefined;
@@ -53,7 +54,8 @@
          * setting data to be available on the view.
          */        
         function onInit() {
-          
+           vm.discrepancies = populateModalWithCurrentDiscrepancies(discrepancies);
+           console.log(vm.discrepancies);
            vm.selectedDiscrepancy = [];
 
            vm.rejectionReasons = rejectionReasons.content;
@@ -108,6 +110,20 @@
             }
             else{
                 notificationService.error('Add discrepancies before saving them.');
+            }
+        }
+
+        function populateModalWithCurrentDiscrepancies (currentDiscrepancies){
+            if(currentDiscrepancies.length!=0){
+                angular.forEach(currentDiscrepancies, function(reason){
+                    reason.quantity = reason.quantityAffected;
+                    reason.name = reason.rejectionReason.name
+                    
+                });
+                return currentDiscrepancies;
+            }
+            else{
+               return [];
             }
         }
                      

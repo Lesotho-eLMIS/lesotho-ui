@@ -2,6 +2,7 @@
   "pointOfDeliveryView.deliveriesAt": "View Deliveries at ${facility}",
   "pointOfDeliveryView.facility": "Supplying Facility",
   "pointOfDeliveryView.label": "View",
+  "pointOfDeliveryView.action": "Action",
 
   "pointOfDeliveryView.numberOfCartons": "Number of Cartons",  
   "pointOfDeliveryView.numberOfContainers": "Number of Containers",

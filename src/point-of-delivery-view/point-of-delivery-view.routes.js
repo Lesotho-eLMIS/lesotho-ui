@@ -58,6 +58,9 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                           return [];
                       });                    
                 },
+                facilitiesMinimal: function(facilityService) {
+                    return facilityService.getAllMinimal();
+                },
                 facility: function($stateParams, facilityFactory) {
                     // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
@@ -65,16 +68,20 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     }
                     return $stateParams.facility;
                 },
-                // requisitions: function(paginationService, requisitionService, $stateParams) {
-                //     return paginationService.registerUrl($stateParams, function(stateParams) {
-                //         if (stateParams.facility) {
-                //             var offlineFlag = stateParams.offline;
-                //             delete stateParams.offline;
-                //             return requisitionService.search(offlineFlag === 'true', stateParams);
-                //         }
-                //         return undefined;
-                //     });
-                // },
+                podEvents: function(facility, pointOfDeliveryService) {
+                    return pointOfDeliveryService.getPODs(facility.id);
+                },
+                podEventsWithSuppliers: function(podEvents, facilitiesMinimal) {
+                    const podEventsWithSuppliers = Object.keys(podEvents).map(key => {
+                        const event = podEvents[key];
+                        const supplier = facilitiesMinimal.find(facility => facility.id == event.sourceId);
+                        //console.log(supplier);
+                        event.sourceName = supplier.name;
+                        return event;
+                      });
+                    //console.log(podEventsWithSuppliers);
+                    return podEventsWithSuppliers;
+                }, 
                 PODs: function(paginationService, pointOfDeliveryService, $stateParams, facility) {
                         return paginationService.registerUrl($stateParams, function(stateParams){
                              if (stateParams){
