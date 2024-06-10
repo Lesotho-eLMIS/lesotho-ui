@@ -172,13 +172,15 @@
         // Handle errors
         console.error('Error in controller:', error);
     });
-    vm.viewPOD = function(id) {
-        /*Function for view single POD event*/
+
+    /*Function for view single POD event*/
+    vm.viewPOD = function(id) {        
         $state.go('openlmis.pointOfDelivery.manage', {
             podId: id,
-
         }); 
     }
+
+
     vm.viewDiscrepancies = function(discrepancies, referenceNumber) {
         pointOfDeliveryService.showViewModal(discrepancies, referenceNumber).then(function() {
             $stateParams.noReload = true;

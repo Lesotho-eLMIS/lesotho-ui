@@ -12,7 +12,7 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
-(function() {
+(function () {
 
     'use strict';
 
@@ -28,58 +28,55 @@
         .controller('pointOfDeliveryManageController', pointOfDeliveryManageController);
 
     pointOfDeliveryManageController.$inject = [
-        '$rootScope','$state','$stateParams', 'facility','facilities','facilityService','offlineService', 'pointOfDeliveryService', 
-        '$scope', 'notificationService', 'podAddDiscrepancyModalService', 'podEvents','confirmService', 'messageService'];
+        '$rootScope', '$state', '$stateParams', 'facility', 'facilities', 'facilityService', 'offlineService', 'pointOfDeliveryService',
+        '$scope', 'notificationService', 'podAddDiscrepancyModalService', 'podEvents', 'confirmService', 'alertService'];
 
-    function pointOfDeliveryManageController($rootScope, $state,$stateParams, facility,facilities,facilityService, offlineService, 
-                                        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService, podEvents,  confirmService, messageService ) {
+    function pointOfDeliveryManageController($rootScope, $state, $stateParams, facility, facilities, facilityService, offlineService,
+        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService, podEvents, confirmService, alertService) {
 
 
         var vm = this;
 
         vm.maxDate = new Date();
         vm.maxDate.setHours(23, 59, 59, 999);
-      //  vm.addDiscrepancyOnModal = addDiscrepancyOnModal;
-
         vm.supplyingFacilities = facilities;
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.POD = {};
         vm.discrepancy = {};
         vm.tempPOD = undefined;
-        vm.proofOfDelivery ={};
+        vm.proofOfDelivery = {};
         vm.Cartons = "Cartons";
-        vm.Containers = "Containers";                                        
+        vm.Containers = "Containers";
         vm.facilities = undefined;
 
-        vm.homeFacilities = [ facility ];
+        vm.homeFacilities = [facility];
+        vm.validateConsignment = validateConsignment;
 
-     /**
-         * @ngdoc method
-         * @methodOf requisition-search.controller:RequisitionViewController
-         * @name $onInit
-         *
-         * @description
-         * Initialization method called after the controller has been created. Responsible for
-         * setting data to be available on the view.
-         */        
-         function onInit() {
+        /**
+            * @ngdoc method
+            * @methodOf requisition-search.controller:RequisitionViewController
+            * @name $onInit
+            *
+            * @description
+            * Initialization method called after the controller has been created. Responsible for
+            * setting data to be available on the view.
+            */
+        function onInit() {
 
-        // var stateParams = angular.copy($stateParams);
-          
             vm.receivingFacility = facility.name;
-            vm.supplyingFacilities = facilities;        
-            vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();            
+            vm.supplyingFacilities = facilities;
+            vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
             vm.POD.referenceNo = $rootScope.referenceNoPOD; // Getting  Ref Number from Quality Checks
             $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope 
-            if($stateParams.podId){
+            if ($stateParams.podId) {
                 vm.tempPOD = filterShipmentById(podEvents, $stateParams.podId);
                 console.log(vm.tempPOD.discrepancies);
                 populatePODView(vm.tempPOD);
             }
 
         }
-    
+
         function filterShipmentById(shipments, id) {
             if (shipments.hasOwnProperty(id)) {
                 return shipments[id];
@@ -88,8 +85,8 @@
             }
         }
 
-        vm.addDiscrepancyOnModal = function(shipmentType, currentDiscrepancies) {
-            pointOfDeliveryService.show(shipmentType,currentDiscrepancies ).then(function() {
+        vm.addDiscrepancyOnModal = function (shipmentType, currentDiscrepancies) {
+            pointOfDeliveryService.show(shipmentType, currentDiscrepancies).then(function () {
                 $stateParams.noReload = true;
                 draft.$modified = true;
                 vm.cacheDraft();
@@ -97,19 +94,136 @@
                 $state.go($state.current.name, $stateParams, {
                     reload: $state.current.name
                 });
-            }); 
+            });
         }
+
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name populatePODView
+         *
+         * @description
+         * Loads view with POD data to edit
+         */
         function populatePODView(podObject) {
             vm.POD.referenceNo = podObject.referenceNumber;
-            vm.proofOfDelivery.receivedDate = podObject.packingDate;
+            vm.POD.receivedDate = podObject.packingDate;
             vm.POD.packedBy = podObject.packedBy;
-            vm.discrepancy.cartonsQuantityOnWaybill = podObject.cartonsQuantityOnWaybill;
-            vm.discrepancy.cartonsQuantityAccepted = podObject.cartonsQuantityAccepted;
-            vm.discrepancy.cartonsQuantityRejected = podObject.cartonsQuantityRejected;
-            vm.discrepancy.containersQuantityOnWayBill = podObject.containersQuantityOnWaybill;
-            vm.discrepancy.containersQuantityAccepted = podObject.containersQuantityAccepted;
-            vm.discrepancy.containersQuantityRejected = podObject.containersQuantityRejected;
-            console.log( vm.discrepancy);
+            vm.POD.cartonsQuantityOnWaybill = podObject.cartonsQuantityOnWaybill;
+            vm.POD.cartonsQuantityAccepted = podObject.cartonsQuantityAccepted;
+            vm.POD.cartonsQuantityRejected = podObject.cartonsQuantityRejected;
+            vm.POD.containersQuantityOnWayBill = podObject.containersQuantityOnWaybill;
+            vm.POD.containersQuantityAccepted = podObject.containersQuantityAccepted;
+            vm.POD.containersQuantityRejected = podObject.containersQuantityRejected;
+            console.log(vm.POD);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name buildPayload
+         *
+         * @description
+         * Builds POD receive payload for sending to backend
+         */
+        vm.buildPayload = function () {
+
+            var discrepancyList = pointOfDeliveryService.getDiscrepancies();
+
+            var payloadData = {
+                sourceId: vm.POD.supplyingFacility.id,
+                destinationId: vm.POD.receivingFacility.id,
+                referenceNumber: vm.POD.referenceNo,
+                packingDate: vm.POD.receivedDate,
+                packedBy: vm.POD.packedBy,
+                cartonsQuantityOnWaybill: vm.POD ? vm.POD.cartonsQuantityOnWaybill : null,
+                //Quantity Shipped = Quantity Accepted + Quantity Rejected for both cartons and containers
+                cartonsQuantityShipped: vm.POD ? (vm.POD.cartonsQuantityRejected + vm.POD.cartonsQuantityAccepted) : null,
+                cartonsQuantityAccepted: vm.POD ? vm.POD.cartonsQuantityAccepted : null,
+                cartonsQuantityRejected: vm.POD ? vm.POD.cartonsQuantityRejected : null,
+                containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
+                containersQuantityShipped: vm.POD ? (vm.POD.containersQuantityAccepted + vm.POD.containersQuantityRejected) : null,
+                containersQuantityAccepted: vm.POD ? vm.POD.containersQuantityAccepted : null,
+                containersQuantityRejected: vm.POD ? vm.POD.containersQuantityRejected : null,
+                discrepancies: discrepancyList
+            };
+            const inputsValid = vm.validatePODinputs(payloadData);
+            const validatedCartonsAndContainers = vm.validateCartonsAndContainers(payloadData);
+            const consignmentValid = validateConsignment(payloadData);
+            if (inputsValid && consignmentValid) {
+                if (validatedCartonsAndContainers) {
+                    vm.submitPOD(payloadData);
+                } else {
+                    alertService.error("Please ensure that cartons and containers details are correct.");
+                }
+            } else {
+                alertService.error('pointOfDeliveryManage.emptyConsignment');
+            }
+        };
+
+        //Perform validation to ensure that all mandatory form data is filled in
+        vm.validatePODinputs = function (podInputs) {
+
+            const hasreference = podInputs.hasOwnProperty('referenceNumber') && podInputs.referenceNumber;
+            const hasSupplyingFacility = podInputs.hasOwnProperty('sourceId') && podInputs.sourceId;
+            const hasreceivingFacility = podInputs.hasOwnProperty('destinationId') && podInputs.destinationId;
+            const hasPackingDate = podInputs.hasOwnProperty('packingDate') && podInputs.packingDate;
+            const hasPacker = podInputs.hasOwnProperty('packedBy') && podInputs.packedBy;
+
+            if (!(hasreference)) {
+                alertService.error('Reference number details missing');
+            } else if (!(hasSupplyingFacility)) {
+                alertService.error("Supplying facility details missing");
+            } else if (!(hasreceivingFacility)) {
+                alertService.error("Receiving facility details missing");
+            } else if (!(hasPackingDate)) {
+                alertService.error("Packing date data missing");
+            } else if (!(hasPacker)) {
+                alertService.error("Consingnment packer details missing");
+            } else {
+                return true;
+            }
+        };
+
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name validateCartonsAndContainers
+         *
+         * @description
+         * 
+         */
+        vm.validateCartonsAndContainers = function (podDetails) {
+            console.log(podDetails);
+
+            if ((podDetails.cartonsQuantityRejected > podDetails.cartonsQuantityOnWaybill) || (podDetails.containersQuantityRejected > podDetails.containersQuantityOnWaybill)) {
+
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
+         * @name validateConsignment
+         *
+         * @description
+         * Function validates to ensure POD form is not submitted with zero cartons and containers
+         */
+        function validateConsignment(consignmentDetails) {
+
+            const hasCartonsQuantity = consignmentDetails.hasOwnProperty('cartonsQuantityOnWaybill') && consignmentDetails.cartonsQuantityOnWaybill;
+            const hasContainersQuantity = consignmentDetails.hasOwnProperty('containersQuantityOnWaybill') && consignmentDetails.containersQuantityOnWaybill;
+
+            //Check if Cartons and Containers have values
+            if (!(hasCartonsQuantity || hasContainersQuantity)) {
+                return false;
+            }
+
+            return true;
         }
 
         /**
@@ -118,138 +232,73 @@
          * @name submitPOD
          *
          * @description
-         * Builds POD receive payload for sending to backend
+         * Sends POD payload to backend and confirms
          */
-        vm.submitPOD = function () {
+        vm.submitPOD = function (payloadData) {
 
-            //var descrepancies = podAddDiscrepancyModalService.getDiscrepancies(); 
-                var discrepancyList = pointOfDeliveryService.getDiscrepancies();
-                console.log("discrepancyList");
-                console.log(discrepancyList);
-                if (vm.POD.referenceNo) {
-             
-                var payloadData = {
-                    sourceId:vm.supplyingFacility.id,
-                    destinationId:vm.receivingFacility.id,
-                    referenceNumber:vm.POD.referenceNo,
-                    packingDate:vm.proofOfDelivery.receivedDate,
-                    packedBy:vm.POD.packedBy,
-                    cartonsQuantityOnWaybill: vm.discrepancy? vm.discrepancy.cartonsQuantityOnWaybill : null,
-                    //Quantity Shipped = Quantity Accepted + Quantity Rejected for both cartons and containers
-                    cartonsQuantityShipped: vm.discrepancy? (vm.discrepancy.cartonsQuantityRejected + vm.discrepancy.cartonsQuantityAccepted) : null,
-                    cartonsQuantityAccepted: vm.discrepancy ? vm.discrepancy.cartonsQuantityAccepted : null,
-                    cartonsQuantityRejected: vm.discrepancy ? vm.discrepancy.cartonsQuantityRejected : null,
-                    containersQuantityOnWaybill: vm.discrepancy ? vm.discrepancy.containersQuantityOnWayBill : null,
-                    containersQuantityShipped: vm.discrepancy ? (vm.discrepancy.containersQuantityAccepted + vm.discrepancy.containersQuantityRejected) : null,
-                    containersQuantityAccepted: vm.discrepancy? vm.discrepancy.containersQuantityAccepted : null,
-                    containersQuantityRejected: vm.discrepancy? vm.discrepancy.containersQuantityRejected : null,
-                    discrepancies: discrepancyList
-                }; 
-                
-                
-                console.log("Pay load");
-                console.log(payloadData);
-
-                if (vm.tempPOD) {
-                    // call the edit POD method here    
-                    confirmService
-                        .confirm("Are you sure you want to edit this point of delivery event?", 'Edit')
-                        .then(function () {
-                        pointOfDeliveryService.editPOD(vm.tempPOD.id,payloadData)
-                        .then(function(response) {
-                            // Success callback
-                            vm.tempPOD = undefined;
-                            vm.POD = {};
-                            vm.discrepancy = [];
-                            vm.proofOfDelivery = {};
-                            pointOfDeliveryService.clearDiscrepancies();
-                            $scope.podManageForm.$setPristine();
-                            $scope.podManageForm.$setUntouched();
-                            notificationService.success('point of delivery event Edited.');
-                            $state.go('openlmis.pointOfDelivery.view');
-                            }
-                        )
-                        .catch(function(error) {
-                            // Error callback
-                            notificationService.error('Failed to edit.');
-                            console.error('Error occurred:', error);
-                        
-                        });
-                        });
-                }else{
-                    //Saving New POD event
-                    confirmService
-                        .confirm("Are you sure you want to submit this point of delivery event?", 'Submit')
-                        .then(function () {
-                         pointOfDeliveryService.submitPodManage(payloadData)
-                        .then(function(response) {
-                            // Success callback
-                            vm.POD = {};
-                            vm.discrepancy = [];
-                            vm.proofOfDelivery = {};
-                            pointOfDeliveryService.clearDiscrepancies();
-                            $scope.podManageForm.$setPristine();
-                            $scope.podManageForm.$setUntouched();
-                            notificationService.success('point of delivery event Submitted.');
-                            $state.go('openlmis.pointOfDelivery.view');
-                            }
-                        )
-                        .catch(function(error) {
-                            // Error callback
-                            notificationService.error('Failed to submit.');
-                            console.error('Error occurred:', error);
-                        
-                        });
-                        });
-
-                }
+            if (vm.tempPOD) {
+                // call the edit POD method here    
+                confirmService
+                    .confirm("Are you sure you want to edit this point of delivery event?", 'Edit')
+                    .then(function () {
+                        pointOfDeliveryService.editPOD(vm.tempPOD.id, payloadData)
+                            .then(function (response) {
+                                // Success callback
+                                vm.tempPOD = undefined;
+                                vm.clearForm();
+                                notificationService.success('point of delivery event Edited.');
+                                $state.go('openlmis.pointOfDelivery.view');
+                            })
+                            .catch(function (error) {
+                                // Error callback
+                                notificationService.error('Failed to edit.');
+                                console.error('Error occurred:', error);
+                            });
+                    });
             } else {
-                notificationService.error('Reference number required. Try again.');
-            };
+                //Saving New POD event
+                confirmService
+                    .confirm("Are you sure you want to submit this point of delivery event?", 'Submit')
+                    .then(function () {
+                        pointOfDeliveryService.submitPodManage(payloadData)
+                            .then(function (response) {
+                                vm.clearForm();
+                                notificationService.success('point of delivery event Submitted.');
+                                $state.go('openlmis.pointOfDelivery.view');
+                            })
+                            .catch(function (error) {
+                                // Error callback
+                                notificationService.error('Failed to submit.');
+                                console.error('Error occurred:', error);
+
+                            });
+                    });
+            }
         };
 
         /**
          * @ngdoc method
          * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
-         * @name validateCartons
+         * @name clearForm
          *
          * @description
-         * Checks if the number of rejected cartons is greater than the total number of cartons received. If it is, 
-         * it resets the number of rejected cartons to 0
+         * Clears all form fields from POD form
          */
-
-        vm.validateCartons = function(){
-            
-            if(vm.POD.numberOfRejectedCartons > vm.POD.numberOfCartons){
-                vm.POD.numberOfRejectedCartons = 0;
-            }            
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
-         * @name validateContainers
-         *
-         * @description
-         * Checks if the number of rejected containers is greater than the total number of containers received. If it is, 
-         * it resets the number of rejected containers to 0
-         */
-
-        vm.validateContainers = function(){
-
-            console.log(vm.POD.numberOfRejectedContainers + " && " + vm.POD.numberOfContainers)
-
-            if(vm.POD.numberOfRejectedContainers > vm.POD.numberOfContainers){
-                vm.POD.numberOfRejectedContainers = 0;
-            }           
-        }
+        vm.clearForm = function () {
+            vm.POD = {};
+            vm.discrepancy = [];
+            vm.proofOfDelivery = {};
+            pointOfDeliveryService.clearDiscrepancies();
+            $scope.podManageForm.$setPristine();
+            $scope.podManageForm.$setUntouched();
+        };
 
 
-        vm.getSupplyingFacilityName = async function(supplyingFacilityId) {
+        vm.getSupplyingFacilityName = async function (supplyingFacilityId) {
             try {
-               
+
                 var facilityObject = await facilityService.get(supplyingFacilityId);
-                
+
                 // Return Facility Name
                 //console.log(facilityObject.name);
                 return facilityObject.name;
@@ -259,13 +308,13 @@
                 return ""; // Or handle the error appropriately
             }
         };
-     
-        vm.addSupplyingFacility = async function(eventPODs) {
+
+        vm.addSupplyingFacility = async function (eventPODs) {
             try {
                 // Create an array of Promises
                 const promises = Object.keys(eventPODs).map(async key => {
                     const singlePODEvent = eventPODs[key];
-        
+
                     // Check whether SourceId has a value before calling
                     if (singlePODEvent.sourceId) {
                         try {
@@ -276,13 +325,13 @@
                             console.error('Error in controller:', error);
                         }
                     }
-        
+
                     return singlePODEvent;
                 });
-        
+
                 // Await all Promises to resolve
                 const eventPODsWithSupplierNames = await Promise.all(promises);
-        
+
                 return eventPODsWithSupplierNames.reduce((acc, curr, index) => {
                     acc[index] = curr;
                     return acc;
@@ -293,16 +342,6 @@
                 return {};
             }
         };
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-search.controller:RequisitionViewController
-         * @name facilities
-         * @type {Array}
-         *
-         * @description
-         * The list of all facilities available to the user.
-         */
 
     }
 })();
