@@ -13,7 +13,9 @@
   "pointOfDeliveryManage.receivedBy": "Received By",
   "pointOfDeliveryManage.receivedDate": "Receiving Date",
   "pointOfDeliveryManage.submit": "Submit",
+  "pointOfDeliveryManage.clear": "Clear",
   "pointOfDeliveryManage.save": "Save",
+  "pointOfDeliveryManage.validateCartonsQuantity": "Cartons rejected cannot exceed number on waybill",
   "proofOfDeliveryManage.receivingFacility":"Receiving Facility",
   "pointOfDeliveryManage.shipmentType": "Shipment Type",
   "pointOfDeliveryManage.quantityShipped": "Quantity Shipped",
@@ -23,5 +25,6 @@
   "proofOfDeliveryManage.action":"Discrepancy",
   "proofOfDeliveryManage.addDiscrepancy":"Add",
   "proofOfDeliveryManage.cartons": "Cartons",
-  "pointOfDeliveryManage.containers": "Containers"
+  "pointOfDeliveryManage.containers": "Containers",
+  "pointOfDeliveryManage.emptyConsignment": "Cartons and Containers both have zero values. Insert at least one container or carton"
 }
