@@ -179,7 +179,7 @@
             } else if (!(hasPackingDate)) {
                 alertService.error("Packing date data missing");
             } else if (!(hasPacker)) {
-                alertService.error("Consingnment packer details missing");
+                alertService.error("Consignment packer details missing");
             } else {
                 return true;
             }
