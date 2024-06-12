@@ -97,6 +97,18 @@
             });
         }
 
+        vm.addComplaintOnModal = function (shipmentType, currentDiscrepancies) {
+            pointOfDeliveryService.show(shipmentType, currentDiscrepancies).then(function () {
+                $stateParams.noReload = true;
+                draft.$modified = true;
+                vm.cacheDraft();
+                //Only reload current state and avoid reloading parent state
+                $state.go($state.current.name, $stateParams, {
+                    reload: $state.current.name
+                });
+            });
+        }
+
         /**
          * @ngdoc method
          * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController

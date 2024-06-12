@@ -35,6 +35,7 @@
         'referencedata-user',
         'openlmis-urls',
         'pod-add-discrepancy-modal',
+        'complaint-modal',
         'openlmis-modal'
     ]);
 

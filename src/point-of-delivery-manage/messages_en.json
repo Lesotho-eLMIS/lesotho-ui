@@ -22,8 +22,8 @@
   "pointOfDeliveryManage.quantityOnWayBill": "Waybill Quantity",
   "proofOfDeliveryManage.quantityAccepted":"Accepted Quantity",
   "proofOfDeliveryManage.quantityRejected":"Rejected Quantity",
-  "proofOfDeliveryManage.action":"Discrepancy",
-  "proofOfDeliveryManage.addDiscrepancy":"Add",
+  "proofOfDeliveryManage.action":"Action",
+  "proofOfDeliveryManage.addDiscrepancy":"Add Discrepancy",
   "proofOfDeliveryManage.cartons": "Cartons",
   "pointOfDeliveryManage.containers": "Containers",
   "pointOfDeliveryManage.emptyConsignment": "Cartons and Containers both have zero values. Insert at least one container or carton"

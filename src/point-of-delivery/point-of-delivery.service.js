@@ -55,6 +55,7 @@
         this.submitPodManage = submitPodManage; // To post data POD Manage payload
         this.getPODs = getPODs; //To retrieve PODs from the database
         this.show = show;
+        this.showComplaintModal = showComplaintModal;
         this.getDiscrepancies = getDiscrepancies; // To retrieve the compiled discrepancies
         this.addDiscrepancies = addDiscrepancies; // To compile the list of discrepancies
         this.clearDiscrepancies = clearDiscrepancies;
@@ -128,6 +129,37 @@
                     controller: 'podAddDiscrepancyModalController',
                     controllerAs: 'vm',
                     templateUrl: 'pod-add-discrepancy-modal/add-discrepancy-modal.html',
+                    show: true ,
+                    resolve: {
+                        rejectionReasons: function(rejectionReasonService) {
+                                // Load rejection Reasons into the controller.
+                                return rejectionReasonService.getAll();
+                            
+                        }, 
+                        shipmentType: function () {
+                            return shipmentType;
+                        },
+                        discrepancies: function () {
+                            if (currentDiscrepancies) {
+                                return currentDiscrepancies;
+                            }else{
+                                return [];
+                            }
+                            
+                        }
+                    }   
+                }
+            ).promise.finally(function() {
+                angular.element('.openlmis-popover').popover('destroy');
+            });
+        }
+
+        function showComplaintModal (shipmentType, currentDiscrepancies) {
+            return openlmisModalService.createDialog(
+                {
+                    controller: 'complaintModalController',
+                    controllerAs: 'vm',
+                    templateUrl: 'complaint-modal/complaint-modal.html',
                     show: true ,
                     resolve: {
                         rejectionReasons: function(rejectionReasonService) {
