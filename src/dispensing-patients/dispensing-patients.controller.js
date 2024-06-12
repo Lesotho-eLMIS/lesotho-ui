@@ -27,10 +27,10 @@
         .module('dispensing-patients')
         .controller('dispensingPatientsController', dispensingPatientsController);
 
-        dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 
+        dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 'facilityService',
         'offlineService', 'dispensingService'];
 
-    function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, 
+    function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, facilityService,
         dispensingService) {
 
             
@@ -39,6 +39,7 @@
         vm.addPatientForm = undefined;
         vm.searchPatients = searchPatients;
         vm.$onInit = onInit;
+        vm.viewPatients = viewPatients;
 
         // /**
         //  * @ngdoc property
@@ -80,6 +81,8 @@
             vm.fetchPatients = undefined;
             vm.patientsData = undefined;
             vm.patientParams = {};
+            vm.facility = facility;
+            vm.facilities = facilities;
 
         }
 
@@ -88,20 +91,31 @@
             $state.go('openlmis.dispensing.patients.form');
         }
 
+
         function searchPatients(){
-            console.log(vm.patientParams);
+
             var getPatientParams = vm.patientParams;
-            vm.fetchPatients = dispensingService.getPatients(getPatientParams);
-            vm.fetchPatients.then(function(resolvedObject) {
-            // Assign the resolved object to a scope variable            
-                vm.patientsData = resolvedObject;   
-                console.log("Resolved Patients for View:");
-                console.log(vm.patientsData);   
-                //return patientsData;                
-            })
-            .catch(function(error) {
-                // Handle errors
-                console.error('Error in controller:', error);
+            if(getPatientParams.facilityLocation){
+                getPatientParams.facilityId = vm.facility.id;
+            }
+            else{
+                getPatientParams.facilityId = undefined;
+            }    
+            viewPatients(getPatientParams);   
+        }
+
+        function viewPatients(patientSearchParams){
+            return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {               
+                for (var key in patientsObject) {
+                        if (patientsObject.hasOwnProperty(key)) {
+                            // Access each patient object to modify its facilityId
+                            var patient = patientsObject[key];
+                            //Find the Patient's home facility
+                            let facility = vm.facilities.filter(item => item.id === patient.facilityId);
+                            patient.facilityId = facility[0].name;                      
+                        }
+                    }
+                    vm.patientsData =  patientsObject;
             });
         }
     }
