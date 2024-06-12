@@ -75,47 +75,19 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     const podEventsWithSuppliers = Object.keys(podEvents).map(key => {
                         const event = podEvents[key];
                         const supplier = facilitiesMinimal.find(facility => facility.id == event.sourceId);
-                        //console.log(supplier);
                         event.sourceName = supplier.name;
                         return event;
                       });
-                    //console.log(podEventsWithSuppliers);
                     return podEventsWithSuppliers;
                 }, 
                 PODs: function(paginationService, pointOfDeliveryService, $stateParams, facility) {
                         return paginationService.registerUrl($stateParams, function(stateParams){
                              if (stateParams){
-                                console.log(stateParams);
                                 stateParams.facility = facility;
-                                console.log("paging POD");
-                                //console.log(facility.id);
-                                console.log(stateParams);
-                                console.log(stateParams.facility);
-                                //console.log(pointOfDeliveryService.getPODs(facility.id));
-                                //console.log(pointOfDeliveryService.getPODs(stateParams.facility.id));
-                               // var records = 
-                               // stateParams.sort = 'packingDate,desc';
                                return pointOfDeliveryService.getPODs(stateParams.facility.id);
-                               //return undefined;
                             }
-                           // console.log(facility.id);
-                           console. log("skipped loop");
-                            console.log(stateParams);
-                           // return pointOfDeliveryService.getPODs(facility.id);
-                           // return undefined;
                         });
-                        // customPageParamName: 'customPage',
-                        // customSizeParamName: 'customSize'
                     }
-                     // PODs: function(paginationService, pointOfDeliveryService, $stateParams) {
-                //     return paginationService.registerUrl($stateParams, function(stateParams) {
-                //         if (stateParams.supplyingFacilityId) {
-                //             stateParams.sort = 'createdDate,desc';
-                //             return pointOfDeliveryService.getPODs(stateParams);
-                //         }
-                //         return undefined;
-                //     });
-                // }
             }
         });
        

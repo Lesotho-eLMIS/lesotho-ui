@@ -115,7 +115,6 @@
             vm.POD.containersQuantityOnWayBill = podObject.containersQuantityOnWaybill;
             vm.POD.containersQuantityAccepted = podObject.containersQuantityAccepted;
             vm.POD.containersQuantityRejected = podObject.containersQuantityRejected;
-            console.log(vm.POD);
         }
 
         /**
@@ -137,7 +136,6 @@
                 packingDate: vm.POD.receivedDate,
                 packedBy: vm.POD.packedBy,
                 cartonsQuantityOnWaybill: vm.POD ? vm.POD.cartonsQuantityOnWaybill : null,
-                //Quantity Shipped = Quantity Accepted + Quantity Rejected for both cartons and containers
                 cartonsQuantityShipped: vm.POD ? (vm.POD.cartonsQuantityRejected + vm.POD.cartonsQuantityAccepted) : null,
                 cartonsQuantityAccepted: vm.POD ? vm.POD.cartonsQuantityAccepted : null,
                 cartonsQuantityRejected: vm.POD ? vm.POD.cartonsQuantityRejected : null,
@@ -194,8 +192,6 @@
          * 
          */
         vm.validateCartonsAndContainers = function (podDetails) {
-            console.log(podDetails);
-
             if ((podDetails.cartonsQuantityRejected > podDetails.cartonsQuantityOnWaybill) || (podDetails.containersQuantityRejected > podDetails.containersQuantityOnWaybill)) {
 
                 return false;

@@ -12,7 +12,7 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
-(function() {
+(function () {
 
     'use strict';
 
@@ -27,11 +27,11 @@
         .module('point-of-delivery-view')
         .controller('pointOfDeliveryViewController', pointOfDeliveryViewController);
 
-    pointOfDeliveryViewController.$inject = ['$stateParams', 'facility','facilities','facilityService','offlineService', 
-                                            '$scope', 'PODs', 'pointOfDeliveryService','$state', 'podEventsWithSuppliers'];
+    pointOfDeliveryViewController.$inject = ['$stateParams', 'facility', 'facilities', 'facilityService', 'offlineService',
+        '$scope', 'PODs', 'pointOfDeliveryService', '$state', 'podEventsWithSuppliers'];
 
-    function pointOfDeliveryViewController($stateParams, facility,facilities,facilityService, offlineService, 
-        $scope, PODs, pointOfDeliveryService,$state, podEventsWithSuppliers) {
+    function pointOfDeliveryViewController($stateParams, facility, facilities, facilityService, offlineService,
+        $scope, PODs, pointOfDeliveryService, $state, podEventsWithSuppliers) {
 
 
         var vm = this;
@@ -40,7 +40,7 @@
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.PODEvents = podEventsWithSuppliers;
-     //   vm.viewDiscrepancies = viewDiscrepancies;
+        //   vm.viewDiscrepancies = viewDiscrepancies;
         //vm.hasDiscrepancies = hasDiscrepancies;
 
         // vm.options = {
@@ -59,11 +59,8 @@
         function onInit() {
 
             vm.receivingFacility = facility.name;
-            vm.supplyingFacilities = facilities;        
+            vm.supplyingFacilities = facilities;
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
-           // vm.hasDiscrepancies = pointOfDeliveryService.submitQualityDiscrepancies();
-           //var pods = PODs; 
-           //console.log(podEvents);
         }
 
 
@@ -74,27 +71,27 @@
          *
          * @description
          * Responsible for formatting 'Received By' in the view
-         */     
-        $scope.formatPODrecievedBy = function(name) {
-            if (name) {
-              var splittedName = name.split(', '); // Splitting the string by comma and space
-              return splittedName.join(' '); // Joining the array elements with a space in between 
-            } else {
-              return ''; // Handle if input is empty or undefined
-            }
-          };
-       
-          /**
-         * @ngdoc method
-         * @methodOf point-of-delivery-view.controller:pointOfDeliveryViewController
-         * @name getSupplyingFacilityName
-         *
-         * @description
-         * Retrieves the name of the Supplying Facility
          */
-        vm.getSupplyingFacilityName = async function(supplyingFacilityId) {
+        $scope.formatPODrecievedBy = function (name) {
+            if (name) {
+                var splittedName = name.split(', '); // Splitting the string by comma and space
+                return splittedName.join(' '); // Joining the array elements with a space in between 
+            } else {
+                return ''; // Handle if input is empty or undefined
+            }
+        };
+
+        /**
+       * @ngdoc method
+       * @methodOf point-of-delivery-view.controller:pointOfDeliveryViewController
+       * @name getSupplyingFacilityName
+       *
+       * @description
+       * Retrieves the name of the Supplying Facility
+       */
+        vm.getSupplyingFacilityName = async function (supplyingFacilityId) {
             try {
-               
+
                 var facilityObject = await facilityService.get(supplyingFacilityId);
                 // Return Facility Name
                 return facilityObject.name;
@@ -104,29 +101,29 @@
                 return ''; // Or handle the error appropriately
             }
         };
-     
-        vm.addSupplyingFacility = async function(eventPODs) {
+
+        vm.addSupplyingFacility = async function (eventPODs) {
             try {
                 // Create an array of Promises
                 const promises = Object.keys(eventPODs).map(async key => {
                     const singlePODEvent = eventPODs[key];
-        
+
                     // Check whether SourceId has a value before calling
                     if (singlePODEvent.sourceId) {
                         try {
                             const resolvedObject = await pointOfDeliveryService.getSupplyingFacilityName(singlePODEvent.sourceId);
+                            console.log(resolvedObject);
                             singlePODEvent.sourceName = resolvedObject;
                         } catch (error) {
                             // Handle errors
                             console.error('Error in controller:', error);
                         }
-                    }        
+                    }
                     return singlePODEvent;
                 });
-        
+
                 // Await all Promises to resolve
                 const eventPODsWithSupplierNames = await Promise.all(promises);
-        
                 return eventPODsWithSupplierNames.reduce((acc, curr, index) => {
                     acc[index] = curr;
                     return acc;
@@ -138,75 +135,54 @@
             }
         };
 
-        
-   //$scope.PODEvents = PODs; 
+        // For Displaying Recieved By Name without a comma
+        $scope.formatPODrecievedBy = function (name) {
+            if (name) {
+                var splittedName = name.split(', '); // Splitting the string by comma and space
+                return splittedName.join(' '); // Joining the array elements with a space in between 
+            } else {
+                return ''; // Handle if input is empty or undefined
+            }
+        };
 
-     // For Displaying Recieved By Name without a comma
-    $scope.formatPODrecievedBy = function(name) {
-        if (name) {
-          var splittedName = name.split(', '); // Splitting the string by comma and space
-          return splittedName.join(' '); // Joining the array elements with a space in between 
-        } else {
-          return ''; // Handle if input is empty or undefined
-        }
-    };
-         
-    var sendToView = pointOfDeliveryService.getPODs(facility.id);
+        var sendToView = pointOfDeliveryService.getPODs(facility.id);
 
-    // Handle the promise resolution
-    sendToView.then(function(resolvedObject) {
-        // Assign the resolved object to a scope variable
-        $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
-        $scope.dataObject.then(function(resolvedObject) {             
-            $scope.PODEvents  = resolvedObject;     
-            console.log("Resolved PODs for View:");
-            console.log($scope.PODEvents);                   
+        // Handle the promise resolution
+        sendToView.then(function (resolvedObject) {
+            // Assign the resolved object to a scope variable
+            $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
+            $scope.dataObject.then(function (resolvedObject) {
+                $scope.PODEvents = resolvedObject;
+            })
+                .catch(function (error) {
+                    // Handle errors
+                    console.error('Error in controller:', error);
+                });
+
         })
-        .catch(function(error) {
-            // Handle errors
-            console.error('Error in controller:', error);
-        });
-
-    })
-    .catch(function(error) {
-        // Handle errors
-        console.error('Error in controller:', error);
-    });
-
-    /*Function for view single POD event*/
-    vm.viewPOD = function(id) {        
-        $state.go('openlmis.pointOfDelivery.manage', {
-            podId: id,
-        }); 
-    }
-
-
-    vm.viewDiscrepancies = function(discrepancies, referenceNumber) {
-        pointOfDeliveryService.showViewModal(discrepancies, referenceNumber).then(function() {
-            $stateParams.noReload = true;
-            draft.$modified = true;
-            vm.cacheDraft();
-            //Only reload current state and avoid reloading parent state
-            $state.go($state.current.name, $stateParams, {
-                reload: $state.current.name
+            .catch(function (error) {
+                // Handle errors
+                console.error('Error in controller:', error);
             });
-        }); 
-    }
 
-        //Confirms if there are discrepancies associated with a POD.
-  
+        /*Function for view single POD event*/
+        vm.viewPOD = function (id) {
+            $state.go('openlmis.pointOfDelivery.manage', {
+                podId: id,
+            });
+        }
 
-        
-            //Confirms if there are discrepancies associated with a POD.
-        // function hasDiscrepancies(referenceNumber)
-        // {
-        //     console.log("In hasDiscrepancies");
-        //     console.log(podAddDiscrepancyModalService.getDiscrepancies().length);
-        //    // return podAddDiscrepancyModalService.getDiscrepancies() > 0 ? true:false;
-        //   var output = podAddDiscrepancyModalService.getDiscrepancies().length > 0 ? true:false;
-        //   console.log("Output: " + output);
-        //   return output;
-        // }
-                
+
+        vm.viewDiscrepancies = function (discrepancies, referenceNumber) {
+            pointOfDeliveryService.showViewModal(discrepancies, referenceNumber).then(function () {
+                $stateParams.noReload = true;
+                draft.$modified = true;
+                vm.cacheDraft();
+                //Only reload current state and avoid reloading parent state
+                $state.go($state.current.name, $stateParams, {
+                    reload: $state.current.name
+                });
+            });
+        }
     }
 })();
