@@ -358,21 +358,22 @@
       if (
         lineItem.quantity > lineItem.$previewSOH &&
         lineItem.reason &&
-        lineItem.reason.reasonType === REASON_TYPES.DEBIT
-      ) {
+        lineItem.reason.reasonType === REASON_TYPES.DEBIT) {
+        lineItem.$errors.quantityInvalid = messageService.get('stockAdjustmentCreation.quantityGreaterThanStockOnHand');
+      } 
+      else if (lineItem.quantity > MAX_INTEGER_VALUE) {
+        lineItem.$errors.quantityInvalid = messageService.get('stockmanagement.numberTooLarge');
+      }
+      else if (lineItem.quantity > lineItem.deliveryNoteQuantity) {
         lineItem.$errors.quantityInvalid = messageService.get(
-          'stockAdjustmentCreation.quantityGreaterThanStockOnHand'
-        );
-      } else if (lineItem.quantity > MAX_INTEGER_VALUE) {
-        lineItem.$errors.quantityInvalid = messageService.get(
-          'stockmanagement.numberTooLarge'
-        );
-      } else if (lineItem.quantity >= 1) {
+          'stockAdjustmentCreation.acceptedQuantityError');
+      } 
+      else if (lineItem.quantity >= 1) {
         lineItem.$errors.quantityInvalid = false;
-      } else {
+      } 
+      else {
         lineItem.$errors.quantityInvalid = messageService.get(
-          vm.key('positiveInteger')
-        );
+          vm.key('positiveInteger'));
       }
       return lineItem;
     };
@@ -380,35 +381,8 @@
     //-----LESOTHO ELMIS-----
 
     vm.validatePrepackQuantity = function(lineItem){
-      console.log(vm.addedLineItems);
       return prepackingService.validatePrepackQuantity(lineItem, vm.addedLineItems);
-    }
-    // vm.validatePrepackQuantity = function(lineItem){
-    //   let remainingStock = calculateRemainingStock(lineItem);
-    //   if(remainingStock <= 0){
-    //     lineItem.$errors.prepackQuantityInvalid = messageService.get(
-    //       'stockPrepackCreation.validatePrepackQuantity');
-    //   }
-    //   else{
-    //     lineItem.$errors.prepackQuantityInvalid = false;
-    //   }
-    // }
-
-    // function calculateRemainingStock(lineItem){    
-    //   if(vm.addedLineItems.length === 1){
-    //     return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
-    //   }
-    //   else{
-    //     let productType = vm.addedLineItems.filter( item => item.lot.lotCode === lineItem.lot.lotCode && 
-    //       item.orderable.productCode === lineItem.orderable.productCode);
-    //     let total = 0;
-    //     productType.forEach(product => {
-    //       let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
-    //       total += quantityToPrepack;
-    //     });
-    //     productType.forEach( item => item.remainingStock = item.stockOnHand - total);
-    //   }
-    // }
+    };
 
     //-----LESOTHO ELMIS-----
 
@@ -872,9 +846,7 @@
         .catch(function(error) {
          // Handle errors
              console.error('Error getting reasons:', error);
-      });
-      
-
+      });    
 
       var copiedOrderableGroups = angular.copy(orderableGroups);
       vm.allItems = _.flatten(copiedOrderableGroups);
@@ -935,6 +907,7 @@
         adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state;
       vm.showReasonsInAdjustment =
         adjustmentType.state === ADJUSTMENT_TYPE.ADJUSTMENT.state;
+      
       /* eLMIS Lesotho : end */
       vm.srcDstAssignments = srcDstAssignments;
       vm.addedLineItems = $stateParams.addedLineItems || [];
