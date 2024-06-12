@@ -36,28 +36,7 @@ routes.$inject = ['$stateProvider'];
             controller: 'dispensingPatientsController',
             controllerAs: 'vm',
             resolve: {
-                // facilities: function(facilityService) {
-                //     var paginationParams = {};
-                      
-                //     var queryParams = {
-                //         "type":"health_center" && "hospital"
-                //         // "type":"hospital"
-                //       };
-                //     // var paginationParams = {};
-                //     // var queryParams = [
-                //     //     { key: "type", value: "health_center" },
-                //     //     { key: "type", value: "hospital" }
-                //     // ];
-                //       return facilityService.query(paginationParams, queryParams)
-                //       .then(function(result) {
-                //           return result.content; // Return Facilities of Type = Warehouse
-                //       })
-                //       .catch(function(error) {
-                //           // Handle any errors that may occur during the query
-                //           console.error("Error:", error);
-                //           return [];
-                //       });                    
-                //     },
+                
                 facilities: function(facilityService) {
                         return facilityService.getAllMinimal();
                     },
