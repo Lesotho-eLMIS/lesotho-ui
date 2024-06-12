@@ -40,6 +40,7 @@
         vm.addContact = addContact;
         vm.removeContact = removeContact;
         vm.viewTitle = undefined;
+        vm.initialisePatient = initialisePatient;
        // vm.submitPatientData = submitPatientData;
 
         /**
@@ -51,9 +52,9 @@
          * Initialization method of the PatientFormModalController.
          */
         function onInit() {
-            console.log(patient);
             vm.viewTitle = (patientState === "New") ? "Add Patient" : "Edit Patient";
             vm.contactOptions = ["email", "phone"];
+            vm.patient = !(patientState === "New")? vm.initialisePatient(patient) : {};
 
            // console.log("...In init...")
         }
@@ -89,6 +90,27 @@
             var patientInfo = vm.patient;
             patientInfo.homeFacility = facility.id;
             dispensingService.submitPatientInfo(patientInfo);
+        }
+
+        function initialisePatient (patientObj) {
+            const patientArray = Object.values(patientObj)[0];
+            console.log(patientArray);
+            vm.patient.patientNumber = patientArray.patientNumber;
+            vm.patient.nationalID = patientArray.personDto.nationalId;
+            vm.patient.firstName = patientArray.personDto.firstName;
+            vm.patient.lastName = patientArray.personDto.lastName;
+            vm.patient.nickName = patientArray.personDto.nickName;
+            vm.patient.sex = patientArray.personDto.sex;
+            vm.patient.DOB = patientArray.personDto.DOB;
+            vm.patient.isDobEstimated = patientArray.personDto.isDobEstimated;
+            vm.patient.physicalAddress = patientArray.personDto.physicalAddress;
+            vm.patient.nextOfKinNames = patientArray.personDto.nextOfKinNames;
+            vm.patient.nextOfKinContact = patientArray.personDto.nextOfKinContact;
+            vm.patient.motherMaidenName = patientArray.personDto.motherMaidenName;
+            vm.patient.deceased = patientArray.personDto.deceased;
+            vm.patient.retired = patientArray.personDto.retired;
+            //console.log(vm.patient);
+            return vm.patient;
         }
     }
 })();
