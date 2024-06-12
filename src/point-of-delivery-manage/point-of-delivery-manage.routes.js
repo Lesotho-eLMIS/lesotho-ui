@@ -35,6 +35,7 @@ routes.$inject = ['$stateProvider'];
             showInNavigation: true,
             controller: 'pointOfDeliveryManageController',
             controllerAs: 'vm',
+            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             resolve: {
                 facilities: function(facilityService) {
                     var paginationParams = {};
