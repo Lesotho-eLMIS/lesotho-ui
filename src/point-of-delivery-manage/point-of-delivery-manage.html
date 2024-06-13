@@ -25,23 +25,21 @@
                 <label for="receivedDate">{{'pointOfDeliveryManage.packingDate' | message}}</label>
                 <input id="receivedDate" type="date" max-date="vm.maxDate" ng-model="vm.POD.receivedDate" required />
             </Fieldset>
-    
+
             <Fieldset>
                 <label for="packedBy">{{'pointOfDeliveryManage.packedBy' | message}}</label>
                 <input id="packedBy" type="text" ng-model="vm.POD.packedBy" maxlength="50" required />
             </Fieldset>
-    
-             <div>
-    
+
+            <div>
+
                 <section class="openlmis-table-container">
                     <table suppress-tr-openlmis-invalid>
                         <thead>
                             <tr>
                                 <th>{{'pointOfDeliveryManage.shipmentType'| message}}</th>
                                 <th>{{'pointOfDeliveryManage.quantityOnWayBill'| message}}</th>
-                                <!-- <th>{{'pointOfDeliveryManage.quantityShipped'| message}}</th> -->
                                 <th>{{'proofOfDeliveryManage.quantityAccepted'| message}}</th>
-                                <!-- <th>{{'proofOfDeliveryManage.quantityRejected'| message}}</th> -->
                                 <th>{{'proofOfDeliveryManage.action'| message}}</th>
                             </tr>
                         </thead>
@@ -49,241 +47,38 @@
                             <tr>
                                 <td>{{vm.Cartons}}</td>
                                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.cartonsQuantityOnWaybill"></td>
+                                    style="width: 60px;" ng-model="vm.POD.cartonsQuantityOnWaybill"></td>
                                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.cartonsQuantityAccepted"></td>
-                                <!-- <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.cartonsQuantityRejected"></td> -->
+                                    style="width: 60px;" ng-model="vm.POD.cartonsQuantityAccepted"></td>
                                 <td><button type="button"
                                         ng-click="vm.addDiscrepancyOnModal('carton', vm.tempPOD.discrepancies)"
-                                        class="primary"><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'|
+                                        style="width: 180px;" class="primary"><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'|
                                         message}}</button>
-                                        <button type="button"
+                                    <button type="button"
                                         ng-click="vm.addComplaintOnModal('container', vm.tempPOD.discrepancies)"
-                                        class="primary"><b>+Add Complaint</b></button>
+                                        style="width: 180px;" class="primary"><b>+</b>{{'proofOfDeliveryManage.addComplaint'|message}}</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>{{vm.Containers}}</td>
                                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.containersQuantityOnWayBill"></td>
+                                    style="width: 60px;"ng-model="vm.POD.containersQuantityOnWayBill"></td>
                                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.containersQuantityAccepted"></td>
-                                <!-- <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.containersQuantityRejected"></td> -->
+                                    style="width: 60px;"ng-model="vm.POD.containersQuantityAccepted"></td>
                                 <td><button type="button"
                                         ng-click="vm.addDiscrepancyOnModal('container', vm.tempPOD.discrepancies)"
-                                        class="primary"><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'|
+                                        style="width: 180px;" class="primary"><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'|
                                         message}}</button>
-                                        <button type="button"
+                                    <button type="button"
                                         ng-click="vm.addComplaintOnModal('container', vm.tempPOD.discrepancies)"
-                                        class="primary"><b>+Add Complaint</b></button>
+                                        style="width: 180px;" class="primary"><b>+</b>{{'proofOfDeliveryManage.addComplaint'|message}}</button>
                                 </td>
-                            </tr>    //this.getDiscrepancies = getDiscrepancies;
-                            // this.submitQualityDiscrepancies = submitQualityDiscrepancies;
-                    
-                            // // /**
-                            // //  * @ngdoc method
-                            // //  * @methodOf complaint-modal.complaintModalService
-                            // //  * @name show
-                            // //  *
-                            // //  * @description
-                            // //  * Shows modal that allows users to choose products.
-                            // //  *
-                            // //  * @param  {Array}   availableItems orderable + lot items that can be selected
-                            // //  * @param  {Array}   selectedItems  orderable + lot items that were added already
-                            // //  * @return {Promise}                resolved with selected products.
-                            // //  */
-                            // // function show() {
-                            // //     return openlmisModalService.createDialog(
-                            // //         {
-                            // //             controller: 'complaintModalController',
-                            // //             controllerAs: 'vm',
-                            // //             templateUrl: 'complaint-modal/add-discrepancy-modal.html',
-                            // //             show: true ,
-                            // //             resolve: {
-                            // //                 rejectionReasons: function(rejectionReasonService) {
-                            // //                         // Load rejection Reasons into the controller.
-                            // //                         return rejectionReasonService.getAll();
-                                                
-                            // //                 }, 
-                            // //                 shipmentType: function () {
-                            // //                     return shipmentTypeType;
-                            // //                 }
-                            // //             }   
-                            // //         }
-                            // //     ).promise.finally(function() {
-                            // //         angular.element('.openlmis-popover').popover('destroy');
-                            // //     });
-                            // // }
-                    
-                            // /**
-                            //  * @ngdoc method
-                            //  * @methodOf complaint-modal.complaintModalService
-                            //  * @name submitQualityDiscrepancies
-                            //  *
-                            //  * @description
-                            //  * .
-                            //  */
-                            // function submitQualityDiscrepancies(discrepancyPayload){
-                            //     console.log("discrepancyPayload in service");
-                            //     console.log(discrepancyPayload);
-                            //     //return discrepancyPayload;
-                            //     return 3;
-                            // }
-                    
-                            // /**
-                            //  * @ngdoc method
-                            //  * @methodOf complaint-modal.complaintModalService
-                            //  * @name getDiscrepancies
-                            //  *
-                            //  * @description
-                            //  * 
-                            //  */
-                            // this.getDiscrepancies = function (discrepancies){
-                            //     console.log("get discrepancies in service");
-                            //     console.log(discrepancies);
-                            //     return discrepancies;
-                            // }    //this.getDiscrepancies = getDiscrepancies;
-                            // this.submitQualityDiscrepancies = submitQualityDiscrepancies;
-                    
-                            // // /**
-                            // //  * @ngdoc method
-                            // //  * @methodOf complaint-modal.complaintModalService
-                            // //  * @name show
-                            // //  *
-                            // //  * @description
-                            // //  * Shows modal that allows users to choose products.
-                            // //  *
-                            // //  * @param  {Array}   availableItems orderable + lot items that can be selected
-                            // //  * @param  {Array}   selectedItems  orderable + lot items that were added already
-                            // //  * @return {Promise}                resolved with selected products.
-                            // //  */
-                            // // function show() {
-                            // //     return openlmisModalService.createDialog(
-                            // //         {
-                            // //             controller: 'complaintModalController',
-                            // //             controllerAs: 'vm',
-                            // //             templateUrl: 'complaint-modal/add-discrepancy-modal.html',
-                            // //             show: true ,
-                            // //             resolve: {
-                            // //                 rejectionReasons: function(rejectionReasonService) {
-                            // //                         // Load rejection Reasons into the controller.
-                            // //                         return rejectionReasonService.getAll();
-                                                
-                            // //                 }, 
-                            // //                 shipmentType: function () {
-                            // //                     return shipmentTypeType;
-                            // //                 }
-                            // //             }   
-                            // //         }
-                            // //     ).promise.finally(function() {
-                            // //         angular.element('.openlmis-popover').popover('destroy');
-                            // //     });
-                            // // }
-                    
-                            // /**
-                            //  * @ngdoc method
-                            //  * @methodOf complaint-modal.complaintModalService
-                            //  * @name submitQualityDiscrepancies
-                            //  *
-                            //  * @description
-                            //  * .
-                            //  */
-                            // function submitQualityDiscrepancies(discrepancyPayload){
-                            //     console.log("discrepancyPayload in service");
-                            //     console.log(discrepancyPayload);
-                            //     //return discrepancyPayload;
-                            //     return 3;
-                            // }
-                    
-                            // /**
-                            //  * @ngdoc method
-                            //  * @methodOf complaint-modal.complaintModalService
-                            //  * @name getDiscrepancies
-                            //  *
-                            //  * @    //this.getDiscrepancies = getDiscrepancies;
-                            // this.submitQualityDiscrepancies = submitQualityDiscrepancies;
-                    
-                            // // /**
-                            // //  * @ngdoc method
-                            // //  * @methodOf complaint-modal.complaintModalService
-                            // //  * @name show
-                            // //  *
-                            // //  * @description
-                            // //  * Shows modal that allows users to choose products.
-                            // //  *
-                            // //  * @param  {Array}   availableItems orderable + lot items that can be selected
-                            // //  * @param  {Array}   selectedItems  orderable + lot items that were added already
-                            // //  * @return {Promise}                resolved with selected products.
-                            // //  */
-                            // // function show() {
-                            // //     return openlmisModalService.createDialog(
-                            // //         {
-                            // //             controller: 'complaintModalController',
-                            // //             controllerAs: 'vm',
-                            // //             templateUrl: 'complaint-modal/add-discrepancy-modal.html',
-                            // //             show: true ,
-                            // //             resolve: {
-                            // //                 rejectionReasons: function(rejectionReasonService) {
-                            // //                         // Load rejection Reasons into the controller.
-                            // //                         return rejectionReasonService.getAll();
-                                                
-                            // //                 }, 
-                            // //                 shipmentType: function () {
-                            // //                     return shipmentTypeType;
-                            // //                 }
-                            // //             }   
-                            // //         }
-                            // //     ).promise.finally(function() {
-                            // //         angular.element('.openlmis-popover').popover('destroy');
-                            // //     });
-                            // // }
-                    
-                            // /**
-                            //  * @ngdoc method
-                            //  * @methodOf complaint-modal.complaintModalService
-                            //  * @name submitQualityDiscrepancies
-                            //  *
-                            //  * @description
-                            //  * .
-                            //  */
-                            // function submitQualityDiscrepancies(discrepancyPayload){
-                            //     console.log("discrepancyPayload in service");
-                            //     console.log(discrepancyPayload);
-                            //     //return discrepancyPayload;
-                            //     return 3;
-                            // }
-                    
-                            // /**
-                            //  * @ngdoc method
-                            //  * @methodOf complaint-modal.complaintModalService
-                            //  * @name getDiscrepancies
-                            //  *
-                            //  * @description
-                            //  * 
-                            //  */
-                            // this.getDiscrepancies = function (discrepancies){
-                            //     console.log("get discrepancies in service");
-                            //     console.log(discrepancies);
-                            //     return discrepancies;
-                            // }description
-                            //  * 
-                            //  */
-                            // this.getDiscrepancies = function (discrepancies){
-                            //     console.log("get discrepancies in service");
-                            //     console.log(discrepancies);
-                            //     return discrepancies;
-                            // }
+                            </tr>
                         </tbody>
                     </table>
                 </section>
             </div>
-    
-            <!-- <input ng-if="!vm.tempPOD" type="submit" value="{{'pointOfDeliveryManage.submit' | message}}" /> -->
-            <!-- <input ng-if="vm.tempPOD" type="submit" value="{{'pointOfDeliveryManage.save' | message}}" /> -->
-    
-        </fieldset> 
+        </fieldset>
     </form>
 </form>
 
