@@ -28,9 +28,9 @@
         .module('requisition-search')
         .service('dispensingService', dispensingService);
 
-        dispensingService.$inject = ['$resource','openlmisUrlFactory', '$q', 'notificationService', 'confirmService',];
+        dispensingService.$inject = ['$resource','openlmisUrlFactory', 'notificationService', 'confirmService','openlmisModalService'];
 
-    function dispensingService($resource,openlmisUrlFactory, $q, notificationService, confirmService ) {
+    function dispensingService($resource,openlmisUrlFactory, notificationService, confirmService, openlmisModalService ) {
 
         var promise,
             POD_FACILITIES = 'dispensingPatientsFacilities';
@@ -55,6 +55,8 @@
                     method: 'GET'
                 },            
             });
+
+        this.show = show;
  
         this.submitPatientInfo = submitPatientInfo; // To post data POD Manage payload
         this.getPatients = getPatients; //To retrieve PODs from the database
@@ -136,6 +138,41 @@
                 ]
             }
             return resource.postPatientEvent(payload);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf point-of-delivery.pointOfDeliveryService
+         * @name show
+         *
+         * @description
+         * Shows modal that allows users to add discrepancies.
+         *
+         * @param  {Array}   rejectionReasons 
+         * @param  {String}   shipmentType  
+         * @return {Promise}                resolved with discrepancies.
+         */
+        function show (shipmentType) {
+            return openlmisModalService.createDialog(
+                {
+                    controller: 'dispensingPrescriptionDetailsModalController',
+                    controllerAs: 'vm',
+                    templateUrl: 'dispensing-prescription-details-modal/dispensing-prescription-details-modal.html',
+                    show: true ,
+                    resolve: {
+                        rejectionReasons: function(rejectionReasonService) {
+                                // Load rejection Reasons into the controller.
+                                return rejectionReasonService.getAll();
+                            
+                        }, 
+                        shipmentType: function () {
+                            return shipmentType;
+                        }
+                    }   
+                }
+            ).promise.finally(function() {
+                angular.element('.openlmis-popover').popover('destroy');
+            });
         }
         
     }

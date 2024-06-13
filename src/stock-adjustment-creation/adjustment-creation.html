@@ -15,6 +15,15 @@
         <section class="is-primary">
             <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
                 <div>
+                    <label for="referenceNumberSelect">Reference Number</label>
+                    <select id="referenceNumberSelect" name="referenceNumber">
+                        <option value="REF-01">REF-01</option>
+                        <option value="REF-02">REF-02</option>
+                        <option value="REF-03">REF-03</option>
+                        <option value="REF-04">REF-04</option>
+                    </select>
+                </div>
+                <div>
                     <label for="productSelect">{{vm.key('product') | message}}</label>
                     <select id="productSelect" ng-model="vm.selectedOrderableGroup"
                         ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
@@ -57,9 +66,9 @@
                     <th ng-show="vm.srcDstAssignments">{{vm.key('srcDstLabel') | message}}</th>
                     <th ng-hide="vm.showDeliveryNoteAttributes || vm.showReasonsInAdjustment || vm.showPrepackingAttributes" ng-show="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
                     <th ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reason') | message}}</th>
-                    <th ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reasonComments') | message}}</th>
+                    <th ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reasonComments') | message}}</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('referenceNumber') | message}}</th>
+                    <th ng-if="vm.showDeliveryNoteAttributes">Carton Number</th><!---{{vm.key('referenceNumber') | message}}-->
                     <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="true">{{vm.key('invoiceNumber') | message}}</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('deliveryNoteQuantity') | message}}</th>
@@ -71,6 +80,8 @@
 
                     <th ng-show="vm.showPrepackingAttributes">{{vm.key('quantityToPrepack') | message}}</th>
                     <th ng-show="vm.showPrepackingAttributes">{{vm.key('stockRemaining') | message}}</th>
+                    <th ng-show="vm.showPrepackingAttributes">{{vm.key('prepackComments') | message}}</th>
+                    <th ng-show="vm.showPrepackingAttributes">{{vm.key('collectedBy') | message}}</th>
 
                     
                     <th ng-show="vm.showDeliveryNoteAttributes">{{vm.key('acceptedQuantity') | message}}</th>
@@ -116,7 +127,7 @@
                             ng-options="reason.name for reason in vm.reasons track by reason.id" autofocus>
                         </select>
                     </td>
-                    <td ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes" >
+                    <td ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes" >
                         <input type="text" ng-show="lineItem.reason.isFreeTextAllowed" ng-model="lineItem.reasonFreeText" rows="1" cols="15"></input>
                     </td>
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.referenceNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
