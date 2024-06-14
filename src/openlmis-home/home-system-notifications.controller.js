@@ -78,7 +78,7 @@
                 },
                 message: 'Chehe. Re felletsoe ke DTG'
             }];
-
+            homeService.markNotificationsAsRead();
             homeService.getNotifications(user.id).then(function(notifications) {
                 // Handle the notifications here
                 console.log(notifications);

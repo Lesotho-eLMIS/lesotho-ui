@@ -16,41 +16,36 @@
 (function() {
     angular.module('openlmis-home').service('homeService', ['$http','openlmisUrlFactory','$resource', function($http,openlmisUrlFactory,$resource) {
         var data = [];
-        var resource = $resource(openlmisUrlFactory('/api/podEvents:id'), {}, {
+        var resource = $resource(openlmisUrlFactory('/api/notifications:id'), {}, {
             get: {
                 url: openlmisUrlFactory('/api/notifications'),
                 method: 'GET'
             }, 
             save: {
-                url: openlmisUrlFactory('/api/notifications'),
-                method: 'POST'
+                url: openlmisUrlFactory('/api/notifications/:id'),
+                method: 'PUT'
             }             
         });
 
         this.getNotifications = getNotifications;
-
-        this.test = function() {
-            console.log('Service Wired')
-        };
+        this.markNotificationsAsRead = markNotificationsAsRead;
 
         function getNotifications(currentUserId){
-            console.log(currentUserId)
             var params = {
                          userId: currentUserId 
                          }
            return resource.get(params).$promise.then(function(response) {
                     return response.content;
-                    // Transforming the response to an object if it's an array
-            //     if (Array.isArray(response)) {
-                                  
-            //         var objectOfPODs = response.reduce((result, obj) => {
-            //         result[obj.id] = obj;
-            //         return result;
-            //     }, {});                          
-            //     return objectOfPODs;                         
-            //     }
-            // return response; 
             });
+        }
+
+        function markNotificationsAsRead(/*notificationId, isRead*/) {
+            var params = {
+                isRead : true //isRead 
+                }
+            //    "bf6d1c18-3cc9-4ca3-b25a-209ea265ebcd"
+            return resource.save({ id:"93122ec0-c366-4660-a0c2-e8364fb1ff43" }, params).$promise
+            
         }
 
     }]);
