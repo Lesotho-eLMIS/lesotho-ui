@@ -115,7 +115,7 @@
     vm.hasPermissionToAddNewLot = hasPermissionToAddNewLot;
     vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item","More..."];
     vm.rejectionReasons = []; // To Store Shipment rejection Reasons
-    //vm.UPrice;
+    vm.quantityUnit = undefined;
     vm.FromSupplier = false; 
     vm.hideColumns=function(){
       //vm.FromSupplier = true;
@@ -181,6 +181,16 @@
               reload: $state.current.name
           });
       }); 
+  }
+
+  vm.showAsPacks = function(quantity){
+    if(vm.quantityUnit === "Packs"){
+        //return Math.floor(quantity);
+        console.log(quantity);
+    }
+    else{
+
+    };
   }
 
     vm.key = function (secondaryKey) {
@@ -267,6 +277,7 @@
         
         var timestamp = new Date().getTime();
         selectedItem.timestamp = timestamp; // Add a time stamp to the selected line item
+        selectedItem.stockOnHandInPacks = Math.floor(selectedItem.stockOnHand / selectedItem.orderable.netContent) // Add Stock On Hand Expressed a Packs
         vm.addedLineItems.unshift(
           _.extend(
             {
@@ -279,6 +290,7 @@
         );
         previousAdded = vm.addedLineItems[0];
         vm.search();
+        console.log(vm.addedLineItems);
       }
     }
 
