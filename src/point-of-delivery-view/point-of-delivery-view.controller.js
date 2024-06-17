@@ -40,13 +40,7 @@
         vm.$onInit = onInit;
         vm.facility = facility;
         vm.PODEvents = podEventsWithSuppliers;
-        //   vm.viewDiscrepancies = viewDiscrepancies;
-        //vm.hasDiscrepancies = hasDiscrepancies;
-
-        // vm.options = {
-        //     'requisitionSearch.dateInitiated': ['createdDate,desc']
-        // };
-
+        
         /**
          * @ngdoc method
          * @methodOf point-of-delivery-view.controller:pointOfDeliveryViewController

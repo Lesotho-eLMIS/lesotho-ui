@@ -11,5 +11,6 @@
   "stockReceiveCreation.rejectionReason": "Rejection Reason",
   "stockReceiveCreation.comments": "Comments",
   "stockReceiveCreation.amount": "Amount",
-  "stockReceiveCreation.discrepancy": "Discrepancy"
+  "stockReceiveCreation.discrepancy": "Discrepancy",
+  "stockReceiveCreation.cartonNumber": "Carton Number"
 }

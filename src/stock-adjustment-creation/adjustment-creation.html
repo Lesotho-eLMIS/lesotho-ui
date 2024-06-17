@@ -15,12 +15,9 @@
         <section class="is-primary">
             <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
                 <div>
-                    <label for="referenceNumberSelect">Reference Number</label>
-                    <select id="referenceNumberSelect" name="referenceNumber">
-                        <option value="REF-01">REF-01</option>
-                        <option value="REF-02">REF-02</option>
-                        <option value="REF-03">REF-03</option>
-                        <option value="REF-04">REF-04</option>
+                    <label for="referenceNumberSelect">{{vm.key('referenceNumber') | message}}</label>
+                    <select id="referenceNumberSelect" ng-model="vm.referenceNumber" 
+                        ng-options="value for value in vm.refValues" required>                        
                     </select>
                 </div>
                 <div>
@@ -68,7 +65,7 @@
                     <th ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reason') | message}}</th>
                     <th ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reasonComments') | message}}</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes">Carton Number</th><!---{{vm.key('referenceNumber') | message}}-->
+                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('cartonNumber') | message}}</th>
                     <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="true">{{vm.key('invoiceNumber') | message}}</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('deliveryNoteQuantity') | message}}</th>
@@ -130,7 +127,16 @@
                     <td ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes" >
                         <input type="text" ng-show="lineItem.reason.isFreeTextAllowed" ng-model="lineItem.reasonFreeText" rows="1" cols="15"></input>
                     </td>
-                    <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.referenceNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
+                    
+                    <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">
+                        <input ng-model="lineItem.individualCartonNumber" class="form-control" 
+                        type="number" style="width: 5px;" min="0" step="1" oninput="validity.valid||(value='');" style="display: inline-block;">
+                        <label style="display: inline-block;">of</label>
+                        <input ng-model="lineItem.totalCartonNumber" class="form-control" 
+                        type="number" style="width: 5px;" min="0" step="1" oninput="validity.valid||(value='');" style="display: inline-block;">
+                        <!-- <input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.cartonNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"> -->
+                    </td>
+                    
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="true"><input class="form-control" type="text" value="INV" ng-model="lineItem.invoiceNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
                     
                     <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.deliveryNoteQuantity" class="form-control" 

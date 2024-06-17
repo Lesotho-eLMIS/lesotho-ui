@@ -63,7 +63,8 @@
     'moment',
     'rejectionReasonService',
     'receivingAddDiscrepancyModalService',
-    'prepackingService'
+    'prepackingService',
+    'pointOfDeliveryService'
   ];
 
   function controller(
@@ -102,7 +103,8 @@
     moment,
     rejectionReasonService,
     receivingAddDiscrepancyModalService,
-    prepackingService
+    prepackingService,
+    pointOfDeliveryService
   ) {
     var vm = this,
       previousAdded = {};
@@ -112,6 +114,8 @@
     vm.validateExpirationDate = validateExpirationDate;
     vm.lotChanged = lotChanged;
     vm.addProduct = addProduct;
+    vm.getReferenceNumbers = getReferenceNumbers;
+    vm.podReferenceNumbers = undefined;
     vm.hasPermissionToAddNewLot = hasPermissionToAddNewLot;
     vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item","More..."];
     vm.rejectionReasons = []; // To Store Shipment rejection Reasons
@@ -233,6 +237,7 @@
      * Add a product for stock adjustment.
      */
     function addProduct() {
+
       var selectedItem;
 
       if (vm.selectedOrderableGroup && vm.selectedOrderableGroup.length) {
@@ -264,7 +269,10 @@
         !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
 
       if (noErrors) {
-        
+
+        selectedItem.referenceNumber = vm.referenceNumber;  
+       // let cartonNumber = vm.generateCartonNumber(selectedItem);
+       // selectedItem.cartonNumber =  cartonNumber;   
         var timestamp = new Date().getTime();
         selectedItem.timestamp = timestamp; // Add a time stamp to the selected line item
         vm.addedLineItems.unshift(
@@ -282,6 +290,18 @@
       }
     }
 
+    vm.generateCartonNumber = function (item){
+      console.log(item);
+      let num1 = item.individualCartonNumber;
+      let num2 = item.totalCartonNumber;
+      console.log(num1 + "of" + num2);
+      // let cartonNumber = individualCartonNumber + "of" + totalCartons;
+      return num1.toString() + " of " + num2.toString();
+
+      //return `${num1} of ${num2}`;
+
+    }
+
     function copyDefaultValue() {
       var defaultDate;
       if (previousAdded.occurredDate) {
@@ -289,6 +309,9 @@
       } else {
         defaultDate = dateUtils.toStringDate(new Date());
       }
+
+      console.log("Copying Value");
+      console.log(previousAdded);
 
       return{
         assignment: previousAdded.assignment,
@@ -503,29 +526,28 @@
      * Submit all added items.
      */
     vm.submit = function () {
+
+      console.log(vm.addedLineItems);
+      
       if(adjustmentType.state == "prepack"){
         // Handle prepacking logic
         vm.addedLineItems.forEach((lineItem) => {
           lineItem.orderableId = lineItem.orderable.id;
           lineItem.lotId = lineItem.lot.id;
         });
-
         var prepackingEvent = {
-        facilityId: facility.id,
-        programId: program.id,
-        supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
-        userId: user.user_id,
-        status: "Initiated",
-        comments: "", //To be used when there is need
-        lineItems:vm.addedLineItems
-          };
-
-
+          facilityId: facility.id,
+          programId: program.id,
+          supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
+          userId: user.user_id,
+          status: "Initiated",
+          comments: "", //To be used when there is need
+          lineItems:vm.addedLineItems
+        };
         var confirmMessage = messageService.get(vm.key('confirmInfo'), {
             username: user.username,
             number: vm.addedLineItems.length,
         });
-
         confirmService
             .confirm(confirmMessage, vm.key('confirm'))
             .then(function () {
@@ -831,7 +853,32 @@
       addedLineItems.push.apply(addedLineItems, constituentLineItems);
     }
 
-    function onInit() {
+    // Function to get reference numbers of PODs received in the last two weeks
+    async function getReferenceNumbers() {
+      var val = [];
+      const podDetails = pointOfDeliveryService.getPODs(facility.id);
+
+      return podDetails.then(function(resolved){
+      let currentDate = new Date();
+      let activePeriod = new Date(currentDate.getTime() - (14 * 24 * 60 * 60 * 1000));
+        Object.values(resolved).forEach(function(podRecord){
+          let receivingDate = new Date(podRecord.receivingDate);
+          if(receivingDate >= activePeriod){
+            val.push(podRecord.referenceNumber);
+          }          
+        });
+        return val; 
+      });
+    }    
+   
+    
+    function onInit() {   
+      
+      //Get active POD reference numbers
+      getReferenceNumbers().then((references) =>{
+        vm.refValues = references;
+      });
+
       //Getting Rejection Reasons
       var rej = rejectionReasonService.getAll();
       rej.then(function(reasons) {             
