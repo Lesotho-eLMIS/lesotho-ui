@@ -29,6 +29,7 @@
         'openlmis-pagination',
         'referencedata-system-notification',
         'openlmis-message',
+        'openlmis-notification',
         'ui.router',
         'openlmis-config',
         'openlmis-date'

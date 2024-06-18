@@ -36,6 +36,18 @@
 
         vm.$onInit = onInit;
 
+        
+        /**
+         * @ngdoc property
+         * @propertyOf home-system-notifications.controller:HomeSystemNotificationsController
+         * @type {Object}
+         * @name homePageSystemNotifications
+         *
+         * @description
+         * System notifications which will be displayed to users.
+         */
+        vm.userNotifications = undefined;
+
         /**
          * @ngdoc property
          * @propertyOf home-system-notifications.controller:HomeSystemNotificationsController
@@ -68,20 +80,30 @@
          */
         function onInit() {
             vm.isOffline = offlineService.isOffline();
-           // vm.homePageSystemNotifications = homePageSystemNotifications;
+           vm.homePageSystemNotifications = homePageSystemNotifications;
            // Studying the system Notifications view
-            vm.homePageSystemNotifications = [{
-                title: 'StockOut Alert',
-                author: {
-                    firstName: 'flo',
-                    lastName: 'User'
-                },
-                message: 'Chehe. Re felletsoe ke DTG'
-            }];
+            // vm.userNotifications = [{
+            //     title: 'StockOut Alert',
+            //     author: {
+            //         firstName: 'flo',
+            //         lastName: 'User'
+            //     },
+            //     message: 'Chehe. Re felletsoe ke DTG'
+            // },
+            // {
+            //     title: 'Overstock Alert',
+            //     author: {
+            //         firstName: 'flo',
+            //         lastName: 'User'
+            //     },
+            //     message: 'Re imelitsoe'
+            // }
+            // ];
             homeService.markNotificationsAsRead();
             homeService.getNotifications(user.id).then(function(notifications) {
                 // Handle the notifications here
                 console.log(notifications);
+                vm.userNotifications = notifications;
             })
             .catch(function(error) {
                 // Handle any errors that occurred during the resource request

@@ -13,7 +13,16 @@
                 user-last-name="systemNotification.author.lastName"
                 message-content="systemNotification.message"
                 created-date="systemNotification.createdDate">
-        </openlmis-message>
+        </openlmis-message> 
+
+        
+      </div>
+      <div ng-repeat="systemNotification in vm.userNotifications">
+        <openlmis-notification
+                message-title="systemNotification.messages.email.subject" 
+                user-first-name="systemNotification.author.firstName"
+                message-content="systemNotification.messages.email.body">
+        </openlmis-notification>
       </div>
     </div>
   </div>
