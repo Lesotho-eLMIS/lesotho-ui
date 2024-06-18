@@ -1,0 +1,106 @@
+<div class="modal add-products-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">
+          {{'complaintFormModal.title' | message}}
+        </h4>
+      </div>
+
+      <div class="modal-body">
+<!-- ///////////////////////////////////////////// -->
+        <form class="sidebar" ng-submit="vm.searchPatients()">
+
+          <fieldset class="form-group">
+            <label for="orderingFacility">{{'complaintFormModal.healthFacility' | message}}</label>
+            <select id="receivingFacility" ng-model="vm.POD.receivingFacility" ng-required="!vm.supplyingFacility"
+              ng-options="facility.name for facility in vm.homeFacilities"></select>
+          </fieldset>
+
+          <fieldset class="form-group">
+          <label for="lastName">{{'complaintFormModal.purchaseOrderNumber' | message}}</label>
+          <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.lastName">
+          </fieldset>
+
+          <fieldset class="form-group">
+          <label for="firstName">{{'complaintFormModal.NDSOInvoiceNumber' | message}}</label>
+          <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.firstName">
+          <p> </p><p> </p><p> </p><p> </p>
+          </fieldset>
+          
+        </form>
+        
+        
+        
+        <section class="openlmis-table-container">
+          <!-- <openlmis-sort options="vm.options"/> -->
+          <section class="is-primary">
+            <form class="form-inline" name="productForm"> 
+              <div>
+                <label for="productSelect">{{vm.key('product') | message}}</label>
+                <select id="productSelect" ng-model="vm.selectedOrderableGroup"
+                    ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
+                    ng-change="vm.orderableSelectionChanged()"
+                    required>
+                </select>
+            </div>
+            <div ng-if="vm.selectedOrderableHasLots">
+                <label for="lotSelect">{{'stockAddProductsModal.lotCode' | message}}</label>
+                <select id="lotSelect" ng-model="vm.selectedLot"
+                    ng-options="lot.lotCode for lot in vm.lots"
+                    ng-change="vm.lotChanged()"
+                    required>
+                </select>
+            </div>
+                <!-- <button type="button" ng-click="vm.addPatientForm()" class="add">{{'complaintFormModal.addProduct' | message}}</button> -->
+            </form>
+          </section>
+
+          <table>
+            <!-- <caption ng-if="!vm.patientsData || vm.patientsData.length === 0">
+                {{'complaintFormModal.patients.error' | message}}
+            </caption> -->
+            <thead>
+              <tr>
+                <th>{{'complaintFormModal.productName' | message}}</th>
+                <th>{{'complaintFormModal.batchNumber' | message}}</th>
+                <th>{{'complaintFormModal.expiryDate' | message}}</th>
+                <th>{{'complaintFormModal.quantityReturned' | message}}</th>
+                <th>{{'complaintFormModal.natureOfComplaint' | message}}</th>
+                <th class="col-sticky sticky-right">{{'complaintFormModal.actions' | message}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="patient in vm.patientsData">
+                <td>{{patient.patientNumber}}</td>
+                <th>{{patient.facilityId}}</th>
+                <td>{{patient.personDto.lastName}}</td>
+                <td>{{patient.personDto.firstName}}</td>
+                <td>{{patient.personDto.nationalId}}</td>
+                <td>
+                  <button class="primary" ui-sref="openlmis.dispensing.patients.form">{{'complaintFormModal.edit' | message}}</button>
+                  <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">{{'complaintFormModal.addComplaint' | message}}</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p> </p><p> </p><p> </p><p> </p>
+          <openlmis-pagination/>
+        </section>
+<!-- /////////////////////////////////////////////////////////// -->
+      </div>
+
+      <div class="modal-footer">
+        <button ng-click="$hide()">{{'complaintFormModal.cancel' | message}}</button>
+        <button ng-click="vm.confirm()" class="primary">
+          {{'complaintFormModal.addComplaint' | message}}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -24,23 +24,12 @@
      * Provides edit/add prescription screen for user.
      */
     angular.module('dispensing-prescription-form', [
-        'openlmis-date',
         'openlmis-modal',
         'openlmis-rights',
         'referencedata-facility',
         'ui.router',
         'dispensing',
-        'stock-orderable-group',
-        'stock-product-name',
-        'stock-constants',
-        'stock-adjustment',
-        'stock-adjustment-creation',
-        'stockmanagement',
-        'referencedata-lot',
-        'stock-reasons-modal',
-        'stock-edit-lot-modal',
-        'openlmis-urls',
-        'dispensing-prescription-details-modal'
+        'stockmanagement'
     ]);
 
 })();

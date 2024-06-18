@@ -1,0 +1,16 @@
+{
+  "complaintFormModal.productName": "Product Name",
+  "complaintFormModal.batchNumber": "Batch Number",
+  "complaintFormModal.expiryDate": "Expiry Date",
+  "complaintFormModal.quantityReturned": "Quantity Returned",
+  "complaintFormModal.natureOfComplaint": "Nature Of Complaint",
+  "complaintFormModal.actions": "Actions",
+  "complaintFormModal.addComplaint": "File a Complaint",
+  "complaintFormModal.edit": "Exit",
+  "complaintFormModal.title": "Complaint Form",
+  "complaintFormModal.cancel": "Cancel",
+  "complaintFormModal.NDSOInvoiceNumber": "NDSO Invoice Number",
+  "complaintFormModal.purchaseOrderNumber": "Purchase Order Number",
+  "complaintFormModal.healthFacility": "Health Facility",
+  "complaintFormModal.addProduct": "Add Product"
+}

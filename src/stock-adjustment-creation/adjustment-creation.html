@@ -14,7 +14,7 @@
         </form>
         <section class="is-primary">
             <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
-                <div>
+                <div ng-if="vm.showDeliveryNoteAttributes">
                     <label for="referenceNumberSelect">{{vm.key('referenceNumber') | message}}</label>
                     <select id="referenceNumberSelect" ng-model="vm.referenceNumber" 
                         ng-options="value for value in vm.refValues" required>                        
@@ -89,6 +89,7 @@
 
                     <th ng-if="vm.showVVMStatusColumn">{{vm.key('vvmStatus') | message}}</th>
                     <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('discrepancy') | message}}</th>
+                    <!-- <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('complaint') | message}}</th> -->
 
                     <th>{{vm.key('date') | message}}</th>
                     <th>{{vm.key('actions') | message}}</th>
@@ -178,6 +179,10 @@
                         <button ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" type="button" class="primary" 
                         ng-click="vm.addDiscrepancyOnModal(lineItem.timestamp)"><b>+ </b>Add</button>
                     </td>
+                    <!-- <td ng-if="vm.showDeliveryNoteAttributes"> 
+                        <button ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" type="button" class="primary" 
+                        ng-click="vm.addComplaintOnModal(lineItem.timestamp)">File Complaint</button>
+                    </td> -->
                     <td class="date-cell">
                         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
                             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>

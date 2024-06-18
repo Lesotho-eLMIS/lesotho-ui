@@ -63,6 +63,7 @@
     'moment',
     'rejectionReasonService',
     'receivingAddDiscrepancyModalService',
+    'complaintFormModalService',
     'prepackingService',
     'pointOfDeliveryService'
   ];
@@ -103,6 +104,7 @@
     moment,
     rejectionReasonService,
     receivingAddDiscrepancyModalService,
+    complaintFormModalService,
     prepackingService,
     pointOfDeliveryService
   ) {
@@ -185,7 +187,19 @@
               reload: $state.current.name
           });
       }); 
-  }
+    }
+
+    vm.addComplaintOnModal = function(itemTimestamp) {
+      complaintFormModalService.show(itemTimestamp,program,facility,orderableGroups,hasPermissionToAddNewLot).then(function() {
+          $stateParams.noReload = true;
+          draft.$modified = true;
+          vm.cacheDraft();
+          //Only reload current state and avoid reloading parent state
+          $state.go($state.current.name, $stateParams, {
+              reload: $state.current.name
+          });
+      }); 
+    }
 
     vm.key = function (secondaryKey) {
       return adjustmentType.prefix + 'Creation.' + secondaryKey;
