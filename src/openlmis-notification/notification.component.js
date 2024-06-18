@@ -40,12 +40,14 @@
         .module('openlmis-notification')
         .component('openlmisNotification', {
             templateUrl: 'openlmis-notification/notification.html',
-            controllerAs: 'ctrl',
+            controllerAs: 'vm',
+            controller: 'notificationController',
             bindings: {
-                messageTitle: '<',
-                messageContent: '<',
-                createdDate: '<',
-                isRead: '<'
+                messageTitle: '=',
+                messageContent: '=',
+                createdDate: '=',
+                isRead: '=',
+                id: '='
             }
         });
 

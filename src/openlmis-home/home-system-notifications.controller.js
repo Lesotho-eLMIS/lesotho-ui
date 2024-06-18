@@ -81,29 +81,10 @@
         function onInit() {
             vm.isOffline = offlineService.isOffline();
            vm.homePageSystemNotifications = homePageSystemNotifications;
-           // Studying the system Notifications view
-            // vm.userNotifications = [{
-            //     title: 'StockOut Alert',
-            //     author: {
-            //         firstName: 'flo',
-            //         lastName: 'User'
-            //     },
-            //     message: 'Chehe. Re felletsoe ke DTG'
-            // },
-            // {
-            //     title: 'Overstock Alert',
-            //     author: {
-            //         firstName: 'flo',
-            //         lastName: 'User'
-            //     },
-            //     message: 'Re imelitsoe'
-            // }
-            // ];
-            homeService.markNotificationsAsRead();
             homeService.getNotifications(user.id).then(function(notifications) {
                 // Handle the notifications here
-                console.log(notifications);
-                vm.userNotifications = notifications;
+                vm.userNotifications = notifications.filter(msg => msg.isRead !== true); // Show only notifications that have not been read.
+            
             })
             .catch(function(error) {
                 // Handle any errors that occurred during the resource request

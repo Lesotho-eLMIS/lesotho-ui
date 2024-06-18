@@ -1,13 +1,13 @@
 <article class="message">
     <header>
         <div class="title">
-            <p>{{ctrl.messageTitle}}</p>
+            <p>{{vm.messageTitle}}</p>
         </div>
         <div>
             <label>
-                <input type="checkbox" ng-model="vm.isRead"> Mark as read
+                <input type="checkbox" ng-change="vm.onChange(vm.id)" ng-model="vm.isRead"> Mark as read
             </label>
         </div>
     </header>
-    <div class="content">{{ctrl.messageContent}}</div>
+    <div class="content">{{vm.messageContent}}</div>
 </article>

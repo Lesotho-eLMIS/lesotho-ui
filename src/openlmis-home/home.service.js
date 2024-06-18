@@ -39,12 +39,12 @@
             });
         }
 
-        function markNotificationsAsRead(/*notificationId, isRead*/) {
+        function markNotificationsAsRead(notificationId) {
             var params = {
                 isRead : true //isRead 
                 }
             //    "bf6d1c18-3cc9-4ca3-b25a-209ea265ebcd"
-            return resource.save({ id:"93122ec0-c366-4660-a0c2-e8364fb1ff43" }, params).$promise
+            return resource.save({ id:notificationId }, params).$promise
             
         }
 

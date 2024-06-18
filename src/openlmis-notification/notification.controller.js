@@ -34,12 +34,14 @@
 
     function notificationController(homeService, localStorageService) {
 
-        var vm = this;
+        var vm= this;
 
         vm.$onInit = onInit;
-        vm.getMessage = getMessage;
         vm.onChange = onChange;
-
+        vm.isRead = false;
+        vm.messageTitle = undefined;
+        vm.messageContent = undefined;
+        vm.id = undefined; // Notification ID to be stored here
 
         /**
          * @ngdoc method
@@ -51,8 +53,15 @@
          * setting data to be available on the view.
          */
         function onInit() {
-
-           console.log(isRead);
+           //vm.messageContent = messageContent;
+           //vm.isRead = isRead;
+           //vm.messageTitle = messageTitle;
+           /*console.log('Notification initialized:', {
+            title: vm.messageTitle,
+            content: vm.messageContent,
+            isRead: vm.isRead,
+            id: vm.id
+            });*/
         }
 
 
@@ -62,10 +71,10 @@
          * @name onChange
          *
          * @description
-         * Handles change in toggle.
+         * Handles change in read status of a notification.
          */
-        function onChange() {
-            localStorageService.add(QUANTITY_UNIT_KEY, vm.quantityUnit);
+        function onChange(notificationId) {
+           homeService.markNotificationsAsRead(notificationId);
         }
 
     }
