@@ -128,12 +128,14 @@
                         <input type="text" ng-show="lineItem.reason.isFreeTextAllowed" ng-model="lineItem.reasonFreeText" rows="1" cols="15"></input>
                     </td>
                     
-                    <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">
-                        <input ng-model="lineItem.individualCartonNumber" class="form-control" 
-                        type="number" style="width: 5px;" min="0" step="1" oninput="validity.valid||(value='');" style="display: inline-block;">
+                    <td openlmis-invalid="{{lineItem.$errors.cartonsInvalid}}" class="digit-cell" ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">
+                        <input class="form-control" ng-model="lineItem.individualCartonNumber"   ng-class="{'error': lineItem.$errors.cartonsInvalid}"
+                            ng-change="vm.validateCartonNumber(lineItem)" 
+                            type="number" style="width: 10px;" min="0" step="1" oninput="validity.valid||(value='');">
+
                         <label style="display: inline-block;">of</label>
-                        <input ng-model="lineItem.totalCartonNumber" class="form-control" 
-                        type="number" style="width: 5px;" min="0" step="1" oninput="validity.valid||(value='');" style="display: inline-block;">
+                        <input class="form-control" ng-model="lineItem.totalCartonNumber" ng-change="vm.validateCartonNumber(lineItem)" ng-blur="vm.validateCartonNumber(lineItem)"                         
+                            type="number" style="width: 10px;" min="0" step="1" oninput="validity.valid||(value='');">
                         <!-- <input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.cartonNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"> -->
                     </td>
                     
@@ -141,8 +143,7 @@
                     
                     <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.deliveryNoteQuantity" class="form-control" 
                         type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" 
-                        ng-change="vm.validateQuantity(lineItem)" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
-                         
+                        ng-change="vm.validateQuantity(lineItem)" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>                     
                     
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.prepackSize" ng-change="vm.validatePrepackQuantity(lineItem)" type="number" min="0" style="width: 70px;"></td>
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.numberOfPrepacks" ng-change="vm.validatePrepackQuantity(lineItem)" type="number" style="width: 120px;"></td>
