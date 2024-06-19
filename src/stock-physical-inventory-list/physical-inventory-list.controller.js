@@ -29,10 +29,10 @@
         .controller('PhysicalInventoryListController', controller);
 
     controller.$inject = ['facility', 'programs', 'drafts', 'messageService', '$state', 'physicalInventoryService',
-        'FunctionDecorator', 'offlineService', '$q', '$scope', '$stateParams'];
+        'FunctionDecorator', 'offlineService', '$q', '$scope', '$stateParams','draftsForCyclic'];
 
     function controller(facility, programs, drafts, messageService, $state, physicalInventoryService,
-                        FunctionDecorator, offlineService, $q, $scope, $stateParams) {
+                        FunctionDecorator, offlineService, $q, $scope, $stateParams,draftsForCyclic) {
         var vm = this;
         vm.$onInit = onInit;
 
@@ -153,6 +153,7 @@
         }
 
         function onInit() {
+            console.log(draftsForCyclic);
             if (networkStateHasBeenChanged()) {
                 reloadPage();
             }
