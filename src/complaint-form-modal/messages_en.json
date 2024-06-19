@@ -5,12 +5,16 @@
   "complaintFormModal.quantityReturned": "Quantity Returned",
   "complaintFormModal.natureOfComplaint": "Nature Of Complaint",
   "complaintFormModal.actions": "Actions",
-  "complaintFormModal.addComplaint": "File a Complaint",
+  "complaintFormModal.sendComplaint": "Send",
   "complaintFormModal.edit": "Exit",
-  "complaintFormModal.title": "Complaint Form",
+  "complaintFormModal.title": "Complaint Form to NDSO",
   "complaintFormModal.cancel": "Cancel",
   "complaintFormModal.NDSOInvoiceNumber": "NDSO Invoice Number",
   "complaintFormModal.purchaseOrderNumber": "Purchase Order Number",
   "complaintFormModal.healthFacility": "Health Facility",
-  "complaintFormModal.addProduct": "Add Product"
+  "complaintFormModal.addProduct": "Add Product",
+  "complaintFormModal.product": "Product",
+  "complaintFormModal.remove": "Remove",
+  "complaintFormModal.comments": "Comments",
+  "complaintFormModal.add": "Add"
 }
