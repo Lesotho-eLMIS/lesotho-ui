@@ -52,6 +52,17 @@
         /**
          * @ngdoc property
          * @propertyOf stock-physical-inventory-list.controller:PhysicalInventoryListController
+         * @name physicalInventoryType
+         * @type {Object}
+         *
+         * @description
+         * Holds Physical Inventory Type.
+         */
+        vm.physicalInventoryType = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf stock-physical-inventory-list.controller:PhysicalInventoryListController
          * @name programs
          * @type {Array}
          *
