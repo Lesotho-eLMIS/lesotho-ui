@@ -1,4 +1,5 @@
 {
   "stockAdjustmentCreation.lotCode": "Batch Number",
-  "stockAdjustmentCreation.acceptedQuantityError": "Rejected quantity cannot exceed accepted quantity"
+  "stockAdjustmentCreation.acceptedQuantityError": "Rejected quantity cannot exceed accepted quantity",
+  "stockAdjustmentCreation.cartonsInvalidError": "Cartons cannot be zero or greater than total received"
 }

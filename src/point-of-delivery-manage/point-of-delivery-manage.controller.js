@@ -292,11 +292,7 @@
 
         vm.getSupplyingFacilityName = async function (supplyingFacilityId) {
             try {
-
                 var facilityObject = await facilityService.get(supplyingFacilityId);
-
-                // Return Facility Name
-                //console.log(facilityObject.name);
                 return facilityObject.name;
             } catch (error) {
                 // Handle any errors that may occur during the query

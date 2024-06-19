@@ -3,21 +3,21 @@
 <form class="sidebar">
 
     <fieldset class="form-group">
-        <label for="lastName">Status</label>
+        <label for="lastName">{{'dispensingPrescriptionForm.status' | message}}</label>
         <input class="form-control" type="text" disabled>
     </fieldset>
     <fieldset class="form-group">
-        <label for="PrescriptionNumber">Follow up date</label>
+        <label for="PrescriptionNumber">{{'dispensingPrescriptionForm.followupDate' | message}}</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
     </fieldset>
     <fieldset class="form-group">
-        <label for="firstName">Created date</label>
+        <label for="firstName">{{'dispensingPrescriptionForm.createdDate' | message}}</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
     </fieldset>
     <fieldset class="form-group">
-        <legend>Patient type</legend>
+        <legend>{{'dispensingPrescriptionForm.patientType' | message}}</legend>
         <label class="radio">
             <input type="radio" ng-model="vm.Prescription.sex"
                 ng-value="true" required/>
@@ -30,7 +30,7 @@
         </label>
     </fieldset>
     <fieldset class="form-group">
-        <label for="nationalID">Dispensing date</label>
+        <label for="nationalID">{{'dispensingPrescriptionForm.dispensingDate' | message}}</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
     </fieldset>
@@ -51,7 +51,7 @@
     <section class="openlmis-table-container">
         <section class="is-primary">
             <form class="form-inline" name="productForm">
-                <button type="button" ng-click="vm.addContact()" class="add">Add Product</button>
+                <button type="button" ng-click="vm.addPrescription()" class="add">{{'dispensingPrescriptionForm.addProduct' | message}}</button>
             </form>
         </section>
         <table suppress-tr-openlmis-invalid>
@@ -60,14 +60,11 @@
                     <th>{{'dispensingPrescriptionForm.prescribedProduct' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.substituteProduct' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.batchNumber' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.dose' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.doseUnits' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.frequency' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.route' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.duration' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.durationUnits' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.instructions' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th>
+
+                    <th>{{'dispensingPrescriptionForm.prescriptionsDetails' | message}}</th>
+
+                    
+
                     <th>{{'dispensingPrescriptionForm.quantityPrescribed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.servedInternally' | message}}</th>
@@ -76,7 +73,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="contact in vm.contacts">
+                <tr ng-repeat="prescription in vm.prescriptions">
                     <td>
                         <label for="contactType">Select Product:</label>
                         <select id="contactType" name="contactType">
@@ -97,104 +94,11 @@
                     <td>
                         <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
                     </td>
-                    <td>
-                        <input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;"/>
-                    </td>
 
-                    <td>
-                        <label for="contactType">Select Units:</label>
-                        <select id="contactType" name="contactType">
-                            <option ng-model="contact.phon" value="phone"> </option>
-                            <option ng-model="contact.email" value="email">Capsule(s)</option>
-                            <option ng-model="contact.phone" value="phone">Tablet(s)</option>
-                            <option ng-model="contact.phone" value="phone">ml</option>
-                            <option ng-model="contact.phon" value="phone">mg</option>
-                            <option ng-model="contact.email" value="email">IU</option>
-                            <option ng-model="contact.phone" value="phone">Drop</option>
-                            <option ng-model="contact.phone" value="phone">Tablespoon</option>
-                            <option ng-model="contact.phon" value="phone">Teaspoon</option>
-                            <option ng-model="contact.email" value="email">Unit(s)</option>
-                            <option ng-model="contact.phone" value="phone">Puff(s)</option>
-                        </select>
-                    </td>
-                    <td>
-                        <label for="contactType">Select Frequency:</label>
-                        <select id="contactType" name="contactType">
-                            <option ng-model="contact.phon" value="phone"> </option>
-                            <option ng-model="contact.email" value="email">Immediately</option>
-                            <option ng-model="contact.phone" value="phone">Once a day</option>
-                            <option ng-model="contact.phone" value="phone">Twice a day</option>
-                            <option ng-model="contact.email" value="email">Thrice a aday</option>
-                            <option ng-model="contact.phone" value="phone">Every hour</option>
-                            <option ng-model="contact.phone" value="phone">Every 2 hours</option>
-                            <option ng-model="contact.email" value="email">Every 3 hours</option>
-                            <option ng-model="contact.email" value="email">Every 4 hours</option>
-                            <option ng-model="contact.email" value="email">Every 6 hours</option>
-                            <option ng-model="contact.email" value="email">Every 8 hours</option>
-                            <option ng-model="contact.email" value="email">Every 12 hours</option>
-                            <option ng-model="contact.phone" value="phone">On alternate days</option>
-                            <option ng-model="contact.phone" value="phone">Once a week</option>
-                            <option ng-model="contact.email" value="email">Twice a week</option>
-                            <option ng-model="contact.phone" value="phone">Thrice a week</option>
-                            <option ng-model="contact.phone" value="phone">Every 2 weeks</option>
-                            <option ng-model="contact.email" value="email">Every 3 weeks</option>
-                            <option ng-model="contact.phone" value="phone">Once a month</option>
-                            <option ng-model="contact.phone" value="phone">5 times a day</option>
-                            <option ng-model="contact.email" value="email">4 days a week</option>
-                            <option ng-model="contact.email" value="email">5 days a week</option>
-                            <option ng-model="contact.email" value="email">6 days a week</option>
-                        </select>
-                    </td>
-                    <td>
-                        <label for="contactType">Select Route:</label>
-                        <select id="contactType" name="contactType">
-                            <option ng-model="contact.phon" value="phone"> </option>
-                            <option ng-model="contact.email" value="email">Intramuscular</option>
-                            <option ng-model="contact.phone" value="phone">Intravenous</option>
-                            <option ng-model="contact.phone" value="phone">Oral</option>
-                            <option ng-model="contact.email" value="email">Per Vaginal</option>
-                            <option ng-model="contact.phone" value="phone">Sub Cutaneous</option>
-                            <option ng-model="contact.phone" value="phone">Per Rectum</option>
-                            <option ng-model="contact.email" value="email">Sub Lingual</option>
-                            <option ng-model="contact.phone" value="phone">Nasogastric</option>
-                            <option ng-model="contact.phone" value="phone">Intradermal</option>
-                            <option ng-model="contact.email" value="email">Intraperitoneal</option>
-                            <option ng-model="contact.phone" value="phone">Intrathecal</option>
-                            <option ng-model="contact.phone" value="phone">Intraosseous</option>
-                            <option ng-model="contact.email" value="email">Topical</option>
-                            <option ng-model="contact.phone" value="phone">Nasal</option>
-                            <option ng-model="contact.phone" value="phone">Inhalation</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;"/>
-                    </td>
-                    <td>
-                        <label for="contactType">Select Duration Units:</label>
-                        <select id="contactType" name="contactType">
-                            <option ng-model="contact.phon" value="phone"> </option>
-                            <option ng-model="contact.email" value="email">Day(s)</option>
-                            <option ng-model="contact.phone" value="phone">Weeks(s)</option>
-                            <option ng-model="contact.phone" value="phone">Month(s)</option>
-                        </select>
-                    </td>
+                    <td><button type="button" ng-click="vm.addDiscrepancyOnModal('carton')" class="add" >{{'dispensingPrescriptionForm.add'| message}}</button></td>
 
-                    <td>
-                        <label for="contactType">Select Instructions:</label>
-                        <select id="contactType" name="contactType">
-                            <option ng-model="contact.phon" value="phone"> </option>
-                            <option ng-model="contact.email" value="email">Before meals</option>
-                            <option ng-model="contact.phone" value="phone">Empty stomach</option>
-                            <option ng-model="contact.phone" value="phone">In the morning</option>
-                            <option ng-model="contact.email" value="email">In the evening</option>
-                            <option ng-model="contact.phone" value="phone">At bedtime</option>
-                            <option ng-model="contact.phone" value="phone">Immediately</option>
-                            <option ng-model="contact.email" value="email">As directed</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input id="contact" ng-model="vm.Prescription.contact" type="text" style="width: 120px;"/>
-                    </td>
+                    
+                    
                     <td>
                         <input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 50px;"/>
                     </td>
@@ -208,7 +112,7 @@
                         <input id="contact" ng-model="vm.Prescription.contact" type="text" style="width: 120px;"/>
                     </td>
                     <td>
-                        <button type="button" class="danger" ng-click="removeContact($index)">Remove</button>
+                        <button type="button" ng-click="removePrescription($index)" class="danger">Remove</button>
                     </td>
                 </tr>
             </tbody>

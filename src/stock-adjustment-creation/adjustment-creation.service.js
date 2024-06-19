@@ -79,18 +79,13 @@
 
             return result;
         }
-        //FROM RECEIVING ADD DISCREPANCY MODAL
 
+        //FROM RECEIVING ADD DISCREPANCY MODAL
          var receivingDiscrepancies = [];
         
         function addReceivingDiscrepancies (discrepancies) {
-            // var dsi = [];
-            // dsi.push(discrepancies);
-            //return dsi;
-            console.log (discrepancies);
-            receivingDiscrepancies.push(discrepancies);
-            console.log (receivingDiscrepancies);
  
+            receivingDiscrepancies.push(discrepancies);
         }
         
         //get discrepancies for view 
@@ -103,7 +98,6 @@
            
             // Search for objects in discrepanciesArray with a matching timeStamp
             var itemDiscrepancies = receivingDiscrepancies.filter(discrepancy => discrepancy.timestamp === timestamp);
-            console.log(itemDiscrepancies);
             return itemDiscrepancies;
 
         }
@@ -111,27 +105,14 @@
         function getItemDiscrepancies(timestamp){
            
             var itemDiscrepancies = [];
-           
-             console.log("getting Discrepancy  "+timestamp);
+
              // Search for objects with a matching timeStamp in receivingDiscrepancies array
             receivingDiscrepancies.forEach((discrepancy) => {
-                console.log(discrepancy.timestamp);
+                
                 if(discrepancy.timestamp === timestamp){
                     itemDiscrepancies.push(discrepancy);
-                    // receivingDiscrepancies.splice(index, 1);
                 }
             });
-            // Remove the matched discrepancies from receivingDiscrepancies array
-            // itemDiscrepancies.forEach(i => {
-            //     receivingDiscrepancies.forEach(j => {
-            //         if(i.timestamp===j.timestamp){
-            //             receivingDiscrepancies.splice(i, 1);
-            //         }
-            //     });
-            // });
-
-            console.log('Matched Discrepancies:');
-            console.log(itemDiscrepancies);
             return itemDiscrepancies;
         }
     //----------------------------------------------
@@ -156,10 +137,10 @@
                             vvmStatus: item.vvmStatus
                         },
                         occurredDate: item.occurredDate,
-                        //reasonId: 'e3fc3cf3-da18-44b0-a220-77c985202e06', //
                         reasonId: item.reason ? item.reason.id : null, 
                         reasonFreeText: item.reasonFreeText,
                         invoiceNumber: item.invoiceNumber,
+                        cartonNumber: item.cartonNumber,
                         referenceNumber: item.referenceNumber,
                         unitPrice: item.unitPrice,
                         selectedDiscrepancy: item.selectedDiscrepancy,
