@@ -46,7 +46,16 @@
                                 }
                             };
                         var fullSupplyLineItems = $filter('filter')(requisition.requisitionLineItems, filterObject);
-
+                        
+                        //Auto Populate requested quantity with calculatedOrderQuantity when the requisition is still in the Initiated State on lineItems where requestedQuantity is not filled.
+                        if(requisition.status === "INITIATED"){
+                            fullSupplyLineItems.forEach(item => {
+                                if(item.requestedQuantity === undefined){
+                                    item.requestedQuantity = item.calculatedOrderQuantity;
+                                }
+                                
+                            });
+                        } 
                         return $filter('orderBy')(fullSupplyLineItems, [
                             '$program.orderableCategoryDisplayOrder',
                             '$program.orderableCategoryDisplayName',
