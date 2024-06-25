@@ -18,7 +18,7 @@
     "requisitionRedistribution.reject.failure": "Failed to reject requisition!",
     "requisitionRedistribution.reject.label": "Reject",
     "requisitionRedistribution.rnrHasErrors": "R&R has errors, please correct them to proceed.",
-    "requisitionRedistribution.submit.confirm": "Are you sure you want to submit this R&R?",
+    "requisitionRedistribution.submit.confirm": "Are you sure you want to redistribute this R&R?",
     "requisitionRedistribution.requisition.error": "R&R has errors",
     "requisitionRedistribution.approvedQuantity": "Approved Quantity",
     "requisitionRedistribution.cancel": "Cancel",
@@ -35,5 +35,5 @@
     "requisitionRedistribution.submit.label": "Submit",
     "requisitionRedistribution.submit.error": "Approved quantity does not match Quantity to Issue. Please correct before proceeding",
     "requisitionRedistribution.supplyingFacility": "Supplying Facility",
-    "requisitionRedistribution.fail": "Make sure that Approved Quantity matches Quantity to Issue for all products."
+    "requisitionRedistribution.fail": "Approved quantity does not match Quantity to Issue. Please correct before proceeding."
 }
