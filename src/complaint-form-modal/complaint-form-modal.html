@@ -1,6 +1,6 @@
 <div class="modal add-products-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 1100px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
 
       <div class="modal-header">
         <button type="button" class="close" aria-label="Close" ng-click="$hide()">
@@ -13,12 +13,14 @@
 
       <div class="modal-body">
 <!-- ///////////////////////////////////////////// -->
-        <form class="sidebar" ng-submit="vm.searchPatients()">
-
+        <form>
+          
           <fieldset class="form-group">
             <label for="orderingFacility">{{'complaintFormModal.healthFacility' | message}}</label>
-            <select id="receivingFacility" ng-model="vm.POD.receivingFacility" ng-required="!vm.supplyingFacility"
-              ng-options="facility.name for facility in vm.homeFacilities"></select>
+            <select id="receivingFacility" ng-model="vm.complaintFormFacility" 
+                ng-options="facility.name for facility in vm.homeFacilities"></select>
+            <!-- <select id="receivingFacility" ng-model="vm.homeFacility" ng-required="!vm.supplyingFacility"
+              ng-options="facility.name for facility in vm.facility"></select> -->
           </fieldset>
 
           <fieldset class="form-group">
@@ -80,9 +82,12 @@
                 <th>{{'complaintFormModal.productName' | message}}</th>
                 <th>{{'complaintFormModal.batchNumber' | message}}</th>
                 <th>{{'complaintFormModal.expiryDate' | message}}</th>
+                <th>{{'complaintFormModal.quantityAffected' | message}}</th>
                 <th>{{'complaintFormModal.quantityReturned' | message}}</th>
                 <th>{{'complaintFormModal.natureOfComplaint' | message}}</th>
-                <th>{{'complaintFormModal.comments' | message}}</th>
+                <th>{{'complaintFormModal.complaintReason' | message}}</th>
+                <th>{{'complaintFormModal.complaintDetail' | message}}</th>
+                <th>{{'complaintFormModal.complainComment' | message}}</th>
                 <th class="col-sticky sticky-right">{{'complaintFormModal.actions' | message}}</th>
               </tr>
             </thead>
@@ -91,8 +96,38 @@
                 <td>{{product.name}}</td>
                 <td>{{product.batch}}</td>
                 <td><input type="date" style="width: 90px;" ng-model="product.expiary" ng-disabled="true"></td>
+                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;" ng-model="product.quantityAffected"></td>
                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;" ng-model="product.quantityReturned"></td>
-                <td><input type="text" style="width: 70px;" ng-model="product.natureOfComplaint"></td>
+                <td>
+                  <!-- Nature of complaint -->
+                  <select id="complaintType" name="complaintType">
+                      <option ng-model="complaint.email" value="email">Wrong product</option>
+                      <option ng-model="complaint.email" value="email">Wrong pack size</option>
+                      <option ng-model="complaint.email" value="email">Over supply</option>
+                      <option ng-model="complaint.email" value="email">Expired products</option>
+                      <option ng-model="complaint.email" value="email">Due to expire</option>
+                      <option ng-model="complaint.email" value="email">Delivery queries</option>
+                      <option ng-model="complaint.email" value="email">Shortage</option>
+                      <option ng-model="complaint.email" value="email">Quality</option>
+                      <option ng-model="complaint.email" value="email">Price hike</option>
+                      <option ng-model="complaint.email" value="email">Other(specify)</option>
+                  </select>
+                </td>
+                <td>
+                  <!-- complaint reason -->
+                  <select id="complaintType" name="complaintType">
+                    <option ng-model="complaint.email" value="email">Issued</option>
+                    <option ng-model="complaint.email" value="email">Ordered</option>
+                    <option ng-model="complaint.email" value="email">Requested</option>
+                  </select>
+                </td>
+                <td>
+                  <!-- reason detail -->
+                  <select id="complaintType" name="complaintType">
+                    <option ng-model="complaint.email" value="email">Ordered</option>
+                    <option ng-model="complaint.email" value="email">Requested</option>
+                  </select>
+                </td>
                 <td><input type="text" style="width: 70px;" ng-model="product.comments"></td>
                 <td>
                   <button type="button" ng-click="vm.removeProductLineItem($index)" class="danger">{{'complaintFormModal.remove'| message}}</button>

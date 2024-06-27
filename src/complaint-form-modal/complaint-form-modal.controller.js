@@ -32,7 +32,7 @@
         'orderableGroups', 'program', 'facility', 'programService', 'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService'];
 
     function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService, 
-                        notificationService, orderableGroups, program, faciity, programService, orderableGroupService, hasPermissionToAddNewLot, messageService) {//
+                        notificationService, orderableGroups, program, facility, programService, orderableGroupService, hasPermissionToAddNewLot, messageService) {//
         var vm = this;
 
         vm.$onInit = onInit;
@@ -45,6 +45,12 @@
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
         vm.selectedDiscrepancy = undefined;
+        vm.facility = facility;
+        vm.facilities = undefined;
+        vm.homeFacilities = [facility];
+
+        //vm.complaintFormFacility = undefined;
+
         //vm.addDiscrepancy = addDiscrepancy;
         //vm.removeDispency = removeDiscrepancy;
 
@@ -67,6 +73,18 @@
         // }
         
         function onInit() {
+            
+            // console.log("start");
+            // console.log(facility.geographicZone.name);
+            // console.log("Just facility");
+            // console.log(facility);
+            // vm.facility.push(facility.name);
+            // //vm.homeFacility = "home facility here";
+            // console.log("finish");
+
+            vm.receivingFacility = facility.name;
+            //vm.complaintFormFacility = vm.homeFacilities[0].value;
+
             vm.selectedDiscrepancy = [];
            
            vm.rejectionReasons = rejectionReasons.content;
