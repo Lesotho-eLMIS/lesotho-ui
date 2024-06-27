@@ -32,14 +32,14 @@
         '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility', 'requisitionService'
     ];
 
     function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, homeFacility) {
+                               canUnskipRequisitionItemWhenApproving, homeFacility, requisitionService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -147,15 +147,13 @@
         function onInit() {
             vm.lineItems = lineItems;
             vm.items = items;
-            console.log(vm.items);
-            vm.requisition = requisition;
+           // vm.requisition = requisition;
             vm.homeFacility = homeFacility;
             console.log(vm.homeFacility.type.name);
             // vm.requisition = disabledRequisitionEdit();
             console.log("In requisition view tab!")
-            console.log(vm.requisition);
+            console.log(requisition);
             vm.columns = columns;
-            console.log(vm.columns);
             vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
@@ -169,20 +167,51 @@
             vm.requisition = disabledRequisitionEdit();
         }
 
-        function disabledRequisitionEdit(){
-            // vm.homeFacility.type.name === 'Warehouse' ?
-            vm.requisition = requisition;
+        function disabledRequisitionEdit() {
+            vm.requisitionCopy = angular.copy(requisition);
+            console.log("Copied Requisition");
+            // console.log(vm.requisitionCopy);
+
             if(vm.homeFacility.type.name === 'Warehouse'){
-                vm.requisition.requisitionLineItems.forEach(function(lineItem) {
-                    console.log(lineItem);
+                console.log("Status  " + vm.requisitionCopy.status);
+                vm.requisitionCopy.requisitionLineItems.forEach(function (lineItem) {
+                    if (lineItem.skipped === "") {
+                        console.log("Unskipped");
+                        vm.requisitionCopy.extraData.unskippedLineItems = [];
+                        vm.requisitionCopy.extraData.unskippedLineItems.push(lineItem.id);
+
+                       // vm.requisitionCopy.extraData.unSkippedRequisitionLineItems.unSkippedLineItemList.push(lineItem);
+                        console.log(lineItem.skipped);       
                         lineItem.skipped = true;
+                        console.log(lineItem.skipped);       
+                    }                 
                 });
-                // var unEditableRequisition = vm.requisition.skipAllFullSupplyLineItems();
-                // refreshLineItems();
-                return vm.requisition;
-            }
-            else{
-                return vm.requisition;
+                console.log('Returned A');
+                console.log(vm.requisitionCopy);
+                return vm.requisitionCopy
+            }else if (vm.homeFacility.type.name !== 'Warehouse' && vm.requisitionCopy.status === 'REJECTED'){
+                //Unskip line Items that were skipped when rejecting
+                if(vm.requisitionCopy.extraData.hasOwnProperty('unskippedLineItems')){
+                    console.log("UnSkipping");
+                    for (let anItem of vm.requisitionCopy.extraData.unskippedLineItems) {
+                        let match = vm.requisitionCopy.requisitionLineItems.find(item => item.id === anItem.id);
+                        if (match) {
+                            console.log(match);
+                            match.skipped = "";
+                        }
+                    }
+                    console.log('Returned B');
+                    console.log(vm.requisitionCopy);
+                    return vm.requisitionCopy;
+                }
+                console.log('Returned C');
+                console.log(vm.requisitionCopy);
+                return vm.requisitionCopy;                
+            }else{
+                console.log('Returned D');
+                console.log(vm.requisitionCopy);
+                vm.requisitionCopy.$isEditable = false;
+                return vm.requisitionCopy;
             }
         }
 
