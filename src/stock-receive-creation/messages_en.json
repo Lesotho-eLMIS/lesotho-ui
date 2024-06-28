@@ -12,5 +12,7 @@
   "stockReceiveCreation.comments": "Comments",
   "stockReceiveCreation.amount": "Amount",
   "stockReceiveCreation.discrepancy": "Discrepancy",
+  "stockReceiveCreation.complaint": "Complaint",
+  "stockReceiveCreation.fileComplaint": "File Complaint",
   "stockReceiveCreation.cartonNumber": "Carton Number"
 }

@@ -28,16 +28,16 @@
         .module('dispensing-prescription-form')
         .controller('prescriptionFormController', controller);
 
-    controller.$inject = ['$filter', '$state', 'pointOfDeliveryService', '$scope', 'notificationService', 'dispensingService', 'dispensingPrescriptionDetailsModalService'];
+    controller.$inject = ['$filter', '$state'];
 
-    function controller($filter, $state, pointOfDeliveryService, $scope, notificationService, dispensingService, dispensingPrescriptionDetailsModalService) {
+    function controller($filter, $state) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.prescriptions = []; 
-        vm.addPrescription = addPrescription;
-        vm.removePrescription= removePrescription;
+        vm.contacts = []; 
+        vm.addContact = addContact;
+        vm.removeContact = removeContact;
 
         /**
          * @ngdoc method
@@ -61,31 +61,19 @@
          * Add another line item for a Contact
          *
          */
-        function addPrescription() {
+        function addContact() {
             console.log("Add line item...");
-            vm.prescriptions.push({
-                //'phone': '',
-                //'email': ''
+            vm.contacts.push({
+                'phone': '',
+                'email': ''
             });  
         }
 
-        // removing prescription from table
-        function removePrescription(index) {
+        // removing discrepancies from table
+        function removeContact(index) {
             console.log("Remove...");
             console.log(index);
-            vm.prescriptions.splice(index, 1);
-        }
-
-        vm.addDiscrepancyOnModal = function(shipmentType) {
-            dispensingService.show(shipmentType).then(function() {
-                $stateParams.noReload = true;
-                draft.$modified = true;
-                vm.cacheDraft();
-                //Only reload current state and avoid reloading parent state
-                $state.go($state.current.name, $stateParams, {
-                    reload: $state.current.name
-                });
-            }); 
+            vm.contacts.splice(index, 1);
         }
     }
 })();
