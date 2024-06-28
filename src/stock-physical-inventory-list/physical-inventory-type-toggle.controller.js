@@ -103,7 +103,8 @@
          * Handles change in toggle.
          */
         function onChange() {
-            localStorageService.add(QUANTITY_UNIT_KEY, vm.quantityUnit);
+            //localStorageService.add(QUANTITY_UNIT_KEY, vm.quantityUnit);
+            //console.log(vm.physicalInventoryType);
         }
 
     }

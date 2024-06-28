@@ -25,7 +25,7 @@
 
     function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
         $stateProvider.state('openlmis.stockmanagement.physicalInventory.draft', {
-            url: '/:id?keyword&includeInactive&page&size',
+            url: '/:id?physicalInventoryType&keyword&includeInactive&page&size',
             isOffline: true,
             views: {
                 '@openlmis': {
@@ -49,7 +49,9 @@
                     if (offlineService.isOffline() || $stateParams.noReload) {
                         return physicalInventoryDraftCacheService.getDraft($stateParams.id);
                     }
-                    return physicalInventoryFactory.getPhysicalInventory(getDraftFromParent(drafts, $stateParams));
+                    var currentDraft = getDraftFromParent(drafts, $stateParams);
+                    //console.log(draft);
+                    return physicalInventoryFactory.getPhysicalInventory(currentDraft);
                 },
                 program: function($stateParams, programService, draft) {
                     if ($stateParams.program === undefined) {
@@ -114,9 +116,11 @@
         });
 
         function getDraftFromParent(drafts, $stateParams) {
-            return drafts.reduce(function(draft, physicalInventory) {
+            //Major = 0, Cyclic = 1
+            var index = ($stateParams.physicalInventoryType === "Major") ? 0 : 1 ;
+            return drafts[index].reduce(function(draft, physicalInventory) {
                 if (physicalInventory.id === $stateParams.id) {
-                    draft = physicalInventory;
+                    draft = physicalInventory;                   
                 }
                 return draft;
             }, {});

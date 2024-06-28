@@ -2,7 +2,7 @@
 
 <section class="openlmis-table-container openlmis-physical-inventory">
   <div>
-    <physical-inventory-type-toggle class="is-primary" physical-inventory-type="vm.physicalInventoryType"></physical-inventory-type-toggle>
+    <physical-inventory-type-toggle class="is-primary" ng-click="vm.onChangePhysicalInventoryType()" physical-inventory-type="vm.physicalInventoryType"></physical-inventory-type-toggle>
   </div>
   <table>
     <caption ng-if="!vm.drafts.length">{{'stockPhysicalInventory.noPhysicalInventoryFound' |

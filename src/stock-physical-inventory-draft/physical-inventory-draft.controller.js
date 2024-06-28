@@ -51,6 +51,7 @@
         vm.cacheDraft = cacheDraft;
         vm.quantityChanged = quantityChanged;
         vm.checkUnaccountedStockAdjustments = checkUnaccountedStockAdjustments;
+        vm.selectProductForCyclic = selectProductForCyclic;
 
         /**
          * @ngdoc property
@@ -114,7 +115,7 @@
          * When true shows inactive items
          */
         vm.includeInactive = $stateParams.includeInactive;
-
+    
         /**
          * @ngdoc property
          * @propertyOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
@@ -159,6 +160,8 @@
          * Indicates if VVM Status column should be visible.
          */
         vm.showVVMStatusColumn = false;
+        vm.productsForCyclic = []; // list of products to be selected for cyclic stock count
+        vm.selectedProductForCyclic = undefined; // product selected for cyclic stock count
 
         /**
          * @ngdoc property
@@ -497,8 +500,15 @@
          */
         vm.submit = function() {
             vm.isSubmitted = true;
+            var error = undefined;//(vm.physicalInventoryType === "Major") ? validate() : validateCyclic();
+            if(vm.stateParams.physicalInventoryType === "Cyclic"){
+                console.log("Cyclic");
+                validateCyclic();
+            }else if(vm.stateParams.physicalInventoryType === "Major"){
+                console.log("Major");
+                validate();
+            }
 
-            var error = validate();
             if (error) {
                 $scope.$broadcast('openlmis-form-submit');
                 alertService.error(error);
@@ -510,7 +520,7 @@
                     draft.signature = resolvedData.signature;
 
                     return saveLots(draft, function() {
-                        physicalInventoryService.submitPhysicalInventory(draft).then(function() {
+                        physicalInventoryService.submitPhysicalInventory(draft,vm.stateParams.physicalInventoryType ).then(function() {
                             notificationService.success('stockPhysicalInventoryDraft.submitted');
                             confirmService.confirm('stockPhysicalInventoryDraft.printModal.label',
                                 'stockPhysicalInventoryDraft.printModal.yes',
@@ -661,39 +671,65 @@
             return activeError || qtyError;
         }
 
+        function validateCyclic() {
+            var qtyError = false;
+            var activeError = false;
+
+            displayLineItemsGroup.forEach(function(group) {
+
+                console.log(group);
+                if(vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName){
+                    _.chain(group).flatten()
+                        .each(function(item) {
+                        if (!item.active) {
+                            activeError = 'stockPhysicalInventoryDraft.submitInvalidActive';
+                        } else if (vm.validateQuantity(item) || vm.validateUnaccountedQuantity(item)) {
+                            qtyError = 'stockPhysicalInventoryDraft.submitInvalid';
+                        }
+                });
+            return activeError || qtyError;                }
+            })
+        }
         function onInit() {
             $state.current.label = messageService.get('stockPhysicalInventoryDraft.title', {
                 facilityCode: facility.code,
                 facilityName: facility.name,
                 program: program.name
             });
-
             vm.reasons = reasons;
             vm.stateParams = $stateParams;
             $stateParams.program = undefined;
             $stateParams.facility = undefined;
-
+            
+            //Prepare product for select for cyclic stock count
+            displayLineItemsGroup.forEach(function(group) {
+                vm.productsForCyclic.push(group[0])
+            })
             vm.hasLot = _.any(draft.lineItems, function(item) {
                 return item.lot;
             });
-
+            
             draft.lineItems.forEach(function(item) {
                 item.unaccountedQuantity =
                     stockReasonsCalculations.calculateUnaccounted(item, item.stockAdjustments);
             });
 
-            vm.updateProgress();
-            var orderableGroups = orderableGroupService.groupByOrderableId(draft.lineItems);
-            vm.showVVMStatusColumn = orderableGroupService.areOrderablesUseVvm(orderableGroups);
-            shouldDisplayHideButtonColumn(draft.lineItems);
-            $scope.$watchCollection(function() {
-                return vm.pagedLineItems;
-            }, function(newList) {
-                vm.groupedCategories = $filter('groupByProgramProductCategory')(newList, vm.program.id);
-            }, true);
-
-            if (!$stateParams.noReload) {
-                vm.cacheDraft();
+            if (vm.stateParams.physicalInventoryType === "Major") {
+                vm.updateProgress();
+                var orderableGroups = orderableGroupService.groupByOrderableId(draft.lineItems);
+                vm.showVVMStatusColumn = orderableGroupService.areOrderablesUseVvm(orderableGroups);
+                shouldDisplayHideButtonColumn(draft.lineItems);
+                $scope.$watchCollection(function() {
+                    return vm.pagedLineItems;
+                }, function(newList) {
+                    vm.groupedCategories = $filter('groupByProgramProductCategory')(newList, vm.program.id);
+                }, true);
+    
+                if (!$stateParams.noReload) {
+                    vm.cacheDraft();
+                }  
+            }else{
+               // Block for Initiating Cyclic stock count.
             }
         }
 
@@ -774,6 +810,17 @@
         }
 
         vm.validateOnPageChange();
+
+        function selectProductForCyclic () {
+            displayLineItemsGroup.forEach(function(group) {
+                if(vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName){
+                    vm.groupedCategories = $filter('groupByProgramProductCategory')([group], vm.program.id);
+                }
+            })
+
+            //console.log("Draft LineItems");
+            //console.log(draft.lineItems);
+        }
 
     }
 })();

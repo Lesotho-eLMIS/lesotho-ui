@@ -71,7 +71,7 @@
          */
         vm.programs = programs;
 
-        vm.drafts = drafts;
+        vm.drafts = (vm.physicalInventoryType === "Major") ? drafts : draftsForCyclic;
         vm.editDraft = new FunctionDecorator()
             .decorateFunction(editDraft)
             .withLoading(true)
@@ -111,6 +111,11 @@
 
         };
 
+        vm.onChangePhysicalInventoryType = function(){
+            //Major = 0, Cyclic = 1
+            vm.drafts = (vm.physicalInventoryType === "Major") ? drafts[0] : drafts[1];
+        }
+
         /**
          * @ngdoc method
          * @propertyOf stock-physical-inventory-list.controller:PhysicalInventoryListController
@@ -137,7 +142,8 @@
                     id: draft.id,
                     program: program,
                     facility: facility,
-                    includeInactive: false
+                    includeInactive: false,
+                    physicalInventoryType : vm.physicalInventoryType
                 });
                 return $q.resolve();
             }
@@ -147,13 +153,13 @@
                     id: draft.id,
                     program: program,
                     facility: facility,
-                    includeInactive: false
+                    includeInactive: false,
+                    physicalInventoryType : vm.physicalInventoryType
                 });
             });
         }
 
         function onInit() {
-            console.log(draftsForCyclic);
             if (networkStateHasBeenChanged()) {
                 reloadPage();
             }

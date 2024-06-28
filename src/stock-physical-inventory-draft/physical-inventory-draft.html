@@ -22,13 +22,20 @@
     </form>
 
     <openlmis-progressbar class="physical-inventory-draft-progress"
+        ng-if="vm.stateParams.physicalInventoryType === 'Major'"
         value="vm.itemsWithQuantity.length" max="vm.displayLineItemsGroup.length"
         title="{{'stockPhysicalInventoryDraft.numberOfProductsComplete' | message: {'num': vm.itemsWithQuantity.length, 'total': vm.displayLineItemsGroup.length} }}">
     </openlmis-progressbar>
 
-    <button class="pull-right add" ng-click="vm.addProducts()">
+    <button ng-if="vm.stateParams.physicalInventoryType === 'Major'" class="pull-right add" ng-click="vm.addProducts()">
         {{'stockPhysicalInventoryDraft.addProduct' | message}}
     </button>
+    <div ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" class="pull-right add">
+        <label for="productSelect">{{'Select Product'}}</label>
+        <select ng-change="vm.selectProductForCyclic()" id="productSelect" ng-model="vm.selectedProductForCyclic"
+            ng-options="product.orderable.fullProductName for product in vm.productsForCyclic">
+        </select>
+    </div>
 
     <saving-indicator class="draft-indicator" object="vm.dataChanged"/>
 
@@ -115,7 +122,8 @@
             </tr>
         </tbody>
     </table>
-    <openlmis-pagination list="vm.displayLineItemsGroup" paged-list="vm.pagedLineItems" on-page-change="vm.saveOnPageChange"></openlmis-pagination>
+    <openlmis-pagination ng-if="vm.stateParams.physicalInventoryType === 'Major'" list="vm.displayLineItemsGroup" paged-list="vm.pagedLineItems" on-page-change="vm.saveOnPageChange"></openlmis-pagination>
+    <openlmis-pagination ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" list="vm.displayLineItemsGroup" paged-list="vm.pagedLineItemsForCyclic" on-page-change="vm.saveOnPageChange"></openlmis-pagination>
 </section>
 
 <ng-include src="'stock-physical-inventory-draft/physical-inventory-draft-toolbar.html'"></ng-include>
