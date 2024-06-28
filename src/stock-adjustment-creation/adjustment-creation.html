@@ -65,7 +65,8 @@
                     <th ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reason') | message}}</th>
                     <th ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reasonComments') | message}}</th>
 
-                    <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('cartonNumber') | message}}</th>
+                    <!-- <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('cartonNumber') | message}}</th> -->
+                    <th colspan="3" ng-if="vm.showDeliveryNoteAttributes">{{vm.key('cartonNumber') | message}}</th>
                     <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="true">{{vm.key('invoiceNumber') | message}}</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('deliveryNoteQuantity') | message}}</th>
@@ -130,11 +131,15 @@
                     </td>
                     
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">
-                        <input ng-model="lineItem.individualCartonNumber" class="form-control" 
-                        type="number" style="width: 5px;" min="0" step="1" oninput="validity.valid||(value='');" style="display: inline-block;">
-                        <label style="display: inline-block;">of</label>
-                        <input ng-model="lineItem.totalCartonNumber" class="form-control" 
-                        type="number" style="width: 5px;" min="0" step="1" oninput="validity.valid||(value='');" style="display: inline-block;">
+                        <input class="form-control" ng-model="lineItem.individualCartonNumber"   ng-class="{'error': lineItem.$errors.cartonsInvalid}"
+                            ng-change="vm.validateCartonNumber(lineItem)" 
+                            type="number" style="width: 20px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
+
+                        <td><label style="display: inline-block;">of</label></td>
+                       <td openlmis-invalid="{{lineItem.$errors.cartonsInvalid}}" class="digit-cell">
+                            <input class="form-control" ng-model="lineItem.totalCartonNumber" ng-change="vm.validateCartonNumber(lineItem)" 
+                            ng-class="{'error': lineItem.$errors.cartonsInvalid}" ng-blur="vm.validateCartonNumber(lineItem)"                         
+                            type="number" style="width: 20px;" min="0" step="1" oninput="validity.valid||(value='');">
                         <!-- <input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.cartonNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"> -->
                     </td>
                     
@@ -142,8 +147,7 @@
                     
                     <td ng-if="vm.showDeliveryNoteAttributes"><input ng-model="lineItem.deliveryNoteQuantity" class="form-control" 
                         type="number" style="width: 50px;" min="0" step="1" oninput="validity.valid||(value='');" 
-                        ng-change="vm.validateQuantity(lineItem)" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
-                         
+                        ng-change="vm.validateQuantity(lineItem)" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" required></td>                     
                     
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.prepackSize" ng-change="vm.validatePrepackQuantity(lineItem)" type="number" min="0" style="width: 70px;"></td>
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.numberOfPrepacks" ng-change="vm.validatePrepackQuantity(lineItem)" type="number" style="width: 120px;"></td>

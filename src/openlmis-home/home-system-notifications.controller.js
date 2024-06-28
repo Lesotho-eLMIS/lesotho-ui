@@ -28,13 +28,25 @@
         .module('openlmis-home')
         .controller('HomeSystemNotificationsController', controller);
 
-    controller.$inject = ['homePageSystemNotifications', 'offlineService'];
+    controller.$inject = ['homePageSystemNotifications', 'offlineService','user','homeService'];
 
-    function controller(homePageSystemNotifications, offlineService) {
+    function controller(homePageSystemNotifications, offlineService,user,homeService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
+
+        
+        /**
+         * @ngdoc property
+         * @propertyOf home-system-notifications.controller:HomeSystemNotificationsController
+         * @type {Object}
+         * @name homePageSystemNotifications
+         *
+         * @description
+         * System notifications which will be displayed to users.
+         */
+        vm.userNotifications = undefined;
 
         /**
          * @ngdoc property
@@ -68,7 +80,17 @@
          */
         function onInit() {
             vm.isOffline = offlineService.isOffline();
-            vm.homePageSystemNotifications = homePageSystemNotifications;
+           vm.homePageSystemNotifications = homePageSystemNotifications;
+            homeService.getNotifications(user.id).then(function(notifications) {
+                // Handle the notifications here
+                vm.userNotifications = notifications.filter(msg => msg.isRead !== true); // Show only notifications that have not been read.
+            
+            })
+            .catch(function(error) {
+                // Handle any errors that occurred during the resource request
+                console.error(error);
+            });
+
         }
     }
 

@@ -41,6 +41,9 @@
                 }
             },
             resolve: {
+                user: function(currentUserService) {
+                    return currentUserService.getUserInfo();
+                },
                 homePageSystemNotifications: function(paginationService, SystemNotificationResource, $stateParams,
                     offlineService, systemNotificationService) {
                     if (!offlineService.isOffline()) {
