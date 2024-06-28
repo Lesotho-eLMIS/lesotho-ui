@@ -116,7 +116,6 @@
     vm.validateExpirationDate = validateExpirationDate;
     vm.lotChanged = lotChanged;
     vm.addProduct = addProduct;
-    vm.getReferenceNumbers = getReferenceNumbers;
     vm.podReferenceNumbers = undefined;
     vm.hasPermissionToAddNewLot = hasPermissionToAddNewLot;
     vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item","More..."];
@@ -285,8 +284,6 @@
       if (noErrors) {
 
         selectedItem.referenceNumber = vm.referenceNumber;  
-       // let cartonNumber = vm.generateCartonNumber(selectedItem);
-       // selectedItem.cartonNumber =  cartonNumber;   
         var timestamp = new Date().getTime();
         selectedItem.timestamp = timestamp; // Add a time stamp to the selected line item
         vm.addedLineItems.unshift(
@@ -304,18 +301,6 @@
       }
     }
 
-    vm.generateCartonNumber = function (item){
-      console.log(item);
-      let num1 = item.individualCartonNumber;
-      let num2 = item.totalCartonNumber;
-      console.log(num1 + "of" + num2);
-      // let cartonNumber = individualCartonNumber + "of" + totalCartons;
-      return num1.toString() + " of " + num2.toString();
-
-      //return `${num1} of ${num2}`;
-
-    }
-
     function copyDefaultValue() {
       var defaultDate;
       if (previousAdded.occurredDate) {
@@ -323,9 +308,6 @@
       } else {
         defaultDate = dateUtils.toStringDate(new Date());
       }
-
-      console.log("Copying Value");
-      console.log(previousAdded);
 
       return{
         assignment: previousAdded.assignment,
@@ -412,6 +394,25 @@
         lineItem.$errors.quantityInvalid = messageService.get(
           vm.key('positiveInteger'));
       }
+      return lineItem;
+    };
+
+    vm.validateCartonNumber = function(lineItem){
+      
+      if (!lineItem.hasOwnProperty('totalCartonNumber') || lineItem.individualCartonNumber > lineItem.totalCartonNumber ||
+        isEmpty(lineItem.totalCartonNumber)) {
+       
+        lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
+      }else if(!lineItem.hasOwnProperty('individualCartonNumber') || lineItem.individualCartonNumber === 0 ){
+      
+        lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
+      }else if(lineItem.individualCartonNumber > 0 && lineItem.individualCartonNumber <= lineItem.totalCartonNumber){
+       
+        lineItem.$errors.cartonsInvalid = false;
+        let cartonNumber = lineItem.individualCartonNumber + " of " + lineItem.totalCartonNumber;
+        lineItem.cartonNumber = cartonNumber;
+      }
+      console.log(lineItem);
       return lineItem;
     };
 
@@ -656,6 +657,7 @@
         vm.validateDate(item);
         vm.validateAssignment(item);
         vm.validateReason(item);
+        vm.validateCartonNumber(item);
       });
       return _.chain(vm.addedLineItems)
         .groupBy(function (item) {

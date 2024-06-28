@@ -30,11 +30,11 @@
         .module('requisition-redistribution')
         .controller('RequisitionRedistributionController', controller);
 
-        controller.$inject = ['supplyingFacilities','stateTrackerService','requisition','user','facility', 'program', '$state',
-                                'processingPeriod','orderCreateService', 'notificationService', 'alertService', 'loadingModalService'];
+        controller.$inject = ['supplyingFacilities','stateTrackerService','requisition','user','facility', 'program', '$state', 'processingPeriod',
+                        'orderCreateService', 'notificationService', 'alertService', 'loadingModalService', 'confirmService'];
 
-    function controller(supplyingFacilities, stateTrackerService, requisition, user, facility, program, $state,
-                        processingPeriod, orderCreateService, notificationService, alertService, loadingModalService) {
+    function controller(supplyingFacilities, stateTrackerService, requisition, user, facility, program, $state, processingPeriod, 
+                    orderCreateService, notificationService, alertService, loadingModalService, confirmService) {
             
         var vm = this;
 
@@ -79,6 +79,7 @@
            vm.totalApprovedQty = vm.getApprovedQuantity();
            console.log(vm.totalApprovedQty);
         }
+        
 
         //Compute the total approved quantity for the requisition
         vm.getApprovedQuantity = function(){
@@ -99,32 +100,35 @@
         }
 
         //Assembles orders for each requisition line item and passes them on for processing.
-        function submitRedistribution () {
-       
+        function submitRedistribution() {
+            
             // validate that approved quantity and quantity to issue match
-            if(vm.totalApprovedQty !== vm.getQuantityToIssue())
-            {    
+            if (vm.totalApprovedQty !== vm.getQuantityToIssue()) {
                 failWithMessage('requisitionRedistribution.fail')();
                 reloadState();
             }
-            else{
-                let orderLineItems = [];
-                //build an order object for each requisition line item 
-                vm.requisitionLineItems.forEach(lineItem => {
-                    const order = {
-                        emergency: true,
-                        createdBy: { id: user.id },
-                        program: { id: program.id },
-                        requestingFacility: { id: facility.id },
-                        receivingFacility: { id: facility.id },
-                        supplyingFacility: { id: lineItem.supplyingFacility.id },
-                        facility: { id: facility.id }
-                    };
-                    orderLineItems.push(order); 
-                });
-                let requestedItems = vm.requisitionLineItems;
-                //Pass the array of orders and their respective requisition line items to submitOrders for further processing
-                submitOrders(requestedItems, orderLineItems );
+            else {
+                confirmService
+                    .confirm('requisitionRedistribution.submit.confirm')
+                    .then(function () {
+                        let orderLineItems = [];
+                        //build an order object for each requisition line item 
+                        vm.requisitionLineItems.forEach(lineItem => {
+                            const order = {
+                                emergency: true,
+                                createdBy: { id: user.id },
+                                program: { id: program.id },
+                                requestingFacility: { id: facility.id },
+                                receivingFacility: { id: facility.id },
+                                supplyingFacility: { id: lineItem.supplyingFacility.id },
+                                facility: { id: facility.id }
+                            };
+                            orderLineItems.push(order);
+                        });
+                        let requestedItems = vm.requisitionLineItems;
+                        //Pass the array of orders and their respective requisition line items to submitOrders for further processing
+                        submitOrders(requestedItems, orderLineItems);
+                    })
             }
         }
 
@@ -160,7 +164,7 @@
                     requestedItems.forEach((lineItem) => {
                         fetchedOrder.orderLineItems.push({                                    
                             orderable: lineItem.orderable,
-                            orderedQuantity: lineItem.quantityToIssue,
+                            orderedQuantity: lineItem.packsToShip,
                             soh: 45
                         });
                     });                  

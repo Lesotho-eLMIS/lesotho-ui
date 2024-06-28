@@ -262,6 +262,16 @@
 
         } 
 
+        vm.isEmergencyRequisition = function(){
+          
+            if(vm.requisition.emergency){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
         function setTypeAndClass() {
             if (vm.requisition.emergency) {
                 vm.requisitionType = 'requisitionView.emergency';
