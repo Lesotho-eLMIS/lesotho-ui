@@ -34,7 +34,7 @@
         '$scope', 'RequisitionWatcher', 'accessTokenFactory', 'messageService', 'stateTrackerService',
         'RequisitionStockCountDateModal', 'localStorageFactory', 'canSubmit', 'canAuthorize', 'canApproveAndReject',
         'canDelete', 'canSkip', 'canSync', 'program', 'facility', 'processingPeriod',
-        'rejectionReasonModalService', '$q'
+        'rejectionReasonModalService', '$q', 'homeFacility'
     ];
        
     function RequisitionViewController($state, requisition, requisitionValidator, requisitionService,
@@ -42,8 +42,8 @@
                                        offlineService, $window, requisitionUrlFactory, $filter, $scope,
                                        RequisitionWatcher, accessTokenFactory, messageService, stateTrackerService,
                                        RequisitionStockCountDateModal, localStorageFactory, canSubmit, canAuthorize,
-                                       canApproveAndReject, canDelete, canSkip, canSync,
-                                       program, facility, processingPeriod, rejectionReasonModalService, $q) {
+                                       canApproveAndReject, canDelete, canSkip, canSync, program, facility, 
+                                       processingPeriod, rejectionReasonModalService, $q, homeFacility) {
 
         var vm = this,
             watcher = new RequisitionWatcher($scope, requisition, localStorageFactory('requisitions'));
@@ -539,6 +539,8 @@
          * Otherwise, a success notification modal will be shown.
          */
         function rejectRnr() {
+            console.log("Rejecting Requisition");
+            console.log(vm.requisition);
             loadRejectionReasonModal().then(function(rejectionReasons) {
                 confirmService.confirmDestroy(
                     'requisitionView.reject.confirm',
