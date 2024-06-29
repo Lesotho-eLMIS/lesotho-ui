@@ -123,7 +123,7 @@
         </tbody>
     </table>
     <openlmis-pagination ng-if="vm.stateParams.physicalInventoryType === 'Major'" list="vm.displayLineItemsGroup" paged-list="vm.pagedLineItems" on-page-change="vm.saveOnPageChange"></openlmis-pagination>
-    <openlmis-pagination ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" list="vm.displayLineItemsGroup" paged-list="vm.pagedLineItemsForCyclic" on-page-change="vm.saveOnPageChange"></openlmis-pagination>
+    <!--<openlmis-pagination ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" list="vm.displayLineItemsGroup" paged-list="vm.pagedLineItemsForCyclic" on-page-change="vm.saveOnPageChange"></openlmis-pagination>-->
 </section>
 
 <ng-include src="'stock-physical-inventory-draft/physical-inventory-draft-toolbar.html'"></ng-include>
