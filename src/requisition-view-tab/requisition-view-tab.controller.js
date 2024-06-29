@@ -147,15 +147,9 @@
         function onInit() {
             vm.lineItems = lineItems;
             vm.items = items;
-           // console.log(vm.items);
             vm.requisition = requisition;
             vm.homeFacility = homeFacility;
-            console.log(vm.homeFacility.type.name);
-            // vm.requisition = disabledRequisitionEdit();
-            console.log("In requisition view tab!")
-            //console.log(vm.requisition);
             vm.columns = columns;
-            //console.log(vm.columns);
             vm.userCanEdit = canAuthorize || canSubmit || canUnskipRequisitionItemWhenApproving;
             vm.showAddFullSupplyProductsButton = showAddFullSupplyProductsButton();
             vm.showAddNonFullSupplyProductsButton = showAddNonFullSupplyProductsButton();
@@ -163,30 +157,23 @@
             vm.showSkipControls = showSkipControls();
             vm.noProductsMessage = getNoProductsMessage();
             vm.canApproveAndReject = canApproveAndReject;
-            console.log("=============");
-            console.log(vm.canApproveAndReject);
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
             vm.requisition = disabledRequisitionEdit();
         }
 
-        function disabledRequisitionEdit(){
-            // vm.homeFacility.type.name === 'Warehouse' ?
-            console.log("NDSO can also see Authorised requisitions not yet Approved by DHMT");
-            console.log("I also cannot find or see the requisition rejected at NDSO. Yet to test rejection at DHMT");
-            console.log(canAuthorize);
-            console.log(vm.requisition);
-            console.log(vm.requisition);
+        // Allows requisition line items to be editable by skipping or unskipping line item
+        function disabledRequisitionEdit(){           
             vm.requisition = requisition;
-
+            // Make all requisition line item skipped at Warehouses
             if(vm.homeFacility.type.name === 'Warehouse'){
                 vm.requisition.requisitionLineItems.forEach(function(lineItem) {
-                    console.log(lineItem);
                         lineItem.skipped = true;
                 });            
                 return vm.requisition;
             }
-            else if(vm.homeFacility !== 'Warehouse'){// && vm.canApproveAndReject){ 
-                console.log(vm.canApproveAndReject);
+            else if(vm.homeFacility !== 'Warehouse'){
+                //Unskip all skipped requisition line items where requested quantity is greater than zero. 
+                //This will allow them to be editable
                 vm.requisition.requisitionLineItems.forEach(function(lineItem) {
                     if(lineItem.requestedQuantity > 0 ){
                         lineItem.skipped = "";
@@ -194,9 +181,6 @@
                 });
                 return vm.requisition;
             }
-            // else{
-            //     return vm.requisition;
-            // }
         }
 
         /**

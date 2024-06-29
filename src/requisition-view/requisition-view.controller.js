@@ -504,21 +504,27 @@
          * Otherwise, a success notification modal will be shown.
          */
         function approveRnr() {
+            // Unskip skipped line items when approving
+            vm.requisition.requisitionLineItems.forEach(function (lineItem) {
+                if (lineItem.requestedQuantity > 0) {
+                    lineItem.skipped = "";
+                }
+            });
             confirmService.confirm(
                 'requisitionView.approve.confirm',
                 'requisitionView.approve.label'
-            ).then(function() {
+            ).then(function () {
                 if (requisitionValidator.validateRequisition(requisition)) {
                     var loadingPromise = loadingModalService.open();
-                    vm.requisition.$save().then(function() {
-                        vm.requisition.$approve().then(function() {
+                    vm.requisition.$save().then(function () {
+                        vm.requisition.$approve().then(function () {
                             watcher.disableWatcher();
-                            loadingPromise.then(function() {
+                            loadingPromise.then(function () {
                                 notificationService.success('requisitionView.approve.success');
                             });
                             stateTrackerService.goToPreviousState('openlmis.requisitions.approvalList');
                         }, loadingModalService.close);
-                    }, function(response) {
+                    }, function (response) {
                         handleSaveError(response.status);
                     });
                 } else {
