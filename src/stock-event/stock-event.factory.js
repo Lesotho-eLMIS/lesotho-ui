@@ -49,6 +49,10 @@
          */
         function createFromPhysicalInventory(physicalInventory, physicalInventoryType ) {
            // console.log(physicalInventory)
+           if(physicalInventoryType === "Cyclic"){
+            physicalInventory.lineItems = physicalInventory.lineItems.filter(item => item.quantity >= 0)
+           }
+
             var physicalInventoryCopy = angular.copy(physicalInventory);
             physicalInventoryCopy.lineItems = physicalInventory.lineItems
                 .filter(function(item) {
@@ -80,7 +84,7 @@
                         }, stockAdjustments
                     );
                 });
-            console.log(physicalInventoryCopy)
+            console.log(physicalInventoryCopy.lineItems)
 
             return new StockEvent(physicalInventoryCopy);
         }
