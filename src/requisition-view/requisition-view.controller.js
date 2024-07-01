@@ -545,8 +545,6 @@
          * Otherwise, a success notification modal will be shown.
          */
         function rejectRnr() {
-            console.log("Rejecting Requisition");
-            console.log(vm.requisition);
             loadRejectionReasonModal().then(function(rejectionReasons) {
                 confirmService.confirmDestroy(
                     'requisitionView.reject.confirm',
