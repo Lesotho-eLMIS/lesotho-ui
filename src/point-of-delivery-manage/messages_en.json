@@ -26,5 +26,5 @@
   "proofOfDeliveryManage.addDiscrepancy":"Add",
   "proofOfDeliveryManage.cartons": "Cartons",
   "pointOfDeliveryManage.containers": "Containers",
-  "pointOfDeliveryManage.emptyConsignment": "Cartons and Containers both have zero values. Insert at least one container or carton"
+  "pointOfDeliveryManage.emptyConsignment": "Waybill Quantity and Accepted Quantity cannot be zero. Please enter correct values"
 }
