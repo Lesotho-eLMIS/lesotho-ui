@@ -230,7 +230,7 @@
         vm.close = close;
         vm.loadRejectionReasonModal = loadRejectionReasonModal;
         vm.goToRedistribution = goToRedistribution;
-
+        
         /**
          * @ngdoc method
          * @methodOf requisition-view.controller:RequisitionViewController
@@ -252,6 +252,7 @@
             vm.displayRejectButton = canApproveAndReject && !vm.requisition.extraData.originalRequisition;
             vm.displaySkipButton = canSkip;
             vm.displaySyncButton = canSync;
+            vm.homeFacility = homeFacility;
         }
 
         function goToRedistribution(requisitionId) {
@@ -264,7 +265,7 @@
 
         vm.isEmergencyRequisition = function(){
           
-            if(vm.requisition.emergency){
+            if(vm.requisition.emergency && vm.homeFacility.type.name === "District Store" ){
                 return true;
             }
             else{
