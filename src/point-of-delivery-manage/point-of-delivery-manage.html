@@ -41,7 +41,7 @@
                                 <th>{{'pointOfDeliveryManage.quantityOnWayBill'| message}}</th>
                                 <!-- <th>{{'pointOfDeliveryManage.quantityShipped'| message}}</th> -->
                                 <th>{{'proofOfDeliveryManage.quantityAccepted'| message}}</th>
-                                <th>{{'proofOfDeliveryManage.quantityRejected'| message}}</th>
+                                <!-- <th>{{'proofOfDeliveryManage.quantityRejected'| message}}</th> -->
                                 <th>{{'proofOfDeliveryManage.action'| message}}</th>
                             </tr>
                         </thead>
@@ -52,8 +52,8 @@
                                         style="width: 60px;" ng-model="vm.POD.cartonsQuantityOnWaybill"></td>
                                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
                                         style="width: 60px;" ng-model="vm.POD.cartonsQuantityAccepted"></td>
-                                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.cartonsQuantityRejected"></td>
+                                <!-- <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
+                                        style="width: 60px;" ng-model="vm.POD.cartonsQuantityRejected"></td> -->
                                 <td><button type="button"
                                         ng-click="vm.addDiscrepancyOnModal('carton', vm.tempPOD.discrepancies)"
                                         class="primary"><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'|
@@ -65,8 +65,8 @@
                                         style="width: 60px;" ng-model="vm.POD.containersQuantityOnWayBill"></td>
                                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
                                         style="width: 60px;" ng-model="vm.POD.containersQuantityAccepted"></td>
-                                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
-                                        style="width: 60px;" ng-model="vm.POD.containersQuantityRejected"></td>
+                                <!-- <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');"
+                                        style="width: 60px;" ng-model="vm.POD.containersQuantityRejected"></td> -->
                                 <td><button type="button"
                                         ng-click="vm.addDiscrepancyOnModal('container', vm.tempPOD.discrepancies)"
                                         class="primary"><b>+ </b>{{'proofOfDeliveryManage.addDiscrepancy'|

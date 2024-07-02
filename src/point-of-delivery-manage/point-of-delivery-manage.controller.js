@@ -71,7 +71,6 @@
             $rootScope.referenceNoPOD = undefined; // Clear Var on Root Scope 
             if ($stateParams.podId) {
                 vm.tempPOD = filterShipmentById(podEvents, $stateParams.podId);
-                console.log(vm.tempPOD.discrepancies);
                 populatePODView(vm.tempPOD);
             }
 
@@ -138,22 +137,22 @@
                 cartonsQuantityOnWaybill: vm.POD ? vm.POD.cartonsQuantityOnWaybill : null,
                 cartonsQuantityShipped: vm.POD ? (vm.POD.cartonsQuantityRejected + vm.POD.cartonsQuantityAccepted) : null,
                 cartonsQuantityAccepted: vm.POD ? vm.POD.cartonsQuantityAccepted : null,
-                cartonsQuantityRejected: vm.POD ? vm.POD.cartonsQuantityRejected : null,
+                // cartonsQuantityRejected: vm.POD ? vm.POD.cartonsQuantityRejected : null,
                 containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
                 containersQuantityShipped: vm.POD ? (vm.POD.containersQuantityAccepted + vm.POD.containersQuantityRejected) : null,
                 containersQuantityAccepted: vm.POD ? vm.POD.containersQuantityAccepted : null,
-                containersQuantityRejected: vm.POD ? vm.POD.containersQuantityRejected : null,
+                // containersQuantityRejected: vm.POD ? vm.POD.containersQuantityRejected : null,
                 discrepancies: discrepancyList
             };
             const inputsValid = vm.validatePODinputs(payloadData);
-            const validatedCartonsAndContainers = vm.validateCartonsAndContainers(payloadData);
+            // const validatedCartonsAndContainers = vm.validateCartonsAndContainers(payloadData);
             const consignmentValid = validateConsignment(payloadData);
             if (inputsValid && consignmentValid) {
-                if (validatedCartonsAndContainers) {
+                // if (validatedCartonsAndContainers) {
                     vm.submitPOD(payloadData);
-                } else {
-                    alertService.error("Please ensure that cartons and containers details are correct.");
-                }
+                // } else {
+                    // alertService.error("Please ensure that cartons and containers details are correct.");
+                // }
             } else {
                 alertService.error('pointOfDeliveryManage.emptyConsignment');
             }
@@ -191,15 +190,15 @@
          * @description
          * 
          */
-        vm.validateCartonsAndContainers = function (podDetails) {
-            if ((podDetails.cartonsQuantityRejected > podDetails.cartonsQuantityOnWaybill) || (podDetails.containersQuantityRejected > podDetails.containersQuantityOnWaybill)) {
+        // vm.validateCartonsAndContainers = function (podDetails) {
+        //     if ((podDetails.cartonsQuantityRejected > podDetails.cartonsQuantityOnWaybill) || (podDetails.containersQuantityRejected > podDetails.containersQuantityOnWaybill)) {
 
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
+        //         return false;
+        //     }
+        //     else {
+        //         return true;
+        //     }
+        // }
 
         /**
          * @ngdoc method
@@ -213,9 +212,12 @@
 
             const hasCartonsQuantity = consignmentDetails.hasOwnProperty('cartonsQuantityOnWaybill') && consignmentDetails.cartonsQuantityOnWaybill;
             const hasContainersQuantity = consignmentDetails.hasOwnProperty('containersQuantityOnWaybill') && consignmentDetails.containersQuantityOnWaybill;
+            const hasCartonsAcceptedQuantity = consignmentDetails.hasOwnProperty('cartonsQuantityAccepted') && consignmentDetails.cartonsQuantityAccepted;
+            const hasContainersAcceptedQuantity = consignmentDetails.hasOwnProperty('containersQuantityAccepted') && consignmentDetails.containersQuantityAccepted;
+            
 
             //Check if Cartons and Containers have values
-            if (!(hasCartonsQuantity || hasContainersQuantity)) {
+            if (!(hasCartonsQuantity && hasCartonsAcceptedQuantity)) {
                 return false;
             }
 

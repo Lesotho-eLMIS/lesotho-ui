@@ -51,13 +51,9 @@
          * setting data to be available on the view.
          */
         function onInit() {
-
-            console.log("POD Events from Routes");
             
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;
-            console.log(vm.receivingFacility);
-            console.log(vm.supplyingFacilities);
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
         }
 
