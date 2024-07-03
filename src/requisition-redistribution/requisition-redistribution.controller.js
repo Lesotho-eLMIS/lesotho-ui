@@ -59,10 +59,12 @@
         vm.redistributeRequisition = redistributeRequisition;
         vm.submitOrders = submitOrders;
         vm.filteredProducts = filteredProducts;
+        vm.filterFacilities = filterFacilities;
         
         function onInit() {
            vm.facility = facility;
-           vm.supplyingFacilities = supplyingFacilities.filter(item => item.type.code === "health_center" || item.type.code === "hospital"); //facilities;
+           vm.supplyingFacilities = supplyingFacilities;
+           vm.filteredSupplyingFacilities = filterFacilities();
            vm.program = program;
            vm.processingPeriod = processingPeriod;
            vm.requisitionLineItems = requisition.requisitionLineItems;
@@ -77,9 +79,14 @@
             item.removeRowButton = false;
            });
            vm.totalApprovedQty = vm.getApprovedQuantity();
-           console.log(vm.totalApprovedQty);
         }
         
+        //Select facilities in the same district as requesting facility as well as all DHMT facilities
+        function filterFacilities(){
+            var districtFacilities = vm.supplyingFacilities.filter(item => item.type.code === "dist_store" || item.type.code === "health_center" || item.type.code === "hospital");
+            const zoneId = vm.facility.geographicZone.parent.id;
+            return districtFacilities.filter(item => item.geographicZone.parent.id === zoneId || item.geographicZone.parent.id === '1a6a6a05-8b6a-458c-84c5-7c60de2edfe1');
+        }
 
         //Compute the total approved quantity for the requisition
         vm.getApprovedQuantity = function(){

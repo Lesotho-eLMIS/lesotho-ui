@@ -37,9 +37,6 @@ routes.$inject = ['$stateProvider'];
                 requisition: function($stateParams,requisitionService) {
                     return requisitionService.get($stateParams.rnr);
                 },
-                facilities: function(facilityService) {
-                    return facilityService.getAllMinimal();
-                },
                 facility: function(facilityService, requisition) {
                     return facilityService.get(requisition.facility.id);
                 },
