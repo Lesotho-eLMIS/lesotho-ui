@@ -87,6 +87,9 @@
                 },
                 hasPermissionToAddNewLot: function() {
                     return false;
+                },
+                ReferenceNumbers:function() {
+                    return undefined;
                 }
             }
         });

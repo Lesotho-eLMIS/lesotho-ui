@@ -127,6 +127,21 @@
                         .catch(function() {
                             return false;
                         });
+                },
+                ReferenceNumbers: function (pointOfDeliveryService, facility) {
+                    return pointOfDeliveryService.getPODs(facility.id)
+                        .then(function (result) {
+                            let references = [];
+                            let currentDate = new Date();
+                            let activePeriod = new Date(currentDate.getTime() - (14 * 24 * 60 * 60 * 1000));
+                            Object.values(result).forEach(function (record) {
+                                let receivingDate = new Date(record.receivingDate);
+                                if (receivingDate >= activePeriod) {
+                                    references.push(record.referenceNumber);
+                                }
+                            });
+                           return references;
+                        });
                 }
             }
         });

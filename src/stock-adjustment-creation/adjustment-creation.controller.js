@@ -66,7 +66,8 @@
     'complaintFormModalService',
     'prepackingService',
     'pointOfDeliveryService',
-    'suppliers'
+    'suppliers',
+    'ReferenceNumbers'
   ];
 
   function controller(
@@ -108,7 +109,8 @@
     complaintFormModalService,
     prepackingService,
     pointOfDeliveryService, 
-    suppliers
+    suppliers,
+    ReferenceNumbers
   ) {
     var vm = this,
       previousAdded = {};
@@ -414,7 +416,7 @@
         let cartonNumber = lineItem.individualCartonNumber + " of " + lineItem.totalCartonNumber;
         lineItem.cartonNumber = cartonNumber;
       }
-      console.log(lineItem);
+      
       return lineItem;
     };
 
@@ -871,49 +873,17 @@
       addedLineItems.push.apply(addedLineItems, constituentLineItems);
     }
 
-    // Function to get reference numbers of PODs received in the last two weeks
-    async function getReferenceNumbers() {
-      var val = [];
-      const podDetails = pointOfDeliveryService.getPODs(facility.id);
-
-      return podDetails.then(function(resolved){
-      let currentDate = new Date();
-      let activePeriod = new Date(currentDate.getTime() - (14 * 24 * 60 * 60 * 1000));
-        Object.values(resolved).forEach(function(podRecord){
-          let receivingDate = new Date(podRecord.receivingDate);
-          if(receivingDate >= activePeriod){
-            val.push(podRecord.referenceNumber);
-          }          
-        });
-        return val; 
-      });
-    }    
-
-
     //Merging Facility Arrays
     function mergeFacilities(...arrays) {
       return arrays.reduce((acc, array) => acc.concat(array), []);
     }
 
-
     //Filter facilities so that only necessary facilities or service points are viewed when receiving and issuing
-    // function filterFacilities() {
-    //   vm.srcDstAssignments = mergeFacilities(vm.srcDstAssignments, vm.suppliers);
-    //   if (adjustmentType.state === 'receive') {
-    //     let temp = vm.srcDstAssignments.filter(item => item.type.name !== "Unserviceable");
-    //     vm.srcDstAssignments = angular.copy(temp);
-    //   }
-    //   console.log(vm.srcDstAssignments);
-    //   return vm.srcDstAssignments;
-    // }
-
-
     function filterFacilities() {
       vm.srcDstAssignments = mergeFacilities(vm.srcDstAssignments, vm.suppliers);
       if (adjustmentType.state === 'receive') {
         vm.srcDstAssignments = vm.srcDstAssignments.filter(item => item.type && item.type.name !== "Unserviceable");
       }
-      console.log(vm.srcDstAssignments);
       return vm.srcDstAssignments;
     }
       
@@ -921,14 +891,10 @@
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
+      vm.references = ReferenceNumbers;
       
-      console.log(adjustmentType);
       filterFacilities();
-      //Get active POD reference numbers
-      getReferenceNumbers().then((references) =>{
-        vm.refValues = references;
-      });
-
+     
       //Getting Rejection Reasons
       var rej = rejectionReasonService.getAll();
       rej.then(function(reasons) {             

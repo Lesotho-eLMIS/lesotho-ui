@@ -120,6 +120,9 @@
                             return [];
                         });
                 },
+                ReferenceNumbers:function() {
+                    return undefined;
+                },
                 hasPermissionToAddNewLot: function() {
                     return false;
                 }
