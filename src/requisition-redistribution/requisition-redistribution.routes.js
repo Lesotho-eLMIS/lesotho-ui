@@ -40,23 +40,56 @@ routes.$inject = ['$stateProvider'];
                 facility: function(facilityService, requisition) {
                     return facilityService.get(requisition.facility.id);
                 },
+                districtFacilities: function (facilityService) {
+                    var paginationParams = {};
+                    var queryParams = {
+                        "type": "dist_store"
+                    };
+                    return facilityService.query(paginationParams, queryParams)
+                        .then(function (result) {
+                            return result.content;
+                        })
+                        .catch(function (error) {
+                            // Handle any errors that may occur during the query
+                            console.error("Error:", error);
+                            return [];
+                        });
+                },
+                hospitalFacilities: function (facilityService) {
+                    var paginationParams = {};
+                    var queryParams = {
+                        "type": "hospital"
+                    };
+                    return facilityService.query(paginationParams, queryParams)
+                        .then(function (result) {
+                            return result.content;
+                        })
+                        .catch(function (error) {
+                            // Handle any errors that may occur during the query
+                            console.error("Error:", error);
+                            return [];
+                        });
+                },
+                healthFacilities: function (facilityService, facility) {
+                    var paginationParams = {};
+                    var queryParams = {
+                        "type": "health_center",                        
+                    };
+                    return facilityService.query(paginationParams, queryParams)
+                        .then(function (result) {
+                            return result.content;
+                        })
+                        .catch(function (error) {
+                            // Handle any errors that may occur during the query
+                            console.error("Error:", error);
+                            return [];
+                        });
+                },
                 program: function(programService, requisition) {
                     return programService.get(requisition.program.id);
                 },
                 processingPeriod: function(periodService, requisition) {
                     return periodService.get(requisition.processingPeriod.id);
-                },
-                supplyingFacilities: function(facilityService) {
-                    var paginationParams = {};   
-                      return facilityService.query(paginationParams)
-                      .then(function(result) {
-                          return result.content;
-                      })
-                      .catch(function(error) {
-                          // Handle any errors that may occur during the query
-                          console.error("Error:", error);
-                          return [];
-                      });                    
                 }
             }
         });
