@@ -98,6 +98,12 @@
                 },
                 adjustmentType: function() {
                     return ADJUSTMENT_TYPE.PREPACK;
+                },
+                suppliers: function(){
+                    return undefined;
+                },
+                ReferenceNumbers:function() {
+                    return undefined;
                 }
             }
         });

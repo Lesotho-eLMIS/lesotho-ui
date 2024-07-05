@@ -16,6 +16,7 @@
   "stockPrepackCreation.expiryDate": "Expiry Date",
   "stockPrepackCreation.quantityToPrepack": "Quantity of Bulk Supplied",
   "stockPrepackCreation.productHasNoLots": "Product has no batches",
+  "stockPrepackCreation.srcDstLabel": "Received From",
   "stockPrepackCreation.soh": "Stock on Hand",
   "stockPrepackCreation.quantity": "Quantity",
   "stockPrepackCreation.collectedBy": "Collected By",
