@@ -60,7 +60,7 @@
                     <th ng-show="vm.hasLot">{{vm.key('expiryDate') | message}}</th>
                     <th>{{vm.key('soh') | message}}</th>
 
-                    <th ng-show="vm.srcDstAssignments">{{vm.key('srcDstLabel') | message}}</th>
+                    <th ng-show="vm.srcDstAssignments" ng-hide="vm.showPrepackingAttributes || vm.showReasonsInAdjustment">{{vm.key('srcDstLabel') | message}}</th>
                     <th ng-hide="vm.showDeliveryNoteAttributes || vm.showReasonsInAdjustment || vm.showPrepackingAttributes" ng-show="vm.srcDstAssignments">{{vm.key('srcDstComments') | message}}</th>
                     <th ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reason') | message}}</th>
                     <th ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reasonComments') | message}}</th>
@@ -111,7 +111,7 @@
                     </td>
                     <td ng-show="vm.hasLot">{{lineItem.lot.expirationDate | openlmisDate}}</td>
                     <td align="right">{{lineItem.$previewSOH}}</td>
-                    <td ng-show="vm.srcDstAssignments" openlmis-invalid="{{lineItem.$errors.assignmentInvalid ? 'openlmisForm.required' : '' | message}}">
+                    <td ng-show="vm.srcDstAssignments" ng-hide="vm.showPrepackingAttributes || vm.showReasonsInAdjustment" openlmis-invalid="{{lineItem.$errors.assignmentInvalid ? 'openlmisForm.required' : '' | message}}">
                         <select ng-model="lineItem.assignment"
                             ng-change="vm.validateAssignment(lineItem);vm.clearFreeText(lineItem, 'srcDstFreeText');vm.hideColumns()"
                             ng-options="assignment.name for assignment in vm.srcDstAssignments track by assignment.id" autofocus>
