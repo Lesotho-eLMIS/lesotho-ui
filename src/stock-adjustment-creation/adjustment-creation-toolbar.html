@@ -9,7 +9,7 @@
     {{(vm.offline() ? vm.key('submitOffline') : vm.key('submit')) | message}}
   </button>
 
-  <button type="button" class="primary" 
+  <button ng-if="!vm.showPrepackingAttributes" type="button" class="primary" 
     ng-click="vm.addComplaintOnModal(lineItem.timestamp)"> <!-- ng-if="vm.showDeliveryNoteAttributes" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" -->
     {{vm.key('fileComplaint') | message}}
   </button>

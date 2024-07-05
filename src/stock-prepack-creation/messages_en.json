@@ -19,7 +19,7 @@
   "stockPrepackCreation.soh": "Stock on Hand",
   "stockPrepackCreation.quantity": "Quantity",
   "stockPrepackCreation.collectedBy": "Collected By",
-  "stockPrepackCreation.prepackComments": "Comments",
+  "stockPrepackCreation.comments": "Comments",
   "stockPrepackCreation.actions": "Actions",
   "stockPrepackCreation.remove": "Remove",
   "stockPrepackCreation.clear": "Clear",
