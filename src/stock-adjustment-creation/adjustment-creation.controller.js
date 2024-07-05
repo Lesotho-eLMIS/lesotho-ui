@@ -65,7 +65,9 @@
     'receivingAddDiscrepancyModalService',
     'complaintFormModalService',
     'prepackingService',
-    'pointOfDeliveryService'
+    'pointOfDeliveryService',
+    'suppliers',
+    'ReferenceNumbers'
   ];
 
   function controller(
@@ -106,7 +108,9 @@
     receivingAddDiscrepancyModalService,
     complaintFormModalService,
     prepackingService,
-    pointOfDeliveryService
+    pointOfDeliveryService, 
+    suppliers,
+    ReferenceNumbers
   ) {
     var vm = this,
       previousAdded = {};
@@ -120,14 +124,14 @@
     vm.hasPermissionToAddNewLot = hasPermissionToAddNewLot;
     vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item","More..."];
     vm.rejectionReasons = []; // To Store Shipment rejection Reasons
-    //vm.UPrice;
     vm.FromSupplier = false; 
     vm.hideColumns=function(){
       //vm.FromSupplier = true;
      vm.addedLineItems[0].assignment.name
       vm.UPrice=$scope.lineItem.assignment.name;
     };
-  //  vm.calculateRemainingStock = calculateRemainingStock;
+    vm.mergeFacilities = mergeFacilities;
+    vm.filteredFacilities = filterFacilities;
 
     /**
      * @ngdoc property
@@ -412,7 +416,7 @@
         let cartonNumber = lineItem.individualCartonNumber + " of " + lineItem.totalCartonNumber;
         lineItem.cartonNumber = cartonNumber;
       }
-      console.log(lineItem);
+      
       return lineItem;
     };
 
@@ -869,32 +873,28 @@
       addedLineItems.push.apply(addedLineItems, constituentLineItems);
     }
 
-    // Function to get reference numbers of PODs received in the last two weeks
-    async function getReferenceNumbers() {
-      var val = [];
-      const podDetails = pointOfDeliveryService.getPODs(facility.id);
+    //Merging Facility Arrays
+    function mergeFacilities(...arrays) {
+      return arrays.reduce((acc, array) => acc.concat(array), []);
+    }
 
-      return podDetails.then(function(resolved){
-      let currentDate = new Date();
-      let activePeriod = new Date(currentDate.getTime() - (14 * 24 * 60 * 60 * 1000));
-        Object.values(resolved).forEach(function(podRecord){
-          let receivingDate = new Date(podRecord.receivingDate);
-          if(receivingDate >= activePeriod){
-            val.push(podRecord.referenceNumber);
-          }          
-        });
-        return val; 
-      });
-    }    
-   
-    
-    function onInit() {   
+    //Filter facilities so that only necessary facilities or service points are viewed when receiving and issuing
+    function filterFacilities() {
+      vm.srcDstAssignments = mergeFacilities(vm.srcDstAssignments, vm.suppliers);
+      if (adjustmentType.state === 'receive') {
+        vm.srcDstAssignments = vm.srcDstAssignments.filter(item => item.type && item.type.name !== "Unserviceable");
+      }
+      return vm.srcDstAssignments;
+    }
       
-      //Get active POD reference numbers
-      getReferenceNumbers().then((references) =>{
-        vm.refValues = references;
-      });
+    function onInit() {   
 
+      vm.srcDstAssignments = srcDstAssignments;
+      vm.suppliers = suppliers;
+      vm.references = ReferenceNumbers;
+      
+      filterFacilities();
+     
       //Getting Rejection Reasons
       var rej = rejectionReasonService.getAll();
       rej.then(function(reasons) {             
@@ -902,8 +902,7 @@
               // Load only those of type POD/Point of Delivery
               if(reason.rejectionReasonCategory.code == "POD"){
                   vm.rejectionReasons.push(reason.name);
-              }
-            
+              }            
            });                   
         })
         .catch(function(error) {
@@ -972,7 +971,7 @@
         adjustmentType.state === ADJUSTMENT_TYPE.ADJUSTMENT.state;
       
       /* eLMIS Lesotho : end */
-      vm.srcDstAssignments = srcDstAssignments;
+     
       vm.addedLineItems = $stateParams.addedLineItems || [];
       $stateParams.displayItems = displayItems;
       vm.displayItems = $stateParams.displayItems || [];

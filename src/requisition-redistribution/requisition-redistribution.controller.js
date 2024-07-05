@@ -30,11 +30,13 @@
         .module('requisition-redistribution')
         .controller('RequisitionRedistributionController', controller);
 
-        controller.$inject = ['supplyingFacilities','stateTrackerService','requisition','user','facility', 'program', '$state', 'processingPeriod',
-                        'orderCreateService', 'notificationService', 'alertService', 'loadingModalService', 'confirmService'];
+        controller.$inject = ['stateTrackerService','requisition','user','facility', 'program', '$state', 'processingPeriod',
+                        'orderCreateService', 'notificationService', 'alertService', 'loadingModalService', 'confirmService', 'healthFacilities',
+                         'hospitalFacilities', 'districtFacilities'];
 
-    function controller(supplyingFacilities, stateTrackerService, requisition, user, facility, program, $state, processingPeriod, 
-                    orderCreateService, notificationService, alertService, loadingModalService, confirmService) {
+    function controller(stateTrackerService, requisition, user, facility, program, $state, processingPeriod, 
+                    orderCreateService, notificationService, alertService, loadingModalService, confirmService, healthFacilities,
+                    hospitalFacilities, districtFacilities) {
             
         var vm = this;
 
@@ -59,10 +61,15 @@
         vm.redistributeRequisition = redistributeRequisition;
         vm.submitOrders = submitOrders;
         vm.filteredProducts = filteredProducts;
+        vm.filterFacilities = filterFacilities;
         
         function onInit() {
+        
            vm.facility = facility;
-           vm.supplyingFacilities = supplyingFacilities.filter(item => item.type.code === "health_center" || item.type.code === "hospital"); //facilities;
+           vm.hospitals = hospitalFacilities;
+           vm.healthCenters = healthFacilities;
+           vm.dhmts = districtFacilities;
+           vm.filteredSupplyingFacilities = filterFacilities();
            vm.program = program;
            vm.processingPeriod = processingPeriod;
            vm.requisitionLineItems = requisition.requisitionLineItems;
@@ -77,9 +84,20 @@
             item.removeRowButton = false;
            });
            vm.totalApprovedQty = vm.getApprovedQuantity();
-           console.log(vm.totalApprovedQty);
         }
+
+        //Merging Facility Arrays
+        function getSupplyingFacilities(...arrays) {
+            return arrays.reduce((acc, array) => acc.concat(array), []);
+        }   
         
+        
+        //Select facilities in the same district as requesting facility as well as all DHMT facilities
+        function filterFacilities(){
+           const zoneId = vm.facility.geographicZone.parent.id;
+            var supplierFacilities = getSupplyingFacilities(vm.hospitals, vm.healthCenters, vm.dhmts);
+           return supplierFacilities.filter(item => item.geographicZone.parent.id === zoneId || item.geographicZone.parent.id === '1a6a6a05-8b6a-458c-84c5-7c60de2edfe1');
+        }
 
         //Compute the total approved quantity for the requisition
         vm.getApprovedQuantity = function(){
