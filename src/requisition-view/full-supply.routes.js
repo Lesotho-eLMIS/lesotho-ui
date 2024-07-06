@@ -33,7 +33,14 @@
                 isOffline: true,
                 nonTrackable: true,
                 resolve: {
-                    lineItems: function($filter, requisition) {
+                    facility: function($stateParams, facilityFactory) {
+                        // Load the current User's Assigned Facility
+                        if (!$stateParams.facility) {
+                            return facilityFactory.getUserHomeFacility();
+                        }
+                        return $stateParams.facility;
+                    },
+                    lineItems: function($filter,facilityService,requisition,facility) {
                         var filterObject = requisition.template.hideSkippedLineItems() ?
                             {
                                 skipped: '!true',
@@ -55,7 +62,30 @@
                                 }
                                 
                             });
-                        } 
+                        }
+                        //Check whether product being requested from Service Point has stock on hand at Facility Store
+                        const cfcode = facility.code;
+                        const fcode = cfcode.substring(0, 5);
+                        var paginationParams = {};                      
+                        var queryParams = {
+                            "code":fcode
+                        };
+                      
+                      facilityService.query(paginationParams, queryParams)
+                      .then(function(result) {
+                          const mainStoreFacilityCode = result.content.filter(facility => facility.code === fcode);
+                          console.log(mainStoreFacilityCode);
+                      })
+                      .catch(function(error) {
+                          // Handle any errors that may occur during the query
+                          console.error("Error:", error);
+                      });                    
+                            
+                        fullSupplyLineItems.forEach(item =>{
+                            console.log(item);
+                            //Parent Facility Code
+                           
+                        }) 
                         return $filter('orderBy')(fullSupplyLineItems, [
                             '$program.orderableCategoryDisplayOrder',
                             '$program.orderableCategoryDisplayName',
