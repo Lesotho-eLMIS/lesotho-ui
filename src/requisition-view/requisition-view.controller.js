@@ -265,13 +265,28 @@
 
         vm.isEmergencyRequisition = function(){
           
-            if(vm.requisition.emergency && vm.homeFacility.type.name === "District Store" ){
+            if(vm.requisition.emergency && vm.homeFacility.type.code === "dist_store" ){
                 return true;
             }
             else{
                 return false;
             }
         }
+
+        vm.inDHMTForApproval = function(){
+            console.log(vm.requisition);
+            if(vm.requisition.hasOwnProperty('supervisoryNode')){
+                if(vm.homeFacility.type.code === "dist_store" && vm.requisition.supervisoryNode === "0cde1e0a-6492-4c6e-aa99-1e93229d91a4"){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            else{
+                return true;
+            }
+         }
 
         function setTypeAndClass() {
             if (vm.requisition.emergency) {
