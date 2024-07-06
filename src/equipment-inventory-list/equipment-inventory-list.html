@@ -1,0 +1,75 @@
+<h2>{{'equipmentInventoryList.equipmentInventory' | message}}</h2>
+<form class="sidebar" ng-submit="vm.search()">
+    <openlmis-facility-program-select
+        is-supervised="vm.isSupervised"
+        program="vm.program"
+        facility="vm.facility"
+        module="'equipment-inventory-list'">
+    </openlmis-facility-program-select>
+    <input type="submit" value="{{'equipmentInventoryList.search' | message}}"/>
+</form>
+<section class="openlmis-table-container">
+    <input openlmis-download="{{vm.getDownloadURL()}}" type="button" value="{{'equipmentInventoryList.exportCSV' | message}}"/>
+    <button id="add-inventory-item" class="add" ui-sref="openlmis.cce.inventory.add"
+        ng-show="vm.userHasRightToEdit">
+        {{'equipmentInventoryList.addEquipment' | message}}
+    </button>
+    <form ng-submit="vm.search()" openlmis-table-filter>
+        <fieldset class="form-group">
+            <label for="functionalStatus">{{'equipmentInventoryList.functionalStatus' | message}}</label>
+            <select id="functionalStatus" ng-model="vm.functionalStatus"
+                    ng-options="vm.getStatusLabel(status) for status in vm.functionalStatuses">
+            </select>
+        </fieldset>
+        <input type="submit" value="{{'equipmentInventoryList.search' | message}}"/>
+    </form>
+    <table>
+        <caption ng-if="!vm.inventoryItems || vm.inventoryItems.length === 0">
+            {{'equipmentInventoryList.noInventoryItems' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'equipmentInventoryList.facility' | message}}</th>
+                <th>{{'equipmentInventoryList.serialNo' | message}}</th>
+                <th>{{'equipmentInventoryList.referenceName' | message}}</th>
+                <th>{{'equipmentInventoryList.makeModel' | message}}</th>
+                <th>{{'equipmentInventoryList.type' | message}}</th>
+                <th>{{'equipmentInventoryList.functionalStatus' | message}}</th>
+                <th>{{'equipmentInventoryList.lastUpdated' | message}}</th>
+                <th>{{'equipmentInventoryList.yearInstalled' | message}}</th>
+                <th>{{'equipmentInventoryList.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in vm.inventoryItems">
+                <td>{{item.facility.name}}</td>
+                <td>{{item.equipmentTrackingId}}</td>
+                <td>{{item.referenceName}}</td>
+                <td>{{item.catalogItem | makeModel}}</td>
+                <td>{{item.catalogItem.type}}</td>
+                <td>
+                    <div class="cce-inventory-item-status-box">
+                        <span class="cce-inventory-item-status {{vm.getFunctionalStatusClass(item.functionalStatus)}}"
+                            openlmis-popover="{{vm.getReasonLabel(item.reasonNotWorkingOrNotInUse)}}">{{vm.getStatusLabel(item.functionalStatus)}}</span>
+
+                        <span ng-if="vm.cceAlerts[item.id] && vm.cceAlerts[item.id].activeAlerts.length" class="rtm-alert-status-active" popover
+                            popover-title="{{'equipmentInventoryList.rtmAlerts.title' | message}}"
+                            popover-template="cce-inventory-list/rtm-alerts-popover.html"></span>
+                        <span ng-if="vm.cceAlerts[item.id] && !vm.cceAlerts[item.id].activeAlerts.length" class="rtm-alert-status-inactive"></span>
+                        <span ng-if="!vm.cceAlerts[item.id]" class="rtm-alert-status-unavailable"></span>
+
+                        <a id="functional-status" class="cce-inventory-item-update-status" ng-click="vm.goToStatusUpdate(item)"></a>
+                    </div>
+                </td>
+                <td>{{item.lastModifier.firstName}} {{item.lastModifier.lastName}} {{item.modifiedDate | openlmisDatetime}}</td>
+                <td>{{item.yearOfInstallation}}</td>
+                <td>
+                    <input type="button" class="inventory-item-details"
+                        value="{{'equipmentInventoryList.view' | message}}"
+                        ui-sref=".item.details({inventoryItemId: item.id, inventoryItem: item})"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <openlmis-pagination/>
+</section>

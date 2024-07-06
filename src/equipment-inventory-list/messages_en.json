@@ -1,0 +1,19 @@
+{
+    "equipmentInventoryList.addEquipment": "Add Equipment",
+    "equipmentInventoryList.equipmentInventory": "Equipment Inventory",
+    "equipmentInventoryList.facility": "Facility",
+    "equipmentInventoryList.program": "Program",
+    "equipmentInventoryList.serialNo": "Serial No.",
+    "equipmentInventoryList.makeModel": "Make/Model",
+    "equipmentInventoryList.type": "Type",
+    "equipmentInventoryList.functionalStatus": "Functional Status",
+    "equipmentInventoryList.lastUpdated": "Last Updated",
+    "equipmentInventoryList.yearInstalled": "Year Installed",
+    "equipmentInventoryList.referenceName": "Reference Name",
+    "equipmentInventoryList.rtmAlerts.title": "RTM Alerts",
+    "equipmentInventoryList.actions": "Actions",
+    "equipmentInventoryList.view": "View",
+    "equipmentInventoryList.noInventoryItems": "No inventory items found.",
+    "equipmentInventoryList.search": "Search",
+    "equipmentInventoryList.exportCSV": "Export CSV"
+}
