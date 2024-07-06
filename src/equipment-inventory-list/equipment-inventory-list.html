@@ -1,5 +1,5 @@
 <h2>{{'equipmentInventoryList.equipmentInventory' | message}}</h2>
-<form class="sidebar" ng-submit="vm.search()">
+<!--<form class="sidebar" ng-submit="vm.search()">
     <openlmis-facility-program-select
         is-supervised="vm.isSupervised"
         program="vm.program"
@@ -7,9 +7,9 @@
         module="'equipment-inventory-list'">
     </openlmis-facility-program-select>
     <input type="submit" value="{{'equipmentInventoryList.search' | message}}"/>
-</form>
+</form> -->
 <section class="openlmis-table-container">
-    <input openlmis-download="{{vm.getDownloadURL()}}" type="button" value="{{'equipmentInventoryList.exportCSV' | message}}"/>
+    <!--<input openlmis-download="{{vm.getDownloadURL()}}" type="button" value="{{'equipmentInventoryList.exportCSV' | message}}"/> -->
     <button id="add-inventory-item" class="add" ui-sref="openlmis.cce.inventory.add"
         ng-show="vm.userHasRightToEdit">
         {{'equipmentInventoryList.addEquipment' | message}}
