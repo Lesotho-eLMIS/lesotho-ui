@@ -274,9 +274,8 @@
         }
 
         vm.inDHMTForApproval = function(){
-            console.log(vm.requisition);
             if(vm.requisition.hasOwnProperty('supervisoryNode')){
-                if(vm.homeFacility.type.code === "dist_store" && vm.requisition.supervisoryNode === "0cde1e0a-6492-4c6e-aa99-1e93229d91a4"){
+                if(vm.homeFacility.type.code === "dist_store" && vm.requisition.status === "IN_APPROVAL"){
                     return false;
                 }
                 else{
@@ -286,7 +285,7 @@
             else{
                 return true;
             }
-         }
+        }
 
         function setTypeAndClass() {
             if (vm.requisition.emergency) {
