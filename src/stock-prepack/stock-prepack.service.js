@@ -113,41 +113,75 @@
         // Takes all the prepack line items and returns only those with product id and lot id same as the those of the current line item
         function filterProductByLot (productsList, lineItem){
 
+            var product = productsList.filter(item => item.orderable.id === lineItem.orderableId);
+            console.log(product);
+
             var hasLots = undefined;
             lineItem.lot === null ? hasLots = false: hasLots = true;
-            console.log(hasLots);
-
-            console.log("PRODUCT LIST");
-            console.log(productsList);
-
-            console.log("Line Item");
-            console.log(lineItem);
-
-            if(lineItem.prepackingEventId){
-                if(!hasLots)
-                    {
-                        console.log(hasLots);
-                        return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderableId);
-                    }
-                    else{
-                        console.log(hasLots);
-                        return productsList.filter(item => !(item.lot === null) && item.lot.id=== lineItem.lotId
-                                            && item.orderable.id === lineItem.orderableId);
-                    }
+            
+            if (lineItem.hasOwnProperty('orderableId')) {
+                if (!hasLots) {
+                    return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderableId);
+                } else {
+                    return productsList.filter(item => !(item.lot === null)&&  item.lot.id === lineItem.lotId
+                        && item.orderable.id === lineItem.orderableId);
+                }
+            } else if (lineItem.hasOwnProperty('orderable')) {
+                console.log(!hasLots);
+                return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderable.id);
+            } else {
+                console.log(hasLots);
+                return productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lot.id
+                    && item.orderable.id === lineItem.orderable.id);
             }
-            else{
-                if(!hasLots)
-                    {
-                        console.log(hasLots);
-                        return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderable.id);
-                    }
-                    else{
-                        console.log(hasLots);
-                        return productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lot.id
-                                            && item.orderable.id === lineItem.orderable.id);
-                    }
-            }         
+
+            // console.log(hasLots);
+
+            // console.log("PRODUCT LIST");
+            // console.log(productsList);
+
+            // console.log("Line Item");
+            // console.log(lineItem);
+
+            // if(lineItem.prepackingEventId){
+            //     if(!hasLots)
+            //         {
+            //             console.log(hasLots);
+            //             return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderableId);
+            //         }
+            //         else{
+            //             console.log(hasLots);
+            //             return productsList.filter(item => !(item.lot === null) && item.lot.id=== lineItem.lotId
+            //                                 && item.orderable.id === lineItem.orderableId);
+            //         }
+            // }
+            // else{
+            //     if(!hasLots)
+            //         {
+            //             console.log(hasLots);
+            //             return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderable.id);
+            //         }
+            //         else{
+            //             console.log(hasLots);
+            //             return productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lot.id
+            //                                 && item.orderable.id === lineItem.orderable.id);
+            //         }
+            // }        
+            
+           // const filterProducts = (lineItem, hasLots, productsList) => {
+            //};
+
+
         };
+
+      
+        
+        // Usage example:
+       // const filteredProducts = filterProducts(lineItem, hasLots, productsList);
+        
+
+
+
         
         //Calculates the remaining stock after a prepack of the lineItems' product type and lot has been created
         function calculateRemainingStock(productsList, lineItem){  
