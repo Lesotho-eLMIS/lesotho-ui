@@ -49,11 +49,25 @@
                     url: openlmisUrlFactory('/api/prepackingEvents/:id'),
                     method: 'PUT'
                 },
+                authorizePrepackingEvent: {
+                    url: openlmisUrlFactory('/api/prepackingEvents/:id/authorize'),
+                    method: 'POST',
+                    params: { id: '@id' }
+                },
+                rejectPrepackingEvent: {
+                    url: openlmisUrlFactory('/api/prepackingEvents/:id/reject'),
+                    method: 'POST',
+                    params: { id: '@id' }
+                },
+                deletePrepackingEvent: {
+                    url: openlmisUrlFactory('/api/prepackingEvents/:id/delete'),
+                    method: 'DELETE',
+                    params: { id: '@id' }
+                },
                 getPrepackingEvent: {
                     url: openlmisUrlFactory('/api/prepackingEvents/:id'),
                     method: 'GET'
                 }
-
         });
 
         this.updatePrepacks = updatePrepacks;
@@ -64,9 +78,16 @@
         this.filterProductByLot = filterProductByLot;
         this.calculateRemainingStock = calculateRemainingStock;
         this.prepackCalculation = prepackCalculation;
+        this.authorizePrepack = authorizePrepack;
+        this.deletePrepack = deletePrepack;
 
         function updatePrepacks(id,prepackingEvent) {
             return resource.updatePrepackingEvent({ id:id }, prepackingEvent).$promise;
+        };
+
+        function authorizePrepack(prepackId) {            
+            var params = {id: prepackId}
+            return resource.authorizePrepackingEvent(params).$promise;
         };
 
         function getPrepacks(facilityId) {
@@ -96,6 +117,10 @@
             return resource.postPrepackingEvent(params);
         };
 
+        function deletePrepack(prepackId){
+            var params = {id: prepackId};
+            return resource.deletePrepackingEvent(params).$promise;
+        }
 
         function  validatePrepackQuantity(lineItem, prepackLineItems){
             let remainingStock = calculateRemainingStock(prepackLineItems, lineItem);
@@ -113,76 +138,29 @@
         // Takes all the prepack line items and returns only those with product id and lot id same as the those of the current line item
         function filterProductByLot (productsList, lineItem){
 
-            var product = productsList.filter(item => item.orderable.id === lineItem.orderableId);
-            console.log(product);
-
+            var product = undefined;
             var hasLots = undefined;
-            lineItem.lot === null ? hasLots = false: hasLots = true;
+           
+            hasLots = (lineItem.lotId === null) ? false : true;
             
             if (lineItem.hasOwnProperty('orderableId')) {
                 if (!hasLots) {
-                    return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderableId);
+                    product = productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderableId);
                 } else {
-                    return productsList.filter(item => !(item.lot === null)&&  item.lot.id === lineItem.lotId
+                    product = productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lotId
                         && item.orderable.id === lineItem.orderableId);
                 }
             } else if (lineItem.hasOwnProperty('orderable')) {
-                console.log(!hasLots);
-                return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderable.id);
-            } else {
-                console.log(hasLots);
-                return productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lot.id
-                    && item.orderable.id === lineItem.orderable.id);
+                if (!hasLots) {
+                    product = productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderable.id);
+                } else {
+                    product = productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lot.id
+                        && item.orderable.id === lineItem.orderable.id);
+                }
             }
-
-            // console.log(hasLots);
-
-            // console.log("PRODUCT LIST");
-            // console.log(productsList);
-
-            // console.log("Line Item");
-            // console.log(lineItem);
-
-            // if(lineItem.prepackingEventId){
-            //     if(!hasLots)
-            //         {
-            //             console.log(hasLots);
-            //             return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderableId);
-            //         }
-            //         else{
-            //             console.log(hasLots);
-            //             return productsList.filter(item => !(item.lot === null) && item.lot.id=== lineItem.lotId
-            //                                 && item.orderable.id === lineItem.orderableId);
-            //         }
-            // }
-            // else{
-            //     if(!hasLots)
-            //         {
-            //             console.log(hasLots);
-            //             return productsList.filter(item => (item.lot === null) && item.orderable.id === lineItem.orderable.id);
-            //         }
-            //         else{
-            //             console.log(hasLots);
-            //             return productsList.filter(item => !(item.lot === null) && item.lot.id === lineItem.lot.id
-            //                                 && item.orderable.id === lineItem.orderable.id);
-            //         }
-            // }        
-            
-           // const filterProducts = (lineItem, hasLots, productsList) => {
-            //};
-
-
+           return product;
         };
-
-      
-        
-        // Usage example:
-       // const filteredProducts = filterProducts(lineItem, hasLots, productsList);
-        
-
-
-
-        
+   
         //Calculates the remaining stock after a prepack of the lineItems' product type and lot has been created
         function calculateRemainingStock(productsList, lineItem){  
             

@@ -44,6 +44,7 @@
         vm.selectedOrderableGroup  = undefined;
         vm.orderableGroups = undefined;
         vm.lots = undefined;
+      //  vm.authorizePrepack = authorizePrepack;
         
         function onInit(){
             vm.orderableGroups = orderableGroups;
@@ -118,53 +119,54 @@
             console.log()
         };
 
-        function changePrepackStatus(newStatus) {           
-            var buttonContext = "";
-            var questionContext = "";
-            var successMsgContext = "";
+        // function changePrepackStatus(newStatus) {           
+        //     var buttonContext = "";
+        //     var questionContext = "";
+        //     var successMsgContext = "";
 
-            if(newStatus === "Authorised"){
-                buttonContext = "Authorise";
-                questionContext = "authorise";
-                successMsgContext = "authorised"
-            }else if(newStatus === "Cancelled"){
-                buttonContext = "Cancel";
-                questionContext = "cancel";
-                successMsgContext = "cancelled"
-            }else if(newStatus === "Rejected"){
-                buttonContext = "Reject";
-                questionContext = "reject";
-                successMsgContext = "rejected"
-            }else if(newStatus === "Edited"){
-                buttonContext = "Edit";
-                questionContext = "edit";
-                successMsgContext = "edited"
-                vm.prepack.lineItems = vm.prepackedProducts;
-            }
-            else{
-                notificationService.error('Unknown Prepack Status Detected.');
-                console.error("Unknown Prepack Status Detected");
-            }
-            confirmService
-                .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
-                .then(function () {
-                   vm.prepack.status = newStatus;
-                   prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
-                  .then(function(response) {
-                    // Success callback
-                    notificationService.success('Prepacking job '+successMsgContext+'.');
-                    $state.go('openlmis.prepacking.view');
-                    }
-                  )
-                  .catch(function(error) {
-                      // Error callback
-                      notificationService.error('Failed to '+questionContext+'.');
-                      console.error('Error occurred:', error);
+        //     if(newStatus === "Authorised"){
+        //         buttonContext = "Authorise";
+        //         questionContext = "authorise";
+        //         successMsgContext = "authorised"
+        //     }else if(newStatus === "Cancelled"){
+        //         buttonContext = "Cancel";
+        //         questionContext = "cancel";
+        //         successMsgContext = "cancelled"
+        //     }else if(newStatus === "Rejected"){
+        //         buttonContext = "Reject";
+        //         questionContext = "reject";
+        //         successMsgContext = "rejected"
+        //     }else if(newStatus === "Edited"){
+        //         buttonContext = "Edit";
+        //         questionContext = "edit";
+        //         successMsgContext = "edited"
+        //         vm.prepack.lineItems = vm.prepackedProducts;
+        //     }
+        //     else{
+        //         notificationService.error('Unknown Prepack Status Detected.');
+        //         console.error("Unknown Prepack Status Detected");
+        //     }
+        //     confirmService
+        //         .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
+        //         .then(function () {
+        //            vm.prepack.status = newStatus;
+        //            prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
+        //           .then(function(response) {
+        //             // Success callback
+        //             notificationService.success('Prepacking job '+successMsgContext+'.');
+        //             $state.go('openlmis.prepacking.view');
+        //             }
+        //           )
+        //           .catch(function(error) {
+        //               // Error callback
+        //               notificationService.error('Failed to '+questionContext+'.');
+        //               console.error('Error occurred:', error);
                   
-                  });
-                });
+        //           });
+        //         });
     
-        }
+        // }
+
 
         vm.remove = function (lineItem) {
             lineItem.prepackSize = 0;

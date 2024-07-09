@@ -15,7 +15,7 @@
 
 (function () {
     'use strict';
-  
+
     /**
      * @ngdoc controller
      * @name prepacking-view.controller:prepackingViewController
@@ -24,12 +24,12 @@
      * Controller for managing stock adjustment creation.
      */
     angular
-      .module('prepacking-view')
-      .controller('prepackingViewController', controller);
-  
+        .module('prepacking-view')
+        .controller('prepackingViewController', controller);
+
     controller.$inject = ['facility', 'user', 'programs', 'Prepacks', 'facilityService', '$state', 'prepackStage'];
 
-    function controller(facility, user, programs, Prepacks, facilityService, $state, prepackStage){
+    function controller(facility, user, programs, Prepacks, facilityService, $state, prepackStage) {
         var vm = this;
 
         vm.onInit = onInit;
@@ -37,16 +37,19 @@
         vm.formatPrepacks = formatPrepacks;
         vm.getFacilityName = getFacilityName;
         vm.getProgramName = getProgramName;
-        vm.filterPrepacksForAuthorisation = filterPrepacksForAuthorisation;
+        vm.filterPrepacksForView = filterPrepacksForView;
         vm.prepackDetailsLength = 0;
-        
-        function onInit(){
-            vm.facility = facility;            
+
+        function onInit() {
+            vm.facility = facility;
             vm.user = user;
             vm.programs = programs;
-            vm.prepackDetails = (prepackStage === "authorise") ? vm.filterPrepacksForAuthorisation(Prepacks) : Prepacks;            
+            vm.prepacks = Prepacks;
+            vm.prepackDetails = (prepackStage === "authorise") ? vm.filterPrepacksForView(vm.prepacks) : vm.prepacks;
+            // vm.prepackDetails = vm.filterPrepacksForView();
             formatPrepacks();
             vm.prepackDetailsLength = Object.keys(vm.prepackDetails).length;
+            //filterPrepacksForAuthorisation();
         }
         onInit();
 
@@ -60,30 +63,30 @@
             }
         }
 
-       function getProgramName(programId){
+        function getProgramName(programId) {
             let program = vm.programs.find(item => item.id === programId);
             return program.name;
-        }   
+        }
 
         async function formatPrepacks() {
             for (let key in vm.prepackDetails) {
                 if (vm.prepackDetails.hasOwnProperty(key)) {
-                    const pack =vm.prepackDetails[key];                  
+                    const pack = vm.prepackDetails[key];
                     pack.facilityName = await getFacilityName(pack.facilityId);
-                    pack.programName = getProgramName(pack.programId);                   
+                    pack.programName = getProgramName(pack.programId);
                 }
             }
         }
 
-        vm.getPrepackLineItems = function(item){
-            if(item.status === 'Rejected'){
+        vm.getPrepackLineItems = function (item) {
+            if (item.status === 'Rejected') {
                 $state.go('openlmis.stockmanagement.prepack.update', {
                     prepackId: item.id,
                     programId: item.programId,
                     facilityId: item.facilityId
                 });
 
-            }else{
+            } else {
                 $state.go('openlmis.prepacking.details', {
                     id: item.id,
                     programId: item.programId,
@@ -92,15 +95,17 @@
             }
         }
 
-        function filterPrepacksForAuthorisation (prepacksObj) {
+        function filterPrepacksForView(prepacksObj) {
             const prepacks = Object.values(prepacksObj);
             // Filter out authorised and cancelled prepacking Jobs.
-            var filteredPrepacks =  prepacks.filter(prepack => (prepack.status === "Initiated") || (prepack.status === "Edited") ); 
+            var filteredPrepacks = prepacks.filter(prepack => prepack.status === "INITIATED");
             const prepacksObject = {};
             filteredPrepacks.forEach(prepack => {
-            prepacksObject[prepack.id] = prepack;
+                prepacksObject[prepack.id] = prepack;
             });
             return prepacksObject;
-            }
+        }
+        
+
     }
 })()

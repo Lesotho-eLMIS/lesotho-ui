@@ -50,9 +50,8 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
                     var programs =  stockProgramUtilService.getPrograms(user.user_id, STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST);
                     return programs;
                 },
-                Prepacks: function(facility, programs, prepackingService ) {              
-                    
-                    
+                Prepacks: function(facility, programs, prepackingService ) {        
+                       
                     return prepackingService.getPrepacks(facility.id);
                 },
                 prepackStage: function() {
