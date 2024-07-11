@@ -39,6 +39,7 @@
         // vm.resetPatientPassword = resetPatientPassword;
         vm.search = search;
         vm.$onInit = onInit;
+        vm.searchPatients = searchPatients;
 
         /**
          * @ngdoc property
@@ -97,11 +98,47 @@
          * Method that is executed on initiating dispensingPrescriptionsController.
          */
         function onInit() {
-            vm.prescriptions = prescriptions;
-            vm.firstName = $stateParams.firstName;
-            vm.lastName = $stateParams.lastName;
-            vm.patientType = $stateParams.patientType;
-            vm.patientId = $stateParams.patientId;
+            console.log("##############3");
+            //vm.prescriptions = prescriptions;
+            // vm.firstName = $stateParams.firstName;
+            // vm.lastName = $stateParams.lastName;
+            // vm.patientType = $stateParams.patientType;
+            // vm.patientId = $stateParams.patientId;
+
+            vm.fetchPatients = undefined;
+            vm.patientsData = undefined;
+            vm.patientParams = {};
+            vm.facility = facility;
+            vm.facilities = facilities;
+        }
+
+        function searchPatients(){
+
+            console.log("************");
+
+            var getPatientParams = vm.patientParams;
+            if(getPatientParams.facilityLocation){
+                getPatientParams.facilityId = vm.facility.id;
+            }
+            else{
+                getPatientParams.facilityId = undefined;
+            }    
+            viewPatients(getPatientParams);   
+        }
+
+        function viewPatients(patientSearchParams){
+            return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {               
+                for (var key in patientsObject) {
+                        if (patientsObject.hasOwnProperty(key)) {
+                            // Access each patient object to modify its facilityId
+                            var patient = patientsObject[key];
+                            //Find the Patient's home facility
+                            let facility = vm.facilities.filter(item => item.id === patient.facilityId);
+                            patient.facilityId = facility[0].name;                      
+                        }
+                    }
+                    vm.patientsData =  patientsObject;
+            });
         }
 
         /**
