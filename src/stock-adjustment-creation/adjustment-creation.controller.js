@@ -563,7 +563,7 @@
         var prepackingEvent = {
           facilityId: facility.id,
           programId: program.id,
-          // supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
+         // supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
           prepackerUserId: user.user_id,
           // status: "Initiated",
           comments: "", //To be used when there is need

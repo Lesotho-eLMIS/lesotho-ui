@@ -145,10 +145,19 @@
         }
 
         vm.isAuthorised = function(){
-          if(vm.prepack.status === 'AUTHORISED'){
+          if(vm.prepack.status === 'AUTHORIZED'){
             return true;
           }
           return false;
+        }
+
+        vm.updatePrepack = function(){
+          console.log(vm.prepack);
+          $state.go('openlmis.stockmanagement.prepack.update', {
+            prepackId: vm.prepack.id,
+            programId: vm.prepack.programId,
+            facilityId: vm.facility.id
+          });
         }
 
     }

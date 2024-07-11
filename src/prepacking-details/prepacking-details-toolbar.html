@@ -9,5 +9,8 @@
   </button>
   <button class="danger" ng-if="!vm.isAuthorised()" ng-class="{'is-offline':vm.offline()}"  ng-click="vm.deletePrepack()">
     {{'prepackingDetails.delete'|message}}
+  </button><button class="primary" ng-if="!vm.isAuthorised()" ng-class="{'is-offline':vm.offline()}"  ng-click="vm.updatePrepack()">
+    {{'prepackingDetails.update'|message}}
   </button>
+
 </div>

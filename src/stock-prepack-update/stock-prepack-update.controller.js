@@ -36,7 +36,7 @@
         vm.prepackLineItems = [];
         vm.getLineItemsDetails = getLineItemsDetails;
         vm.filterProductByLot = filterProductByLot;
-        vm.changePrepackStatus = changePrepackStatus; 
+     //   vm.changePrepackStatus = changePrepackStatus; 
         vm.selectedOrderableHasLots = false; 
         vm.prepack = undefined;
         vm.calculateRemainingStock = calculateRemainingStock;
@@ -166,6 +166,23 @@
         //         });
     
         // }
+
+        vm.editPrepack = function() {
+          console.log(vm.prepack);
+          prepackingService.updatePrepacks(vm.prepack)
+          .then(function (response) {
+            console.log(response);
+            // Success callback
+            notificationService.success('Prepacking updated Successfully');
+            $state.go('openlmis.prepacking.view');
+          })
+          .catch(function (error) {
+            // Error callback
+            notificationService.error('Failed to update ' + error + '.');
+            console.error('Error occurred:', error);
+
+          });
+        }
 
 
         vm.remove = function (lineItem) {

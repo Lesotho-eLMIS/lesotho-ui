@@ -60,7 +60,7 @@
                     params: { id: '@id' }
                 },
                 deletePrepackingEvent: {
-                    url: openlmisUrlFactory('/api/prepackingEvents/:id/delete'),
+                    url: openlmisUrlFactory('/api/prepackingEvents/:id'),
                     method: 'DELETE',
                     params: { id: '@id' }
                 },
@@ -81,8 +81,8 @@
         this.authorizePrepack = authorizePrepack;
         this.deletePrepack = deletePrepack;
 
-        function updatePrepacks(id,prepackingEvent) {
-            return resource.updatePrepackingEvent({ id:id }, prepackingEvent).$promise;
+        function updatePrepacks(prepackingEvent) {
+            return resource.updatePrepackingEvent({ id:prepackingEvent.id }, prepackingEvent).$promise;
         };
 
         function authorizePrepack(prepackId) {            

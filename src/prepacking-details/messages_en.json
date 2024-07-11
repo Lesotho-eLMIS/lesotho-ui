@@ -11,5 +11,6 @@
   "prepackingDetails.soh": "Stock on Hand",
   "prepackingDetails.prepackSize": "Prepack Size",
   "prepackingDetails.numberOfPrepacks": "Number of Prepacks",
-  "prepackingDetails.remainingStock": "Remaining Stock"
+  "prepackingDetails.remainingStock": "Remaining Stock",
+  "prepackingDetails.update": "Update"
 }
