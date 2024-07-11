@@ -1,0 +1,51 @@
+<form id="configurationForm" ng-submit="vm.saveConfiguration()">
+    <div class="form-group">
+        <label for="name">{{'dhis2ConfigurationEdit.name' | message}}</label>
+        <input id="name"
+            type="text"
+            ng-model="vm.configuration.name"
+            required/>
+    </div>
+    <div class="form-group">
+        <label for="targetUrl">{{'dhis2ConfigurationEdit.targetUrl' | message}}</label>
+        <input id="targetUrl"
+            type="text"
+            ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/"
+            ng-model="vm.configuration.targetUrl"
+            required/>
+    </div>
+    <div class="form-group">
+        <label for="authType">{{'dhis2ConfigurationEdit.authType' | message}}</label>
+        <select id="authType"
+            ng-model="vm.configuration.authenticationDetails.type"
+            ng-options="authType as authType for authType in vm.authTypes"
+            ng-required="!ngDisabled && ngRequired && !isComplex"
+            ng-disabled="ngDisabled">
+        </select>
+    </div>
+    <div class="form-group" ng-show="vm.isBearer(vm.configuration.authenticationDetails.type)" input-control>
+        <label for="token">{{'dhis2ConfigurationEdit.token' | message}}</label>
+        <input id="token"
+            type="text"
+            ng-model="vm.configuration.authenticationDetails.token"
+            ng-required="!ngDisabled && ngRequired && !isComplex"
+            ng-disabled="ngDisabled"/>
+    </div>
+    <div class="form-group" ng-show="vm.isBasic(vm.configuration.authenticationDetails.type)">
+        <label for="username">{{'dhis2ConfigurationEdit.username' | message}}</label>
+        <input id="username"
+            type="text"
+            ng-model="vm.configuration.authenticationDetails.username"
+            ng-required="!ngDisabled && ngRequired && !isComplex"
+            ng-disabled="ngDisabled"/>
+    </div>
+    <div class="form-group" ng-show="vm.isBasic(vm.configuration.authenticationDetails.type)">
+        <label for="password">{{'dhis2ConfigurationEdit.password' | message}}</label>
+        <input id="password"
+            type="text"
+            ng-model="vm.configuration.authenticationDetails.password"
+            ng-required="!ngDisabled && ngRequired && !isComplex"
+            ng-disabled="ngDisabled"/>
+    </div>
+
+</form>

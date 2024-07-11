@@ -1,0 +1,23 @@
+<form id="integrationForm" ng-submit="vm.saveIntegration()" reload-form>
+    <label for="program">{{'dhis2IntegrationEdit.program' | message}}</label>
+    <p class="note">{{'dhis2IntegrationEdit.program.description' | message}}</p>
+    <select id="program" ng-model="vm.integration.programId"
+        ng-options="program.id as program.name for program in vm.programs">
+    </select>
+    
+    <label for="period" class="is-required">{{'dhis2IntegrationEdit.schedule' | message}}</label>
+    <openlmis-cron-selection 
+        ng-required="true"
+        ng-disabled="false"
+        ng-model="vm.integration.cronExpression" 
+        read-only="false"/>
+
+    <label for="description">{{'dhis2IntegrationEdit.description' | message}}</label>
+    <input id="description" type="text" ng-model="vm.integration.description"/>
+    <label for="configuration">{{'dhis2IntegrationEdit.configuration' | message}}</label>
+    <select id="configuration" ng-model="vm.integration.configuration"
+        ng-options="configuration as configuration.name for configuration in vm.configurations track by configuration.id"
+        required>
+    </select>
+
+</form>

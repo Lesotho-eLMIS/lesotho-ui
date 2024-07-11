@@ -1,0 +1,21 @@
+<div class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>{{'dhis2ExecutionList.responseBody' | message}}</h1>
+            </div>
+            <div class="modal-body">
+                <label>
+                    {{'dhis2ExecutionList.responseStatus' | message}}:
+                    {{ 'dhis2ExecutionList.responseStatus.' + vm.execution.response.statusCode | message}}
+                    ({{vm.execution.response.statusCode}})
+                </label>
+                <pre style="max-height: 80vh;">{{vm.formatResponse()}}</pre>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="vm.goToExecutionList(false)">{{'dhis2ExecutionList.cancel' | message}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+    

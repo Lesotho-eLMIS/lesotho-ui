@@ -1,0 +1,13 @@
+{
+    "dhis2ConfigurationEdit.authType":"Authorization Type",
+    "dhis2ConfigurationEdit.token":"Token",
+    "dhis2ConfigurationEdit.username":"Username",
+    "dhis2ConfigurationEdit.password":"Password",
+    "dhis2ConfigurationEdit.name":"Name",
+    "dhis2ConfigurationEdit.targetUrl":"Target URL",
+    "dhis2ConfigurationEdit.editConfiguration":"Edit Configuration",
+    "dhis2ConfigurationEdit.cancel":"Cancel",
+    "dhis2ConfigurationEdit.configurationAddSuccessfully":"The configuration has been added successfully!",
+    "dhis2ConfigurationEdit.configurationEditSuccessfully":"The configuration has been edited successfully!",
+    "dhis2ConfigurationEdit.pageHasBeenRefreshed" : "The page has been refreshed."
+}

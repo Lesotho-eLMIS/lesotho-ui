@@ -1,0 +1,103 @@
+<div class="openlmis-cron-selection" ng-show="!readOnly && !isComplex">
+
+    <div openlmis-invalid>
+        <select id="occurrence"
+        ng-model="occurrence"
+            ng-options="option as (option | message) for option in occurrences"
+            ng-required="!ngDisabled && ngRequired && !isComplex"
+            ng-disabled="ngDisabled"></select>
+    </div>
+    <!-- Malawi: monthly schedule -->
+    <div ng-show="isMonthly(occurrence, occurrences)">{{'openlmisCronSelection.onDay' | message}}</div>
+
+    <div class="input-control"
+        openlmis-invalid="{{validateDay(day, isComplex, ngDisabled, isMonthly(occurrence, occurrences)) | message}}"
+        ng-show="isMonthly(occurrence, occurrences)"
+        input-control>
+
+        <input id="day"
+            type="text"
+            positive-integer
+            ng-model="day"
+            ng-required="!ngDisabled && ngRequired && !isComplex && isMonthly(occurrence, occurrences)"
+            ng-disabled="ngDisabled"/>
+    </div>
+
+    <div ng-show="isMonthly(occurrence, occurrences)">{{'openlmisCronSelection.ofMonth' | message}}</div>
+    <!-- --- ends here --- -->
+    <div ng-show="isWeekly(occurrence, occurrences)">{{'openlmisCronSelection.on' | message}}</div>
+
+    <div openlmis-invalid
+        ng-show="isWeekly(occurrence, occurrences)">
+
+        <select
+            id="weekday"
+            ng-model="weekday"
+            ng-options="option as (option | message) for option in weekdays"
+            ng-required="!ngDisabled && ngRequired && !isComplex && isWeekly(occurrence, occurrences)"
+            ng-disabled="ngDisabled"
+            ></select>
+    </div>
+
+    <div>{{'openlmisCronSelection.at' | message}}</div>
+
+    <div class="input-control"
+        openlmis-invalid="{{validateHour(hour, isComplex, ngDisabled) | message}}"
+        input-control>
+
+        <input id="hour"
+            type="text"
+            positive-integer
+            ng-model="hour"
+            ng-required="!ngDisabled && ngRequired && !isComplex"
+            ng-disabled="ngDisabled"/>
+    </div>
+
+    <div>:</div>
+
+    <div class="input-control"
+        openlmis-invalid="{{validateMinute(minute, isComplex, ngDisabled) | message}}"
+        input-control>
+
+        <input id="minute"
+            type="text"
+            positive-integer
+            ng-model="minute"
+            ng-required="!ngDisabled && ngRequired && !isComplex"
+            ng-disabled="ngDisabled"/>
+    </div>
+</div>
+
+<div class="input-control"
+    ng-show="!readOnly && isComplex"
+    input-control
+    openlmis-invalid="{{validateCronExpression(cronExpression, isComplex, ngDisabled) | message}}">
+
+    <input id="cronExpression"
+        type="text"
+        ng-model="cronExpression"
+        ng-disabled="ngDisabled"
+        ng-required="!ngDisabled && ngRequired && isComplex"/>
+</div>
+
+<!-- Malawi: read only-->
+<div ng-show="readOnly">
+    <div ng-show="!isComplex">
+        {{occurrence | message}},
+        <span ng-show="isMonthly(occurrence, occurrences)">{{'openlmisCronSelection.onDay' | message}}</span>
+        <span ng-show="isMonthly(occurrence, occurrences)">{{day}}</span>
+        <span ng-show="isMonthly(occurrence, occurrences)">{{'openlmisCronSelection.ofMonth' | message}}</span>
+        <span ng-show="isWeekly(occurrence, occurrences)">{{'openlmisCronSelection.on' | message}}</span>
+        <span ng-show="isWeekly(occurrence, occurrences)">{{weekday | message}}</span>
+        {{'openlmisCronSelection.at' | message}}
+        <span ng-show="hour < 10">0{{hour}}</span>
+        <span ng-show="hour >= 10">{{hour}}</span>
+        :
+        <span ng-show="minute < 10">0{{minute}}</span>
+        <span ng-show="minute >= 10">{{minute}}</span>
+    </div>
+    <div ng-show="isComplex">
+        {{cronExpression}}
+    </div>
+</div>
+<!-- --- ends here --- -->

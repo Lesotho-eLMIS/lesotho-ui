@@ -1,0 +1,16 @@
+{
+    "dhis2IntegrationList.addSchedule": "Add Schedule",
+    "dhis2IntegrationList.noIntegrations": "No schedule integration found.",
+    "dhis2IntegrationList.program": "Program",
+    "dhis2IntegrationList.allPrograms": "All programs",
+    "dhis2IntegrationList.schedule": "Schedule",
+    "dhis2IntegrationEdit.description": "Description",
+    "dhis2IntegrationList.configuration": "Selected Configuration",
+    "dhis2IntegrationList.actions": "Actions",
+    "dhis2IntegrationList.edit": "Edit",
+    "dhis2IntegrationList.execute": "Execute",
+    "dhis2IntegrationList.delete": "Delete",
+    "dhis2IntegrationList.delete.confirm": "Do you really want to remove the schedule?",
+    "dhis2IntegrationList.scheduleDeleted": "The schedule has been deleted successfully!",
+    "dhis2IntegrationList.pageHasBeenRefreshed" : "The page has been refreshed."
+}

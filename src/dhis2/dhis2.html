@@ -1,0 +1,9 @@
+<h2>{{'dhis2.serviceName' | message}}</h2>
+<nav>
+    <ul>
+        <li ng-repeat="tab in vm.tabs" ui-sref-active="active" role="presentation">
+            <a ui-sref="{{tab.state}}">{{tab.name | message}}</a>
+        </li>
+    </ul>
+</nav>
+<div ui-view=""></div>

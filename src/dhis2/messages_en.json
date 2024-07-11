@@ -1,0 +1,6 @@
+{
+    "dhis2.serviceName": "DHIS2 Integration",
+    "dhis2.executions": "Logs",
+    "dhis2.integrations": "Schedule Integration",
+    "dhis2.configurations": "Configuration"
+}

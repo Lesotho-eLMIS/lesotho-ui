@@ -1,0 +1,9 @@
+{
+    "dhis2IntegrationExecute.period":"Period",
+    "dhis2IntegrationExecute.description": "Description",
+    "dhis2IntegrationExecute.execute":"Execute",
+    "dhis2IntegrationExecute.execute.description": "For manual execution Integration to DHIS-2 Integration Layer, please fill below and click the \"Execute\" button",
+    "dhis2IntegrationExecute.cancel":"Cancel",
+    "dhis2IntegrationExecute.manualExecutionStarted":"The schedule has been executed successfully!"
+    
+}

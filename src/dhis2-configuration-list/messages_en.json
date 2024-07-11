@@ -1,0 +1,15 @@
+{
+    "dhis2ConfigurationList.noConfigurations": "No configurations found.",
+    "dhis2ConfigurationList.name": "Name",
+    "dhis2ConfigurationList.targetUrl": "Target URL",
+    "dhis2ConfigurationList.authenticationDetails": "Authentication Details",
+    "dhis2ConfigurationList.addConfiguration": "Add Configuration",
+    "dhis2ConfigurationList.search": "Search",
+    "dhis2ConfigurationList.actions": "Actions",
+    "dhis2ConfigurationList.edit": "Edit",
+    "dhis2ConfigurationList.delete": "Delete",
+    "dhis2ConfigurationList.delete.confirm": "Do you really want to remove the configuration?",
+    "dhis2ConfigurationList.configurationDeletedSuccessfully" : "The configuration has been deleted successfully!",
+    "dhis2ConfigurationList.pageHasBeenRefreshed" : "The page has been refreshed."
+    
+}

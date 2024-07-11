@@ -1,0 +1,72 @@
+<button type="text" ng-click="vm.refreshPage()">{{'dhis2ExecutionList.refresh' | message}}</button>
+
+<section class="openlmis-table-container">
+    <h2>{{'dhis2ExecutionList.queueItems' | message}}</h2>
+    <table>
+        <caption ng-if="!vm.queueItems || vm.queueItems.length === 0">
+            {{ 'dhis2ExecutionList.queueItems.isEmpty' | message }}
+        </caption>
+        <thead>
+            <tr>
+                <th popover="{{'dhis2ExecutionList.executionTime.description' | message}}" popover-trigger-area="element">
+                    {{'dhis2ExecutionList.executionTime' | message}}
+                </th>
+                <th>{{'dhis2ExecutionList.relevantPeriod' | message}}</th>
+                <th popover="{{'dhis2ExecutionList.requestedBy.description' | message}}" popover-trigger-area="element">
+                    {{'dhis2ExecutionList.requestedBy' | message}}
+                </th>
+                <th>{{'dhis2ExecutionList.description' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="queueItem in vm.queueItems">
+                <td>{{queueItem.executionTime | openlmisDatetime}}</td>
+                <td>{{vm.periods[queueItem.processingPeriodId].name}}</td>
+
+                <td ng-if="queueItem.userId">{{vm.showUser(vm.usersMap[queueItem.userId])}}</td>
+                <td ng-if="!queueItem.userId">{{'dhis2ExecutionList.executedBy.system' | message}}</td>
+
+                <td>{{queueItem.description}}</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="openlmis-table-container">
+    <h2>{{'dhis2ExecutionList.executionList' | message}}</h2>
+    <table>
+        <caption ng-if="!vm.executions || vm.executions.length === 0">
+            {{'dhis2ExecutionList.noExecutions' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'dhis2ExecutionList.startDate' | message}}</th>
+                <th>{{'dhis2ExecutionList.endDate' | message}}</th>
+                <th>{{'dhis2ExecutionList.relevantPeriod' | message}}</th>
+                <th>{{'dhis2ExecutionList.executedBy' | message}}</th>
+                <th>{{'dhis2ExecutionList.description' | message}}</th>
+                <th>{{'dhis2ExecutionList.status' | message}}</th>
+                <th>{{'dhis2ExecutionList.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="execution in vm.executions">
+                <td>{{execution.startDate | openlmisDatetime}}</td>
+                <td>{{execution.endDate | openlmisDatetime}}</td>
+                <td>{{vm.periods[execution.processingPeriodId].name}}</td>
+
+                <td ng-if="execution.userId">{{vm.showUser(vm.usersMap[execution.userId])}}</td>
+                <td ng-if="!execution.userId">{{'dhis2ExecutionList.executedBy.system' | message}}</td>
+
+                <td>{{execution.description}}</td>
+
+                <td>{{ 'dhis2ExecutionList.executionStatus.' + execution.status | message}}</td>
+                <td>
+                    <button ng-if="execution.status != 'STARTED'" class="primary" ng-click="vm.downloadRequestBodyJSON(execution)">{{'dhis2ExecutionList.downloadRequest' | message}}</button>
+                    <button ng-if="execution.response" class="primary" ui-sref='.responsebody({id: execution.id})'>{{'dhis2ExecutionList.showResponse' | message}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <openlmis-pagination list="vm.executions" paged-list="vm.items"/>
+</section>

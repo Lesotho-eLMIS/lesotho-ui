@@ -1,0 +1,16 @@
+<div class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>{{'dhis2ExecutionList.requestBody' | message}}</h1>
+            </div>
+            <div class="modal-body">
+                <pre style="max-height: 80vh;">{{vm.requestbody | json}}</pre>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="vm.goToExecutionList(false)">{{'dhis2ExecutionList.cancel' | message}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+    

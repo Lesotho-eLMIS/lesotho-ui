@@ -21,6 +21,7 @@ services:
       - ui-layout
       - offline-ui
       - one-network-integration-ui
+      - mw-dhis2-integration-ui
     depends_on:
       - auth-ui
       - fulfillment-ui
@@ -33,6 +34,7 @@ services:
       - ui-layout
       - offline-ui
       - one-network-integration-ui
+      - mw-dhis2-integration-ui
   auth-ui:
     image: openlmis/auth-ui:6.2.11-SNAPSHOT
     volumes:
@@ -77,6 +79,11 @@ services:
     image: openlmis/one-network-integration-ui:0.0.4-SNAPSHOT
     volumes:
       - '/one-network-integration-ui'
+  mw-dhis2-integration-ui:
+    image: openlmismw/dhis2-integration-ui:1.0.2
+    volumes:
+        - '/mw-dhis2-integration-ui'
   image:
     build: .
     image: openlmis/reference-ui
+

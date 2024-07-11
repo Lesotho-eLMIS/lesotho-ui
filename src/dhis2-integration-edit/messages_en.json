@@ -1,0 +1,11 @@
+{
+    "dhis2IntegrationEdit.editIntegration":"Edit Schedule",
+    "dhis2IntegrationEdit.cancel":"Cancel",
+    "dhis2IntegrationEdit.program": "Program",
+    "dhis2IntegrationEdit.program.description": "To create a schedule integration for all programs, please leave this field blank",
+    "dhis2IntegrationEdit.schedule": "Schedule",
+    "dhis2IntegrationEdit.description": "Description",
+    "dhis2IntegrationEdit.configuration": "Configuration",
+    "dhis2IntegrationEdit.integrationAddSuccessfully":"The schedule has been added successfully!",
+    "dhis2IntegrationEdit.integrationEditSuccessfully":"The schedule has been edited successfully!"
+}

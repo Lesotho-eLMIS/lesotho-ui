@@ -1,0 +1,20 @@
+<div class="modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1>{{'dhis2IntegrationAdd.addIntegration' | message}}</h1>
+                </div>
+                <div class="modal-body">
+                    <ng-include src="'dhis2-integration-edit/dhis2-integration-form.html'"></ng-include>
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="vm.goToIntegrationList(false)">{{'dhis2IntegrationAdd.cancel' | message}}</button>
+                    <div class="button-group primary">
+                        <button class="primary" type="submit"
+                            form="integrationForm">{{'dhis2IntegrationAdd.addIntegration' | message}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        

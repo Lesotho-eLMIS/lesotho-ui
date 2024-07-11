@@ -1,0 +1,32 @@
+<div class="modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1>{{'dhis2IntegrationExecute.execute' | message}}</h1>
+                </div>
+                <div class="modal-body">
+                    <h4>{{'dhis2IntegrationExecute.execute.description' | message}}</h4>
+                    <form id="startManualExecutionForm" ng-submit="vm.startManualExecution()">
+                        <div class="form-group">
+                            <label for="period">{{'dhis2IntegrationExecute.period' | message}}</label>
+                            <select id="period" 
+                                ng-model="vm.selectedPeriod"
+                                ng-options="period as period.name for period in vm.periods"
+                                required>
+                            </select>
+                        </div>
+
+                        <label for="description">{{'dhis2IntegrationExecute.description' | message}}</label>
+                        <input id="description" type="text" ng-model="vm.description"/>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="vm.goToIntegrationList()">{{'dhis2IntegrationExecute.cancel' | message}}</button>
+                    <div class="button-group primary">
+                        <button class="primary" type="submit"
+                            form="startManualExecutionForm">{{'dhis2IntegrationExecute.execute' | message}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
