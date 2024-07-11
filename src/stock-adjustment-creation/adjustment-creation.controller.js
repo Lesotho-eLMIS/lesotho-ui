@@ -893,7 +893,7 @@
       vm.suppliers = suppliers;
       vm.references = ReferenceNumbers;
       
-      filterFacilities();
+     // filterFacilities();
      
       //Getting Rejection Reasons
       var rej = rejectionReasonService.getAll();
