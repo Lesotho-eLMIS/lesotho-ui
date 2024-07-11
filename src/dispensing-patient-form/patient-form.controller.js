@@ -28,13 +28,15 @@
         .module('dispensing-patient-form')
         .controller('patientFormController', controller);
 
-    controller.$inject = ['dispensingService', 'notificationService', 'facility', '$scope'];
+    controller.$inject = ['dispensingService', 'notificationService', 'facility', '$scope', 'confirmService', 'alertService'];
 
-    function controller(dispensingService, notificationService, facility, $scope) {
+    function controller(dispensingService, notificationService, facility, $scope, confirmService, alertService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.maxDate = new Date();
+        vm.maxDate.setHours(23, 59, 59, 999);
         vm.contacts = []; 
         vm.patient = {};
         vm.addContact = addContact;
@@ -83,22 +85,35 @@
         }
 
         vm.submitPatientData = function(){
-            
-            var patientInfo = vm.patient;
-            patientInfo.homeFacility = facility.id;
-            var response = dispensingService.submitPatientInfo(patientInfo);
-            if (response) {
-                    // Adding success message when POD saved.
-                notificationService.success('Successfully submitted.');
-            } else {
-                notificationService.error('Failed to submit.');
-            }
-            
-            $scope.newPatientForm1.$setUntouched();
-            $scope.newPatientForm1.$setPristine();
-            
-            $scope.newPatientForm2.$setUntouched();
-            $scope.newPatientForm2.$setPristine();
+
+            //Saving New Patient
+            confirmService
+            .confirm("Are you sure you want to create this patient?", 'Submit')
+            .then(function () {
+                var patientInfo = vm.patient;
+                patientInfo.homeFacility = facility.id;
+                var response = dispensingService.submitPatientInfo(patientInfo);
+                if (response) {
+                        // Adding success message when Patient saved.
+                    notificationService.success('Successfully submitted.');
+                } else {
+                    notificationService.error('Failed to submit.');
+                }
+
+                //clearing all the fields
+                vm.patient.nationalID = "";
+                vm.patient.firstName = "";
+                vm.patient.lastName = "";
+                vm.patient.nickName = "";
+                vm.patient.DOB = "";
+                vm.patient.dateOfBirthEstimated = "";
+                vm.patient.physicalAddress = "";
+                vm.patient.contact.contactValue = "";
+                vm.patient.motherMaidenName = "";
+                vm.patient.nextOfKinNames = "";
+                vm.patient.nextOfKinContact = "";
+                vm.patient.sex = null;
+            });
         }
     }
 })();

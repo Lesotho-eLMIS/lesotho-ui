@@ -33,9 +33,22 @@ routes.$inject = ['$stateProvider'];
             label: 'dispensingPrescriptions.title',
             priority: 1,
             showInNavigation: true,
-            //controller: 'pointOfDeliveryManageController',
-            //controllerAs: 'vm',
-            
+            controller: 'dispensingPrescriptionsController',
+            controllerAs: 'vm',
+            resolve: {
+                
+                facilities: function(facilityService) {
+                        return facilityService.getAllMinimal();
+                    },
+                facility: function($stateParams, facilityFactory) {
+                    // Load the current User's Assigned Facility
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
+                }
+             
+            }
         });
     }
 })();
