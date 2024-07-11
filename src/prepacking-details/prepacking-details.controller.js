@@ -102,20 +102,22 @@
       
       function authorizePrepack() {
         console.log(vm.prepack);
-        prepackingService.authorizePrepack(vm.prepack.id)
-          .then(function (response) {
-            console.log(response);
-            // Success callback
-            notificationService.success('Prepacking Authorised Successfully');
-            $state.go('openlmis.prepacking.view');
-          }
-          )
-          .catch(function (error) {
-            // Error callback
-            notificationService.error('Failed to Authorise ' + error + '.');
-            console.error('Error occurred:', error);
-
-          });
+        confirmService.confirm('Do you wish to confirm the adjustments?')
+          .then(function () {
+            prepackingService.authorizePrepack(vm.prepack.id)
+              .then(function (response) {
+                console.log(response);
+                // Success callback
+                notificationService.success('Prepacking Authorised Successfully');
+                $state.go('openlmis.prepacking.view');
+              })
+              .catch(function (error) {
+                // Error callback
+                notificationService.error('Failed to Authorise ' + error + '.');
+                console.error('Error occurred:', error);
+    
+              });
+          })
       }
 
       function deletePrepack() {

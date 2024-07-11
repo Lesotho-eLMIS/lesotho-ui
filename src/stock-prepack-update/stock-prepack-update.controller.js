@@ -73,11 +73,11 @@
                     $errors: {},
                     $previewSOH: selectedItem.stockOnHand,
                     batchNumber: selectedItem.displayLotMessage,
-                    expiryDate : selectedItem.lot.expirationDate,
+                    expiryDate : selectedItem.lot? selectedItem.lot.expirationDate : null,
                     productName: selectedItem.orderable.fullProductName,
                     productCode: selectedItem.orderable.productCode,
                     soh: selectedItem.stockOnHand,
-                    lotId: selectedItem.lot.id,
+                    lotId: selectedItem.lot? selectedItem.lot.id : null,
                     orderableId: selectedItem.orderable.id
                   },
                   selectedItem
@@ -167,14 +167,17 @@
     
         // }
 
-        vm.editPrepack = function() {
-          console.log(vm.prepack);
-          prepackingService.updatePrepacks(vm.prepack)
-          .then(function (response) {
-            console.log(response);
-            // Success callback
-            notificationService.success('Prepacking updated Successfully');
-            $state.go('openlmis.prepacking.view');
+      vm.editPrepack = function () {
+        console.log(vm.prepack);
+        confirmService.confirm('Do you wish to confirm the adjustments?')
+          .then(function () {
+            prepackingService.updatePrepacks(vm.prepack)
+              .then(function (response) {
+                console.log(response);
+                // Success callback
+                notificationService.success('Prepacking updated Successfully');
+                $state.go('openlmis.prepacking.view');
+              })
           })
           .catch(function (error) {
             // Error callback
@@ -182,7 +185,7 @@
             console.error('Error occurred:', error);
 
           });
-        }
+      }
 
 
         vm.remove = function (lineItem) {
@@ -201,14 +204,17 @@
             var productsArray = _.flatten(vm.productInfo);            
             var haslots = undefined;
             vm.prepackLineItems.forEach(item => {
+              console.table(item)
                 item.lotId === null ? haslots = true: haslots = false;              
-                var productDetails = filterProductByLot(productsArray, haslots).find(lineItem => ((lineItem.orderable.id === item.orderableId
-                            && lineItem.lot.id === item.lotId))); 
-                item.productName = productDetails.orderable.fullProductName;
-                item.productCode = productDetails.orderable.productCode;
-                item.batchNumber = productDetails.lot.lotCode;
-                item.expiryDate = productDetails.lot.expirationDate;
-                item.soh = productDetails.stockOnHand;
+                var productDetails = prepackingService.filterProductByLot(productsArray, item);//haslots)
+                // .find(lineItem => ((lineItem.orderable.id === item.orderableId
+                //             && lineItem.lot.id === item.lotId))); 
+                console.table(productDetails);
+                item.productName = productDetails[0].orderable.fullProductName;
+                item.productCode = productDetails[0].orderable.productCode;
+                item.batchNumber = productDetails[0].lot? productDetails[0].lot.lotCode : null;
+                item.expiryDate = productDetails[0].expirationDate? productDetails[0].lot.expirationDate : null;
+                item.soh = productDetails[0].stockOnHand;
                 item.remainingStock = prepackingService.prepackCalculation(vm.prepackLineItems, item);
             });         
             return(vm.prepackLineItems);  
