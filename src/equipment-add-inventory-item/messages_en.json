@@ -1,0 +1,10 @@
+{
+    "equipmentAddInventoryItem.addNewColdChainEquipment": "Add New Equipment",
+    "equipmentAddInventoryItem.equipmentType": "Equipment Type",
+    "equipmentAddInventoryItem.makeModel": "Make/Model",
+    "equipmentAddInventoryItem.cancel": "Cancel",
+    "equipmentAddInventoryItem.next": "Next",
+    "equipmentAddInventoryItem.closeAddInventoryItemModal": "Are you sure you want to close the modal? All progress will be lost.",
+    "equipmentAddInventoryItem.yes": "Yes",
+    "equipmentAddInventoryItem.no": "No"
+}
