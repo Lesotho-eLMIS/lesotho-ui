@@ -36,7 +36,7 @@
         vm.prepackLineItems = [];
         vm.getLineItemsDetails = getLineItemsDetails;
         vm.filterProductByLot = filterProductByLot;
-        vm.changePrepackStatus = changePrepackStatus; 
+     //   vm.changePrepackStatus = changePrepackStatus; 
         vm.selectedOrderableHasLots = false; 
         vm.prepack = undefined;
         vm.calculateRemainingStock = calculateRemainingStock;
@@ -44,6 +44,7 @@
         vm.selectedOrderableGroup  = undefined;
         vm.orderableGroups = undefined;
         vm.lots = undefined;
+      //  vm.authorizePrepack = authorizePrepack;
         
         function onInit(){
             vm.orderableGroups = orderableGroups;
@@ -72,11 +73,11 @@
                     $errors: {},
                     $previewSOH: selectedItem.stockOnHand,
                     batchNumber: selectedItem.displayLotMessage,
-                    expiryDate : selectedItem.lot.expirationDate,
+                    expiryDate : selectedItem.lot? selectedItem.lot.expirationDate : null,
                     productName: selectedItem.orderable.fullProductName,
                     productCode: selectedItem.orderable.productCode,
                     soh: selectedItem.stockOnHand,
-                    lotId: selectedItem.lot.id,
+                    lotId: selectedItem.lot? selectedItem.lot.id : null,
                     orderableId: selectedItem.orderable.id
                   },
                   selectedItem
@@ -118,53 +119,74 @@
             console.log()
         };
 
-        function changePrepackStatus(newStatus) {           
-            var buttonContext = "";
-            var questionContext = "";
-            var successMsgContext = "";
+        // function changePrepackStatus(newStatus) {           
+        //     var buttonContext = "";
+        //     var questionContext = "";
+        //     var successMsgContext = "";
 
-            if(newStatus === "Authorised"){
-                buttonContext = "Authorise";
-                questionContext = "authorise";
-                successMsgContext = "authorised"
-            }else if(newStatus === "Cancelled"){
-                buttonContext = "Cancel";
-                questionContext = "cancel";
-                successMsgContext = "cancelled"
-            }else if(newStatus === "Rejected"){
-                buttonContext = "Reject";
-                questionContext = "reject";
-                successMsgContext = "rejected"
-            }else if(newStatus === "Edited"){
-                buttonContext = "Edit";
-                questionContext = "edit";
-                successMsgContext = "edited"
-                vm.prepack.lineItems = vm.prepackedProducts;
-            }
-            else{
-                notificationService.error('Unknown Prepack Status Detected.');
-                console.error("Unknown Prepack Status Detected");
-            }
-            confirmService
-                .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
-                .then(function () {
-                   vm.prepack.status = newStatus;
-                   prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
-                  .then(function(response) {
-                    // Success callback
-                    notificationService.success('Prepacking job '+successMsgContext+'.');
-                    $state.go('openlmis.prepacking.view');
-                    }
-                  )
-                  .catch(function(error) {
-                      // Error callback
-                      notificationService.error('Failed to '+questionContext+'.');
-                      console.error('Error occurred:', error);
+        //     if(newStatus === "Authorised"){
+        //         buttonContext = "Authorise";
+        //         questionContext = "authorise";
+        //         successMsgContext = "authorised"
+        //     }else if(newStatus === "Cancelled"){
+        //         buttonContext = "Cancel";
+        //         questionContext = "cancel";
+        //         successMsgContext = "cancelled"
+        //     }else if(newStatus === "Rejected"){
+        //         buttonContext = "Reject";
+        //         questionContext = "reject";
+        //         successMsgContext = "rejected"
+        //     }else if(newStatus === "Edited"){
+        //         buttonContext = "Edit";
+        //         questionContext = "edit";
+        //         successMsgContext = "edited"
+        //         vm.prepack.lineItems = vm.prepackedProducts;
+        //     }
+        //     else{
+        //         notificationService.error('Unknown Prepack Status Detected.');
+        //         console.error("Unknown Prepack Status Detected");
+        //     }
+        //     confirmService
+        //         .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
+        //         .then(function () {
+        //            vm.prepack.status = newStatus;
+        //            prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
+        //           .then(function(response) {
+        //             // Success callback
+        //             notificationService.success('Prepacking job '+successMsgContext+'.');
+        //             $state.go('openlmis.prepacking.view');
+        //             }
+        //           )
+        //           .catch(function(error) {
+        //               // Error callback
+        //               notificationService.error('Failed to '+questionContext+'.');
+        //               console.error('Error occurred:', error);
                   
-                  });
-                });
+        //           });
+        //         });
     
-        }
+        // }
+
+      vm.editPrepack = function () {
+        console.log(vm.prepack);
+        confirmService.confirm('Do you wish to confirm the adjustments?')
+          .then(function () {
+            prepackingService.updatePrepacks(vm.prepack)
+              .then(function (response) {
+                console.log(response);
+                // Success callback
+                notificationService.success('Prepacking updated Successfully');
+                $state.go('openlmis.prepacking.view');
+              })
+          })
+          .catch(function (error) {
+            // Error callback
+            notificationService.error('Failed to update ' + error + '.');
+            console.error('Error occurred:', error);
+
+          });
+      }
+
 
         vm.remove = function (lineItem) {
             lineItem.prepackSize = 0;
@@ -182,14 +204,17 @@
             var productsArray = _.flatten(vm.productInfo);            
             var haslots = undefined;
             vm.prepackLineItems.forEach(item => {
+              console.table(item)
                 item.lotId === null ? haslots = true: haslots = false;              
-                var productDetails = filterProductByLot(productsArray, haslots).find(lineItem => ((lineItem.orderable.id === item.orderableId
-                            && lineItem.lot.id === item.lotId))); 
-                item.productName = productDetails.orderable.fullProductName;
-                item.productCode = productDetails.orderable.productCode;
-                item.batchNumber = productDetails.lot.lotCode;
-                item.expiryDate = productDetails.lot.expirationDate;
-                item.soh = productDetails.stockOnHand;
+                var productDetails = prepackingService.filterProductByLot(productsArray, item);//haslots)
+                // .find(lineItem => ((lineItem.orderable.id === item.orderableId
+                //             && lineItem.lot.id === item.lotId))); 
+                console.table(productDetails);
+                item.productName = productDetails[0].orderable.fullProductName;
+                item.productCode = productDetails[0].orderable.productCode;
+                item.batchNumber = productDetails[0].lot? productDetails[0].lot.lotCode : null;
+                item.expiryDate = productDetails[0].expirationDate? productDetails[0].lot.expirationDate : null;
+                item.soh = productDetails[0].stockOnHand;
                 item.remainingStock = prepackingService.prepackCalculation(vm.prepackLineItems, item);
             });         
             return(vm.prepackLineItems);  

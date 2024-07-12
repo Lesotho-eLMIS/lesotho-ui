@@ -11,7 +11,8 @@
                     <th>{{'prepackingDetails.soh'|message}}</th>
                     <th>{{'prepackingDetails.prepackSize'|message}}</th>
                     <th>{{'prepackingDetails.numberOfPrepacks'|message}}</th>
-                    <th>{{'prepackingDetails.remainingStock'|message}}</th>                   
+                    <th>{{'prepackingDetails.remainingStock'|message}}</th> 
+                    <!-- <th>Action</th>                   -->
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +25,9 @@
                     <td>{{item.prepackSize}}</td>
                     <td>{{item.numberOfPrepacks}}</td>
                     <td>{{item.remainingStock}}</td>
+                    <!-- <td><button  ng-click="vm.authorizePrepack(item.prepackingEventId)">
+                        {{'prepackingDetails.cancel'|message}}
+                      </button></td> -->
                 </tr>
             </tbody>
         </table>
