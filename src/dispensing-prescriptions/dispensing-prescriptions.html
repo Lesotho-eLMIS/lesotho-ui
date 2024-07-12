@@ -61,7 +61,7 @@
     </form>
   </section>
   <table>
-    <caption ng-if="!vm.prescriptions.length">{{'dispensingPrescriptions.prescriptions.error' | message}}</caption>
+    <!-- <caption ng-if="!vm.prescriptions.length">{{'dispensingPrescriptions.prescriptions.error' | message}}</caption> -->
     <thead>
     <tr>
       <th>{{'dispensingPrescriptions.patientNumber' | message}}</th>
@@ -78,8 +78,9 @@
     </thead>
     <tbody>
     <tr ng-repeat="patient in vm.patientsData">
-      <td>{{patient.patientNumber}}</td><td> </td>
-      <td> </td>
+      <td>{{patient.patientNumber}}</td>
+      <td>{{patient.personDto.lastName}}</td>
+      <td>{{patient.personDto.firstName}}</td>
       <td> </td>
       <td> </td>
       <td> </td>
@@ -90,50 +91,30 @@
         <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">
           {{'dispensingPrescriptions.addPrescription' | message}}
         </button>
-        <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form">
+        <!-- <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form">
           {{'dispensingPrescriptions.viewPrescription' | message}}
-        </button>
-      </td>
-      <!-- <td class="col-emergency">
-        <i ng-class="{'icon-ok': order.emergency}"></i>
-      </td> -->
-          <!-- <td>{{patient.patientId}}</td>
-          <td>{{prescription.status}}</td> -->
-          <!-- <td>{{order.facility | facility}}</td> -->
-          <!-- <td>{{prescription.program.name}}</td>
-          <td>{{prescription.dateCaptured | openlmisDate}}</td>
-          <td>{{prescription.createdDate | openlmisDate}}</td> -->
-      <!-- <td> -->
-        <!-- <button ng-if="order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
-          {{'orderFulfillment.continueFulfillment' | message}}
-        </button>
-        <button ng-if="!order.isFulfilling()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
-          {{'orderFulfillment.startFulfillment' | message}}
         </button> -->
-      <!-- </td> -->
+      </td>
     </tr>
 
-    <!-- <tr>
+    <tr ng-repeat="patient in vm.patientsData">
+      <td>F2011/20240711/00045</td>
+      <td>Demo</td>
+      <td>Dan</td>
+      <td>Out</td>
+      <td>09/08/2024</td>
+      <td>09/07/2024</td>
+      <td>09/07/2024</td>
       <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td>Initiated</td>
       <td>
-        <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">
-          {{'dispensingPrescriptions.addPrescription' | message}}
-        </button>
-        <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form">
+        <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form2">
           {{'dispensingPrescriptions.viewPrescription' | message}}
         </button>
       </td>
-    </tr> -->
+    </tr>
 
     </tbody>
   </table>
-  <openlmis-pagination/>
+  <!-- <openlmis-pagination/> -->
 </section>

@@ -40,6 +40,7 @@
         vm.search = search;
         vm.$onInit = onInit;
         vm.searchPatients = searchPatients;
+        vm.viewPrescription = viewPrescription;
 
         /**
          * @ngdoc property
@@ -98,13 +99,6 @@
          * Method that is executed on initiating dispensingPrescriptionsController.
          */
         function onInit() {
-            console.log("##############3");
-            //vm.prescriptions = prescriptions;
-            // vm.firstName = $stateParams.firstName;
-            // vm.lastName = $stateParams.lastName;
-            // vm.patientType = $stateParams.patientType;
-            // vm.patientId = $stateParams.patientId;
-
             vm.fetchPatients = undefined;
             vm.patientsData = undefined;
             vm.patientParams = {};
@@ -112,10 +106,32 @@
             vm.facilities = facilities;
         }
 
+        function viewPrescription(){
+            console.log("****** View Prescription ******");
+
+            $state.go('openlmis.dispensing.prescriptions.form2');
+            
+            console.log("****** Done ******");
+
+            //var stateParams = angular.copy($stateParams);
+
+            // stateParams.lastName = vm.lastName;
+            // stateParams.firstName = vm.firstName;
+            // stateParams.patientType = vm.patientType;
+            // stateParams.patientId = vm.patientId;
+
+            // stateParams.lastName = "Demo";
+            // stateParams.firstName = "Dan";
+            // stateParams.patientType = "Out";
+            // stateParams.patientId = "F2011/20240711/00045";
+            //stateParams.status = "Initiated";
+
+            // $state.go('openlmis.dispensing.prescriptions.form2', stateParams, {
+            //     reload: true
+            // });
+        }
+
         function searchPatients(){
-
-            console.log("************");
-
             var getPatientParams = vm.patientParams;
             if(getPatientParams.facilityLocation){
                 getPatientParams.facilityId = vm.facility.id;
@@ -138,6 +154,9 @@
                         }
                     }
                     vm.patientsData =  patientsObject;
+
+                    console.log("vvvvvvvvvvvvvvvvv");
+                    console.log(vm.patientsData);
             });
         }
 
