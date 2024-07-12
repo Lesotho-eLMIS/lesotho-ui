@@ -4,7 +4,7 @@
 
     <fieldset class="form-group">
         <label for="lastName">Status</label>
-        <input class="form-control" type="text" disabled>
+        <input class="form-control" type="text" ng-model="vm.prescription.status" disabled>
     </fieldset>
     <fieldset class="form-group">
         <label for="PrescriptionNumber">Follow up date</label>
@@ -80,18 +80,58 @@
                     <td>
                         <label for="contactType">Select Product:</label>
                         <select id="contactType" name="contactType">
-                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <!-- <option ng-model="contact.email" value="email">Abacavier</option>
                             <option ng-model="contact.phone" value="phone">Panado</option>
-                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option> -->
+                            <option ng-model="contact.phone" value="phone">Alcohol Swabs Consumable 200</option>
+                                <option ng-model="contact.phone" value="phone">APTIMA DBS EXTRACTION BUFFER Reagent 1</option>
+                                    <option ng-model="contact.phone" value="phone">Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60</option>
+                                        <option ng-model="contact.phone" value="phone">AbX basolyse 1L Reagent 1</option>
+                                            <option ng-model="contact.phone" value="phone">AbX Cleaner 1L Reagent 1</option>
+                                                <option ng-model="contact.phone" value="phone">AbX diluent 20L Reagent 1</option>
+                                                    <option ng-model="contact.phone" value="phone">AbX eosinofix 1L Reagent 1</option>
+                                                        <option ng-model="contact.phone" value="phone">AbX Lysebio Reagent 1</option>
+                                                            <option ng-model="contact.phone" value="phone">AbX Minoclair 500ml Reagent 1</option>
+                                                                <option ng-model="contact.phone" value="phone">Adaptor for 30ml Consumable 20</option>
+                                                                    <option ng-model="contact.phone" value="phone">Alere-q HIV 1/2 Detect Cartridges Consumable 50</option>
+                                                                        <option ng-model="contact.phone" value="phone">Amphotericin B 50mg Injection 1</option>
+                                                                            <option ng-model="contact.phone" value="phone">Amphotericin B 50mg Injection 10</option>
+                                                                                <option ng-model="contact.phone" value="phone">APTIMA Assay Fluid AS Kit Consumable 1</option>
+                                                                                    <option ng-model="contact.phone" value="phone">APTIMA CAPS AMP/P.R.S Reagent 1</option>
+                                                                                        <option ng-model="contact.phone" value="phone">APTIMA HIV Viral Load Assay 100 T Kit Reagent 1</option>
+                                                                                            <option ng-model="contact.phone" value="phone">APTIMA HIV VIRAL LOAD CONTROLS Reagent 1</option>
+                                                                                                <option ng-model="contact.phone" value="phone">APTIMA LBLD Advanced Cleaning Solution 225ml Consumable 1</option>
+                                                                                                    <option ng-model="contact.phone" value="phone">APTIMA MISC Universal TB Plug Yellow Consumable 100</option>
+                                                                                                        <option ng-model="contact.phone" value="phone">APTIMA Multi Tube Unit Kit Consumable 1</option>
                         </select>
                     </td>
                     <td>
                         <label for="contactType">Select Substitute Product:</label>
                         <select id="contactType" name="contactType">
                             <option ng-model="contact.phon" value="phone"> </option>
-                            <option ng-model="contact.email" value="email">Abacavier</option>
+                            <!-- <option ng-model="contact.email" value="email">Abacavier</option>
                             <option ng-model="contact.phone" value="phone">Panado</option>
-                            <option ng-model="contact.phone" value="phone">Ibupruffin</option>
+                            <option ng-model="contact.phone" value="phone">Ibupruffin</option> -->
+                            <option ng-model="contact.phone" value="phone">Alcohol Swabs Consumable 200</option>
+                                <option ng-model="contact.phone" value="phone">APTIMA DBS EXTRACTION BUFFER Reagent 1</option>
+                                    <option ng-model="contact.phone" value="phone">Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60</option>
+                                        <option ng-model="contact.phone" value="phone">AbX basolyse 1L Reagent 1</option>
+                                            <option ng-model="contact.phone" value="phone">AbX Cleaner 1L Reagent 1</option>
+                                                <option ng-model="contact.phone" value="phone">AbX diluent 20L Reagent 1</option>
+                                                    <option ng-model="contact.phone" value="phone">AbX eosinofix 1L Reagent 1</option>
+                                                        <option ng-model="contact.phone" value="phone">AbX Lysebio Reagent 1</option>
+                                                            <option ng-model="contact.phone" value="phone">AbX Minoclair 500ml Reagent 1</option>
+                                                                <option ng-model="contact.phone" value="phone">Adaptor for 30ml Consumable 20</option>
+                                                                    <option ng-model="contact.phone" value="phone">Alere-q HIV 1/2 Detect Cartridges Consumable 50</option>
+                                                                        <option ng-model="contact.phone" value="phone">Amphotericin B 50mg Injection 1</option>
+                                                                            <option ng-model="contact.phone" value="phone">Amphotericin B 50mg Injection 10</option>
+                                                                                <option ng-model="contact.phone" value="phone">APTIMA Assay Fluid AS Kit Consumable 1</option>
+                                                                                    <option ng-model="contact.phone" value="phone">APTIMA CAPS AMP/P.R.S Reagent 1</option>
+                                                                                        <option ng-model="contact.phone" value="phone">APTIMA HIV Viral Load Assay 100 T Kit Reagent 1</option>
+                                                                                            <option ng-model="contact.phone" value="phone">APTIMA HIV VIRAL LOAD CONTROLS Reagent 1</option>
+                                                                                                <option ng-model="contact.phone" value="phone">APTIMA LBLD Advanced Cleaning Solution 225ml Consumable 1</option>
+                                                                                                    <option ng-model="contact.phone" value="phone">APTIMA MISC Universal TB Plug Yellow Consumable 100</option>
+                                                                                                        <option ng-model="contact.phone" value="phone">APTIMA Multi Tube Unit Kit Consumable 1</option>
                         </select>
                     </td>
                     <td>
