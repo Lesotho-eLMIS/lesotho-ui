@@ -8,12 +8,12 @@
     </fieldset>
     <fieldset class="form-group">
         <label for="PrescriptionNumber">Follow up date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate1"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
     </fieldset>
     <fieldset class="form-group">
         <label for="firstName">Created date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate2"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
     </fieldset>
     <fieldset class="form-group">
@@ -29,11 +29,13 @@
             Out Patient
         </label>
     </fieldset>
-    <fieldset class="form-group">
+    <!-- <fieldset class="form-group">
         <label for="nationalID">Dispensing date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate3"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
-    </fieldset>
+    </fieldset> -->
+
+    
     <!-- <fieldset class="form-group">
         <label for="nickName">Captured date</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
@@ -135,7 +137,7 @@
                         </select>
                     </td>
                     <td>
-                        <input id="contact" ng-model="vm.Prescription.contact" type="text"/>
+                        <input id="contact" ng-model="vm.Prescription.contact0" type="text"/>
                     </td>
                     <td>
                         <input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;"/>
@@ -233,7 +235,7 @@
                         </select>
                     </td>
                     <td>
-                        <input id="contact" ng-model="vm.Prescription.contact" type="text" style="width: 120px;"/>
+                        <input id="contact" ng-model="vm.Prescription.contact2" type="text" style="width: 120px;"/>
                     </td>
                     <td>
                         <input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 50px;"/>
@@ -245,7 +247,7 @@
                         <input type="checkbox" ng-model="vm.Prescription.allowNotify"/>
                     </td>
                     <td>
-                        <input id="contact" ng-model="vm.Prescription.contact" type="text" style="width: 120px;"/>
+                        <input id="contact" ng-model="vm.Prescription.contact3" type="text" style="width: 120px;"/>
                     </td>
                     <td>
                         <button type="button" class="danger" ng-click="removeContact($index)">Remove</button>
