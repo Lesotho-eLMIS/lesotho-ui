@@ -402,21 +402,21 @@
     };
 
     vm.validateCartonNumber = function(lineItem){
-      
-      if (!lineItem.hasOwnProperty('totalCartonNumber') || lineItem.individualCartonNumber > lineItem.totalCartonNumber ||
-        isEmpty(lineItem.totalCartonNumber)) {
-       
-        lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
-      }else if(!lineItem.hasOwnProperty('individualCartonNumber') || lineItem.individualCartonNumber === 0 ){
-      
-        lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
-      }else if(lineItem.individualCartonNumber > 0 && lineItem.individualCartonNumber <= lineItem.totalCartonNumber){
-       
-        lineItem.$errors.cartonsInvalid = false;
-        let cartonNumber = lineItem.individualCartonNumber + " of " + lineItem.totalCartonNumber;
-        lineItem.cartonNumber = cartonNumber;
+      if(adjustmentType.state === "receive"){
+        if (!lineItem.hasOwnProperty('totalCartonNumber') || lineItem.individualCartonNumber > lineItem.totalCartonNumber ||
+          isEmpty(lineItem.totalCartonNumber)) {
+        
+          lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
+        }else if(!lineItem.hasOwnProperty('individualCartonNumber') || lineItem.individualCartonNumber === 0 ){
+        
+          lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
+        }else if(lineItem.individualCartonNumber > 0 && lineItem.individualCartonNumber <= lineItem.totalCartonNumber){
+        
+          lineItem.$errors.cartonsInvalid = false;
+          let cartonNumber = lineItem.individualCartonNumber + " of " + lineItem.totalCartonNumber;
+          lineItem.cartonNumber = cartonNumber;
+        }
       }
-      
       return lineItem;
     };
 
@@ -670,7 +670,7 @@
         vm.validateReason(item);
         vm.validateCartonNumber(item);
       });
-      return _.chain(vm.addedLineItems)
+       return _.chain(vm.addedLineItems)
         .groupBy(function (item) {
           return item.lot ? item.lot.id : item.orderable.id;
         })
