@@ -642,6 +642,10 @@
         vm.hasPermissionToAddNewLot
       );
       vm.selectedOrderableHasLots = vm.lots.length > 0;
+
+      /* eLMIS Lesotho : start */
+      vm.lots.splice(1, 1);  //Removing no lot defined because all products should have lots/batches
+      /* eLMIS Lesotho : end */
     };
 
     /**
@@ -987,7 +991,7 @@
       vm.keyword = $stateParams.keyword;
 
       vm.orderableGroups = orderableGroups;
-      vm.hasLot = false;
+      vm.hasLot = false; 
       vm.orderableGroups.forEach(function (group) {
         vm.hasLot =
           vm.hasLot ||
