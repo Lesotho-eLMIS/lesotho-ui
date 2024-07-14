@@ -156,6 +156,7 @@
     vm.showPrepackingAttributes = false;
     vm.showDeliveryNoteAttributes = false;
     vm.showReasonsInAdjustment = false;
+    vm.servicePointUser = false;
     /* eLMIS Lesotho : end */
 
     /**
@@ -976,7 +977,8 @@
         adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state;
       vm.showReasonsInAdjustment =
         adjustmentType.state === ADJUSTMENT_TYPE.ADJUSTMENT.state;
-      
+      vm.servicePointUser =
+        adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state && facility.type.code === "service_point";
       /* eLMIS Lesotho : end */
      
       vm.addedLineItems = $stateParams.addedLineItems || [];
