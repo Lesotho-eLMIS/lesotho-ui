@@ -44,15 +44,25 @@
                 postComplaint: {
                     url: openlmisUrlFactory('api/complaints'),
                     method: 'POST'
+                },
+                sendComplaint: {
+                    url: openlmisUrlFactory('api/complaints/:id/send'),
+                    method: 'POST'
                 }
         });
        
 
         this.saveComplaint = saveComplaint;
+        this.sendComplaint = sendComplaintToCMS;
 
 
         function saveComplaint(complaint) {
-            return resource.postComplaint({facilityId:complaint.facilityId}, complaint)
+            return resource.postComplaint({facilityId:complaint.facilityId}, complaint);
+        }
+
+        function sendComplaintToCMS(complaintId, complaint) {
+            console.log(complaintId);
+            return resource.sendComplaint({id:complaintId}, complaint);
         }
         
     }

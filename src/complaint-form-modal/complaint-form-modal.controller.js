@@ -196,8 +196,12 @@
                 for (let i = 0; i < Object.keys(response).length-2; i++) {
                     complaintId += response[i];
                 }
-                console.log(complaintId);
                 notificationService.success('Complaint Saved Sucessfully.');
+                complaintService.sendComplaint(complaintId, vm.complaint).$promise
+                    .then(function(sendReponse) {
+                        notificationService.success('Complaint Sent Sucessfully.');
+                    });
+                
                 modalDeferred.resolve();
                 }
               )
