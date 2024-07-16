@@ -18,7 +18,7 @@
           <fieldset class="form-group">
             <label for="orderingFacility">{{'complaintFormModal.healthFacility' | message}}</label>
             <select id="receivingFacility" ng-model="vm.complaintFormFacility" 
-                ng-options="facility.name for facility in vm.homeFacilities" ng-change="vm.onChangeComplainingFacility()"></select>
+                ng-options="facility.name for facility in vm.homeFacilities" ng-change="vm.onChangeComplainingFacility()" required></select>
             <!-- <select id="receivingFacility" ng-model="vm.homeFacility" ng-required="!vm.supplyingFacility"
               ng-options="facility.name for facility in vm.facility"></select> -->
               

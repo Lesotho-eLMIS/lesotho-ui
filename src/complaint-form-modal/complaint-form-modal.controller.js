@@ -29,10 +29,10 @@
         .controller('complaintFormModalController', controller);
 
     controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService', 'notificationService', 
-        'orderableGroups', 'program', 'facility', 'programService', 'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService','user'];
+        'orderableGroups', 'program', 'facility', 'programService', 'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService','user', 'complaintService','confirmService'];
 
     function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService, 
-                        notificationService, orderableGroups, program, facility, programService, orderableGroupService, hasPermissionToAddNewLot, messageService,user) {//
+                        notificationService, orderableGroups, program, facility, programService, orderableGroupService, hasPermissionToAddNewLot, messageService, user, complaintService, confirmService) {//
         var vm = this;
 
         vm.$onInit = onInit;
@@ -176,7 +176,6 @@
 
             });
             
-            console.log(vm.productsForComplaint);
         }
 
         // removing discrepancies from table
@@ -184,38 +183,31 @@
             vm.productsForComplaint.splice(index, 1);
         }
 
-        //builds receiving payload
+    
         function confirm (){
-            vm.complaint.lineItems = vm.productsForComplaint;
-            console.log(vm.complaint)
-
-            // if(vm.discrepancies.length!=0){
-            //     var receivingDiscrepancy = {};
-            //     vm.discrepancies.forEach(function (discrepancy) {
-            //         // Use native array method find to find the matching object in rejectionReasons
-            //         var reasonDetails = vm.rejectionReasons.find(function (reason) {
-            //             return reason.name === discrepancy.name;
-            //         });
-            //         // If a match is found, build the rejection object
-            //         if (reasonDetails) {
-            //             receivingDiscrepancy = {
-            //                 rejectionReason: angular.copy(reasonDetails),
-            //                 quantityAffected: discrepancy.quantity,
-            //                 timestamp: itemTimestamp,
-            //                 remarks: discrepancy.comments
-            //             };
-            //             console.log(receivingDiscrepancy);
-            //             stockAdjustmentCreationService.addReceivingDiscrepancies(receivingDiscrepancy);
-            //             receivingDiscrepancy = {};
-            //         }
-            //     });
-            //     vm.discrepancies = [];
-            //     modalDeferred.resolve();
-            // }
-            // else{
-            //     notificationService.error('Add discrepancies before saving them.');
-            // }
-            modalDeferred.resolve();
+            vm.complaint.lineItems = vm.productsForComplaint; // Add complaint payload lineitems
+            confirmService
+            .confirm("Are you sure you want to send complaint?", "Send")
+            .then(function () {
+               complaintService.saveComplaint(vm.complaint).$promise
+              .then(function(response) {
+                // Success callback
+                let complaintId = "";
+                for (let i = 0; i < Object.keys(response).length-2; i++) {
+                    complaintId += response[i];
+                }
+                console.log(complaintId);
+                notificationService.success('Complaint Saved Sucessfully.');
+                modalDeferred.resolve();
+                }
+              )
+              .catch(function(error) {
+                  // Error callback
+                  notificationService.error('Failed to submit.');
+                  console.error('Error occurred:', error);
+              
+              });
+            });
         }
     }
 })();
