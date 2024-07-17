@@ -94,9 +94,18 @@
         
         //Select facilities in the same district as requesting facility as well as all DHMT facilities
         function filterFacilities(){
-           const zoneId = vm.facility.geographicZone.parent.id;
+           
+           console.log(vm.facility);
             var supplierFacilities = getSupplyingFacilities(vm.hospitals, vm.healthCenters, vm.dhmts);
-           return supplierFacilities.filter(item => item.geographicZone.parent.id === zoneId || item.geographicZone.parent.id === '1a6a6a05-8b6a-458c-84c5-7c60de2edfe1');
+            console.log(supplierFacilities);
+            if(vm.facility.type.code === 'dist_store'){
+                const zoneId = vm.facility.geographicZone.id;
+                return supplierFacilities.filter(item => item.geographicZone.parent.id === zoneId || item.type.code === 'dist_store');
+            }
+           else {
+            const zoneId = vm.facility.geographicZone.parent.id;
+            return supplierFacilities.filter(item => item.geographicZone.parent.id === zoneId || item.type.code === 'dist_store');
+           }
         }
 
         //Compute the total approved quantity for the requisition
