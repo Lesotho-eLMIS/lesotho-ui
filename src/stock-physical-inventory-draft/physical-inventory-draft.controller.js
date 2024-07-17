@@ -684,24 +684,25 @@
         }
 
         function validateCyclic() {
-            var qtyError = false;
-            var activeError = false;
-
+            let errorMessage = null;
+        
             displayLineItemsGroup.forEach(function(group) {
-
-                console.log(group);
-                if(vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName){
-                    _.chain(group).flatten()
-                        .each(function(item) {
+                if (vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName) {
+                    for (let item of group) {
                         if (!item.active) {
-                            activeError = 'stockPhysicalInventoryDraft.submitInvalidActive';
+                            errorMessage = 'stockPhysicalInventoryDraft.submitInvalidActive';
+                            break; // Exit the loop early if an active error is found
                         } else if (vm.validateQuantity(item) || vm.validateUnaccountedQuantity(item)) {
-                            qtyError = 'stockPhysicalInventoryDraft.submitInvalid';
+                            errorMessage = 'stockPhysicalInventoryDraft.submitInvalid';
+                            break; // Exit the loop early if a quantity error is found
                         }
-                });
-            return activeError || qtyError;                }
-            })
+                    }
+                }
+            });
+        
+            return errorMessage; // Returns the first error found or null if none
         }
+        
         function onInit() {
             $state.current.label = messageService.get('stockPhysicalInventoryDraft.title', {
                 facilityCode: facility.code,
