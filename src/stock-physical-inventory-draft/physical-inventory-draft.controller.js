@@ -515,10 +515,10 @@
             var error = undefined;//(vm.physicalInventoryType === "Major") ? validate() : validateCyclic();
             if(vm.stateParams.physicalInventoryType === "Cyclic"){
                 console.log("Cyclic");
-                validateCyclic();
+                error = validateCyclic();
             }else if(vm.stateParams.physicalInventoryType === "Major"){
                 console.log("Major");
-                validate();
+                error = validate();
             }
 
             if (error) {
