@@ -204,13 +204,14 @@
 
             if(productType.length === 1){
                    // return lineItem.remainingStock = 
-                remaining = lineItem.soh - (lineItem.prepackSize*lineItem.numberOfPrepacks); 
-                console.log(lineItem.soh );
-                console.log(lineItem.prepackSize);
-                console.log(lineItem.numberOfPrepacks); 
-                lineItem.remainingStock = remaining;
-                return remaining;
+                // remaining = lineItem.soh - (lineItem.prepackSize*lineItem.numberOfPrepacks); 
+                // console.log(lineItem.soh );
+                // console.log(lineItem.prepackSize);
+                // console.log(lineItem.numberOfPrepacks); 
+                // lineItem.remainingStock = remaining;
+                // return remaining;
                 //return remaining;
+                return lineItem.soh
                     //return remaining = productType.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
             }
             else{
