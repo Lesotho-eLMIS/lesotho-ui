@@ -18,20 +18,20 @@
           <fieldset class="form-group">
             <label for="orderingFacility">{{'complaintFormModal.healthFacility' | message}}</label>
             <select id="receivingFacility" ng-model="vm.complaintFormFacility" 
-                ng-options="facility.name for facility in vm.homeFacilities"></select>
+                ng-options="facility.name for facility in vm.homeFacilities" ng-change="vm.onChangeComplainingFacility()" required></select>
             <!-- <select id="receivingFacility" ng-model="vm.homeFacility" ng-required="!vm.supplyingFacility"
               ng-options="facility.name for facility in vm.facility"></select> -->
               
           </fieldset>
 
           <fieldset class="form-group">
-          <label for="lastName">{{'complaintFormModal.purchaseOrderNumber' | message}}</label>
-          <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.lastName">
+          <label for="purchaseOrderNumber">{{'complaintFormModal.purchaseOrderNumber' | message}}</label>
+          <input class="form-control" type="text" style="width: 150px;" ng-model="vm.complaint.purchaseOrderNumber">
           </fieldset>
 
           <fieldset class="form-group">
-          <label for="firstName">{{'complaintFormModal.NDSOInvoiceNumber' | message}}</label>
-          <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.firstName">
+          <label for="ndsoInvoiceNumber">{{'complaintFormModal.NDSOInvoiceNumber' | message}}</label>
+          <input class="form-control" type="text" style="width: 150px;" ng-model="vm.complaint.invoiceNumber">
           <p> </p><p> </p><p> </p><p> </p>
           </fieldset>
           
@@ -94,39 +94,31 @@
             </thead>
             <tbody>
               <tr ng-repeat="product in vm.productsForComplaint">
-                <td>{{product.name}}</td>
-                <td>{{product.batch}}</td>
-                <td><input type="date" style="width: 90px;" ng-model="product.expiary" ng-disabled="true"></td>
+                <td>{{product.orderable.fullProductName}}</td>
+                <td>{{product.lot.lotCode}}</td>
+                <td><input type="date" style="width: 90px;" ng-model="product.lot.expirationDate" ng-disabled="true"></td>
                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;" ng-model="product.quantityAffected"></td>
                 <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;" ng-model="product.quantityReturned"></td>
                 <td>
                   <!-- Nature of complaint -->
-                  <select id="complaintType" name="complaintType">
-                      <option ng-model="complaint.email" value="email">Wrong product</option>
-                      <option ng-model="complaint.email" value="email">Wrong pack size</option>
-                      <option ng-model="complaint.email" value="email">Over supply</option>
-                      <option ng-model="complaint.email" value="email">Expired products</option>
-                      <option ng-model="complaint.email" value="email">Due to expire</option>
-                      <option ng-model="complaint.email" value="email">Delivery queries</option>
-                      <option ng-model="complaint.email" value="email">Shortage</option>
-                      <option ng-model="complaint.email" value="email">Quality</option>
-                      <option ng-model="complaint.email" value="email">Price hike</option>
-                      <option ng-model="complaint.email" value="email">Other(specify)</option>
+                  <select id="natureOfComplaint" name="natureOfComplaint" 
+                          ng-model="product.natureOfComplaint"  
+                          ng-options="natureOfComplaint for natureOfComplaint in vm.natureOfcomplaintOptions"
+                          required>
                   </select>
                 </td>
                 <td>
                   <!-- complaint reason -->
-                  <select id="complaintType" name="complaintType">
-                    <option ng-model="complaint.email" value="email">Issued</option>
-                    <option ng-model="complaint.email" value="email">Ordered</option>
-                    <option ng-model="complaint.email" value="email">Requested</option>
+                  <select id="complaintReason" name="complaintReason"
+                          ng-model="product.complaintReason"  
+                          ng-options="complaintReason for complaintReason in vm.complaintReasonOptions">
                   </select>
                 </td>
                 <td>
                   <!-- reason detail -->
-                  <select id="complaintType" name="complaintType">
-                    <option ng-model="complaint.email" value="email">Ordered</option>
-                    <option ng-model="complaint.email" value="email">Requested</option>
+                  <select id="complaintDetail" name="complaintDetail"
+                          ng-model="product.complaintDetail"  
+                          ng-options="complaintDetail for complaintDetail in vm.complaintDetailOptions">>
                   </select>
                 </td>
                 <td><input type="text" style="width: 70px;" ng-model="product.comments"></td>

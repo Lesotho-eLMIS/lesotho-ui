@@ -81,6 +81,9 @@
                         hasPermissionToAddNewLot: function() {
                             console.log(hasPermissionToAddNewLot);
                             return hasPermissionToAddNewLot;
+                        },
+                        user: function(currentUserService) {
+                            return currentUserService.getUserInfo();
                         }
                     }   
                 }

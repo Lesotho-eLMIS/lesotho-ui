@@ -29,10 +29,10 @@
         .controller('complaintFormModalController', controller);
 
     controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService', 'notificationService', 
-        'orderableGroups', 'program', 'facility', 'programService', 'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService'];
+        'orderableGroups', 'program', 'facility', 'programService', 'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService','user', 'complaintService','confirmService'];
 
     function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService, 
-                        notificationService, orderableGroups, program, facility, programService, orderableGroupService, hasPermissionToAddNewLot, messageService) {//
+                        notificationService, orderableGroups, program, facility, programService, orderableGroupService, hasPermissionToAddNewLot, messageService, user, complaintService, confirmService) {//
         var vm = this;
 
         vm.$onInit = onInit;
@@ -40,6 +40,7 @@
         vm.lotChanged = lotChanged;
         vm.addProductToComplaintForm = addProductToComplaintForm;
         vm.removeProductLineItem = removeProductLineItem;
+        vm.onChangeComplainingFacility = onChangeComplainingFacility;
         vm.productsForComplaint = [];
         //vm.discrepancies = rejectionReasons;
         vm.discrepancyOptions = [];
@@ -48,6 +49,28 @@
         vm.facility = facility;
         vm.facilities = undefined;
         vm.homeFacilities = [facility];
+        vm.complaint = {}
+        vm.natureOfcomplaintOptions = [
+            "Wrong product",
+            "Wrong pack size",
+            "Over supply",
+            "Expired products",
+            "Due to expire",
+            "Delivery queries",
+            "Shortage",
+            "Quality",
+            "Price hike",
+            "Other (specify)"
+          ];
+        vm.complaintReasonOptions = [
+            "Issued",
+            "Ordered",
+            "Requested"
+        ];
+        vm.complaintDetailOptions = [
+            "Ordered",
+            "Requested"
+        ];
 
         //vm.complaintFormFacility = undefined;
 
@@ -56,35 +79,11 @@
 
         $scope.showModal=false;
         
-
-        // // adding productsForComplaint to table
-        // function addDiscrepancy() {
-        //     vm.productsForComplaint.push({
-        //         'name': vm.vm.selectedOrderableGroup,
-        //         'quantity': '',
-        //         'comments': ''
-        //     });
-        //     console.log(vm.productsForComplaint);
-        // };
-
-        // // removing productsForComplaint from table
-        // function removeDiscrepancy(index) {
-        //     vm.productsForComplaint.splice(index, 1);
-        // }
-        
         function onInit() {
-            
-            // console.log("start");
-            // console.log(facility.geographicZone.name);
-            // console.log("Just facility");
-            // console.log(facility);
-            // vm.facility.push(facility.name);
-            // //vm.homeFacility = "home facility here";
-            // console.log("finish");
-
-            vm.receivingFacility = facility.name;
-            //vm.complaintFormFacility = vm.homeFacilities[0].value;
-
+            vm.receivingFacility = facility.name; 
+            vm.complaint.programId = program.id;
+            vm.complaint.userId = user.id;
+            vm.complaint.userNames = user.username;
             vm.selectedDiscrepancy = [];
            
            vm.rejectionReasons = rejectionReasons.content;
@@ -154,6 +153,11 @@
             initiateNewLotObject();
         }
 
+        function onChangeComplainingFacility() {
+            vm.complaint.facilityId = vm.complaintFormFacility.id
+            console.log(vm.complaint)
+        }
+
         function initiateNewLotObject() {
             vm.newLot = {
               active: true,
@@ -161,23 +165,17 @@
         }
 
         function addProductToComplaintForm() {
-            console.log("Adding products...");
-            console.log(vm.selectedOrderableGroup);
-            console.log(vm.selectedOrderableGroup[0].orderable.fullProductName);
-            console.log("Lot...");
-            console.log(vm.selectedLot.expirationDate);
-            // if(vm.selectedDiscrepancy.length!=0){
-                vm.productsForComplaint.push({
+            vm.productsForComplaint.push({
                     'name': vm.selectedOrderableGroup[0].orderable.fullProductName,
                     'batch': vm.selectedLot.lotCode,
-                    'expiary': vm.selectedLot.expirationDate
-                    // 'quantityReturned': '',
-                    // 'natureOfComplaint': ''
-                });  
-            // }
-            // else{
-            //     notificationService.error('Select a discrepancy before adding.');
-            // }
+                    'expiary': vm.selectedLot.expirationDate,
+                    'orderable': vm.selectedOrderableGroup[0].orderable,
+                    'lot':vm.selectedLot,
+                    'lotId':vm.selectedLot.id,
+                    'orderableId': vm.selectedOrderableGroup[0].orderable.id
+
+            });
+            
         }
 
         // removing discrepancies from table
@@ -185,34 +183,35 @@
             vm.productsForComplaint.splice(index, 1);
         }
 
-        //builds receiving payload
+    
         function confirm (){
-            if(vm.discrepancies.length!=0){
-                var receivingDiscrepancy = {};
-                vm.discrepancies.forEach(function (discrepancy) {
-                    // Use native array method find to find the matching object in rejectionReasons
-                    var reasonDetails = vm.rejectionReasons.find(function (reason) {
-                        return reason.name === discrepancy.name;
+            vm.complaint.lineItems = vm.productsForComplaint; // Add complaint payload lineitems
+            confirmService
+            .confirm("Are you sure you want to send complaint?", "Send")
+            .then(function () {
+               complaintService.saveComplaint(vm.complaint).$promise
+              .then(function(response) {
+                // Success callback
+                let complaintId = "";
+                for (let i = 0; i < Object.keys(response).length-2; i++) {
+                    complaintId += response[i];
+                }
+                notificationService.success('Complaint Saved Sucessfully.');
+                complaintService.sendComplaint(complaintId, vm.complaint).$promise
+                    .then(function(sendReponse) {
+                        notificationService.success('Complaint Sent Sucessfully.');
                     });
-                    // If a match is found, build the rejection object
-                    if (reasonDetails) {
-                        receivingDiscrepancy = {
-                            rejectionReason: angular.copy(reasonDetails),
-                            quantityAffected: discrepancy.quantity,
-                            timestamp: itemTimestamp,
-                            remarks: discrepancy.comments
-                        };
-                        console.log(receivingDiscrepancy);
-                        stockAdjustmentCreationService.addReceivingDiscrepancies(receivingDiscrepancy);
-                        receivingDiscrepancy = {};
-                    }
-                });
-                vm.discrepancies = [];
+                
                 modalDeferred.resolve();
-            }
-            else{
-                notificationService.error('Add discrepancies before saving them.');
-            }
+                }
+              )
+              .catch(function(error) {
+                  // Error callback
+                  notificationService.error('Failed to submit.');
+                  console.error('Error occurred:', error);
+              
+              });
+            });
         }
     }
 })();
