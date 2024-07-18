@@ -66,7 +66,7 @@
                     <th ng-hide="vm.showDeliveryNoteAttributes" ng-if="vm.showReasonDropdown && !vm.showPrepackingAttributes">{{vm.key('reasonComments') | message}}</th>
 
                     <!-- <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('cartonNumber') | message}}</th> -->
-                    <th colspan="3" ng-if="vm.showDeliveryNoteAttributes">{{vm.key('cartonNumber') | message}}</th>
+                    <th colspan="3" ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser">{{vm.key('cartonNumber') | message}}</th>
                     <th ng-if="vm.showDeliveryNoteAttributes" ng-hide="true">{{vm.key('invoiceNumber') | message}}</th>
 
                     <th ng-if="vm.showDeliveryNoteAttributes">{{vm.key('deliveryNoteQuantity') | message}}</th>
@@ -130,13 +130,13 @@
                         <input type="text" ng-show="lineItem.reason.isFreeTextAllowed" ng-model="lineItem.reasonFreeText" rows="1" cols="15"></input>
                     </td>
                     
-                    <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier">
+                    <td ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser" ng-hide="vm.FromSupplier">
                     <input class="form-control" ng-model="lineItem.individualCartonNumber"   ng-class="{'error': lineItem.$errors.cartonsInvalid}"
                         ng-change="vm.validateCartonNumber(lineItem)" 
                         type="number" style="width: 20px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
 
-                    <td ng-if="vm.showDeliveryNoteAttributes"><label style="display: inline-block;">of</label></td>
-                    <td ng-if="vm.showDeliveryNoteAttributes" openlmis-invalid="{{lineItem.$errors.cartonsInvalid}}" class="digit-cell">
+                    <td ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser"><label style="display: inline-block;">of</label></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser" openlmis-invalid="{{lineItem.$errors.cartonsInvalid}}" class="digit-cell">
                         <input class="form-control" ng-model="lineItem.totalCartonNumber" ng-change="vm.validateCartonNumber(lineItem)" 
                         ng-class="{'error': lineItem.$errors.cartonsInvalid}" ng-blur="vm.validateCartonNumber(lineItem)"                         
                         type="number" style="width: 20px;" min="0" step="1" oninput="validity.valid||(value='');">
