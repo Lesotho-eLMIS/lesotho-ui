@@ -29,7 +29,8 @@
         'referencedata-facility',
         'ui.router',
         'dispensing',
-        'stockmanagement'
+        'stockmanagement', 
+        'dispensing-prescriptions'
     ]);
 
 })();

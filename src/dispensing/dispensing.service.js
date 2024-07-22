@@ -25,15 +25,15 @@
      * Responsible for dispensing data as well as commiting it to the server.
      */
     angular
-        .module('requisition-search')
+        .module('dispensing')
         .service('dispensingService', dispensingService);
 
         dispensingService.$inject = ['$resource','openlmisUrlFactory', 'notificationService', 'confirmService','openlmisModalService'];
 
     function dispensingService($resource,openlmisUrlFactory, notificationService, confirmService, openlmisModalService ) {
 
-        var promise,
-            POD_FACILITIES = 'dispensingPatientsFacilities';
+        // var promise,
+        //     POD_FACILITIES = 'dispensingPatientsFacilities';
            // Using Resource to Communicate with dispensing Endpoints
 
             var resource = $resource(openlmisUrlFactory('/api/patient:id'), {}, {

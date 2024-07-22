@@ -19,27 +19,28 @@
 
     /**
      * @ngdoc controller
-     * @name dispensing-prescriptions.controller:dispensingPrescriptionsController
+     * @name dispensing-prescription-form.controller:dispensingPrescriptionFormController
      *
      * @description
      * Controller for managing prescription list screen.
      */
     angular
-        .module('dispensing-prescriptions')
-        .controller('dispensingPrescriptionsController', controller);
+        .module('dispensing-prescription-form')
+        .controller('dispensingPrescriptionFormController', controller);
 
-        controller.$inject = ['$state', '$stateParams', 'facility','facilities', 
-        'offlineService', 'dispensingService', 'prescriptionsService'];
+        controller.$inject = ['prescriptionsService', 'prepackingService' ];
 
-    function controller($state, $stateParams, facility,facilities,offlineService, 
-        dispensingService, prescriptionsService ) {
+    function controller(prescriptionsService, prepackingService) {
 
         var vm = this;
 
         // vm.resetPatientPassword = resetPatientPassword;
         // vm.search = search;
         vm.$onInit = onInit;
-     //   vm.submitPrescription = submitPrescription;
+        vm.submitPrescription = submitPrescription;
+        vm.addProduct = addProduct;
+        vm.addContact = addContact;
+    //    vm.getPrescriptionProducts = getPrescriptionProducts;
         // vm.searchPatients = searchPatients;
         // vm.viewPrescription = viewPrescription;
 
@@ -100,18 +101,100 @@
          * Method that is executed on initiating dispensingPrescriptionsController.
          */
         function onInit() {
-            // vm.fetchPatients = undefined;
-            // vm.patientsData = undefined;
-            // vm.patientParams = {};
-            // vm.facility = facility;
-            // vm.facilities = facilities;
-            //submitPrescription();
+           
+            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon', 
+                                    'Teaspoon', 'Unit(s)', 'Puff(s)'];
+            vm.dosageFrequency = ['Immediately', '>Once a day', 'Twice a day', 'Thrice a day', 'Every hour', 'Every 2 hours', 'Every 3 hours', 
+                        'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'On alternate days', 'Once a week', 'Twice a week', 
+                        'Thrice a week', 'Every 2 weeks', 'Every 3 weeks', 'Once a month', '5 times a day', '4 days a week', '5 days a week', '6 days a week'];
+            vm.doseRoute = ['Intramuscular', 'Intravenous', 'Oral', 'Per Vaginal', 'Sub Cutaneous', 'Per Rectum', 'Sub Lingual', 'Nasogastric', 
+                        'Intradermal', 'Intraperitoneal', 'Intrathecal', 'Intraosseous', 'Topical', 'Nasal', 'Inhalation'];
+            vm.durationUnits =['Day(s)', 'Weeks(s)', 'Month(s)'];
+            vm.instructions = ['Before meals', 'Empty stomach', 'In the morning', 'In the evening', 'At bedtime', 'Immediately', 'As directed'];
+         
+            vm.Products =  [
+                {
+                    "orderable": {
+                        "id": "e02be3ba-8ad5-4ad5-a5bd-713c2eac065a",
+                        "productCode": "DON001-ALC004-CON008-200",
+                        "fullProductName": "Alcohol Swabs Consumable 200",
+                        "description": "Alcohol Swabs Consumable 200",
+                        "netContent": 200
+                    },
+                    "lot": null,
+                    "stockOnHand": 303
+                },   
+                {
+                    "orderable": {
+                        "id": "8d6251a4-5e19-4b5f-af30-c7b5ce1c51cb",
+                        "productCode": "DON-APT025-REA001-1",
+                        "fullProductName": "APTIMA  DBS EXTRACTION BUFFER Reagent 1",
+                        "description": "APTIMA  DBS EXTRACTION BUFFER Reagent 1",
+                        "netContent": 1
+                    },                
+                    "lot": null,
+                    "stockOnHand": 3
+                },
+                {
+                    "orderable": {
+                        "id": "96257977-67dd-4ff1-84bc-eb05639234fe",
+                        "productCode": "DON-ABA005-TAB001-60",
+                        "fullProductName": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60",
+                        "description": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60",
+                        "netContent": 60
+                    },
+                    "lot": "Batch3333",
+                    "stockOnHand": 400
+                },
+                {
+                    "orderable": {
+                        "id": "69004775-e8f1-4c13-b9df-aaa03b86104d",
+                        "productCode": "DON-ABA005-TAB001-60-20",
+                        "fullProductName": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60-20",
+                        "description": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60-20",
+                        "netContent": 20
+                    },
+                    "lot": "Batch3333-20",
+                    "stockOnHand": 40
+                }
+            ];
+            vm.prescriptionDetails = []
         }
-        // function submitPrescription(){
-        //     dispensingService.createPrescription().then(function(response){
+
+        function submitPrescription(){
+            console.log("CREATING PRESCRIPTION");
+            console.log(vm.prescriptionDetails);
+        //    return prescriptionsService.createPrescription().then(function(response){
         //         console.log(response);
-        //     })
-        // }
+        //     });
+        }
+
+
+        function addProduct() {
+            vm.prescriptionDetails.unshift(
+                _.extend(
+                    {
+                        prescribedProduct: vm.selectedProduct.orderable.fullProductName,
+                        batchNumber: vm.selectedProduct.lot ? vm.selectedProduct.lot : null
+                    })
+            );
+            console.log(vm.prescriptionDetails);
+        }
+
+        vm.remove = function (lineItem) {
+            var index = vm.prescriptionDetails.indexOf(lineItem);
+            vm.prescriptionDetails.splice(index, 1);
+        };
+
+        function addContact() {
+            console.log("Add line item...");
+            vm.contacts.push({
+                'phone': '',
+                'email': ''
+            });
+        }
+
+        
 
         // function viewPrescription(){
         //     console.log("****** View Prescription ******");
