@@ -1,11 +1,60 @@
 <h2>{{'dispensingPrescriptionForm.title' | message}}</h2>
 
+<aside class="stock-card-info">
+    <div class="product-name-header">
+      <span>Patient Names</span>
+    </div>
+  
+    <ul>
+      <li>
+        <strong>Sex</strong>
+        {{vm.stockCard.orderable.productCode}}
+      </li>
+      <li>
+        <strong>Age</strong>
+        {{vm.stockCard.facility.name}}
+      </li>
+      <li>
+        <strong>Height</strong>
+        {{vm.stockCard.program.name}}
+      </li>
+      <li align="right">
+        <strong>Weight</strong>
+        {{vm.stockCard.stockOnHand}}
+      </li>
+      <li ng-if="vm.stockCard.lot">
+        <strong>BMI</strong>
+        {{vm.stockCard.lot.lotCode}}
+      </li>
+      <li ng-if="vm.stockCard.lot">
+        <strong>BMI Status</strong>
+        {{vm.stockCard.lot.expirationDate | openlmisDate}}
+      </li>
+      <li>
+        <strong>TB Status</strong>
+        {{vm.stockCard.program.name}}
+      </li>
+      <li>
+        <strong>BP</strong>
+        {{vm.stockCard.program.name}}
+      </li>
+      <li>
+        <strong>Medical History</strong>
+        <button ui-sref="^">View</button>
+      </li>
+      <li>
+        <strong>Prescription Status</strong>
+        {{vm.stockCard.program.name}}
+      </li>
+    </ul>
+  </aside>
+
 <form class="sidebar">
 
-    <fieldset class="form-group">
+    <!-- <fieldset class="form-group">
         <label for="lastName">Status</label>
         <input class="form-control" type="text" ng-model="vm.prescription.status" disabled>
-    </fieldset>
+    </fieldset> -->
     <fieldset class="form-group">
         <label for="PrescriptionNumber">Follow up date</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate1"
