@@ -161,7 +161,8 @@
                     "stockOnHand": 40
                 }
             ];
-            vm.prescriptionDetails.patientId = $stateParams.patientId;
+            console.log(prescriptionsService.getPrescription());
+            console.log(prescriptionsService.getPrescriptions());
         }
 
         function submitPrescription(){

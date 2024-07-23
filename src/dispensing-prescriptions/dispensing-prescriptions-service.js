@@ -37,7 +37,7 @@
            // Using Resource to Communicate with dispensing Endpoints
 
             var resource = $resource(openlmisUrlFactory('api/prescription:id'), {}, {
-                get: {
+                getAll: {
                     url: openlmisUrlFactory('api/prescription'),
                     method: 'GET',
                     isArray: true
@@ -45,6 +45,10 @@
                 postPrescriptionEvent: {
                     url: openlmisUrlFactory('api/prescription'),
                     method: 'POST'
+                },
+                get: {
+                  url: openlmisUrlFactory('/api/prescription/:id'),
+                  method: 'GET'
                 }
                 // updatePatientEvent: {
                 //     url: openlmisUrlFactory('/api/patient:id'),
@@ -59,7 +63,8 @@
        // this.show = show;
  
         this.createPrescription = createPrescription; // To post Prescription paylodad
-        this.getPrescription = getPrescription; //To retrieve a Prescription record from the database
+        this.getPrescriptions = getPrescriptions; //To retrieve a Prescription record from the database
+        this.getPrescription = getPrescription;
         this.prescriptionLineItems = prescriptionLineItems;
         
       //  var patients = [];     
@@ -75,7 +80,8 @@
          * @param  {String}     Facility UUID
          * @return {Promise}    Prescription promise
          */
-        function getPrescription(prescriptionParams) {
+        function getPrescriptions() {
+          
             // var params = {
             //     patientNumber: patientParams.patientNumber,
             //     firstName: patientParams.firstName,
@@ -89,6 +95,8 @@
             return resource.get(params).$promise.then(function(response) {
                 //Transforming the response to an object if it's an array
                     if (Array.isArray(response)) {
+                      console.log("got it!!!!!!!!");
+                      console.log(response);
                                     
                         var objectOfPatients = response.reduce((result, obj) => {
                         result[obj.id] = obj;
@@ -100,6 +108,14 @@
                return response; 
              });
         };
+
+        function getPrescription(){
+          var params ={id: "e8d1085f-cca0-49c1-9115-bf24a88560cc"};
+          return resource.get(params).$promise.then(function(response) {
+            //Transforming the response to an object if it's an array
+                  console.log(response);
+        })
+      }
  
          /**
          * @ngdoc method
