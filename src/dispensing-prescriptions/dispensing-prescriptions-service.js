@@ -49,7 +49,7 @@
                 get: {
                   url: openlmisUrlFactory('/api/prescription/:id'),
                   method: 'GET'
-                }
+               }
                 // updatePatientEvent: {
                 //     url: openlmisUrlFactory('/api/patient:id'),
                 //     method: 'PUT'
@@ -92,7 +92,7 @@
             // };
             // console.log("Prescription Service");
             // console.log(params);
-            return resource.get(params).$promise.then(function(response) {
+            return resource.getAll().$promise.then(function(response) {
                 //Transforming the response to an object if it's an array
                     if (Array.isArray(response)) {
                       console.log("got it!!!!!!!!");
