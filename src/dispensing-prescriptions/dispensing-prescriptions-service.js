@@ -60,6 +60,7 @@
  
         this.createPrescription = createPrescription; // To post Prescription paylodad
         this.getPrescription = getPrescription; //To retrieve a Prescription record from the database
+        this.prescriptionLineItems = prescriptionLineItems;
         
       //  var patients = [];     
 
@@ -111,47 +112,50 @@
          * @param  {String}     Facility UUID
          * @return {Promise}    Prescription promise
          */
-        function createPrescription(){
+        function createPrescription(prescriptionDetails){
             
-           var prescriptionDetails = {
-              "patientId": "22326e87-08ad-48d4-ab61-fc76c268e891",
-              "patientType": "Outpatient",
-              "followUpDate": "2024-07-14",
+           var prescriptionData = {
+              "patientId": prescriptionDetails.patientId,//"22326e87-08ad-48d4-ab61-fc76c268e891",
+              "patientType": prescriptionDetails.patientType ? "Outpatient" : "Inpatient",
+              "followUpDate": prescriptionDetails.followUpDate,//"2024-07-14",
               "issueDate": "2024-07-07",
-              "createdDate": "2024-07-07",
-              "capturedDate": "2024-07-07",
+              "createdDate": prescriptionDetails.createdDate,//"2024-07-07",
+              "capturedDate": prescriptionDetails.createdDate,//"2024-07-07",
               "lastUpdate": "2024-07-07",
               "isVoided": false,
               "status": "Active",
               "facilityId": "81b63356-d08b-42e9-af39-ca9e266ef3a7",
               "userId": "df255157-0162-4466-ad7d-b73f6b2d9774",
-              "lineItems": [
-                {
-                  "id": "c1f77c60-5f7e-11ec-bf63-0242ac130004",
-                  "dosage": "500mg",
-                  "period": 7,
-                  "batchId": "batch-001",
-                  "quantityPrescribed": 30,
-                  "quantityDispensed": 30,
-                  "servedInternally": true,
-                  "orderableId":"167ee72e-04a4-4f97-bcd9-4365015fd157",
-                  "substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
-                  "comments": "Take after meals"
-                },
-                {
-                  "id": "c1f77c60-5f7e-11ec-bf63-0242ac130005",
-                  "dosage": "250mg",
-                  "period": 14,
-                  "batchId": "batch-002",
-                  "quantityPrescribed": 60,
-                  "quantityDispensed": 60,
-                  "servedInternally": false,
-                  "orderableId": "167ee72e-04a4-4f97-bcd9-4365015fd157",
-                  "substituteOrderableId": null,
-                  "comments": "Take before bed"
-                }
-              ]
+              "lineItems": prescriptionLineItems(prescriptionDetails)
             }
+            console.log(prescriptionData);
+            // [
+            //     {
+            //       "id": "c1f77c60-5f7e-11ec-bf63-0242ac130004",
+            //       "dosage": "500mg",
+            //       "period": 7,
+            //       "batchId": "batch-001",
+            //       "quantityPrescribed": 30,
+            //       "quantityDispensed": 30,
+            //       "servedInternally": true,
+            //       "orderableId":"167ee72e-04a4-4f97-bcd9-4365015fd157",
+            //       "substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+            //       "comments": "Take after meals"
+            //     },
+            //     {
+            //       "id": "c1f77c60-5f7e-11ec-bf63-0242ac130005",
+            //       "dosage": "250mg",
+            //       "period": 14,
+            //       "batchId": "batch-002",
+            //       "quantityPrescribed": 60,
+            //       "quantityDispensed": 60,
+            //       "servedInternally": false,
+            //       "orderableId": "167ee72e-04a4-4f97-bcd9-4365015fd157",
+            //       "substituteOrderableId": null,
+            //       "comments": "Take before bed"
+            //     }
+            //   ]
+            //}
             // var payload = {
             //     "facilityId": patientInfo.homeFacility,
             //     "personDto": {
@@ -186,7 +190,31 @@
             //         }
             //     ]
             // }
-            return resource.postPrescriptionEvent(prescriptionDetails).$promise;
+            return resource.postPrescriptionEvent(prescriptionData).$promise;
+        }
+
+        function prescriptionLineItems(prescriptionDetails){
+
+          var lineItems = [];
+          prescriptionDetails.forEach(element => {
+            var item = {
+              // "id": "c1f77c60-5f7e-11ec-bf63-0242ac130004",
+              "dosage": element.dose, // "500mg", [string1, string2].join('');
+              "period": element.duration, // 7,
+              "batchId": element.batchNumber, // "batch-001",
+              "quantityPrescribed": element.quantityPrescribed, // 30,
+              "quantityDispensed": element.quantityDispensed, // 30,
+              "servedInternally": element.isInternallyServed, // true,
+              "orderableId": element.orderableId, // "167ee72e-04a4-4f97-bcd9-4365015fd157",
+              // "substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+              "comments": element.comments // "Take after meals"
+            };
+          
+            lineItems.push(item);
+          });
+          console.log('=======++++++++++++++==========');
+          console.log(lineItems);
+          return lineItems;
         }
 
     }

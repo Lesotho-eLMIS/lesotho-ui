@@ -28,9 +28,9 @@
         .module('dispensing-prescription-form')
         .controller('dispensingPrescriptionFormController', controller);
 
-        controller.$inject = ['prescriptionsService', 'prepackingService' ];
+        controller.$inject = ['prescriptionsService', 'prepackingService', '$stateParams' ];
 
-    function controller(prescriptionsService, prepackingService) {
+    function controller(prescriptionsService, prepackingService, $stateParams) {
 
         var vm = this;
 
@@ -53,7 +53,7 @@
          * @description
          * Holds prescription list.
          */
-        vm.prescriptions = undefined;
+        vm.prescriptionDetails = [];
 
         /**
          * @ngdoc property
@@ -101,6 +101,9 @@
          * Method that is executed on initiating dispensingPrescriptionsController.
          */
         function onInit() {
+
+            vm.patientId = 
+            console.log(vm.patientId);
            
             vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon', 
                                     'Teaspoon', 'Unit(s)', 'Puff(s)'];
@@ -158,22 +161,24 @@
                     "stockOnHand": 40
                 }
             ];
-            vm.prescriptionDetails = []
+            vm.prescriptionDetails.patientId = $stateParams.patientId;
         }
 
         function submitPrescription(){
             console.log("CREATING PRESCRIPTION");
             console.log(vm.prescriptionDetails);
-        //    return prescriptionsService.createPrescription().then(function(response){
-        //         console.log(response);
-        //     });
+            return prescriptionsService.createPrescription(vm.prescriptionDetails).then(function(response){
+                console.log(response);
+             });
         }
 
 
         function addProduct() {
             vm.prescriptionDetails.unshift(
                 _.extend(
-                    {
+                    {   orderableId: vm.selectedProduct.orderable.id,
+                        //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+                        //"exiryDate" "",
                         prescribedProduct: vm.selectedProduct.orderable.fullProductName,
                         batchNumber: vm.selectedProduct.lot ? vm.selectedProduct.lot : null
                     })

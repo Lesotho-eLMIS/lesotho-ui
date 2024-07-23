@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.dispensing.prescriptions.form', {
             label: 'dispensingPrescriptionForm.title',
-            url: '/form/:id',
+            url: '/form/:id?patientId',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             views: {
                 '@openlmis': {

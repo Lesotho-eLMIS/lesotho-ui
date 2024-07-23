@@ -1,29 +1,29 @@
 <h2>{{'dispensingPrescriptionForm.title' | message}}</h2>
 
-<form class="sidebar">
+<form class="sidebar" ng-submit="vm.submitPrescription()">
 
     <fieldset class="form-group">
-        <label for="lastName">Status</label>
-        <input class="form-control" type="text" ng-model="vm.prescription.status" disabled>
+        <label for="status">Status</label>
+        <input class="form-control" type="text" ng-model="vm.prescriptionDetails.status" disabled>
     </fieldset>
     <fieldset class="form-group">
-        <label for="PrescriptionNumber">Follow up date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate1"
-            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none" />
+        <label for="followUpDate">Follow up date</label>
+        <input id="followUpDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.followUpDate"
+            max-date="vm.maxDate" required inputmode="none" />
     </fieldset>
     <fieldset class="form-group">
-        <label for="firstName">Created date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate2"
-            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none" />
+        <label for="createdDate">Created date</label>
+        <input id="createdDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.createdDate"
+            max-date="vm.maxDate" required inputmode="none" />
     </fieldset>
     <fieldset class="form-group">
         <legend>Patient type</legend>
         <label class="radio">
-            <input type="radio" ng-model="vm.Prescription.sex" ng-value="true" required />
+            <input type="radio" ng-model="vm.prescriptionDetails.patientType" ng-value="true" required />
             In Patient
         </label>
         <label class="radio">
-            <input type="radio" ng-model="vm.Prescription.sex" ng-value="false" required />
+            <input type="radio" ng-model="vm.prescriptionDetails.patientType" ng-value="false" required />
             Out Patient
         </label>
     </fieldset>

@@ -125,6 +125,7 @@
                         }
                     }
                     vm.patientsData =  patientsObject;
+                    console.log(vm.patientsData);
             });
         }
     }
