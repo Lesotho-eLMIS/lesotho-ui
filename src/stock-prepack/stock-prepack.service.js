@@ -162,24 +162,27 @@
         };
    
         //Calculates the remaining stock after a prepack of the lineItems' product type and lot has been created
-        function calculateRemainingStock(productsList, lineItem){  
+        function calculateRemainingStock(prepackLineItems, lineItem, productDetails){  
             
             //find line items with the same lot id and product id
-            var productType = filterProductByLot(productsList, lineItem);
-
+           // var productType = filterProductByLot(productsList, lineItem);
+           
             console.log("PRODUCT LIST");
-            console.log(productType);
+            console.log(lineItemsGroup);
 
-            if(productsList.length === 1){
-                return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+            if(prepackLineItems.length === 1){
+                return productDetails.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
             }
-            else{
-                    let total = 0;
-                    productType.forEach(product => {
+            else{   var lineItemsGroup = prepackLineItems.filter(item => item.lotId === lineItem.lotId && item.orderableId === lineItem.orderableId)
+                    var total = 0;
+                    lineItemsGroup.forEach(product => {
+                        console.log(product);
                         let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+                        console.log(quantityToPrepack);
                         total += quantityToPrepack;
+                        console.log(total);
                     });
-                    productType.forEach( item => item.remainingStock = item.stockOnHand - total);
+                    lineItemsGroup.forEach( item => item.remainingStock = productDetails.stockOnHand - total);
                     return total;
                 }               
         };

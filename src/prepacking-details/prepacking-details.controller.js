@@ -53,52 +53,6 @@
         }
 
         onInit();
-        // function changePrepackStatus(newStatus) {
-           
-        //     var buttonContext = "";
-        //     var questionContext = "";
-        //     var successMsgContext = "";
-
-        //     if(newStatus === "Authorised"){
-        //         buttonContext = "Authorise";
-        //         questionContext = "authorise";
-        //         successMsgContext = "authorised"
-        //     }else if(newStatus === "Cancelled"){
-        //         buttonContext = "Cancel";
-        //         questionContext = "cancel";
-        //         successMsgContext = "cancelled"
-        //     }else if(newStatus === "Rejected"){
-        //         buttonContext = "Reject";
-        //         questionContext = "reject";
-        //         successMsgContext = "rejected"
-        //     }
-        //     else{
-        //         notificationService.error('Unknown Prepack Status Detected.');
-        //         console.error("Unknown Prepack Status Detected");
-        //     }
-        //     confirmService
-        //         .confirm("Are you sure you want to "+questionContext+" this prepacking job?", buttonContext)
-        //         .then(function () {
-        //          // vm.prepack.status = newStatus;
-        //          // prepackingService.updatePrepacks(vm.prepack.id, vm.prepack)
-        //          prepackingService.authorizePrepack('4ea61b7f-9456-4907-97e7-20ab5e2d7a0d')
-        //           .then(function(response) {
-        //             console.log(response);
-        //             // Success callback
-        //             notificationService.success('Prepacking Authorised Successfully');
-        //             $state.go('openlmis.prepacking.view');
-        //             }
-        //           )
-        //           .catch(function(error) {
-        //               // Error callback
-        //               notificationService.error('Failed to Authorise '+error+'.');
-        //               console.error('Error occurred:', error);                  
-        //           });
-        //         });
-    
-        // }
-
-        ///////////////////////////////////////////
       
       function authorizePrepack() {
         console.log(vm.prepack);
@@ -136,12 +90,13 @@
             var productsArray = _.flatten(vm.productInfo);   
             vm.prepackLineItems.forEach(item => {           
                 var productDetails = prepackingService.filterProductByLot(productsArray, item);
+                console.log(productDetails);
                 item.productName = productDetails[0].orderable.fullProductName;
                 item.productCode = productDetails[0].orderable.productCode;
                 item.batchNumber = productDetails[0].lot? productDetails[0].lot.lotCode : null;
                 item.expiryDate = productDetails[0].expirationDate? productDetails[0].lot.expirationDate : null;
                 item.soh = productDetails[0].stockOnHand;
-                item.remainingStock = prepackingService.prepackCalculation(vm.prepackLineItems, item);
+                item.remainingStock = prepackingService.calculateRemainingStock(vm.prepackLineItems, item, productDetails);
             });         
             return(vm.prepackLineItems);  
         }
