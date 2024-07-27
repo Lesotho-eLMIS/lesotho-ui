@@ -87,6 +87,9 @@
 
         function getLineItemsDetails(){
 
+          console.log("Working towards viewing details for this prepack");
+          console.log(vm.prepackLineItems);
+
             var productsArray = _.flatten(vm.productInfo);   
             vm.prepackLineItems.forEach(item => {           
                 var productDetails = prepackingService.filterProductByLot(productsArray, item);
@@ -96,7 +99,7 @@
                 item.batchNumber = productDetails[0].lot? productDetails[0].lot.lotCode : null;
                 item.expiryDate = productDetails[0].expirationDate? productDetails[0].lot.expirationDate : null;
                 item.soh = productDetails[0].stockOnHand;
-                item.remainingStock = prepackingService.calculateRemainingStock(vm.prepackLineItems, item, productDetails);
+                item.remainingStock = prepackingService.calculateRemainingStock(vm.prepackLineItems, item);
             });         
             return(vm.prepackLineItems);  
         }
