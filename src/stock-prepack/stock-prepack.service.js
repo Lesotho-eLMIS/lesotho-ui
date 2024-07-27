@@ -80,6 +80,7 @@
         this.prepackCalculation = prepackCalculation;
         this.authorizePrepack = authorizePrepack;
         this.deletePrepack = deletePrepack;
+        this.remainingStockAtPrepackCreation = remainingStockAtPrepackCreation;
 
         function updatePrepacks(prepackingEvent) {
             return resource.updatePrepackingEvent({ id:prepackingEvent.id }, prepackingEvent).$promise;
@@ -167,8 +168,7 @@
         function calculateRemainingStock(prepackLineItems, lineItem, productDetails){  
             
             //find line items with the same lot id and product id
-           // var productType = filterProductByLot(productsList, lineItem);
-           
+           // var productType = filterProductByLot(productsList, lineItem);           
             console.log("PRODUCT LIST");
             console.log(prepackLineItems);
             console.log("Calculate Remaining for the product below");
@@ -190,6 +190,26 @@
                     return total;
                 }               
         };
+
+        function remainingStockAtPrepackCreation(prepackLineItems, lineItem){
+            if(prepackLineItems.length === 1){
+                return lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+            }
+            else{
+                var sameProductLineItems = prepackLineItems.filter(item => item.lot.id === lineItem.lot.id 
+                    && item.orderable.id === lineItem.orderable.id);
+                    var total = 0;
+                    sameProductLineItems.forEach(product => {
+                        console.log(product);
+                        let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+                        console.log(quantityToPrepack);
+                        total += quantityToPrepack;
+                        console.log(total);
+                    });
+                    lineItemsGroup.forEach( item => item.remainingStock = item.stockOnHand - total);
+                    return total;
+            }            
+        }
         
         function prepackCalculation(productsList, lineItem){
             var hasLots = undefined;

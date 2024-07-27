@@ -424,7 +424,7 @@
     //-----LESOTHO ELMIS-----
 
     vm.validatePrepackQuantity = function(lineItem){
-      var remainingStock = prepackingService.validatePrepackQuantity(lineItem, vm.addedLineItems);
+      var remainingStock = prepackingService.remainingStockAtPrepackCreation(vm.addedLineItems, lineItem);
       console.log(remainingStock);
       return remainingStock;
     };
