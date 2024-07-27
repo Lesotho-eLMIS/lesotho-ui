@@ -206,7 +206,7 @@
                         total += quantityToPrepack;
                         console.log(total);
                     });
-                    lineItemsGroup.forEach( item => item.remainingStock = item.stockOnHand - total);
+                    sameProductLineItems.forEach( item => item.remainingStock = item.stockOnHand - total);
                     return total;
             }            
         }
