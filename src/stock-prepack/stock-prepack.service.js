@@ -165,30 +165,32 @@
         };
    
         //Calculates the remaining stock after a prepack of the lineItems' product type and lot has been created
-        function calculateRemainingStock(prepackLineItems, lineItem, productDetails){  
-            
+        function calculateRemainingStock(prepackLineItems, lineItem) {
+
             //find line items with the same lot id and product id
-           // var productType = filterProductByLot(productsList, lineItem);           
+            // var productType = filterProductByLot(productsList, lineItem);           
             console.log("PRODUCT LIST");
             console.log(prepackLineItems);
             console.log("Calculate Remaining for the product below");
             console.log(lineItem);
 
-            if(prepackLineItems.length === 1){
-                return productDetails.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+            if (prepackLineItems.length === 1) {
+                return lineItem.stockOnHand - (lineItem.prepackSize * lineItem.numberOfPrepacks);
             }
-            else{   var lineItemsGroup = prepackLineItems.filter(item => item.lotId === lineItem.lotId && item.orderableId === lineItem.orderableId)
-                    var total = 0;
-                    lineItemsGroup.forEach(product => {
-                        console.log(product);
-                        let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
-                        console.log(quantityToPrepack);
-                        total += quantityToPrepack;
-                        console.log(total);
-                    });
-                    lineItemsGroup.forEach( item => item.remainingStock = productDetails.stockOnHand - total);
-                    return total;
-                }               
+            else {
+                var lineItemsGroup = prepackLineItems.filter(item => item.lotId === lineItem.lotId && item.orderableId === lineItem.orderableId);
+                console.log(lineItemsGroup);
+                var total = 0;
+                lineItemsGroup.forEach(product => {
+                    console.log(product);
+                    let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+                    console.log(quantityToPrepack);
+                    total += quantityToPrepack;
+                    console.log(total);
+                });
+                lineItemsGroup.forEach(item => item.stockOnHand = item.stockOnHand - total);
+                return total;
+            }
         };
 
         function remainingStockAtPrepackCreation(prepackLineItems, lineItem){
