@@ -88,6 +88,7 @@
         function getLineItemsDetails(){
 
             var productsArray = _.flatten(vm.productInfo);   
+            console.log(productsArray);
             vm.prepackLineItems.forEach(item => {           
                 var productDetails = prepackingService.filterProductByLot(productsArray, item);
                 console.log(productDetails);
