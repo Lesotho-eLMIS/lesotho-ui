@@ -132,7 +132,6 @@
             else{
             lineItem.$errors.prepackQuantityInvalid = false;
             }
-            console.log(prepackLineItems);
             return remainingStock;
         };
 
@@ -159,8 +158,6 @@
                         && item.orderable.id === lineItem.orderable.id);
                 }
             }
-            console.log("Finding the righ product");
-            console.log(product);
            return product;
         };
    
@@ -168,28 +165,18 @@
         function calculateRemainingStock(prepackLineItems, lineItem) {
 
             //find line items with the same lot id and product id
-            // var productType = filterProductByLot(productsList, lineItem);           
-            console.log("PRODUCT LIST");
-            console.log(prepackLineItems);
-            console.log("Calculate Remaining for the product below");
-            console.log(lineItem);
-
             if (prepackLineItems.length === 1) {
                 return lineItem.stockOnHand - (lineItem.prepackSize * lineItem.numberOfPrepacks);
             }
             else {
                 var lineItemsGroup = prepackLineItems.filter(item => item.lotId === lineItem.lotId && item.orderableId === lineItem.orderableId);
-                console.log(lineItemsGroup);
+
                 var total = 0;
                 lineItemsGroup.forEach(product => {
-                    console.log(product);
                     let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
-                    console.log(quantityToPrepack);
                     total += quantityToPrepack;
-                    console.log(total);
                 });
                 var remaining = lineItemsGroup[0].stockOnHand - total;
-                //lineItemsGroup.forEach(item => item.stockOnHand = remaining);
                 return remaining;
             }
         };
@@ -203,11 +190,8 @@
                     && item.orderable.id === lineItem.orderable.id);
                     var total = 0;
                     sameProductLineItems.forEach(product => {
-                        console.log(product);
                         let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
-                        console.log(quantityToPrepack);
                         total += quantityToPrepack;
-                        console.log(total);
                     });
                     sameProductLineItems.forEach( item => item.remainingStock = item.stockOnHand - total);
                     return total;
