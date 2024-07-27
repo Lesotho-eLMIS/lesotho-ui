@@ -4,6 +4,7 @@
     "dispensingPrescriptionForm.substituteProduct": "Substitute Product",
     "dispensingPrescriptionForm.batchNumber": "Batch Number",
     "dispensingPrescriptionForm.dose": "Dose",
+    "dispensingPrescriptionForm.soh": "Stock on hand",
     "dispensingPrescriptionForm.doseUnits": "Dose Units",
     "dispensingPrescriptionForm.frequency": "Frequency",
     "dispensingPrescriptionForm.route": "Route",

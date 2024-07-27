@@ -42,6 +42,11 @@
                     method: 'GET',
                     isArray: true
                 }, 
+                getPatient: {
+                  url: openlmisUrlFactory('api/patient'),
+                  method: 'GET',
+                  isArray: true
+                }, 
                 postPrescriptionEvent: {
                     url: openlmisUrlFactory('api/prescription'),
                     method: 'POST'

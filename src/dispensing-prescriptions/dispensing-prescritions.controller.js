@@ -41,6 +41,7 @@
        vm.$onInit = onInit;
        vm.searchPatients = searchPatients;
        vm.viewPrescription = viewPrescription;
+       //vm.goToCreatePrescriptionForm = goToCreatePrescriptionForm;
 
        /**
         * @ngdoc property
@@ -180,6 +181,14 @@
                reload: true
            });
        }
+
+    //    function goToCreatePrescriptionForm(patient) {
+    //     console.log("xxxxxxxxxx patient xxxxxxxxxx");
+    //     console.log(patient);
+    //         $state.go('openlmis.dispensing.prescriptions.form({patientId: patient.id})', {
+    //             patient: patient
+    //         });
+    //    }
    }
 
 })();

@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.dispensing.prescriptions.form', {
             label: 'dispensingPrescriptionForm.title',
-            url: '/form/:id?patientId',
+            url: '/form/:patientId',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             views: {
                 '@openlmis': {
@@ -40,10 +40,17 @@
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
-                }
-                // Prepacks: function(facility, prepackingService ) {                         
-                //     return prepackingService.getPrepacks(facility.id);
-                //  },
+                },
+                
+                patient: function($stateParams, dispensingService) {                         
+                    return dispensingService.getPatients($stateParams.patientId).then(function(patientsObject) {  
+                        for (var key in patientsObject) {
+                                if (key == $stateParams.patientId) {
+                                    return patientsObject[key];                
+                                }
+                            }
+                    });
+                 },
                 //  Products: function($stateParams, orderableGroupService){
                 //     console.log($stateParams);
                 //     return orderableGroupService

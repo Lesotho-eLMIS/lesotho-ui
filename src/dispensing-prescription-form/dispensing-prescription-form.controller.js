@@ -28,9 +28,9 @@
         .module('dispensing-prescription-form')
         .controller('dispensingPrescriptionFormController', controller);
 
-        controller.$inject = ['prescriptionsService', 'prepackingService', '$stateParams' ];
+        controller.$inject = ['$scope','prescriptionsService', 'prepackingService', '$stateParams', 'dispensingService', 'patient'];
 
-    function controller(prescriptionsService, prepackingService, $stateParams) {
+    function controller($scope, prescriptionsService, prepackingService, $stateParams, dispensingService, patient) {
 
         var vm = this;
 
@@ -40,6 +40,15 @@
         vm.submitPrescription = submitPrescription;
         vm.addProduct = addProduct;
         vm.addContact = addContact;
+        //vm.changeToView = changeToView;
+        vm.substitute = substitute;
+
+        vm.firstName = undefined;
+        vm.lastName = undefined;
+        vm.sex = undefined;
+        vm.age = undefined;
+
+        console.log('Patient: ____ ',vm.patientId);
     //    vm.getPrescriptionProducts = getPrescriptionProducts;
         // vm.searchPatients = searchPatients;
         // vm.viewPrescription = viewPrescription;
@@ -102,8 +111,17 @@
          */
         function onInit() {
 
-            vm.patientId = 
-            console.log(vm.patientId);
+            vm.inPrescriptionServe = false;
+            vm.substituteProduct = false;
+
+            vm.firstName = patient.personDto.firstName;
+            vm.lastName = patient.personDto.lastName;
+            //condition ? expressionIfTrue : expressionIfFalse
+            vm.sex = patient.personDto.sex == 'F' ? 'Female' : 'Male';
+            vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth)); 
+
+            // vm.patientId = 
+            //console.log($stateParams);
            
             vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon', 
                                     'Teaspoon', 'Unit(s)', 'Puff(s)'];
@@ -164,12 +182,35 @@
             vm.prescriptionDetails.patientId = $stateParams.patientId;
         }
 
+        vm.calculateAge = function(birthDate) {
+            var today = new Date();
+            var birthDate = new Date(birthDate);
+            var ageYears = today.getFullYear() - birthDate.getFullYear();
+            var ageMonths = today.getMonth() - birthDate.getMonth();
+            var ageDays = today.getDate() - birthDate.getDate();
+    
+            if (ageDays < 0) {
+                ageMonths--;
+                ageDays += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            }
+    
+            if (ageMonths < 0) {
+                ageYears--;
+                ageMonths += 12;
+            }
+
+            var fullAge = (ageYears + ' years,' + ageMonths + ' months, ' + ageDays + ' days')
+            
+            return fullAge;
+        }
+
         function submitPrescription(){
             console.log("CREATING PRESCRIPTION");
             console.log(vm.prescriptionDetails);
             return prescriptionsService.createPrescription(vm.prescriptionDetails).then(function(response){
                 console.log(response);
-             });
+                vm.inPrescriptionServe = true;
+            });
         }
 
 
@@ -197,6 +238,17 @@
                 'phone': '',
                 'email': ''
             });
+        }
+
+        // function changeToView() {
+        //     console.log("qqqqqqqqqqqqqqqqqqqqqqqqq");
+        //     vm.inPrescriptionServe = true;
+        //     // $state.reload();
+        //     // vm.reload();
+        // }
+
+        function substitute(lineItem) {
+            vm.substituteProduct = true;
         }
 
         

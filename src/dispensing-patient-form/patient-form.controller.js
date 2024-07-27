@@ -43,6 +43,8 @@
         vm.removeContact = removeContact;
        // vm.submitPatientData = submitPatientData;
 
+       vm.tbStatusOptions =['No signs', 'TB Presumptive Case', 'On DS TB Treatment', 'On DR TB Treatment'];
+
         /**
          * @ngdoc method
          * @methodOf dispensing-patient-form.controller:patientFormController
