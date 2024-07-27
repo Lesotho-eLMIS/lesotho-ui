@@ -158,7 +158,7 @@
                         type="number" style="width: 120px;" min="0"> 
                     </td>
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.remainingStock" readonly  
-                        type="number" style="width: 120px;" min="0">
+                        ng-change="vm.validatePrepackQuantity(lineItem)"  ng-blur="vm.validatePrepackQuantity(lineItem)"  type="number" style="width: 120px;" min="0">
                     </td>
 
                     <td ng-if="!vm.showPrepackingAttributes" openlmis-invalid="{{lineItem.$errors.quantityInvalid}}" class="digit-cell">

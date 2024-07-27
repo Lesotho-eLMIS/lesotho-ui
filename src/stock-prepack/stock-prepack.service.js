@@ -158,6 +158,8 @@
                         && item.orderable.id === lineItem.orderable.id);
                 }
             }
+            console.log("Finding the righ product");
+            console.log(product);
            return product;
         };
    
@@ -168,7 +170,9 @@
            // var productType = filterProductByLot(productsList, lineItem);
            
             console.log("PRODUCT LIST");
-            console.log(lineItemsGroup);
+            console.log(prepackLineItems);
+            console.log("Calculate Remaining for the product below");
+            console.log(lineItem);
 
             if(prepackLineItems.length === 1){
                 return productDetails.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
