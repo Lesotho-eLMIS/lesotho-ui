@@ -11,7 +11,7 @@
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.lastName">
   <label for="firstName">{{ 'dispensingPrescriptions.firstName' | message }}</label>
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.firstName"> -->
-  <label for="orderingFacility">{{'dispensingPatients.patientNumber' | message}}</label>
+  <label for="patientNumber">{{'dispensingPatients.patientNumber' | message}}</label>
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.patientNumber">
   <label for="lastName">{{'dispensingPatients.lastName' | message}}</label>
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.lastName">
@@ -89,7 +89,7 @@
       <td> </td>
       <td> </td>
       <td>
-        <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">
+        <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form({patientId: patient.id})">
           {{'dispensingPrescriptions.addPrescription' | message}}
         </button>
         <!-- <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form">

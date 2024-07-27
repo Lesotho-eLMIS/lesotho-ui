@@ -4,6 +4,7 @@
     "dispensingPrescriptionForm.substituteProduct": "Substitute Product",
     "dispensingPrescriptionForm.batchNumber": "Batch Number",
     "dispensingPrescriptionForm.dose": "Dose",
+    "dispensingPrescriptionForm.soh": "Stock on hand",
     "dispensingPrescriptionForm.doseUnits": "Dose Units",
     "dispensingPrescriptionForm.frequency": "Frequency",
     "dispensingPrescriptionForm.route": "Route",
@@ -16,7 +17,7 @@
     "dispensingPrescriptionForm.servedInternally": "Served Internally",
     "dispensingPrescriptionForm.comments": "Comments",
     "dispensingPrescriptionForm.action": "Action",
-
+    "dispensingPrescriptionForm.expiryDate": "Expiry Date",
     "dispensingPrescriptionForm.status": "Status",
     "dispensingPrescriptionForm.followupDate": "Follow up date",
     "dispensingPrescriptionForm.createdDate": "Created date",

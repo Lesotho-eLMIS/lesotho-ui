@@ -22,6 +22,24 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <legend>{{'dispensingPatientForm.sex' | message}}</legend>
+
+                    <!-- <table border="0" style="width: 100%;">
+                        <tr>
+                            <td>
+                                <label class="radio">
+                                    <input type="radio" ng-model="vm.patient.sex" ng-value="'M'" required />
+                                    {{'dispensingPatientForm.male' | message}}
+                                </label>
+                            </td>
+                            <td>
+                                <label class="radio">
+                                    <input type="radio" ng-model="vm.patient.sex" ng-value="'F'" required />
+                                    {{'dispensingPatientForm.female' | message}}
+                                </label>
+                            </td>
+                        </tr>
+                    </table> -->
+
                     <label class="radio">
                         <input type="radio" ng-model="vm.patient.sex" ng-value="'M'" required />
                         {{'dispensingPatientForm.male' | message}}
@@ -30,11 +48,8 @@
                         <input type="radio" ng-model="vm.patient.sex" ng-value="'F'" required />
                         {{'dispensingPatientForm.female' | message}}
                     </label>
+
                 </fieldset>
-            </form>
-        </div>
-        <div class="col-sm-4">
-            <form name="newPatientForm2" class="content" ng-submit="vm.submitPatientData()">
                 <fieldset class="form-group">
                     <label>{{'dispensingPatientForm.dateOfBirth' | message}}</label>
                     <input id="lineItem.occurredDate" type="date" ng-model="vm.patient.DOB"
@@ -45,6 +60,14 @@
                         <input type="checkbox" ng-model="vm.patient.dateOfBirthEstimated" />
                         <label>{{'dispensingPatientForm.DOBestimated' | message}}</label>
                     </label>
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <form name="newPatientForm2" class="content" ng-submit="vm.submitPatientData()">
+                <fieldset class="form-group">
+                    <label for="motherMaidenName">{{'dispensingPatientForm.motherMaidenName' | message}}</label>
+                    <input id="motherMaidenName" ng-model="vm.patient.motherMaidenName" type="text" />
                 </fieldset>
                 <fieldset class="form-group" ng-hide="true">
                     <label for="deceased">
@@ -60,14 +83,11 @@
                     <label for="contact">{{'dispensingPatientForm.contact' | message}}</label>
                     <input id="contact" ng-model="vm.patient.contact.contactValue" type="text" />
                 </fieldset>
-                <fieldset class="form-group">
-                    <label for="motherMaidenName">{{'dispensingPatientForm.motherMaidenName' | message}}</label>
-                    <input id="motherMaidenName" ng-model="vm.patient.motherMaidenName" type="text" />
-                </fieldset>
-            </form>
-        </div>
-        <div class="col-sm-4">
-            <form name="newPatientForm3" class="content" ng-submit="vm.submitPatientData()">
+
+                <fieldset class="form-group">.</fieldset>
+                <fieldset class="form-group">.</fieldset>
+                <!-- <fieldset class="form-group"><hr></fieldset> -->
+
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.nextOfKinNames' | message}}</label>
                     <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
@@ -75,6 +95,37 @@
                 <fieldset class="form-group">
                     <label for="nextOfKinContact">{{'dispensingPatientForm.nextOfKinContact' | message}}</label>
                     <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContact" type="text" />
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <form name="newPatientForm3" class="content" ng-submit="vm.submitPatientData()">
+                <fieldset class="form-group">
+                    <label for="nextOfKinNames">{{'dispensingPatientForm.height' | message}}</label>
+                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="nextOfKinContact">{{'dispensingPatientForm.weight' | message}}</label>
+                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContact" type="text" />
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label for="tbStatus">{{'dispensingPatientForm.tbStatus' | message}}</label>
+                    <select id="tbStatus" ng-model="vm.tbStatus"
+                        ng-options="option for option in  vm.tbStatusOptions"></select>
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label for="nextOfKinNames">{{'dispensingPatientForm.systolic' | message}}</label>
+                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="nextOfKinContact">{{'dispensingPatientForm.diastolic' | message}}</label>
+                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContact" type="text" />
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="nextOfKinNames">{{'dispensingPatientForm.muac' | message}}</label>
+                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
                 </fieldset>
             </form>
         </div>

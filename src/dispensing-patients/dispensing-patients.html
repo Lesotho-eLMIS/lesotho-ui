@@ -64,7 +64,8 @@
         <td>{{patient.registrationDate | openlmisDate}}</td>
         <td>
           <button class="primary" ui-sref="openlmis.dispensing.patients.form">{{'dispensingPatients.edit' | message}}</button>
-          <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form">{{'dispensingPatients.addPrescription' | message}}</button>
+          <!-- <button type="button" class="btn btn-primary add" ng-click="vm.addPrescription()">{{'dispensingPatients.addPrescription' | message}}</button> -->
+          <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form({patientId: patient.id})">{{'dispensingPatients.addPrescription' | message}}</button>
         </td>
       </tr>
     </tbody>

@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
@@ -25,23 +25,61 @@
 
         $stateProvider.state('openlmis.dispensing.prescriptions.form', {
             label: 'dispensingPrescriptionForm.title',
-            url: '/form/:id',
+            url: '/form/:patientId',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
-            resolve: {
-                // facilities: function(facilityService) {
-                //     return facilityService.getAllMinimal();
-                // },
-                // prescription: function(prescriptionService, $stateParams) {
-                //     return new prescriptionService().get($stateParams.id);
-                // }
-            },
             views: {
                 '@openlmis': {
-                    controller: 'prescriptionFormController',
-                    templateUrl: 'dispensing-prescription-form/prescription-form.html',
+                    controller: 'dispensingPrescriptionFormController',
+                    templateUrl: 'dispensing-prescription-form/dispensing-prescription-form.html',
                     controllerAs: 'vm'
                 }
+            },
+            resolve: {
+                facility: function(facilityFactory, $stateParams) {
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
+                },
+                
+                patient: function($stateParams, dispensingService) {                         
+                    return dispensingService.getPatients($stateParams.patientId).then(function(patientsObject) {  
+                        for (var key in patientsObject) {
+                                if (key == $stateParams.patientId) {
+                                    return patientsObject[key];                
+                                }
+                            }
+                    });
+                 },
+                //  Products: function($stateParams, orderableGroupService){
+                //     console.log($stateParams);
+                //     return orderableGroupService
+                //         .findAvailableProductsAndCreateOrderableGroups('248dbe58-b31a-4913-8686-9d212f67ed57', $stateParams.facilityId, false);
+                // }
             }
+            // resolve: {
+            //     facility: function(facilityFactory, $stateParams) {
+            //         if (!$stateParams.facility) {
+            //             return facilityFactory.getUserHomeFacility();
+            //         }
+            //         return $stateParams.facility;
+            //     },
+                // program: function(programService, $stateParams) {
+                //     if (!$stateParams.program) {
+                //         return programService.get($stateParams.programId);
+                //     }
+                //     return $stateParams.program;
+                // },
+            //     orderableGroups: function ($stateParams, program, facility, existingStockOrderableGroupsFactory) {
+            //         if (!$stateParams.orderableGroups) {
+            //             $stateParams.orderableGroups = existingStockOrderableGroupsFactory
+            //                 .getGroupsWithNotZeroSoh($stateParams, program, facility);
+            //         }
+            //         console.log("TRANSITIONING");
+            //         return $stateParams.orderableGroups;
+            //     }
+            // }
         });
     }
+
 })();

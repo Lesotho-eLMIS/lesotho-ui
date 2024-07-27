@@ -91,6 +91,15 @@
             $state.go('openlmis.dispensing.patients.form');
         }
 
+        // vm.addPrescription = function(){
+        //     $state.go('openlmis.dispensing.prescriptions.form', {
+        //         facilityId: vm.facility.id
+        //         // id: item.id,
+        //         // programId: item.programId,
+        //         // facilityId: item.facilityId
+        //     });
+        // }
+
 
         function searchPatients(){
 
@@ -116,6 +125,7 @@
                         }
                     }
                     vm.patientsData =  patientsObject;
+                    console.log(vm.patientsData);
             });
         }
     }
