@@ -80,6 +80,7 @@
         this.prepackCalculation = prepackCalculation;
         this.authorizePrepack = authorizePrepack;
         this.deletePrepack = deletePrepack;
+        this.remainingStockAtPrepackCreation = remainingStockAtPrepackCreation;
 
         function updatePrepacks(prepackingEvent) {
             return resource.updatePrepackingEvent({ id:prepackingEvent.id }, prepackingEvent).$promise;
@@ -131,7 +132,6 @@
             else{
             lineItem.$errors.prepackQuantityInvalid = false;
             }
-            console.log(prepackLineItems);
             return remainingStock;
         };
 
@@ -162,27 +162,41 @@
         };
    
         //Calculates the remaining stock after a prepack of the lineItems' product type and lot has been created
-        function calculateRemainingStock(productsList, lineItem){  
-            
+        function calculateRemainingStock(prepackLineItems, lineItem) {
+
             //find line items with the same lot id and product id
-            var productType = filterProductByLot(productsList, lineItem);
+            if (prepackLineItems.length === 1) {
+                return lineItem.stockOnHand - (lineItem.prepackSize * lineItem.numberOfPrepacks);
+            }
+            else {
+                var lineItemsGroup = prepackLineItems.filter(item => item.lotId === lineItem.lotId && item.orderableId === lineItem.orderableId);
 
-            console.log("PRODUCT LIST");
-            console.log(productType);
+                var total = 0;
+                lineItemsGroup.forEach(product => {
+                    let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
+                    total += quantityToPrepack;
+                });
+                var remaining = lineItemsGroup[0].stockOnHand - total;
+                return remaining;
+            }
+        };
 
-            if(productsList.length === 1){
-                return lineItem.remainingStock = lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
+        function remainingStockAtPrepackCreation(prepackLineItems, lineItem){
+            if(prepackLineItems.length === 1){
+                return lineItem.stockOnHand - (lineItem.prepackSize*lineItem.numberOfPrepacks);
             }
             else{
-                    let total = 0;
-                    productType.forEach(product => {
+                var sameProductLineItems = prepackLineItems.filter(item => item.lot.id === lineItem.lot.id 
+                    && item.orderable.id === lineItem.orderable.id);
+                    var total = 0;
+                    sameProductLineItems.forEach(product => {
                         let quantityToPrepack = product.prepackSize * product.numberOfPrepacks;
                         total += quantityToPrepack;
                     });
-                    productType.forEach( item => item.remainingStock = item.stockOnHand - total);
+                    sameProductLineItems.forEach( item => item.remainingStock = item.stockOnHand - total);
                     return total;
-                }               
-        };
+            }            
+        }
         
         function prepackCalculation(productsList, lineItem){
             var hasLots = undefined;
