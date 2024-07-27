@@ -426,6 +426,7 @@
     vm.validatePrepackQuantity = function(lineItem){
       var remainingStock = prepackingService.remainingStockAtPrepackCreation(vm.addedLineItems, lineItem);
       console.log(remainingStock);
+      console.log(lineItem);
       return remainingStock;
     };
 
