@@ -287,8 +287,16 @@
         !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
 
       if (noErrors) {
-
         selectedItem.referenceNumber = vm.referenceNumber;  
+
+        /*Lesotho eLMIS* Autopopulating total number of cartons from POD during stock receive, Start*/
+        for (var i = 0; i < ReferenceNumbers.length; i++) {
+          if (ReferenceNumbers[i].referenceNumber === vm.referenceNumber) {
+            selectedItem.totalCartonNumber = ReferenceNumbers[i].cartonsQuantityAccepted;
+          };
+        }
+        /*Lesotho eLMIS* Autopopulating total number of cartons from POD during stock receive, End*/
+        
         var timestamp = new Date().getTime();
         selectedItem.timestamp = timestamp; // Add a time stamp to the selected line item
         vm.addedLineItems.unshift(
@@ -903,7 +911,8 @@
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
-      vm.references = ReferenceNumbers;
+      //console.log('Ref >> ',ReferenceNumbers[0].referenceNumber);
+      vm.references = populateReferenceNumbers(ReferenceNumbers);
       
      // filterFacilities();
      
@@ -961,6 +970,16 @@
       $scope.$on('$stateChangeStart', function () {
         angular.element('.popover').popover('destroy');
       });
+    }
+
+    function populateReferenceNumbers(pods) {
+      //console.log('------- ',pods);
+      var referencesArray = [];
+      for (var i = 0; i < pods.length; i++) {
+        referencesArray.push(pods[i].referenceNumber);
+        //console.log(pods[i].referenceNumber);
+      }
+      return referencesArray;
     }
 
     function initViewModel() {
