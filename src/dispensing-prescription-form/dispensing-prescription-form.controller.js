@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
@@ -28,9 +28,11 @@
         .module('dispensing-prescription-form')
         .controller('dispensingPrescriptionFormController', controller);
 
-        controller.$inject = ['$scope','prescriptionsService', 'prepackingService', '$stateParams', 'dispensingService', 'patient'];
+    controller.$inject = ['$scope', 'prescriptionsService', 'prepackingService', '$stateParams', 'user', 
+        'dispensingService', 'patient', 'orderableGroupService', 'facility', 'products', 'messageService'];
 
-    function controller($scope, prescriptionsService, prepackingService, $stateParams, dispensingService, patient) {
+    function controller($scope, prescriptionsService, prepackingService, $stateParams, user,
+        dispensingService, patient, orderableGroupService, facility, products, messageService) {
 
         var vm = this;
 
@@ -42,14 +44,18 @@
         vm.addContact = addContact;
         //vm.changeToView = changeToView;
         vm.substitute = substitute;
+        // vm.getProducts = getProducts;
+        vm.patient = undefined;
+        vm.facility = undefined;
+        vm.user = user;
 
-        vm.firstName = undefined;
-        vm.lastName = undefined;
-        vm.sex = undefined;
-        vm.age = undefined;
+        // vm.firstName = undefined;
+        // vm.lastName = undefined;
+        // vm.sex = undefined;
+        // vm.age = undefined;
+        vm.initiateNewLotObject = initiateNewLotObject;
 
-        console.log('Patient: ____ ',vm.patientId);
-    //    vm.getPrescriptionProducts = getPrescriptionProducts;
+        //    vm.getPrescriptionProducts = getPrescriptionProducts;
         // vm.searchPatients = searchPatients;
         // vm.viewPrescription = viewPrescription;
 
@@ -63,7 +69,22 @@
          * Holds prescription list.
          */
         vm.prescriptionDetails = [];
+        // vm.prescriptionDetails = {
+        //     patientId: " ",
+        //     patientType: " ",
+        //     followUpDate: " ",
+        //     issueDate: " ",
+        //     createdDate: " ",
+        //     capturedDate: " ",
+        //     lastUpdate: " ",
+        //     isVoided: false,
+        //     status: "INITIATED",
+        //     facilityId: " ",
+        //     userId: " ",
+        //     lineItems: []
+        // };
 
+        vm.prescriptionLineItems = [];
         /**
          * @ngdoc property
          * @propertyOf dispensing-prescriptions.controller:dispensingPrescriptionsController
@@ -101,6 +122,8 @@
             'dispensingPrescriptions.dateCaptured': ['dateCaptured']
         };
 
+        vm.orderableGroups = undefined;
+
         /**
          * @ngdoc method
          * @methodOf dispensing-prescriptions.controller:dispensingPrescriptionsController
@@ -113,124 +136,221 @@
 
             vm.inPrescriptionServe = false;
             vm.substituteProduct = false;
+           // var Dispense = {};
+            //getProducts();
+            vm.patient = patient;
+            vm.facility = facility;
+            vm.user = user;
+            vm.orderableGroups = products;
+            console.log(vm.facility);
+            console.log(vm.patient);
+            console.log(vm.user);
+            // vm.firstName = patient.personDto.firstName;
+            // vm.lastName = patient.personDto.lastName;
+            // //condition ? expressionIfTrue : expressionIfFalse
+            // vm.sex = patient.personDto.sex == 'F' ? 'Female' : 'Male';
+            vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
 
-            vm.firstName = patient.personDto.firstName;
-            vm.lastName = patient.personDto.lastName;
-            //condition ? expressionIfTrue : expressionIfFalse
-            vm.sex = patient.personDto.sex == 'F' ? 'Female' : 'Male';
-            vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth)); 
 
-            // vm.patientId = 
-            //console.log($stateParams);
-           
-            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon', 
-                                    'Teaspoon', 'Unit(s)', 'Puff(s)'];
-            vm.dosageFrequency = ['Immediately', '>Once a day', 'Twice a day', 'Thrice a day', 'Every hour', 'Every 2 hours', 'Every 3 hours', 
-                        'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'On alternate days', 'Once a week', 'Twice a week', 
-                        'Thrice a week', 'Every 2 weeks', 'Every 3 weeks', 'Once a month', '5 times a day', '4 days a week', '5 days a week', '6 days a week'];
-            vm.doseRoute = ['Intramuscular', 'Intravenous', 'Oral', 'Per Vaginal', 'Sub Cutaneous', 'Per Rectum', 'Sub Lingual', 'Nasogastric', 
-                        'Intradermal', 'Intraperitoneal', 'Intrathecal', 'Intraosseous', 'Topical', 'Nasal', 'Inhalation'];
-            vm.durationUnits =['Day(s)', 'Weeks(s)', 'Month(s)'];
+            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon',
+                'Teaspoon', 'Unit(s)', 'Puff(s)'];
+            vm.dosageFrequency = ['Immediately', '>Once a day', 'Twice a day', 'Thrice a day', 'Every hour', 'Every 2 hours', 'Every 3 hours',
+                'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'On alternate days', 'Once a week', 'Twice a week',
+                'Thrice a week', 'Every 2 weeks', 'Every 3 weeks', 'Once a month', '5 times a day', '4 days a week', '5 days a week', '6 days a week'];
+            vm.doseRoute = ['Intramuscular', 'Intravenous', 'Oral', 'Per Vaginal', 'Sub Cutaneous', 'Per Rectum', 'Sub Lingual', 'Nasogastric',
+                'Intradermal', 'Intraperitoneal', 'Intrathecal', 'Intraosseous', 'Topical', 'Nasal', 'Inhalation'];
+            vm.durationUnits = ['Day(s)', 'Weeks(s)', 'Month(s)'];
             vm.instructions = ['Before meals', 'Empty stomach', 'In the morning', 'In the evening', 'At bedtime', 'Immediately', 'As directed'];
-         
-            vm.Products =  [
-                {
-                    "orderable": {
-                        "id": "e02be3ba-8ad5-4ad5-a5bd-713c2eac065a",
-                        "productCode": "DON001-ALC004-CON008-200",
-                        "fullProductName": "Alcohol Swabs Consumable 200",
-                        "description": "Alcohol Swabs Consumable 200",
-                        "netContent": 200
-                    },
-                    "lot": null,
-                    "stockOnHand": 303
-                },   
-                {
-                    "orderable": {
-                        "id": "8d6251a4-5e19-4b5f-af30-c7b5ce1c51cb",
-                        "productCode": "DON-APT025-REA001-1",
-                        "fullProductName": "APTIMA  DBS EXTRACTION BUFFER Reagent 1",
-                        "description": "APTIMA  DBS EXTRACTION BUFFER Reagent 1",
-                        "netContent": 1
-                    },                
-                    "lot": null,
-                    "stockOnHand": 3
-                },
-                {
-                    "orderable": {
-                        "id": "96257977-67dd-4ff1-84bc-eb05639234fe",
-                        "productCode": "DON-ABA005-TAB001-60",
-                        "fullProductName": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60",
-                        "description": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60",
-                        "netContent": 60
-                    },
-                    "lot": "Batch3333",
-                    "stockOnHand": 400
-                },
-                {
-                    "orderable": {
-                        "id": "69004775-e8f1-4c13-b9df-aaa03b86104d",
-                        "productCode": "DON-ABA005-TAB001-60-20",
-                        "fullProductName": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60-20",
-                        "description": "Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60-20",
-                        "netContent": 20
-                    },
-                    "lot": "Batch3333-20",
-                    "stockOnHand": 40
-                }
-            ];
-            console.log(prescriptionsService.getPrescription());
-            console.log(prescriptionsService.getPrescriptions());
+
+            // console.log(prescriptionsService.getPrescription());
+            // console.log(prescriptionsService.getPrescriptions());
+
+
         }
 
-        vm.calculateAge = function(birthDate) {
+
+        vm.calculateAge = function (birthDate) {
             var today = new Date();
             var birthDate = new Date(birthDate);
             var ageYears = today.getFullYear() - birthDate.getFullYear();
             var ageMonths = today.getMonth() - birthDate.getMonth();
             var ageDays = today.getDate() - birthDate.getDate();
-    
+
             if (ageDays < 0) {
                 ageMonths--;
                 ageDays += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
             }
-    
+
             if (ageMonths < 0) {
                 ageYears--;
                 ageMonths += 12;
             }
 
             var fullAge = (ageYears + ' years,' + ageMonths + ' months, ' + ageDays + ' days')
-            
+
             return fullAge;
         }
 
-        function submitPrescription(){
+        function submitPrescription() {
             console.log("CREATING PRESCRIPTION");
             console.log(vm.prescriptionDetails);
-            return prescriptionsService.createPrescription(vm.prescriptionDetails).then(function(response){
-                console.log(response);
-                vm.inPrescriptionServe = true;
+            console.log("CREATING PRESCRIPTION");
+            console.log(vm.prescriptionDetails.selectedItem);
+            // var lineItems = [];
+            // vm.prescriptionDetails.
+
+            // var prescriptionData = {
+            //         patientId: vm.patient.id,
+            //         patientType: vm.prescriptionDetails.patientType ? "In-patient" : "Out-patient",
+            //         followUpDate: vm.prescriptionDetails.followUpDate,
+            //         issueDate: vm.prescriptionDetails.createdDate,
+            //         createdDate:vm.prescriptionDetails.createdDate,
+            //         capturedDate: vm.prescriptionDetails.createdDate,
+            //         lastUpdate: vm.prescriptionDetails.createdDate,
+            //         isVoided: false,
+            //         status: "INITIATED",
+            //         facilityId: vm.facility.id,
+            //         prescribedByUserId: vm.user_id,
+            //         servedByUserId: vm.user_id,
+            //         "lineItems": [
+            //           {
+            //             "dose": 10,
+            //             "doseUnits": "khaba",
+            //             "doseFrequency": "Three times a day",
+            //             "route": "ORAL",
+            //             "duration": 20,
+            //             "durationUnits": "Days",
+            //             "additionalInstructions": "Kamora lijo",
+            //             "quantityPrescribed": 200,
+            //             "remainingBalance": 5,
+            //             "orderablePrescribed": "067f4c3d-4a69-413d-8782-d40cb833d09e",
+            //             "orderableDispensed": "067f4c3d-4a69-413d-8782-d40cb833d09e",
+            //             "lotId": "12f97dd1-26d4-46d0-b995-603e287850f9",
+            //             "quantityDispensed": 5,
+            //             "servedExternally": false
+            //           }
+            //         ]
+            //       }
+            
+            // return prescriptionsService.createPrescription(vm.prescriptionDetails).then(function (response) {
+            //     console.log(response);
+            //     vm.inPrescriptionServe = true;
+            // });
+        }
+
+        vm.fillPrescrition = function () {
+            console.log("Prescription Items:");
+            console.log(vm.prescriptionDetails);
+
+            vm.inPrescriptionServe = true;
+            //set substitute product to true if prescribed product is out of stock
+            vm.prescriptionDetails.forEach(function (item) {
+                if(item.selectedItem.stockOnHand === null){
+                    vm.substituteProduct = true;
+                }
+               
             });
         }
 
+        
+        vm.orderableSelectionChanged = function () {
+            //reset selected lot, so that lot field has no default value
+            vm.selectedLot = null;
 
-        function addProduct() {
-            vm.prescriptionDetails.unshift(
-                _.extend(
-                    {   orderableId: vm.selectedProduct.orderable.id,
-                        //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
-                        //"exiryDate" "",
-                        prescribedProduct: vm.selectedProduct.orderable.fullProductName,
-                        batchNumber: vm.selectedProduct.lot ? vm.selectedProduct.lot : null
-                    })
+            initiateNewLotObject();
+            vm.canAddNewLot = false;
+
+            //same as above
+            $scope.productForm.$setUntouched();
+
+            //make form good as new, so errors won't persist
+            $scope.productForm.$setPristine();
+
+            vm.lots = orderableGroupService.lotsOf(
+                vm.selectedOrderableGroup,
+                vm.hasPermissionToAddNewLot
             );
-            console.log(vm.prescriptionDetails);
+            vm.selectedOrderableHasLots = vm.lots.length > 0;
+
+            /* eLMIS Lesotho : start */
+            vm.lots.splice(1, 1);  //Removing no lot defined because all products should have lots/batches
+            /* eLMIS Lesotho : end */
+        };
+
+        function initiateNewLotObject() {
+            vm.newLot = {
+                active: true,
+            };
         }
 
-        vm.remove = function (lineItem) {
-            var index = vm.prescriptionDetails.indexOf(lineItem);
-            vm.prescriptionDetails.splice(index, 1);
+        vm.lotChanged = function () {
+            vm.canAddNewLot =
+                vm.selectedLot &&
+                vm.selectedLot.lotCode ===
+                messageService.get('orderableGroupService.addMissingLot');
+            initiateNewLotObject();
+        }
+
+        function addProduct() {
+
+            var selectedItem;
+            // var prescriptionLineItems = [];
+
+            if (vm.selectedOrderableGroup && vm.selectedOrderableGroup.length) {
+                vm.newLot.tradeItemId =
+                    vm.selectedOrderableGroup[0].orderable.identifiers.tradeItem;
+            }
+
+            if (vm.newLot.lotCode) {
+                var createdLot = angular.copy(vm.newLot);
+                selectedItem = orderableGroupService.findByLotInOrderableGroup(
+                    vm.selectedOrderableGroup,
+                    createdLot,
+                    true
+                );
+                selectedItem.$isNewItem = true;
+            } else {
+                selectedItem = orderableGroupService.findByLotInOrderableGroup(
+                    vm.selectedOrderableGroup,
+                    vm.selectedLot
+                );
+            }
+
+            vm.newLot.expirationDateInvalid = undefined;
+            vm.newLot.lotCodeInvalid = undefined;
+            var noErrors =
+                !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
+
+            if (noErrors) {
+
+                // vm.prescriptionLineItems.push({
+                //     prescribedProduct: selectedItem.orderable.fullProductName,
+                //     soh: selectedItem.stockOnHand
+                // });
+                console.log(selectedItem);
+                vm.prescriptionDetails.unshift(
+                    _.extend(
+                        {
+                           // lineItems: prescriptionLineItems,
+                            orderableId: selectedItem.orderable.id,
+                            //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+                            //"exiryDate" "",
+                            //prescribedProduct: selectedItem.orderable.fullProductName,
+                            soh: selectedItem.stockOnHand,
+                            //expiryDate: selectedItem.
+                            batchNumber: selectedItem.lot ? vm.selectedProduct.lot : null
+                        })
+                );
+              //  vm.prescriptionDetails.lineItem.push(selectedItem);
+                console.log(vm.prescriptionDetails);
+            }
+        }
+        // vm.removeItem = function(index) {
+        //     vm.lineItems
+        //   };
+         
+        vm.remove = function (index) {
+           vm.prescriptionDetails.splice(index, 1);
         };
 
         function addContact() {
@@ -252,13 +372,13 @@
             vm.substituteProduct = true;
         }
 
-        
+
 
         // function viewPrescription(){
         //     console.log("****** View Prescription ******");
 
         //     $state.go('openlmis.dispensing.prescriptions.form2');
-            
+
         //     console.log("****** Done ******");
 
         //     //var stateParams = angular.copy($stateParams);
