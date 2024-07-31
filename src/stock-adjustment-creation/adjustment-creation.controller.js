@@ -290,10 +290,12 @@
         selectedItem.referenceNumber = vm.referenceNumber;  
 
         /*Lesotho eLMIS* Autopopulating total number of cartons from POD during stock receive, Start*/
-        for (var i = 0; i < ReferenceNumbers.length; i++) {
-          if (ReferenceNumbers[i].referenceNumber === vm.referenceNumber) {
-            selectedItem.totalCartonNumber = ReferenceNumbers[i].cartonsQuantityAccepted;
-          };
+        if (adjustmentType.state === 'receive'){
+          for (var i = 0; i < ReferenceNumbers.length; i++) {
+            if (ReferenceNumbers[i].referenceNumber === vm.referenceNumber) {
+              selectedItem.totalCartonNumber = ReferenceNumbers[i].cartonsQuantityAccepted;
+            };
+          }
         }
         /*Lesotho eLMIS* Autopopulating total number of cartons from POD during stock receive, End*/
         
@@ -681,7 +683,9 @@
         vm.validateDate(item);
         vm.validateAssignment(item);
         vm.validateReason(item);
-        vm.validateCartonNumber(item);
+        if (adjustmentType.state === 'receive' && vm.hasOwnProperty('totalCartonNumber') ){
+          vm.validateCartonNumber(item);
+        }
       });
        return _.chain(vm.addedLineItems)
         .groupBy(function (item) {
@@ -912,8 +916,9 @@
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
       //console.log('Ref >> ',ReferenceNumbers[0].referenceNumber);
-      vm.references = populateReferenceNumbers(ReferenceNumbers);
-      
+      if (adjustmentType.state === 'receive'){
+        vm.references = populateReferenceNumbers(ReferenceNumbers);
+      }
      // filterFacilities();
      
       //Getting Rejection Reasons
