@@ -8,7 +8,7 @@
     <ul>
       <li>
         <strong>Sex</strong>
-        {{vm.patient.sex}}
+        {{vm.sex}}
       </li>
       <li>
         <strong>Age</strong>
@@ -64,7 +64,7 @@
 
     <fieldset ng-if="vm.inPrescriptionServe" class="form-group">
         <label for="nationalID">Dispensing date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate3"
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.occurredDate"
             ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none" ng-disabled="vm.inPrescriptionServe"/>
     </fieldset>
 
@@ -117,13 +117,16 @@
         <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
             <div>
                 <label for="productSelect">Product</label>
+                <!-- <select id="dispensingUnit" ng-model="lineItem.Dispense.doseUnit" ng-options="unit for unit in vm.dispensingUnits"
+                        required></select> -->
+                
                 <select id="productSelect" ng-model="vm.selectedOrderableGroup"
-                    ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
-                    ng-change="vm.orderableSelectionChanged()"
+                    ng-options="orderableGroup.productName for orderableGroup in vm.orderableGroups"
                     required>
                 </select>
+                <!-- ng-change="vm.orderableSelectionChanged()" -->
             </div>
-            <div ng-if="vm.selectedOrderableHasLots">
+            <!-- <div ng-if="vm.selectedOrderableHasLots">
                 <label for="lotSelect">{{'stockAddProductsModal.lotCode' | message}}</label>
                 <select id="lotSelect" ng-model="vm.selectedLot"
                     ng-options="lot.lotCode for lot in vm.lots"
@@ -141,7 +144,7 @@
                 <input id="expirationDate" type="date" ng-model="vm.newLot.expirationDate"
                 ng-change="vm.expirationDateChanged()" 
                 openlmis-invalid="{{vm.newLot.expirationDateInvalid | message}}"/>
-            </div>
+            </div> -->
             <button type="submit" class="add">Add</button>
         </form>
     </section>
@@ -169,7 +172,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="lineItem in vm.prescriptionDetails">
+            <tr ng-repeat="lineItem in vm.prescriptionLineItems">
             
                 <td>{{lineItem.prescribedProduct}}</td>
                 <td ng-if="vm.inPrescriptionServe"><select id="substituteProduct" ng-model="vm.selectedSubstituteProduct" 
@@ -179,13 +182,13 @@
                 <td>{{lineItem.expiryDate}}</td>
                 <td>{{lineItem.soh}}</td>
                 <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.Dispense.dose" class="form-control" type="number" min="0" step="1"
-                        oninput="validity.valid||(value='');" required></td>
+                        oninput="validity.valid||(value='');" ng-change='vm.setInServe()' required></td>
 
                <td ng-if="vm.inPrescriptionServe"><select id="dispensingUnit" ng-model="lineItem.Dispense.doseUnit" ng-options="unit for unit in vm.dispensingUnits"
-                        required></select></td>
+                ng-change='vm.setInServe()' required></select></td>
 
                 <td ng-if="vm.inPrescriptionServe"><select id="doseFrequency" ng-model="lineItem.Dispense.doseFrequency"
-                        ng-options="frequency for frequency in  vm.dosageFrequency" required></select></td>
+                        ng-options="frequency for frequency in  vm.dosageFrequency" ng-change='vm.setInServe()' required></select></td>
 
                 <td ng-if="vm.inPrescriptionServe"><select id="doseRoute" ng-model="lineItem.Dispense.doseRoute" ng-options="route for route in  vm.doseRoute"
                         required></select></td>

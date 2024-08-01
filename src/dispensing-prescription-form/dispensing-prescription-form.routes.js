@@ -51,8 +51,16 @@
                             }
                     });
                  },
-                 products: function(orderableGroupService, facility) {
-                    // Fetch both sets of products concurrently
+                 products: function(dispensingPrescriptionsService, facility) {
+
+                    return dispensingPrescriptionsService.getDispensingProducts(facility.id)
+                    .then(function(result){
+                        console.log(result);
+                        return result;    
+                    });
+                },
+                combinedCATs: function(orderableGroupService, facility) {
+                    //  Fetch productsfrom CAT A and CAT B  concurrently
                     return Promise.all([
                         orderableGroupService
                             .findAvailableProductsAndCreateOrderableGroups('248dbe58-b31a-4913-8686-9d212f67ed57', facility.id, true),

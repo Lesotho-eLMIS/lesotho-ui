@@ -29,10 +29,12 @@
         .controller('dispensingPrescriptionFormController', controller);
 
     controller.$inject = ['$scope', 'prescriptionsService', 'prepackingService', '$stateParams', 'user', 
-        'dispensingService', 'patient', 'orderableGroupService', 'facility', 'products', 'messageService'];
+        'dispensingService', 'patient', 'orderableGroupService', 'facility', 'products', 'messageService',
+        'dispensingPrescriptionsService', 'combinedCATs', 'confirmService', 'notificationService'];
 
     function controller($scope, prescriptionsService, prepackingService, $stateParams, user,
-        dispensingService, patient, orderableGroupService, facility, products, messageService) {
+        dispensingService, patient, orderableGroupService, facility, products, messageService,
+        dispensingPrescriptionsService, combinedCATs, confirmService, notificationService) {
 
         var vm = this;
 
@@ -48,13 +50,17 @@
         vm.patient = undefined;
         vm.facility = undefined;
         vm.user = user;
+        console.log(vm.user);
 
         // vm.firstName = undefined;
         // vm.lastName = undefined;
         // vm.sex = undefined;
         // vm.age = undefined;
         vm.initiateNewLotObject = initiateNewLotObject;
-
+        vm.getFullProductDetails = getFullProductDetails;
+        vm.fillPrescrition = fillPrescrition;
+        vm.setInServe = setInServe;
+        //vm.loadDispensableProducts = loadDispensableProducts;
         //    vm.getPrescriptionProducts = getPrescriptionProducts;
         // vm.searchPatients = searchPatients;
         // vm.viewPrescription = viewPrescription;
@@ -69,20 +75,7 @@
          * Holds prescription list.
          */
         vm.prescriptionDetails = [];
-        // vm.prescriptionDetails = {
-        //     patientId: " ",
-        //     patientType: " ",
-        //     followUpDate: " ",
-        //     issueDate: " ",
-        //     createdDate: " ",
-        //     capturedDate: " ",
-        //     lastUpdate: " ",
-        //     isVoided: false,
-        //     status: "INITIATED",
-        //     facilityId: " ",
-        //     userId: " ",
-        //     lineItems: []
-        // };
+        
 
         vm.prescriptionLineItems = [];
         /**
@@ -141,15 +134,20 @@
             vm.patient = patient;
             vm.facility = facility;
             vm.user = user;
-            vm.orderableGroups = products;
+            vm.products = products;
+            vm.combinedCATs = combinedCATs;
             console.log(vm.facility);
-            console.log(vm.patient);
-            console.log(vm.user);
+            console.log(vm.products);
+            console.log(vm.combinedCATs);
+            vm.orderableGroups = getFullProductDetails(vm.combinedCATs, vm.products);
+            console.log(vm.orderableGroups);
             // vm.firstName = patient.personDto.firstName;
             // vm.lastName = patient.personDto.lastName;
             // //condition ? expressionIfTrue : expressionIfFalse
-            // vm.sex = patient.personDto.sex == 'F' ? 'Female' : 'Male';
+            vm.sex = patient.personDto.sex == 'F' ? 'Female' : 'Male';
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
+
+            //console.log("COMPLETE PRODUCTS", getFullProductDetails())
 
 
             vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon',
@@ -168,6 +166,39 @@
 
         }
 
+        function getFullProductDetails(A, B) {
+           
+            var completeProduct = [];
+            var allProducts = _.flatten(A);
+            var productMap = new Map();
+
+            allProducts.forEach(function(product) {
+                const id = product.orderable.id;
+                if (!productMap.has(id)) {
+                  productMap.set(id, []);
+                }
+                productMap.get(id).push(product);
+              });
+
+              B.forEach(function(item) {
+                const id = item.orderable.id;
+                const matchingProducts = productMap.get(id) || [];
+              
+                // Add each matching product to completeProduct with combined data
+                matchingProducts.forEach(function(product) {
+                  var newProduct = {
+                    productId : product.orderable.id,
+                    productName: product.orderable.fullProductName,
+                    stockOnHand: product.stockOnHand,
+                    lot: product.lot ? product.lot.lotCode : null,
+                    expiryDate: product.lot ? product.lot.expirationDate : null
+                  };
+              
+                  completeProduct.push(newProduct);
+                });
+              });
+             return completeProduct.filter(product => product.stockOnHand > 0);
+        }
 
         vm.calculateAge = function (birthDate) {
             var today = new Date();
@@ -193,10 +224,17 @@
 
         function submitPrescription() {
             console.log("CREATING PRESCRIPTION");
-            console.log(vm.prescriptionDetails);
-            console.log("CREATING PRESCRIPTION");
-            console.log(vm.prescriptionDetails.selectedItem);
-            // var lineItems = [];
+            console.log(vm.prescriptionLineItems);
+            // fillPrescrition();
+            // return prescriptionsService.createPrescription(vm.prescriptionDetails)
+            // .then(function(response){
+            //     console.log(response);
+            // })
+            // // vm.prescriptionDetails.extend(
+
+            // // )
+            // console.log("CREATING PRESCRIPTION");
+            
             // vm.prescriptionDetails.
 
             // var prescriptionData = {
@@ -238,18 +276,57 @@
             // });
         }
 
-        vm.fillPrescrition = function () {
+        setInServe = function(){
+            console.log("Going now to serve");
+            vm.inPrescriptionServe = true;
+        }
+
+        function fillPrescrition () {
             console.log("Prescription Items:");
             console.log(vm.prescriptionDetails);
 
-            vm.inPrescriptionServe = true;
-            //set substitute product to true if prescribed product is out of stock
-            vm.prescriptionDetails.forEach(function (item) {
-                if(item.selectedItem.stockOnHand === null){
-                    vm.substituteProduct = true;
-                }
-               
-            });
+            confirmService.confirm("Are you sure you want to create this prescription?", 'Submit')
+            .then(function () {
+
+                console.log(vm.prescriptionDetails);
+                vm.prescriptionDetails = {
+                    patientId: vm.patient.id,
+                    patientType: vm.prescriptionDetails.patientType ? "In-patient" : "Out-patient",
+                    followUpDate: vm.prescriptionDetails.followUpDate,//"2024-07-14",
+                    issueDate: "2024-07-07",
+                    createdDate: vm.prescriptionDetails.createdDate,//"2024-07-07",
+                    capturedDate: vm.prescriptionDetails.createdDate,//"2024-07-07",
+                    lastUpdate: "2024-07-07",
+                    isVoided: false,
+                    status: "INITIATED",
+                    facilityId: vm.facility.id,
+                    userId: vm.user.user_id,
+                    lineItems: vm.prescriptionLineItems,
+    
+                };
+                prescriptionsService.createPrescription(vm.prescriptionDetails)
+                    .then(function (response) {
+                        // This will be called when the promise resolves successfully
+                        console.log(response);
+                        notificationService.success('Successfully submitted.');
+                        setInServe();
+                    })
+                    .catch(function (error) {
+                        // This will be called if there is an error or the promise is rejected
+                        console.error("Error:", error);
+                        notificationService.error('Failed to submit.');
+                    });
+                // var response = prescriptionsService.createPrescription(vm.prescriptionDetails)
+                //     if (response) {
+                //         // Adding success message when Patient saved.
+                //         console.log(response);
+                //     notificationService.success('Successfully submitted.');
+                //     vm.inPrescriptionServe = true;
+                // } else {
+                //     notificationService.error('Failed to submit.');
+                // }  
+                       
+            })
         }
 
         
@@ -293,64 +370,67 @@
 
         function addProduct() {
 
-            var selectedItem;
+            var selectedItem = vm.selectedOrderableGroup;
             // var prescriptionLineItems = [];
+            vm.prescriptionLineItems.push({
+                prescribedProduct : selectedItem.productName,
+                batchNumber :selectedItem.lot ,
+                expiryDate : selectedItem.expiryDate,
+                soh : selectedItem.stockOnHand
+            })
 
-            if (vm.selectedOrderableGroup && vm.selectedOrderableGroup.length) {
-                vm.newLot.tradeItemId =
-                    vm.selectedOrderableGroup[0].orderable.identifiers.tradeItem;
-            }
+            // if (vm.selectedOrderableGroup && vm.selectedOrderableGroup.length) {
+            //     vm.newLot.tradeItemId =
+            //         vm.selectedOrderableGroup[0].orderable.identifiers.tradeItem;
+            // }
 
-            if (vm.newLot.lotCode) {
-                var createdLot = angular.copy(vm.newLot);
-                selectedItem = orderableGroupService.findByLotInOrderableGroup(
-                    vm.selectedOrderableGroup,
-                    createdLot,
-                    true
-                );
-                selectedItem.$isNewItem = true;
-            } else {
-                selectedItem = orderableGroupService.findByLotInOrderableGroup(
-                    vm.selectedOrderableGroup,
-                    vm.selectedLot
-                );
-            }
+            // if (vm.newLot.lotCode) {
+            //     var createdLot = angular.copy(vm.newLot);
+            //     selectedItem = orderableGroupService.findByLotInOrderableGroup(
+            //         vm.selectedOrderableGroup,
+            //         createdLot,
+            //         true
+            //     );
+            //     selectedItem.$isNewItem = true;
+            // } else {
+            //     selectedItem = orderableGroupService.findByLotInOrderableGroup(
+            //         vm.selectedOrderableGroup,
+            //         vm.selectedLot
+            //     );
+            // }
 
-            vm.newLot.expirationDateInvalid = undefined;
-            vm.newLot.lotCodeInvalid = undefined;
-            var noErrors =
-                !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
+            // vm.newLot.expirationDateInvalid = undefined;
+            // vm.newLot.lotCodeInvalid = undefined;
+            // var noErrors =
+            //     !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
 
-            if (noErrors) {
+            // if (noErrors) {
 
-                // vm.prescriptionLineItems.push({
-                //     prescribedProduct: selectedItem.orderable.fullProductName,
-                //     soh: selectedItem.stockOnHand
-                // });
-                console.log(selectedItem);
-                vm.prescriptionDetails.unshift(
-                    _.extend(
-                        {
-                           // lineItems: prescriptionLineItems,
-                            orderableId: selectedItem.orderable.id,
-                            //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
-                            //"exiryDate" "",
-                            //prescribedProduct: selectedItem.orderable.fullProductName,
-                            soh: selectedItem.stockOnHand,
-                            //expiryDate: selectedItem.
-                            batchNumber: selectedItem.lot ? vm.selectedProduct.lot : null
-                        })
-                );
+            //     // vm.prescriptionLineItems.push({
+            //     //     prescribedProduct: selectedItem.orderable.fullProductName,
+            //     //     soh: selectedItem.stockOnHand
+            //     // });
+            //     console.log(selectedItem);
+            //     vm.prescriptionDetails.unshift(
+            //         _.extend(
+            //             {
+            //                // lineItems: prescriptionLineItems,
+            //                 // orderableId: selectedItem.orderable.id,
+            //                 //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+            //                 //"exiryDate" "",
+            //                 prescribedProduct: selectedItem.orderable.fullProductName,
+            //                 soh: selectedItem.stockOnHand,
+            //                 //expiryDate: selectedItem.
+            //                 batchNumber: selectedItem.lot ? vm.selectedProduct.lot : null
+            //             })
+            //     );
               //  vm.prescriptionDetails.lineItem.push(selectedItem);
-                console.log(vm.prescriptionDetails);
-            }
+               // console.log(vm.prescriptionDetails);
+            console.log(vm.prescriptionLineItems);
         }
-        // vm.removeItem = function(index) {
-        //     vm.lineItems
-        //   };
-         
+       
         vm.remove = function (index) {
-           vm.prescriptionDetails.splice(index, 1);
+           vm.prescriptionLineItems.splice(index, 1);
         };
 
         function addContact() {
@@ -360,13 +440,6 @@
                 'email': ''
             });
         }
-
-        // function changeToView() {
-        //     console.log("qqqqqqqqqqqqqqqqqqqqqqqqq");
-        //     vm.inPrescriptionServe = true;
-        //     // $state.reload();
-        //     // vm.reload();
-        // }
 
         function substitute(lineItem) {
             vm.substituteProduct = true;
