@@ -49,7 +49,8 @@
                                     return patientsObject[key];                
                                 }
                             }
-                    });
+                    }); 
+                    //return {}
                  },
                  products: function(orderableGroupService, facility) {
                     // Fetch both sets of products concurrently
@@ -67,6 +68,9 @@
                 },
                 user: function(authorizationService) {
                     return authorizationService.getUser();
+                },
+                productsWithSOH: function (prescriptionsService,facility) {
+                    return prescriptionsService.getProductsWithSOH(facility.id);
                 }
                
                 // products: function(existingStockOrderableGroupsFactory,orderableGroups) {

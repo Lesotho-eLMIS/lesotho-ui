@@ -54,6 +54,10 @@
                 get: {
                   url: openlmisUrlFactory('/api/prescription/:id'),
                   method: 'GET'
+               },
+               getProductsWithSOH: {
+                url: openlmisUrlFactory('/api/v2/allStockCardSummaries'),
+                method: 'GET'
                }
                 // updatePatientEvent: {
                 //     url: openlmisUrlFactory('/api/patient:id'),
@@ -71,8 +75,12 @@
         this.getPrescriptions = getPrescriptions; //To retrieve a Prescription record from the database
         this.getPrescription = getPrescription;
         this.prescriptionLineItems = prescriptionLineItems;
+        this.getProductsWithSOH =  getProductsWithSOH;
         
-      //  var patients = [];     
+        function getProductsWithSOH(facilityId) {
+          var params ={facilityId: facilityId}
+          resource.getProductsWithSOH(params)
+        }    
 
         /**
          * @ngdoc method
@@ -114,14 +122,10 @@
              });
         };
 
-        function getPrescription(){
-          var params ={id: "e8d1085f-cca0-49c1-9115-bf24a88560cc"};
-          return resource.get(params).$promise.then(function(response) {
-            //Transforming the response to an object if it's an array
-                  console.log(response);
-        })
-      }
- 
+        function getPrescription(prescriptionIdId){
+          var params ={id: prescriptionIdId};
+          return resource.get(params);
+      };
          /**
          * @ngdoc method
          * @methodOf dispensing-prescriptions.prescriptionsService
@@ -144,74 +148,13 @@
               "capturedDate": prescriptionDetails.createdDate,//"2024-07-07",
               "lastUpdate": "2024-07-07",
               "isVoided": false,
-              "status": "Active",
+              "status": "INITIATED",
               "facilityId": "81b63356-d08b-42e9-af39-ca9e266ef3a7",
               "userId": "df255157-0162-4466-ad7d-b73f6b2d9774",
               "lineItems": prescriptionLineItems(prescriptionDetails)
             }
             console.log(prescriptionData);
-            // [
-            //     {
-            //       "id": "c1f77c60-5f7e-11ec-bf63-0242ac130004",
-            //       "dosage": "500mg",
-            //       "period": 7,
-            //       "batchId": "batch-001",
-            //       "quantityPrescribed": 30,
-            //       "quantityDispensed": 30,
-            //       "servedInternally": true,
-            //       "orderableId":"167ee72e-04a4-4f97-bcd9-4365015fd157",
-            //       "substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
-            //       "comments": "Take after meals"
-            //     },
-            //     {
-            //       "id": "c1f77c60-5f7e-11ec-bf63-0242ac130005",
-            //       "dosage": "250mg",
-            //       "period": 14,
-            //       "batchId": "batch-002",
-            //       "quantityPrescribed": 60,
-            //       "quantityDispensed": 60,
-            //       "servedInternally": false,
-            //       "orderableId": "167ee72e-04a4-4f97-bcd9-4365015fd157",
-            //       "substituteOrderableId": null,
-            //       "comments": "Take before bed"
-            //     }
-            //   ]
-            //}
-            // var payload = {
-            //     "facilityId": patientInfo.homeFacility,
-            //     "personDto": {
-            //         "nationalId": patientInfo.nationalID,
-            //         "firstName": patientInfo.firstName,
-            //         "lastName": patientInfo.lastName,
-            //         "nickName": patientInfo.nickName,
-            //         "sex": patientInfo.sex,
-            //         "dateOfBirth": patientInfo.DOB,
-            //         "isDobEstimated": patientInfo.isDobEstimated,
-            //         "physicalAddress": patientInfo.physicalAddress,
-            //         "nextOfKinFullName": patientInfo.nextOfKinNames,
-            //         "nextOfKinContact": patientInfo.nextOfKinContact,
-            //         "motherMaidenName": patientInfo.motherMaidenName,
-            //         "deceased": patientInfo.deceased,
-            //         "retired": patientInfo.retired,
-            //         "contacts": [
-            //             {
-            //                 "contactType": patientInfo.contact.contactType,
-            //                 "contactValue": patientInfo.contact.contactValue
-            //             }
-            //         ]
-            //     },
-            //     "medicalHistory": [
-            //         {
-            //             "type": "Diagnosis",
-            //             "history": "Diagnosed with letsoejane."
-            //         },
-            //         {
-            //             "type": "Treatment",
-            //             "history": "O sebelisa hloella-hape (iphinde futhi)."
-            //         }
-            //     ]
-            // }
-            return resource.postPrescriptionEvent(prescriptionData).$promise;
+            return resource.postPrescriptionEvent(prescriptionData);
         }
 
         function prescriptionLineItems(prescriptionDetails){

@@ -29,10 +29,10 @@
         .controller('dispensingPrescriptionFormController', controller);
 
     controller.$inject = ['$scope', 'prescriptionsService', 'prepackingService', '$stateParams', 'user', 
-        'dispensingService', 'patient', 'orderableGroupService', 'facility', 'products', 'messageService'];
+        'dispensingService', 'patient', 'orderableGroupService', 'facility', 'products', 'messageService','confirmService','notificationService', 'productsWithSOH'];
 
     function controller($scope, prescriptionsService, prepackingService, $stateParams, user,
-        dispensingService, patient, orderableGroupService, facility, products, messageService) {
+        dispensingService, patient, orderableGroupService, facility, products, messageService,confirmService,notificationService, productsWithSOH) {
 
         var vm = this;
 
@@ -69,21 +69,6 @@
          * Holds prescription list.
          */
         vm.prescriptionDetails = [];
-        // vm.prescriptionDetails = {
-        //     patientId: " ",
-        //     patientType: " ",
-        //     followUpDate: " ",
-        //     issueDate: " ",
-        //     createdDate: " ",
-        //     capturedDate: " ",
-        //     lastUpdate: " ",
-        //     isVoided: false,
-        //     status: "INITIATED",
-        //     facilityId: " ",
-        //     userId: " ",
-        //     lineItems: []
-        // };
-
         vm.prescriptionLineItems = [];
         /**
          * @ngdoc property
@@ -145,6 +130,7 @@
             console.log(vm.facility);
             console.log(vm.patient);
             console.log(vm.user);
+            console.log(productsWithSOH);
             // vm.firstName = patient.personDto.firstName;
             // vm.lastName = patient.personDto.lastName;
             // //condition ? expressionIfTrue : expressionIfFalse
@@ -196,46 +182,6 @@
             console.log(vm.prescriptionDetails);
             console.log("CREATING PRESCRIPTION");
             console.log(vm.prescriptionDetails.selectedItem);
-            // var lineItems = [];
-            // vm.prescriptionDetails.
-
-            // var prescriptionData = {
-            //         patientId: vm.patient.id,
-            //         patientType: vm.prescriptionDetails.patientType ? "In-patient" : "Out-patient",
-            //         followUpDate: vm.prescriptionDetails.followUpDate,
-            //         issueDate: vm.prescriptionDetails.createdDate,
-            //         createdDate:vm.prescriptionDetails.createdDate,
-            //         capturedDate: vm.prescriptionDetails.createdDate,
-            //         lastUpdate: vm.prescriptionDetails.createdDate,
-            //         isVoided: false,
-            //         status: "INITIATED",
-            //         facilityId: vm.facility.id,
-            //         prescribedByUserId: vm.user_id,
-            //         servedByUserId: vm.user_id,
-            //         "lineItems": [
-            //           {
-            //             "dose": 10,
-            //             "doseUnits": "khaba",
-            //             "doseFrequency": "Three times a day",
-            //             "route": "ORAL",
-            //             "duration": 20,
-            //             "durationUnits": "Days",
-            //             "additionalInstructions": "Kamora lijo",
-            //             "quantityPrescribed": 200,
-            //             "remainingBalance": 5,
-            //             "orderablePrescribed": "067f4c3d-4a69-413d-8782-d40cb833d09e",
-            //             "orderableDispensed": "067f4c3d-4a69-413d-8782-d40cb833d09e",
-            //             "lotId": "12f97dd1-26d4-46d0-b995-603e287850f9",
-            //             "quantityDispensed": 5,
-            //             "servedExternally": false
-            //           }
-            //         ]
-            //       }
-            
-            // return prescriptionsService.createPrescription(vm.prescriptionDetails).then(function (response) {
-            //     console.log(response);
-            //     vm.inPrescriptionServe = true;
-            // });
         }
 
         vm.fillPrescrition = function () {
@@ -243,6 +189,59 @@
             console.log(vm.prescriptionDetails);
 
             vm.inPrescriptionServe = true;
+            //set substitute product to true if prescribed product is out of stock
+            vm.prescriptionDetails.forEach(function (item) {
+                if(item.selectedItem.stockOnHand === null){
+                    vm.substituteProduct = true;
+                }
+               
+            });
+        }
+
+        vm.createPrescrition = function () {
+            console.log("Prescription Items:");
+            console.log(vm.prescriptionDetails);
+            vm.prescriptionDetails.patientId = vm.patient.id;
+            
+            
+            
+            confirmService.confirm("Are you sure you want to create a prescription for "+vm.patient.personDto.firstName+" "+vm.patient.personDto.lastName+"", "Create")
+            .then(function () {
+                prescriptionsService.createPrescription(vm.prescriptionDetails).$promise
+               .then(function(response) {
+                console.log(response);
+
+                // Success callback
+                let prescriptionId = "";
+                for (let i = 0; i < Object.keys(response).length-2; i++) {
+                    prescriptionId += response[i];
+                }
+                notificationService.success('Prescription Created.');
+                console.log(prescriptionId);
+
+                prescriptionsService.getPrescription(prescriptionId).$promise
+                .then(function(response) {
+                    // Success callback
+                    vm.inPrescriptionServe = true; 
+                    console.log(response)
+                    vm.savedPrescriptionDetails = response;
+                }).catch(function(error) {
+                        // Error callback
+                        notificationService.error('Could Not get Prescription.');
+                        console.error('Error occurred:', error);
+                    
+                    });
+                  }
+              )
+              .catch(function(error) {
+                  // Error callback
+                  notificationService.error('Failed to submit.');
+                  console.error('Error occurred:', error);
+              
+              });
+            });
+            
+            //vm.inPrescriptionServe = true;
             //set substitute product to true if prescribed product is out of stock
             vm.prescriptionDetails.forEach(function (item) {
                 if(item.selectedItem.stockOnHand === null){
@@ -265,7 +264,6 @@
 
             //make form good as new, so errors won't persist
             $scope.productForm.$setPristine();
-
             vm.lots = orderableGroupService.lotsOf(
                 vm.selectedOrderableGroup,
                 vm.hasPermissionToAddNewLot
@@ -273,7 +271,7 @@
             vm.selectedOrderableHasLots = vm.lots.length > 0;
 
             /* eLMIS Lesotho : start */
-            vm.lots.splice(1, 1);  //Removing no lot defined because all products should have lots/batches
+            //vm.lots.splice(1, 1);  //Removing no lot defined because all products should have lots/batches
             /* eLMIS Lesotho : end */
         };
 
@@ -322,25 +320,17 @@
                 !vm.newLot.expirationDateInvalid && !vm.newLot.lotCodeInvalid;
 
             if (noErrors) {
-
-                // vm.prescriptionLineItems.push({
-                //     prescribedProduct: selectedItem.orderable.fullProductName,
-                //     soh: selectedItem.stockOnHand
-                // });
-                console.log(selectedItem);
-                vm.prescriptionDetails.unshift(
-                    _.extend(
-                        {
-                           // lineItems: prescriptionLineItems,
-                            orderableId: selectedItem.orderable.id,
-                            //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
-                            //"exiryDate" "",
-                            //prescribedProduct: selectedItem.orderable.fullProductName,
-                            soh: selectedItem.stockOnHand,
-                            //expiryDate: selectedItem.
-                            batchNumber: selectedItem.lot ? vm.selectedProduct.lot : null
-                        })
-                );
+                angular.extend(selectedItem, {
+                    // lineItems: prescriptionLineItems,
+                     orderableId: selectedItem.orderable.id,
+                     //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+                     //"exiryDate" "",
+                     prescribedProduct: selectedItem.orderable.fullProductName,
+                     soh: selectedItem.stockOnHand,
+                     //expiryDate: selectedItem.
+                     batchNumber: selectedItem.lot ? selectedItem.lot.lotCode : null
+                 });
+                vm.prescriptionDetails.unshift(selectedItem);
               //  vm.prescriptionDetails.lineItem.push(selectedItem);
                 console.log(vm.prescriptionDetails);
             }
