@@ -54,11 +54,15 @@
                 get: {
                   url: openlmisUrlFactory('/api/prescription/:id'),
                   method: 'GET'
-               },
-               getProductsWithSOH: {
-                url: openlmisUrlFactory('/api/v2/allStockCardSummaries'),
-                method: 'GET'
-               }
+                },
+                serve: {
+                  url: openlmisUrlFactory('/api/prescription/:id/serve'),
+                  method: 'POST'
+                },
+                getProductsWithSOH: {
+                  url: openlmisUrlFactory('/api/v2/allStockCardSummaries'),
+                  method: 'GET'
+                }
                 // updatePatientEvent: {
                 //     url: openlmisUrlFactory('/api/patient:id'),
                 //     method: 'PUT'
@@ -76,6 +80,7 @@
         this.getPrescription = getPrescription;
         this.prescriptionLineItems = prescriptionLineItems;
         this.getProductsWithSOH =  getProductsWithSOH;
+        this.servePrescription = servePrescription;
         
         function getProductsWithSOH(facilityId) {
           var params ={facilityId: facilityId}
@@ -149,37 +154,90 @@
               "lastUpdate": "2024-07-07",
               "isVoided": false,
               "status": "INITIATED",
-              "facilityId": "81b63356-d08b-42e9-af39-ca9e266ef3a7",
-              "userId": "df255157-0162-4466-ad7d-b73f6b2d9774",
-              "lineItems": prescriptionLineItems(prescriptionDetails)
+              "facilityId": prescriptionDetails.facilityId,
+              "userId": prescriptionDetails.userId,
+              "lineItems": prescriptionLineItems("create", prescriptionDetails)
             }
             console.log(prescriptionData);
             return resource.postPrescriptionEvent(prescriptionData);
         }
 
-        function prescriptionLineItems(prescriptionDetails){
+        function prescriptionLineItems(mode ,prescriptionDetails){
 
           var lineItems = [];
-          prescriptionDetails.forEach(element => {
-            var item = {
-              // "id": "c1f77c60-5f7e-11ec-bf63-0242ac130004",
-              "dosage": element.dose, // "500mg", [string1, string2].join('');
-              "period": element.duration, // 7,
-              "batchId": element.batchNumber, // "batch-001",
-              "quantityPrescribed": element.quantityPrescribed, // 30,
-              "quantityDispensed": element.quantityDispensed, // 30,
-              "servedInternally": element.isInternallyServed, // true,
-              "orderableId": element.orderableId, // "167ee72e-04a4-4f97-bcd9-4365015fd157",
-              // "substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
-              "comments": element.comments // "Take after meals"
-            };
+          if(mode === "serve"){
+            prescriptionDetails.forEach(element => {
+              var item = {
+                // "id": "c1f77c60-5f7e-11ec-bf63-0242ac130004",
+                "dose": element.Dispense.dose, // "500mg", [string1, string2].join('');
+                "doseUnits": element.Dispense.doseUnit,
+                "doseFrequency": element.Dispense.doseFrequency,
+                "route": element.Dispense.doseRoute,
+                "duration": element.Dispense.duration, //[0].Dispense.duration
+                "durationUnits": element.Dispense.durationUnit,
+                "additionalInstructions": element.Dispense.instruction,
+                "orderablePrescribed": element.orderablePrescribed,
+                "status": "PARTIALLY_SERVED",
+                "orderableDispensed": element.orderablePrescribed,// Temporarily
+                "lotId": element.lot.id,                       
+                "period": element.duration, // 7,
+                "batchId": element.batchNumber, // "batch-001",
+                "quantityPrescribed": element.quantityPrescribed, // 30,
+                "quantityDispensed": element.Dispense.quantityDispensed, // 30,
+                "servedExternally": element.Dispense.isInternallyServed, // true,
+                "orderableId": element.orderablePrescribed, // "167ee72e-04a4-4f97-bcd9-4365015fd157",
+                // "substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+                "remainingBalance":  element.Dispense.quantityDispensed ? element.quantityPrescribed - element.Dispense.quantityDispensed : element.quantityPrescribed,
+                "comments": element.comments // "Take after meals"
+              };
+              lineItems.push(item);
+            });
+          }else{
+            prescriptionDetails.forEach(element => {
+              var item = {
+                // "id": "c1f77c60-5f7e-11ec-bf63-0242ac130004",
+                "dosage": element.dose, // "500mg", [string1, string2].join('');
+                "period": element.duration, // 7,
+                "batchId": element.batchNumber, // "batch-001",
+                "quantityPrescribed": element.quantityPrescribed, // 30,
+                "quantityDispensed": element.quantityDispensed, // 30,
+                "servedInternally": element.isInternallyServed, // true,
+                "remainingBalance":element.quantityPrescribed,
+                "orderableId": element.orderableId, // "167ee72e-04a4-4f97-bcd9-4365015fd157",
+                // "substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
+                "comments": element.comments // "Take after meals"
+              };
+            
+              lineItems.push(item);
+            });
+          }
           
-            lineItems.push(item);
-          });
           console.log('=======++++++++++++++==========');
           console.log(lineItems);
           return lineItems;
         }
+        
 
+        function servePrescription(prescriptionDetails) {
+          var params ={id:prescriptionDetails.prescriptionId}; //"004d3fe9-c784-4681-8446-5113429d4bb7"};//
+          var prescriptionData = {
+            "patientId": prescriptionDetails.patientId,//"22326e87-08ad-48d4-ab61-fc76c268e891",
+            "patientType": prescriptionDetails.patientType ? "Outpatient" : "Inpatient",
+            "followUpDate": prescriptionDetails.followUpDate,//"2024-07-14",
+            "issueDate": "2024-07-07",
+            "createdDate": prescriptionDetails.createdDate,//"2024-07-07",
+            "capturedDate": prescriptionDetails.createdDate,//"2024-07-07",
+            "lastUpdate": "2024-07-07",
+            "isVoided": false,
+            "status": "FULLY_SERVED",
+            "facilityId": prescriptionDetails.facilityId,
+            "userId": prescriptionDetails.userId,
+            "prescribedByUserId": prescriptionDetails.userId,
+            "servedByUserId": prescriptionDetails.userId,
+            "lineItems": prescriptionLineItems("serve", prescriptionDetails)
+          }
+          console.log(prescriptionData);
+          return resource.serve(params, prescriptionData);
+        }
     }
 })();

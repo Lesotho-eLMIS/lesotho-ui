@@ -169,9 +169,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-if="!vm.inPrescriptionServe" ng-repeat="lineItem in vm.prescriptionDetails">
+            <tr ng-repeat="lineItem in vm.prescriptionDetails">
             
-                <td>{{lineItem.prescribedProduct}}</td>
+                <td>{{lineItem.orderablePrescribedName}}</td>
                 <td ng-if="vm.inPrescriptionServe"><select id="substituteProduct" ng-model="vm.selectedSubstituteProduct" 
                     ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
                     ng-disabled="!vm.substituteProduct"></select></td>
@@ -214,10 +214,10 @@
                 </td>
                 
             </tr>
-
-            <tr ng-show="vm.inPrescriptionServe" ng-repeat="lineItem in vm.savedPrescriptionDetails.lineItems">
+<!-- 
+            <tr ng-show="vm.inPrescriptionServe" ng-repeat="lineItem in vm.PrescriptionDetails">
             
-                <td>{{lineItem.prescribedProduct}}</td>
+                <td>{{lineItem.orderablePrescribedName}}</td>
                 <td ng-if="vm.inPrescriptionServe"><select id="substituteProduct" ng-model="vm.selectedSubstituteProduct" 
                     ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
                     ng-disabled="!vm.substituteProduct"></select></td>
@@ -258,7 +258,7 @@
                     <button ng-if="!vm.inPrescriptionServe" type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
                     <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.substitute(lineItem)">Substitute</button>
                 </td>
-                
+                 -->
             </tr>
 
 
@@ -275,6 +275,6 @@
             message}}</button>
         <!-- <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button> -->
-        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.submitPrescription()">Serve</button>
+        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
     </div>
 </div>

@@ -28,10 +28,10 @@
         .module('dispensing-prescription-form')
         .controller('dispensingPrescriptionFormController', controller);
 
-    controller.$inject = ['$scope', 'prescriptionsService', 'prepackingService', '$stateParams', 'user', 
+    controller.$inject = ['$scope', '$state','prescriptionsService', 'prepackingService', '$stateParams', 'user', 
         'dispensingService', 'patient', 'orderableGroupService', 'facility', 'products', 'messageService','confirmService','notificationService', 'productsWithSOH'];
 
-    function controller($scope, prescriptionsService, prepackingService, $stateParams, user,
+    function controller($scope, $state, prescriptionsService, prepackingService, $stateParams, user,
         dispensingService, patient, orderableGroupService, facility, products, messageService,confirmService,notificationService, productsWithSOH) {
 
         var vm = this;
@@ -39,7 +39,7 @@
         // vm.resetPatientPassword = resetPatientPassword;
         // vm.search = search;
         vm.$onInit = onInit;
-        vm.submitPrescription = submitPrescription;
+        vm.servePrescription = servePrescription;
         vm.addProduct = addProduct;
         vm.addContact = addContact;
         //vm.changeToView = changeToView;
@@ -136,7 +136,9 @@
             // //condition ? expressionIfTrue : expressionIfFalse
             // vm.sex = patient.personDto.sex == 'F' ? 'Female' : 'Male';
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
+           // vm.productsWithSOH = getFullProductDetails(products,productsWithSOH);
 
+            console.log(vm.productsWithSOH);
 
             vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon',
                 'Teaspoon', 'Unit(s)', 'Puff(s)'];
@@ -153,6 +155,41 @@
 
 
         }
+
+        function getFullProductDetails(A, B) {
+           
+            var completeProduct = [];
+            var allProducts = _.flatten(A);
+            var productMap = new Map();
+
+            allProducts.forEach(function(product) {
+                const id = product.orderable.id;
+                if (!productMap.has(id)) {
+                  productMap.set(id, []);
+                }
+                productMap.get(id).push(product);
+              });
+
+              B.forEach(function(item) {
+                const id = item.orderable.id;
+                const matchingProducts = productMap.get(id) || [];
+              
+                // Add each matching product to completeProduct with combined data
+                matchingProducts.forEach(function(product) {
+                  var newProduct = {
+                    productId : product.orderable.id,
+                    productName: product.orderable.fullProductName,
+                    stockOnHand: product.stockOnHand,
+                    lot: product.lot ? product.lot.lotCode : null,
+                    expiryDate: product.lot ? product.lot.expirationDate : null
+                  };
+              
+                  completeProduct.push(newProduct);
+                });
+              });
+             return completeProduct.filter(product => product.stockOnHand > 0);
+        }
+
 
 
         vm.calculateAge = function (birthDate) {
@@ -177,11 +214,29 @@
             return fullAge;
         }
 
-        function submitPrescription() {
+        function servePrescription() {
+
+            console.log(vm.prescriptionDetails.prescriptionId)
             console.log("CREATING PRESCRIPTION");
             console.log(vm.prescriptionDetails);
             console.log("CREATING PRESCRIPTION");
             console.log(vm.prescriptionDetails.selectedItem);
+
+            confirmService.confirm("Are you sure you want to serve a prescription for "+vm.patient.personDto.firstName+" "+vm.patient.personDto.lastName+"", "Served")
+            .then(function () {
+                prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
+               .then(function(response) {
+                console.log(response);
+                notificationService.success('Prescription Served.');
+                $state.go('openlmis.dispensing.prescriptions');
+                 })
+              .catch(function(error) {
+                  // Error callback
+                 // notificationService.error('Failed to submit.');
+                  console.error('Error occurred:', error);
+              
+              });
+            });
         }
 
         vm.fillPrescrition = function () {
@@ -202,7 +257,10 @@
             console.log("Prescription Items:");
             console.log(vm.prescriptionDetails);
             vm.prescriptionDetails.patientId = vm.patient.id;
-            
+            vm.prescriptionDetails.facilityId = vm.facility.id;
+            vm.prescriptionDetails.userId = vm.user.id;
+
+            vm.inPrescriptionServe = true;
             
             
             confirmService.confirm("Are you sure you want to create a prescription for "+vm.patient.personDto.firstName+" "+vm.patient.personDto.lastName+"", "Create")
@@ -217,7 +275,8 @@
                     prescriptionId += response[i];
                 }
                 notificationService.success('Prescription Created.');
-                console.log(prescriptionId);
+                //console.log(prescriptionId);
+                vm.prescriptionDetails.prescriptionId = prescriptionId;
 
                 prescriptionsService.getPrescription(prescriptionId).$promise
                 .then(function(response) {
@@ -322,10 +381,10 @@
             if (noErrors) {
                 angular.extend(selectedItem, {
                     // lineItems: prescriptionLineItems,
-                     orderableId: selectedItem.orderable.id,
+                    orderablePrescribed: selectedItem.orderable.id,
                      //"substituteOrderableId": "dbaa07c0-66cd-43ed-9272-1d0d8ae7844a",
                      //"exiryDate" "",
-                     prescribedProduct: selectedItem.orderable.fullProductName,
+                     orderablePrescribedName: selectedItem.orderable.fullProductName,
                      soh: selectedItem.stockOnHand,
                      //expiryDate: selectedItem.
                      batchNumber: selectedItem.lot ? selectedItem.lot.lotCode : null
