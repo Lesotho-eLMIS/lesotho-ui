@@ -258,7 +258,7 @@
             console.log(vm.prescriptionDetails);
             vm.prescriptionDetails.patientId = vm.patient.id;
             vm.prescriptionDetails.facilityId = vm.facility.id;
-            vm.prescriptionDetails.userId = vm.user.id;
+            vm.prescriptionDetails.userId = vm.user.user_id;
 
             vm.inPrescriptionServe = true;
             
