@@ -35,102 +35,37 @@
                 }
             },
             resolve: {
-                facility: function(facilityFactory, $stateParams) {
+                facility: function (facilityFactory, $stateParams) {
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
                 },
-                
-                patient: function($stateParams, dispensingService) {                         
-                    return dispensingService.getPatients($stateParams.patientId).then(function(patientsObject) {  
+                patient: function ($stateParams, dispensingService) {
+                    return dispensingService.getPatients($stateParams.patientId).then(function (patientsObject) {
                         for (var key in patientsObject) {
-                                if (key == $stateParams.patientId) {
-                                    return patientsObject[key];                
-                                }
+                            if (key == $stateParams.patientId) {
+                                return patientsObject[key];
                             }
-                    }); 
-                    //return {}
-                 },
-                 products: function(orderableGroupService, facility) {
-                    // Fetch both sets of products concurrently
-                    return Promise.all([
-                        orderableGroupService
-                            .findAvailableProductsAndCreateOrderableGroups('248dbe58-b31a-4913-8686-9d212f67ed57', facility.id, true),
-                        orderableGroupService
-                            .findAvailableProductsAndCreateOrderableGroups('c0776c10-5d71-4997-a064-23347f0e4897', facility.id, true)
-                    ]).then(function([result_A, result_B]) {
-                        return result_A.concat(result_B); 
-                    }).catch(function(error) {
-                        console.error("Error fetching products:", error);
-                        throw error; 
+                        }
                     });
                 },
-                user: function(authorizationService) {
+                user: function (authorizationService) {
                     return authorizationService.getUser();
                 },
-                productsWithSOH: function (prescriptionsService,facility) {
-                    return prescriptionsService.getProductsWithSOH(facility.id);
+                productsWithSOH: function (prescriptionsService, facility) {
+                    return prescriptionsService.getProductsWithSOH(facility.id)
+                        .then(function (result) {
+                            return result.content;
+                        });
+                },
+                allProducts: function (prescriptionsService, facility) {
+                    return prescriptionsService.getAllFacilityProducts(facility.id)
+                        .then(function (result) {
+                            return result;
+                        });
                 }
-               
-                // products: function(existingStockOrderableGroupsFactory,orderableGroups) {
-                //     // Fetch both sets of products concurrently
-                //     return existingStockOrderableGroupsFactory.getNotEmptyGroupsWithNotZeroSoh(orderableGroups);
-                // }
-
-                // orderableGroups: function ($stateParams, program, facility, existingStockOrderableGroupsFactory) {
-                //     if (!$stateParams.orderableGroups) {
-                //         $stateParams.orderableGroups = existingStockOrderableGroupsFactory
-                //             .getGroupsWithNotZeroSoh($stateParams, program, facility);
-                //     }
-                //     console.log("TRANSITIONING");
-                //     return $stateParams.orderableGroups;
-                // }
-
-            
-                // products: function(orderableGroupService, facility) {
-
-                //     Promise.all([
-                //         orderableGroupService.findAvailableProductsAndCreateOrderableGroups('248dbe58-b31a-4913-8686-9d212f67ed57', facility.id, true),
-                //         orderableGroupService.findAvailableProductsAndCreateOrderableGroups('c0776c10-5d71-4997-a064-23347f0e4897', facility.id, true)
-                //     ])
-                //         .then(function ([result_A, result_B]) {
-                //             var allProducts = [...result_A, ...result_B];
-                //             console.log("Combined products:", allProducts);
-                //             return allProducts;
-                //         })
-                //         .catch(function (error) {
-                //             console.error("Error fetching products:", error);
-                //         });
-                // }
-                //  Products: function($stateParams, orderableGroupService){
-                //     console.log($stateParams);
-                //     return orderableGroupService
-                //         .findAvailableProductsAndCreateOrderableGroups('248dbe58-b31a-4913-8686-9d212f67ed57', $stateParams.facilityId, false);
-                // }
             }
-            // resolve: {
-            //     facility: function(facilityFactory, $stateParams) {
-            //         if (!$stateParams.facility) {
-            //             return facilityFactory.getUserHomeFacility();
-            //         }
-            //         return $stateParams.facility;
-            //     },
-                // program: function(programService, $stateParams) {
-                //     if (!$stateParams.program) {
-                //         return programService.get($stateParams.programId);
-                //     }
-                //     return $stateParams.program;
-                // },
-                // orderableGroups: function ($stateParams, program, facility, existingStockOrderableGroupsFactory) {
-                //     if (!$stateParams.orderableGroups) {
-                //         $stateParams.orderableGroups = existingStockOrderableGroupsFactory
-                //             .getGroupsWithNotZeroSoh($stateParams, program, facility);
-                //     }
-                //     console.log("TRANSITIONING");
-                //     return $stateParams.orderableGroups;
-                // }
-            // }
         });
     }
 
