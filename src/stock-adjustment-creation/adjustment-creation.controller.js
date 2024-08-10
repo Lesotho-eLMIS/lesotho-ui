@@ -907,7 +907,8 @@
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
       vm.references = ReferenceNumbers;
-      
+      console.log("Getting Progr")
+      console.log(program);
      // filterFacilities();
      
       //Getting Rejection Reasons

@@ -2,13 +2,13 @@
 
 <aside class="stock-card-info">
     <div class="product-name-header">
-      <span>{{vm.firstName}} {{vm.lastName}}</span>
+      <span>{{vm.patient.personDto.firstName}} {{vm.patient.personDto.firstName}}</span>
     </div>
   
     <ul>
       <li>
         <strong>Sex</strong>
-        {{vm.sex}}
+        {{vm.patient.personDto.sex}}
       </li>
       <li>
         <strong>Age</strong>
@@ -16,40 +16,40 @@
       </li>
       <li>
         <strong>Height</strong>
-        {{vm.stockCard.program.name}}
+        {{vm.patient.height}}
       </li>
       <li align="right">
         <strong>Weight</strong>
-        {{vm.stockCard.stockOnHand}}
+        {{vm.patient.weight}}
       </li>
       <li ng-if="vm.stockCard.lot">
         <strong>BMI</strong>
-        {{vm.stockCard.lot.lotCode}}
+        {{patient.BMI}}
       </li>
       <li ng-if="vm.stockCard.lot">
         <strong>BMI Status</strong>
-        {{vm.stockCard.lot.expirationDate | openlmisDate}}
+        {{vm.patient.BMIStatus}}
       </li>
       <li>
         <strong>TB Status</strong>
-        {{vm.stockCard.program.name}}
+        {{vm.patient.TBStatus}}
       </li>
       <li>
         <strong>BP</strong>
-        {{vm.stockCard.program.name}}
+        {{vm.patient.BP}}
       </li>
       <li>
         <strong>Medical History</strong>
-        <button ng-click="vm.changeToView()">View</button>
+        <button ng-click="vm.getMedicalHistory()">View</button>
       </li>
       <li>
         <strong>Prescription Status</strong>
-        {{vm.stockCard.program.name}}
+        {{vm.prescription.status}}
       </li>
     </ul>
 </aside>
 
-<form class="sidebar" ng-submit="vm.submitPrescription()">
+<form class="sidebar" ng-submit="vm.createPrescrition()">
 
     <!-- <fieldset class="form-group">
         <label for="status">Status</label>
@@ -59,19 +59,22 @@
     <fieldset class="form-group">
         <label for="createdDate">Created date</label>
         <input id="createdDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.createdDate"
-            max-date="vm.maxDate" required inputmode="none" ng-disabled="vm.inPrescriptionServe"/>
+            max-date="vm.maxDate" required ng-disabled="vm.inPrescriptionServe"/>
     </fieldset>
 
     <fieldset ng-if="vm.inPrescriptionServe" class="form-group">
         <label for="nationalID">Dispensing date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate3"
-            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none" ng-disabled="vm.inPrescriptionServe"/>
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+        min="{{vm.minFollowUpDate}}" required/>
+        <span ng-show="followUpDateForm.followUpDate.$error.min && !vm.inPrescriptionServe" class="text-danger">
+            Follow-up date must be from tomorrow onwards.
+        </span>
     </fieldset>
 
     <fieldset class="form-group">
         <label for="followUpDate">Follow up date</label>
         <input id="followUpDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.followUpDate"
-            max-date="vm.maxDate" required inputmode="none" ng-disabled="vm.inPrescriptionServe" />
+            max-date="vm.maxDate" required ng-disabled="vm.inPrescriptionServe" />
     </fieldset>
 
     <fieldset class="form-group">
@@ -85,21 +88,6 @@
             Out Patient
         </label>
     </fieldset>
-    
-
-
-    <!-- <fieldset class="form-group">
-        <label for="nickName">Captured date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
-            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
-    </fieldset> -->
-
-    <!-- <fieldset class="form-group">
-        <label>
-            <input type="checkbox" ng-model="vm.Prescription.allowNotify"/>
-            Voided
-        </label>
-    </fieldset> -->
 </form>
 
 <!-- <section id="newPrescriptionForm"> -->
@@ -109,39 +97,50 @@
             <div>
                 <label for="productSelect">Product</label>
                 <select id="productSelect" ng-model="vm.selectedProduct" 
-                ng-options="product.orderable.fullProductName for product in vm.Products"
+                ng-options="product.orderable.fullProductName for product in vm.allProducts"
             required></select>
             </div>
             <button type="submit" class="add">Add Product</button>
         </form>
-        <!-- <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
-                <div>
-                    <label for="productSelect">Product</label>
-                    <select id="productSelect" ng-model="vm.selectedOrderableGroup"
-                        ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
-                        ng-change="vm.orderableSelectionChanged()"
-                        required>
-                    </select>
-                </div>
-                <div ng-if="vm.selectedOrderableHasLots">
-                    <label for="lotSelect">{{'prepackUpdate.lotCode' | message}}</label>
-                    <select id="lotSelect" ng-model="vm.selectedLot"
-                        ng-options="lot.lotCode for lot in vm.lots"
-                        ng-change="vm.lotChanged()"
-                        required>
-                    </select>
-                </div>
-                <button type="submit" class="add">Add</button>
-            </form> -->
+        <!-- <form ng-if="vm.inPrescriptionServe" class="form-inline" ng-submit="vm.addProduct()" name="productForm">
+            <div>
+                <label for="productSelect">Product</label>
+                <select id="productSelect" ng-model="vm.selectedOrderableGroup"
+                    ng-options="orderableGroup.productName for orderableGroup in vm.productsWithSOH"
+                    ng-change="vm.orderableSelectionChanged()"
+                    required>
+                </select>
+            </div>
+            <div ng-if="vm.selectedOrderableHasLots">
+                <label for="lotSelect">{{'stockAddProductsModal.lotCode' | message}}</label>
+                <select id="lotSelect" ng-model="vm.selectedLot"
+                    ng-options="lot.lotCode for lot in vm.lots"
+                    ng-change="vm.lotChanged()"
+                    required>
+                </select>
+            </div>
+            <div ng-if="vm.hasPermissionToAddNewLot && vm.canAddNewLot">
+                <label for="lotCode">{{'stockAddProductsModal.newLotCode' | message}}</label>
+                <input id="lotCode" type="text" ng-model="vm.newLot.lotCode"
+                ng-change="vm.newLotCodeChanged()"
+                openlmis-invalid="{{vm.newLot.lotCodeInvalid | message}}"
+                required>
+                <label for="expirationDate">{{'stockAddProductsModal.newLotExpirationDate' | message}}</label>
+                <input id="expirationDate" type="date" ng-model="vm.newLot.expirationDate"
+                ng-change="vm.expirationDateChanged()" 
+                openlmis-invalid="{{vm.newLot.expirationDateInvalid | message}}"/>
+            </div>
+            <button type="submit" class="add">Add</button>
+        </form> -->
     </section>
     <table suppress-tr-openlmis-invalid>
         <thead>
             <tr>
                 <th>{{'dispensingPrescriptionForm.prescribedProduct' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.substituteProduct' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.batchNumber' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.expiryDate' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.soh' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.dispensedProduct' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.batchNumber' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.expiryDate' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.soh' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.dose' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.doseUnits' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.frequency' | message}}</th>
@@ -149,59 +148,110 @@
                 <th>{{'dispensingPrescriptionForm.duration' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.durationUnits' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.instructions' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th>
+                <th>{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th> 
                 <th>{{'dispensingPrescriptionForm.quantityPrescribed' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.servedInternally' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.servedExternally' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.comments' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.action' | message}}</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="lineItem in vm.prescriptionDetails">
+            <tr ng-repeat="lineItem in vm.prescriptionLineItems">
             
-                <td>{{lineItem.prescribedProduct}}</td>
-                <td><select id="productSelect" ng-model="vm.selectedSubstituteProduct" 
-                    ng-options="product.orderable.fullProductName for product in vm.Products"
-                    ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"></select></td>
+                <td>{{lineItem.fullProductName}}</td>
+                <td ng-if="vm.inPrescriptionServe"><select id="dispensedProduct" ng-model="lineItem.dispensedProduct" 
+                    ng-options="orderableGroup.canFulfillForMe[0].orderableName for orderableGroup in vm.orderableGroups"
+                    ng-change="vm.updateBatchOptions(lineItem)"></select></td>
+                <td ng-if="vm.inPrescriptionServe"><select ng-model="lineItem.selectedBatch" 
+                    ng-options="batch as (batch.lot ? batch.lotCode : 'No Batch') for batch in lineItem.batches"                 
+                    ng-change="vm.updateBatchDetails(lineItem)"></select></td>
+                <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.lotExpirationDate || 'N/A'}}</td>
+                <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.stockOnHand}}</td>
+                <td><input ng-model="lineItem.dose" class="form-control" type="number" min="0" step="1"
+                        oninput="validity.valid||(value='');" required></td>
+
+               <td><select id="dispensingUnit" ng-model="lineItem.doseUnits" ng-options="unit for unit in vm.dispensingUnits"
+                        required></select></td>
+
+                <td><select id="doseFrequency" ng-model="lineItem.doseFrequency"
+                        ng-options="frequency for frequency in  vm.dosageFrequency" required></select></td>
+
+                <td><select id="doseRoute" ng-model="lineItem.route" ng-options="route for route in  vm.doseRoute"
+                        required></select></td>
+
+                <td><input ng-model="lineItem.duration" type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;" 
+                        required></td>
+                
+                <td><select id="durationUnit" ng-model="lineItem.durationUnits" ng-options="durationUnit for durationUnit in  vm.durationUnits" 
+                    required></select></td>
+                
+                <td><select id="instruction" ng-model="lineItem.additionalInstruction" ng-options="instruction for instruction in  vm.instructions" 
+                    required></select></td>
+
+                <td><input type="text" ng-model="lineItem.additionalInstructions" ng-disabled="true"></input></td>
+                
+                <td><input ng-model="lineItem.quantityPrescribed" type="number" min="0" step="1" oninput="validity.valid||(value='');" 
+                    required></td>
+
+                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required/>
+                </td> 
+                <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.servedExternally"></td>
+                <td><input type="text" ng-model="lineItem.comments"></input></td>
+                <td>
+                    <button ng-if="!vm.inPrescriptionServe" type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
+                    <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.substitute(lineItem)">Substitute</button>
+                </td>
+                
+            </tr>
+<!-- 
+            <tr ng-show="vm.inPrescriptionServe" ng-repeat="lineItem in vm.PrescriptionDetails">
+            
+                <td>{{lineItem.orderablePrescribedName}}</td>
+                <td ng-if="vm.inPrescriptionServe"><select id="substituteProduct" ng-model="vm.selectedSubstituteProduct" 
+                    ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
+                    ng-disabled="!vm.substituteProduct"></select></td>
                 <td>{{lineItem.batchNumber}}</td>
                 <td>{{lineItem.expiryDate}}</td>
                 <td>{{lineItem.soh}}</td>
-                <td><input ng-model="lineItem.dose" class="form-control" type="number" min="0" step="1"
-                        oninput="validity.valid||(value='');" required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"></td>
+                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.Dispense.dose" class="form-control" type="number" min="0" step="1"
+                        oninput="validity.valid||(value='');" required></td>
 
-                <td><select id="dispensingUnit" ng-model="lineItem.doseUnit" ng-options="unit for unit in vm.dispensingUnits"
-                        required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"></select></td>
+               <td ng-if="vm.inPrescriptionServe"><select id="dispensingUnit" ng-model="lineItem.Dispense.doseUnit" ng-options="unit for unit in vm.dispensingUnits"
+                        required></select></td>
 
-                <td><select id="doseFrequency" ng-model="lineItem.doseFrequency"
-                        ng-options="frequency for frequency in  vm.dosageFrequency" required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"></select></td>
+                <td ng-if="vm.inPrescriptionServe"><select id="doseFrequency" ng-model="lineItem.Dispense.doseFrequency"
+                        ng-options="frequency for frequency in  vm.dosageFrequency" required></select></td>
 
-                <td><select id="doseRoute" ng-model="lineItem.doseRoute" ng-options="route for route in  vm.doseRoute"
-                        required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"></select></td>
+                <td ng-if="vm.inPrescriptionServe"><select id="doseRoute" ng-model="lineItem.Dispense.doseRoute" ng-options="route for route in  vm.doseRoute"
+                        required></select></td>
 
-                <td><input ng-model="lineItem.duration" type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;" 
-                        required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"/></td>
+                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.Dispense.duration" type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;" 
+                        required></td>
                 
-                <td><select id="durationUnit" ng-model="lineItem.durationUnit" ng-options="durationUnit for durationUnit in  vm.durationUnits" 
-                    required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"></select></td>
+                <td ng-if="vm.inPrescriptionServe"><select id="durationUnit" ng-model="lineItem.Dispense.durationUnit" ng-options="durationUnit for durationUnit in  vm.durationUnits" 
+                    required></select></td>
                 
-                <td><select id="instruction" ng-model="lineItem.instruction" ng-options="instruction for instruction in  vm.instructions" 
-                    required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"></select></td>
+                <td ng-if="vm.inPrescriptionServe"><select id="instruction" ng-model="lineItem.Dispense.instruction" ng-options="instruction for instruction in  vm.instructions" 
+                    required></select></td>
 
-                <td><input type="text" ng-model="lineItem.additionalInstruction"></input></td>
+                <td ng-if="vm.inPrescriptionServe"><input type="text" ng-model="lineItem.Dispense.additionalInstruction"></input></td>
                 
                 <td><input ng-model="lineItem.quantityPrescribed" type="number" min="0" step="1" oninput="validity.valid||(value='');" 
-                    required ng-disabled="vm.inPrescriptionServe && !vm.substituteProduct"/></td>
+                    required></td>
 
-                <td><input ng-model="lineItem.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required/>
-                </td>
-                <td><input type="checkbox" ng-model="lineItem.isInternallyServed"></td>
-                <td><input type="text" ng-model="lineItem.comments"></input></td>
+                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.Dispense.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required/>
+                </td> 
+                <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.Dispense.isInternallyServed"></td>
+                <td><input type="text" ng-model="lineItem.Dispense.comments"></input></td>
                 <td>
-                    <button ng-if="!vm.inPrescriptionServe" type="button" class="danger" ng-click="vm.remove(lineItem)">Remove</button>
+                    <button ng-if="!vm.inPrescriptionServe" type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
                     <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.substitute(lineItem)">Substitute</button>
                 </td>
+                 -->
             </tr>
+
+
         </tbody>
     </table>
 </section>
@@ -210,11 +260,11 @@
 <div class="openlmis-toolbar">
     <button ui-sref="^">{{'dispensingPrescriptionForm.cancel' | message}}</button>
     <div class="button-group primary">
-        <button ng-if="!vm.inPrescriptionServe" class="primary" form="newPrescriptionForm" ng-click="vm.submitPrescription()">{{(vm.updateMode ?
+        <button ng-if="!vm.inPrescriptionServe" class="primary" form="newPrescriptionForm" ng-click="vm.createPrescrition()">{{(vm.updateMode ?
             'dispensingPrescriptionForm.updatePrescription' : 'dispensingPrescriptionForm.createPrescription') |
             message}}</button>
         <!-- <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button> -->
-        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="removeContact($index)">Serve</button>
+        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
     </div>
 </div>

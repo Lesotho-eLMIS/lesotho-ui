@@ -35,50 +35,37 @@
                 }
             },
             resolve: {
-                facility: function(facilityFactory, $stateParams) {
+                facility: function (facilityFactory, $stateParams) {
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
                 },
-                
-                patient: function($stateParams, dispensingService) {                         
-                    return dispensingService.getPatients($stateParams.patientId).then(function(patientsObject) {  
+                patient: function ($stateParams, dispensingService) {
+                    return dispensingService.getPatients($stateParams.patientId).then(function (patientsObject) {
                         for (var key in patientsObject) {
-                                if (key == $stateParams.patientId) {
-                                    return patientsObject[key];                
-                                }
+                            if (key == $stateParams.patientId) {
+                                return patientsObject[key];
                             }
+                        }
                     });
-                 },
-                //  Products: function($stateParams, orderableGroupService){
-                //     console.log($stateParams);
-                //     return orderableGroupService
-                //         .findAvailableProductsAndCreateOrderableGroups('248dbe58-b31a-4913-8686-9d212f67ed57', $stateParams.facilityId, false);
-                // }
+                },
+                user: function (authorizationService) {
+                    return authorizationService.getUser();
+                },
+                productsWithSOH: function (prescriptionsService, facility) {
+                    return prescriptionsService.getProductsWithSOH(facility.id)
+                        .then(function (result) {
+                            return result.content;
+                        });
+                },
+                allProducts: function (prescriptionsService, facility) {
+                    return prescriptionsService.getAllFacilityProducts(facility.id)
+                        .then(function (result) {
+                            return result;
+                        });
+                }
             }
-            // resolve: {
-            //     facility: function(facilityFactory, $stateParams) {
-            //         if (!$stateParams.facility) {
-            //             return facilityFactory.getUserHomeFacility();
-            //         }
-            //         return $stateParams.facility;
-            //     },
-                // program: function(programService, $stateParams) {
-                //     if (!$stateParams.program) {
-                //         return programService.get($stateParams.programId);
-                //     }
-                //     return $stateParams.program;
-                // },
-            //     orderableGroups: function ($stateParams, program, facility, existingStockOrderableGroupsFactory) {
-            //         if (!$stateParams.orderableGroups) {
-            //             $stateParams.orderableGroups = existingStockOrderableGroupsFactory
-            //                 .getGroupsWithNotZeroSoh($stateParams, program, facility);
-            //         }
-            //         console.log("TRANSITIONING");
-            //         return $stateParams.orderableGroups;
-            //     }
-            // }
         });
     }
 
