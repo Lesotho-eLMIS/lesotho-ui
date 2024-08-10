@@ -16,5 +16,6 @@
   "dispensingPrescriptions.issueDate": "Issue Date",
   "dispensingPrescriptions.status": "Status",
   "dispensingPrescriptions.followUpDate": "Follow up Date",
-  "dispensingPrescriptions.addPatient": "Add Patient"
+  "dispensingPrescriptions.addPatient": "Add Patient",
+  "dispensingPrescriptions.facility": "Facility"
 }

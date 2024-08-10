@@ -29,16 +29,17 @@
        .controller('dispensingPrescriptionsController', controller);
 
        controller.$inject = ['$state', '$stateParams', 'facility','facilities', 
-       'offlineService', 'dispensingService'];
+       'offlineService', 'dispensingService', 'prescriptionsService'];
 
    function controller($state, $stateParams, facility,facilities,offlineService, 
-       dispensingService ) {
+       dispensingService, prescriptionsService ) {
 
        var vm = this;
 
        // vm.resetPatientPassword = resetPatientPassword;
        vm.search = search;
        vm.$onInit = onInit;
+       vm.searchPrescriptions = searchPrescriptions;
        vm.searchPatients = searchPatients;
        vm.viewPrescription = viewPrescription;
        //vm.goToCreatePrescriptionForm = goToCreatePrescriptionForm;
@@ -101,6 +102,7 @@
         */
        function onInit() {
            vm.fetchPatients = undefined;
+           vm.prescriptionsData = undefined;
            vm.patientsData = undefined;
            vm.patientParams = {};
            vm.facility = facility;
@@ -131,6 +133,37 @@
            //     reload: true
            // });
        }
+
+        function searchPrescriptions(){
+            var getPatientParams = vm.patientParams;
+            if(getPatientParams.facilityLocation){
+                getPatientParams.facilityId = vm.facility.id;
+            }
+            else{
+                getPatientParams.facilityId = undefined;
+            }    
+            viewPrescriptions(getPatientParams);   
+        }
+
+        function viewPrescriptions(patientSearchParams){
+            console.log("1 ***************");
+            return prescriptionsService.getPrescriptions(patientSearchParams).then(function(patientsObject) {  
+                console.log("2 ***************");             
+                for (var key in patientsObject) {
+                        if (patientsObject.hasOwnProperty(key)) {
+                            // Access each patient object to modify its facilityId
+                            var patient = patientsObject[key];
+                            //Find the Patient's home facility
+                            let facility = vm.facilities.filter(item => item.id === patient.facilityId);
+                            patient.facilityId = facility[0].name;                      
+                        }
+                    }
+                    vm.prescriptionsData =  patientsObject;
+ 
+                    console.log("***************");
+                    console.log(vm.prescriptionsData);
+            });
+        }
 
        function searchPatients(){
            var getPatientParams = vm.patientParams;

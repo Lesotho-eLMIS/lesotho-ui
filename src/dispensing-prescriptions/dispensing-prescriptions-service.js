@@ -98,19 +98,21 @@
          * @param  {String}     Facility UUID
          * @return {Promise}    Prescription promise
          */
-        function getPrescriptions() {
+        function getPrescriptions(patientParams) {
           
-            // var params = {
-            //     patientNumber: patientParams.patientNumber,
-            //     firstName: patientParams.firstName,
-            //     lastName: patientParams.lastName,
-            //     dateOfBirth: patientParams.dateOfBirth,
-            //     nationalId: patientParams.nationalId,
-            //     facilityId:patientParams.facilityId
-            // };
-            // console.log("Prescription Service");
-            // console.log(params);
-            return resource.getAll().$promise.then(function(response) {
+            var params = {
+                patientNumber: patientParams.patientNumber,
+                firstName: patientParams.firstName,
+                // lastName: patientParams.lastName,
+                // dateOfBirth: patientParams.dateOfBirth,
+                nationalId: patientParams.nationalId,
+                // facilityId:patientParams.facilityId,
+                // PrescriptionStatus: 'INITIATED'
+            };
+            console.log("Prescription Service");
+            console.log(params);
+            console.log("1 ###################");
+            return resource.getAll(params).$promise.then(function(response) {
                 //Transforming the response to an object if it's an array
                     if (Array.isArray(response)) {
                       console.log("got it!!!!!!!!");
@@ -123,14 +125,16 @@
                         }, {});                        
                         return objectOfPatients;                         
                     }
-               return response; 
+                    console.log("###################");
+                    return response; 
              });
         };
 
         function getPrescription(prescriptionIdId){
           var params ={id: prescriptionIdId};
           return resource.get(params);
-      };
+        };
+
          /**
          * @ngdoc method
          * @methodOf dispensing-prescriptions.prescriptionsService
