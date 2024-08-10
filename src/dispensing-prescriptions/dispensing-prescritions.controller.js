@@ -28,10 +28,10 @@
        .module('dispensing-prescriptions')
        .controller('dispensingPrescriptionsController', controller);
 
-       controller.$inject = ['$state', '$stateParams', 'facility','facilities', 
-       'offlineService', 'dispensingService'];
+       controller.$inject = ['$state', '$stateParams', '$scope', 'facility','facilities', 
+       'prescriptionsService', 'dispensingService'];
 
-   function controller($state, $stateParams, facility,facilities,offlineService, 
+   function controller($state, $stateParams, $scope, facility,facilities, prescriptionsService, 
        dispensingService ) {
 
        var vm = this;
@@ -102,7 +102,7 @@
        function onInit() {
            vm.fetchPatients = undefined;
            vm.patientsData = undefined;
-           vm.patientParams = {};
+           vm.prescriptionParams = {};
            vm.facility = facility;
            vm.facilities = facilities;
        }
@@ -114,23 +114,19 @@
            
            console.log("****** Done ******");
 
-           //var stateParams = angular.copy($stateParams);
-
-           // stateParams.lastName = vm.lastName;
-           // stateParams.firstName = vm.firstName;
-           // stateParams.patientType = vm.patientType;
-           // stateParams.patientId = vm.patientId;
-
-           // stateParams.lastName = "Demo";
-           // stateParams.firstName = "Dan";
-           // stateParams.patientType = "Out";
-           // stateParams.patientId = "F2011/20240711/00045";
-           //stateParams.status = "Initiated";
-
-           // $state.go('openlmis.dispensing.prescriptions.form2', stateParams, {
-           //     reload: true
-           // });
        }
+
+       //fetches prescriptions for a single patient
+        vm.fetchAllPrescriptions = function(){
+            var patientNum = '09018273934';
+            var searchParams = vm.prescriptionParams;
+            { searchParams.isVoided =  false };
+            console.log(vm.prescriptionParams);
+           var pres= prescriptionsService.getPrescriptions(vm.prescriptionParams);
+           $scope.prescriptionsList.$setPristine();
+           console.log("All Prescriptions", pres);
+        }
+
 
        function searchPatients(){
            var getPatientParams = vm.patientParams;

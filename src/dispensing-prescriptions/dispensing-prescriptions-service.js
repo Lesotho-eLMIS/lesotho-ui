@@ -102,16 +102,25 @@
          * @param  {String}     Facility UUID
          * @return {Promise}    Prescription promise
          */
-      function getPrescriptions() {
-        return resource.getAll().$promise.then(function (response) {
+      function getPrescriptions(prescriptionParams) {
+        var params = {
+          patientNumber: prescriptionParams.patientNumber,
+          status: prescriptionParams.status,
+          lastName: prescriptionParams.lastName,
+          followUpDate: prescriptionParams.followUpDate,
+          nationalId: prescriptionParams.nationalId,
+          contactNumber: prescriptionParams.contactNumber
+        };
+
+        return resource.getAll(params).$promise.then(function (response) {
           //Transforming the response to an object if it's an array
           if (Array.isArray(response)) {
-            var objectOfPatients = response.reduce((result, obj) => {
+            var objectOfPrescriptions = response.reduce((result, obj) => {
               result[obj.id] = obj;
 
               return result;
             }, {});
-            return objectOfPatients;
+            return objectOfPrescriptions;
           }
           return response;
         });

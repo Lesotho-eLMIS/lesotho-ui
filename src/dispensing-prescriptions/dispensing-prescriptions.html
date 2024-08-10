@@ -2,38 +2,30 @@
 <h2 ng-if="vm.orderingFacility">{{'orderFulfillment.fulfillOrdersAt' | message: {'facility':  vm.orderingFacility.name} }}</h2>
 <h2 ng-if="!vm.orderingFacility">{{ 'dispensingPrescriptions.title' | message }}</h2>
 
-<form class="sidebar" ng-submit="vm.searchPatients()">
-  <!-- <label for="patientId">{{ 'dispensingPrescriptions.patientId' | message }}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.nationalId">
-  <label for="patientType">{{ 'dispensingPrescriptions.patientType' | message }}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientType">
-  <label for="lastName">{{ 'dispensingPrescriptions.lastName' | message }}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.lastName">
-  <label for="firstName">{{ 'dispensingPrescriptions.firstName' | message }}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.firstName"> -->
-  <label for="patientNumber">{{'dispensingPatients.patientNumber' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.patientNumber">
-  <label for="lastName">{{'dispensingPatients.lastName' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.lastName">
-  <label for="firstName">{{'dispensingPatients.firstName' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.firstName">
-  <label for="nationalidNumber">{{'dispensingPatients.nationalidNumber' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.nationalId">
-  <label for="dateofBirth">{{'dispensingPatients.dateofBirth' | message}}</label>
-  <input id="dateOfBirth" type="date" style="width: 90px;" ng-model="vm.patientParams.dateOfBirth" max-date="vm.maxDate" inputmode="none"/>
+<form id="prescriptionsList" class="sidebar" ng-submit="vm.fetchAllPrescriptions()">
+  <label for="patientNumber">{{'dispensingPrescriptions.patientNumber' | message}}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.patientNumber">
+  <label for="nationalidNumber">{{'dispensingPrescriptions.nationalidNumber' | message}}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.nationalId">
+  <label for="lastName">{{'dispensingPrescriptions.lastName' | message}}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.lastName">
+  <label for="firstName">{{'dispensingPrescriptions.status' | message}}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.firstName">
+  <label for="dateofBirth">{{'dispensingPrescriptions.followUpDate' | message}}</label>
+  <input id="dateOfBirth" type="date" style="width: 90px;" ng-model="vm.prescriptionParams.followUpDate" max-date="vm.maxDate" inputmode="none"/>
   <label for="contactNumber">{{'dispensingPatients.contactNumber' | message}}</label>
-  <input class="form-control" value="+266 " type="text" style="width: 150px;" ng-model="vm.patientParams.contactNumber">
-  <fieldset class="form-group">
+  <input class="form-control" value="+266 " type="text" style="width: 150px;" ng-model="vm.prescriptionParams.contactNumber">
+  <!-- <fieldset class="form-group">
     <legend>{{'dispensingPatients.facility' | message}}</legend>
     <label class="radio">
-        <input type="radio" ng-model="vm.patientParams.facilityLocation" ng-value="true" ng-required="vm.patientParams.facilityLocation === undefined"/>
+        <input type="radio" ng-model="vm.prescriptionParams.facilityLocation" ng-value="true" ng-required="vm.prescriptionParams.facilityLocation === undefined"/>
         {{'dispensingPatients.facilityLocal' | message}}
     </label>
     <label class="radio">
-        <input type="radio" ng-model="vm.patientParams.facilityLocation" ng-value="false" ng-required="vm.patientParams.facilityLocation === undefined"/>
+        <input type="radio" ng-model="vm.prescriptionParams.facilityLocation" ng-value="false" ng-required="vm.prescriptionParams.facilityLocation === undefined"/>
         {{'dispensingPatients.facilityNational' | message}}
     </label>
-  </fieldset>
+  </fieldset> -->
 
   <input type="submit" class="btn btn-primary" value="{{'dispensingPrescriptions.search' | message}}"/>
 </form>
@@ -82,9 +74,9 @@
       <td>{{patient.patientNumber}}</td>
       <td>{{patient.personDto.lastName}}</td>
       <td>{{patient.personDto.firstName}}</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+      <td> Here </td>
+      <td> Here </td>
+      <td> Here </td>
       <td> </td>
       <td> </td>
       <td> </td>
