@@ -59,19 +59,22 @@
     <fieldset class="form-group">
         <label for="createdDate">Created date</label>
         <input id="createdDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.createdDate"
-            max-date="vm.maxDate" required inputmode="none" ng-disabled="vm.inPrescriptionServe"/>
+            max-date="vm.maxDate" required ng-disabled="vm.inPrescriptionServe"/>
     </fieldset>
 
     <fieldset ng-if="vm.inPrescriptionServe" class="form-group">
         <label for="nationalID">Dispensing date</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
-            max-date="vm.maxDate" required inputmode="none"/>
+        min="{{vm.minFollowUpDate}}" required/>
+        <span ng-show="followUpDateForm.followUpDate.$error.min && !vm.inPrescriptionServe" class="text-danger">
+            Follow-up date must be from tomorrow onwards.
+        </span>
     </fieldset>
 
     <fieldset class="form-group">
         <label for="followUpDate">Follow up date</label>
         <input id="followUpDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.followUpDate"
-            max-date="vm.maxDate" required inputmode="none" ng-disabled="vm.inPrescriptionServe" />
+            max-date="vm.maxDate" required ng-disabled="vm.inPrescriptionServe" />
     </fieldset>
 
     <fieldset class="form-group">
@@ -85,21 +88,6 @@
             Out Patient
         </label>
     </fieldset>
-    
-
-
-    <!-- <fieldset class="form-group">
-        <label for="nickName">Captured date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
-            ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none"/>
-    </fieldset> -->
-
-    <!-- <fieldset class="form-group">
-        <label>
-            <input type="checkbox" ng-model="vm.Prescription.allowNotify"/>
-            Voided
-        </label>
-    </fieldset> -->
 </form>
 
 <!-- <section id="newPrescriptionForm"> -->
@@ -172,7 +160,7 @@
             <tr ng-repeat="lineItem in vm.prescriptionLineItems">
             
                 <td>{{lineItem.fullProductName}}</td>
-                <td ng-if="vm.inPrescriptionServe"><select id="substituteProduct" ng-model="lineItem.dispensedProduct" 
+                <td ng-if="vm.inPrescriptionServe"><select id="dispensedProduct" ng-model="lineItem.dispensedProduct" 
                     ng-options="orderableGroup.canFulfillForMe[0].orderableName for orderableGroup in vm.orderableGroups"
                     ng-change="vm.updateBatchOptions(lineItem)"></select></td>
                 <td ng-if="vm.inPrescriptionServe"><select ng-model="lineItem.selectedBatch" 

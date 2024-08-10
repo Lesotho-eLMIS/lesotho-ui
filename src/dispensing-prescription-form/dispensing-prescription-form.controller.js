@@ -112,7 +112,11 @@
             vm.user = user;
             vm.orderableGroups = productsWithSOH;
             vm.allProducts = allProducts;
+            vm.prescriptionDetails.createdDate = new Date(); //= vm.inPrescriptionServe ? null : new Date();
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
+
+            vm.minFollowUpDate = new Date();
+            vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
 
             vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon',
                 'Teaspoon', 'Unit(s)', 'Puff(s)'];
@@ -122,14 +126,26 @@
             vm.doseRoute = ['Intramuscular', 'Intravenous', 'Oral', 'Per Vaginal', 'Sub Cutaneous', 'Per Rectum', 'Sub Lingual', 'Nasogastric',
                 'Intradermal', 'Intraperitoneal', 'Intrathecal', 'Intraosseous', 'Topical', 'Nasal', 'Inhalation'];
             vm.durationUnits = ['Day(s)', 'Weeks(s)', 'Month(s)'];
-            vm.instructions = ['Before meals', 'Empty stomach', 'In the morning', 'In the evening', 'At bedtime', 'Immediately', 'As directed'];
+            vm.instructions = ['Before meals', 'After Meals', 'Empty stomach', 'In the morning', 'In the evening', 'At bedtime', 'Immediately', 'As directed'];
 
         }
 
         vm.updateBatchOptions = function (lineItem) {
+
             if (lineItem.dispensedProduct) {
-                lineItem.batches = lineItem.dispensedProduct.canFulfillForMe;
-                lineItem.selectedBatch = null;
+                // Retrieve and sort the batches by expiration date (earliest first)
+                lineItem.batches = lineItem.dispensedProduct.canFulfillForMe.sort((a, b) => {
+                    // Assuming expiration dates are JavaScript Date objects; if they are strings, convert them using new Date()
+                    return new Date(a.lotExpirationDate) - new Date(b.lotExpirationDate);
+                });
+        
+                // Auto-select batch if there is only one
+                if (lineItem.batches.length === 1) {
+                    lineItem.selectedBatch = lineItem.batches[0];
+                    vm.updateBatchDetails(lineItem); // Update batch details (expiration date, stock on hand)
+                } else {
+                    lineItem.selectedBatch = null;
+                }
             } else {
                 lineItem.batches = [];
             }
@@ -137,10 +153,11 @@
 
         // Function to update expiry date and soh
         vm.updateBatchDetails = function (lineItem) {
+            
             if (lineItem.selectedBatch) {
-                console.log('Selected Batch:');
+                console.log('Selected Batch:', lineItem.selectedBatch.lotExpirationDate, lineItem.selectedBatch.stockOnHand);
             } else {
-                console.log("No batching!!!")
+                console.log("No batch selected");
             }
         };
 
@@ -245,7 +262,12 @@
         function addProduct() {
 
             var selectedItem = vm.selectedProduct;
-            vm.prescriptionLineItems.push(
+
+            var matchingOrderable = vm.orderableGroups.find(orderableGroup => 
+                orderableGroup.canFulfillForMe[0].orderableName === selectedItem.orderable.fullProductName
+            );
+
+            vm.prescriptionLineItems.unshift(
 
                 {
                     fullProductName: selectedItem.orderable.fullProductName,
@@ -259,9 +281,13 @@
                     quantityPrescribed: "",
                     remainingBalance: "",
                     orderablePrescribed: selectedItem.orderable.id,
+                    dispensedProduct: matchingOrderable ? matchingOrderable : null,
                     status: "REQUESTED"
-                }
+                }                
             );
+            if (matchingOrderable) {
+                vm.updateBatchOptions(vm.prescriptionLineItems[0]); // Assumes the new line item is the first in the list
+            }
         }
 
 
