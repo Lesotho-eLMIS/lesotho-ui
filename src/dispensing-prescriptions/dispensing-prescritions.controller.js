@@ -118,11 +118,15 @@
 
        //fetches prescriptions for a single patient
         vm.fetchAllPrescriptions = function(){
-            var patientNum = '09018273934';
+            //var patientNum = '09018273934';
             var searchParams = vm.prescriptionParams;
             { searchParams.isVoided =  false };
             console.log(vm.prescriptionParams);
-           var pres= prescriptionsService.getPrescriptions(vm.prescriptionParams);
+           var pres= prescriptionsService.getPrescriptions(vm.prescriptionParams)
+           .then(function(response){
+            vm.prescriptionsData = response;
+            console.log("Prescriptions Object", vm.prescriptionsData);
+           });
            $scope.prescriptionsList.$setPristine();
            console.log("All Prescriptions", pres);
         }

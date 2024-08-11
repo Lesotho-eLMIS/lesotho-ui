@@ -70,16 +70,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="patient in vm.patientsData">
-      <td>{{patient.patientNumber}}</td>
-      <td>{{patient.personDto.lastName}}</td>
-      <td>{{patient.personDto.firstName}}</td>
-      <td> Here </td>
-      <td> Here </td>
-      <td> Here </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
+    <tr ng-repeat="prescription in vm.prescriptionsData">
+      <td>{{prescription.patientNumber}}</td>
+      <td>{{prescription.personDto.lastName}}</td>
+      <td>{{prescription.personDto.firstName}}</td>
+      <td> {{prescription.patientType}} </td>
+      <td> {{prescription.followUpDate}} </td>
+      <td> {{prescription.createdDate}} </td>
+      <td>{{prescription.capturedDate}} </td>
+      <td>{{prescription.issueDate}} </td>
+      <td> {{prescription.status}} </td>
       <td>
         <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form({patientId: patient.id})">
           {{'dispensingPrescriptions.addPrescription' | message}}

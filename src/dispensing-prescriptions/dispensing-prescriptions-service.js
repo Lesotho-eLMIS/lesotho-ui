@@ -172,7 +172,7 @@
             patientId: prescriptionDetails.patientId,
             patientType: prescriptionDetails.patientType ? "Outpatient" : "Inpatient",
             followUpDate: prescriptionDetails.followUpDate,
-            issueDate: "2024-07-07",
+            issueDate: prescriptionDetails.issueDate,
             createdDate: prescriptionDetails.createdDate,
             capturedDate: prescriptionDetails.createdDate,
             lastUpdate: "2024-07-07",

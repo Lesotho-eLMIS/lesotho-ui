@@ -64,7 +64,8 @@
 
     <fieldset ng-if="vm.inPrescriptionServe" class="form-group">
         <label for="nationalID">Dispensing date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.issueDate
+        "
         min="{{vm.minFollowUpDate}}" required/>
         <span ng-show="followUpDateForm.followUpDate.$error.min && !vm.inPrescriptionServe" class="text-danger">
             Follow-up date must be from tomorrow onwards.
