@@ -70,7 +70,11 @@
                   method: 'GET',
                   isArray: true,
                   params: { facilityId: '@facilityId' }
-                }
+                },
+                updatePrescriptionEvent: {
+                  url: openlmisUrlFactory('/api/prescription/:id'),
+                  method: 'PUT'
+              },
             });
 
  
@@ -80,6 +84,7 @@
         this.getProductsWithSOH =  getProductsWithSOH;
         this.servePrescription = servePrescription;
         this.getAllFacilityProducts = getAllFacilityProducts;
+        this.updatePrescription = updatePrescription;
 
         function getProductsWithSOH(facilityId) {
           var params ={facilityId: facilityId};
@@ -180,6 +185,11 @@
           }
          
           return resource.serve(params, prescriptionData);
+        }
+
+        function updatePrescription(prescriptionDetails){
+          console.log("Editing Prescription", prescriptionDetails);
+          return resource.updatePrescriptionEvent({ id:prescriptionDetails.id }, prescriptionDetails).$promise;
         }
     }
 })();

@@ -2,7 +2,7 @@
 <h2 ng-if="vm.orderingFacility">{{'orderFulfillment.fulfillOrdersAt' | message: {'facility':  vm.orderingFacility.name} }}</h2>
 <h2 ng-if="!vm.orderingFacility">{{ 'dispensingPrescriptions.title' | message }}</h2>
 
-<form id="prescriptionsList" class="sidebar" ng-submit="vm.fetchAllPrescriptions()">
+<form name="prescriptionsList" class="sidebar" ng-submit="vm.fetchAllPrescriptions()">
   <label for="patientNumber">{{'dispensingPrescriptions.patientNumber' | message}}</label>
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.patientNumber">
   <label for="nationalidNumber">{{'dispensingPrescriptions.nationalidNumber' | message}}</label>
