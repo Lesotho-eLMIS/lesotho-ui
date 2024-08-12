@@ -6,7 +6,7 @@
             <form name="newPatientForm1" class="content" ng-submit="vm.submitPatientData()">
                 <fieldset class="form-group">
                     <label for="nationalID">{{'dispensingPatientForm.nationalID' | message}}</label>
-                    <input id="nationalID" ng-model="vm.patient.nationalID" type="text" required />
+                    <input id="nationalID" ng-model="vm.patient.nationalID" type="text" />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="firstName">{{'dispensingPatientForm.firstName' | message}}</label>
@@ -102,30 +102,30 @@
             <form name="newPatientForm3" class="content" ng-submit="vm.submitPatientData()">
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.height' | message}}</label>
-                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
+                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNamesX" type="text" disabled />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="nextOfKinContact">{{'dispensingPatientForm.weight' | message}}</label>
-                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContact" type="text" />
+                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContactX" type="text" disabled />
                 </fieldset>
 
                 <fieldset class="form-group">
                     <label for="tbStatus">{{'dispensingPatientForm.tbStatus' | message}}</label>
                     <select id="tbStatus" ng-model="vm.tbStatus"
-                        ng-options="option for option in  vm.tbStatusOptions"></select>
+                        ng-options="option for option in  vm.tbStatusOptions" disabled></select>
                 </fieldset>
 
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.systolic' | message}}</label>
-                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
+                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNamesX" type="text" disabled />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="nextOfKinContact">{{'dispensingPatientForm.diastolic' | message}}</label>
-                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContact" type="text" />
+                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContactX" type="text" disabled />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.muac' | message}}</label>
-                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
+                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNamesX" type="text" disabled />
                 </fieldset>
             </form>
         </div>

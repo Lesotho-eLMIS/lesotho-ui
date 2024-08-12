@@ -10,8 +10,12 @@
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.nationalId">
   <label for="lastName">{{'dispensingPrescriptions.lastName' | message}}</label>
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.lastName">
-  <label for="firstName">{{'dispensingPrescriptions.status' | message}}</label>
-  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.status">
+
+  <label for="firstName">{{'dispensingPrescriptions.firstName' | message}}</label>
+  <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.firstName">
+
+  <label for="status">{{'dispensingPrescriptions.status' | message}}</label>
+  <select id="status" ng-model="vm.prescriptionParams.status" ng-options="status for status in  vm.status"></select>
   <label for="dateofBirth">{{'dispensingPrescriptions.followUpDate' | message}}</label>
   <input id="dateOfBirth" type="date" style="width: 90px;" ng-model="vm.prescriptionParams.followUpDate"
     max-date="vm.maxDate" inputmode="none" />

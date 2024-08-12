@@ -115,6 +115,7 @@
             vm.orderableGroups = productsWithSOH;
             vm.allProducts = allProducts;
             vm.prescriptionDetails.createdDate = new Date(); //= vm.inPrescriptionServe ? null : new Date();
+            vm.prescriptionDetails.issueDate = new Date();
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
 
 
@@ -220,18 +221,17 @@
 
             vm.prescriptionDetails.servedByUserId = vm.user.user_id;
 
-            confirmService.confirm("Are you sure you want to serve a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "", "Served")
-                .then(function () {
-                    prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
-                        .then(function (response) {
-                            notificationService.success('Prescription Served.');
-                            $state.go('openlmis.dispensing.prescriptions');
-                        })
-                        .catch(function (error) {
-                            console.error('Error occurred:', error);
-
-                        });
+            confirmService.confirm("Are you sure you want to serve a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "?", "Yes")
+            .then(function () {
+                prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
+                .then(function (response) {
+                    notificationService.success('Prescription Served.');
+                    $state.go('openlmis.dispensing.prescriptions');
+                })
+                .catch(function (error) {
+                    console.error('Error occurred:', error);
                 });
+            });
         }
 
         vm.createPrescrition = function () {
@@ -245,7 +245,7 @@
             vm.prescriptionDetails.prescribedByUserId = vm.user.user_id;
             vm.prescriptionDetails.lineItems = vm.prescriptionLineItems;
 
-            confirmService.confirm("Are you sure you want to create a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "", "Create")
+            confirmService.confirm("Are you sure you want to create a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "?", "Yes")
                 .then(function () {
                     prescriptionsService.createPrescription(vm.prescriptionDetails).$promise
                         .then(function (response) {
