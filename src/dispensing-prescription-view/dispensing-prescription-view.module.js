@@ -18,35 +18,18 @@
     'use strict';
 
     /**
-     * @ngdoc controller
-     * @name dispensing-prescription-form2.controller:prescriptionForm2Controller
+     * @module dispensing-prescription-view
      *
      * @description
-     * Exposes method for creating/updating prescription to the modal view.
+     * Provides edit/add prescription screen for user.
      */
-    angular
-        .module('dispensing-prescription-form2')
-        .controller('prescriptionForm2Controller', controller);
+    angular.module('dispensing-prescription-view', [
+        'openlmis-modal',
+        'openlmis-rights',
+        'referencedata-facility',
+        'ui.router',
+        'dispensing',
+        'stockmanagement'
+    ]);
 
-    controller.$inject = ['$filter', '$state'];
-
-    function controller($filter, $state) {
-
-        var vm = this;
-
-        vm.$onInit = onInit;
-
-        /**
-         * @ngdoc method
-         * @methodOf dispensing-prescription-form.controller:prescriptionFormController
-         * @name $onInit
-         *
-         * @description
-         * Initialization method of the prescriptionFormModalController.
-         */
-        function onInit() {
-
-            console.log("...In init...")
-        }
-    }
 })();

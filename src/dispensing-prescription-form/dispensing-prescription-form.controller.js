@@ -116,6 +116,9 @@
             vm.prescriptionDetails.createdDate = new Date(); //= vm.inPrescriptionServe ? null : new Date();
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
 
+
+           console.log("State Params: ", $stateParams);
+
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
 

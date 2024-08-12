@@ -105,12 +105,20 @@
            vm.prescriptionParams = {};
            vm.facility = facility;
            vm.facilities = facilities;
+           console.log($stateParams);
+           vm.fetchPatient();
+           vm.fetchAllPrescriptions();
        }
 
-       function viewPrescription(){
+       function viewPrescription(prescription){
            console.log("****** View Prescription ******");
 
-           $state.go('openlmis.dispensing.prescriptions.form2');
+           $state.go('openlmis.dispensing.view', {
+            prescriptionId: prescription.id,
+            patientId: prescription.patientId
+        });
+
+          // $state.go('openlmis.dispensing.prescriptions.form2');
            
            console.log("****** Done ******");
 
@@ -125,10 +133,20 @@
            var pres= prescriptionsService.getPrescriptions(vm.prescriptionParams)
            .then(function(response){
             vm.prescriptionsData = response;
+            if(response){
+                response.forEach()
+            }
             console.log("Prescriptions Object", vm.prescriptionsData);
            });
-           $scope.prescriptionsList.$setPristine();
+      //     $scope.prescriptionsList.$setPristine();
            console.log("All Prescriptions", pres);
+        }
+
+        vm.fetchPatient = function(){
+
+            var patient = dispensingService.getPatient($stateParams.patientId);
+            console.log("PATIENT", patient);
+
         }
 
 

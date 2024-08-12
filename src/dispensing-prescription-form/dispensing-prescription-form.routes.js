@@ -34,6 +34,9 @@
                     controllerAs: 'vm'
                 }
             },
+            params: {
+                prescriptionId: null 
+              },
             resolve: {
                 facility: function (facilityFactory, $stateParams) {
                     if (!$stateParams.facility) {

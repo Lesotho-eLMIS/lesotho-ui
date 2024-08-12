@@ -60,6 +60,7 @@
       <th>{{'dispensingPrescriptions.patientNumber' | message}}</th>
       <th>{{'dispensingPrescriptions.lastName' | message}}</th>
       <th>{{'dispensingPrescriptions.firstName' | message}}</th>
+      <th>{{'dispensingPrescriptions.dispensingFacility' | message}}</th>
       <th>{{'dispensingPrescriptions.patientType' | message}}</th>
       <th>{{'dispensingPrescriptions.followUpDate' | message}}</th>
       <th>{{'dispensingPrescriptions.createdDate' | message}}</th>
@@ -74,6 +75,7 @@
       <td>{{prescription.patientNumber}}</td>
       <td>{{prescription.personDto.lastName}}</td>
       <td>{{prescription.personDto.firstName}}</td>
+      <td> {{prescription.dispensingFacility}} </td>
       <td> {{prescription.patientType}} </td>
       <td> {{prescription.followUpDate}} </td>
       <td> {{prescription.createdDate}} </td>
@@ -81,16 +83,16 @@
       <td>{{prescription.issueDate}} </td>
       <td> {{prescription.status}} </td>
       <td>
-        <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form({patientId: patient.id})">
+        <!-- <button type="button" class="btn btn-primary add" ui-sref="openlmis.dispensing.prescriptions.form({patientId: patient.id})">
           {{'dispensingPrescriptions.addPrescription' | message}}
-        </button>
-        <!-- <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form">
-          {{'dispensingPrescriptions.viewPrescription' | message}}
         </button> -->
+        <button class="btn btn-primary" ng-click="vm.viewPrescription(prescription)">
+          {{'dispensingPrescriptions.viewPrescription' | message}}
+        </button>
       </td>
     </tr>
 
-    <tr ng-repeat="patient in vm.patientsData">
+    <!-- <tr ng-repeat="patient in vm.patientsData">
       <td>F2011/20240711/00045</td>
       <td>Demo</td>
       <td>Dan</td>
@@ -104,7 +106,7 @@
         <button class="btn btn-primary" ui-sref="openlmis.dispensing.prescriptions.form2">
           {{'dispensingPrescriptions.viewPrescription' | message}}
         </button>
-      </td>
+      </td> -->
     </tr>
 
     </tbody>
