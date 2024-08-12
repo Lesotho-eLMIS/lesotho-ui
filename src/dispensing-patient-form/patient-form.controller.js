@@ -58,6 +58,7 @@
             vm.viewTitle = (patientState === "New") ? "Add Patient" : "Edit Patient";
             vm.patient = !(patientState === "New")? vm.initialisePatient(patient) : {};
             vm.contactOptions = ["email", "phone"];
+            vm.updateMode = (patientState === "New") ? false : true;
 
             console.log("...In init...")
         }
@@ -87,7 +88,13 @@
             console.log(index);
             vm.contacts.splice(index, 1);
         }
-
+        vm.submitMode =  function() {
+            if (vm.updateMode) {
+                vm.savePatientUpdates();
+            } else {
+                vm.submitPatientData();
+            }
+        }
         vm.submitPatientData = function(){
 
             //Saving New Patient
@@ -96,9 +103,44 @@
             .then(function () {
                 var patientInfo = vm.patient;
                 patientInfo.homeFacility = facility.id;
+                patientInfo.mode = vm.updateMode;
 
                 console.log(patientInfo);
-                var response = dispensingService.submitPatientInfo(patientInfo);
+                var response = !(vm.updateMode) ? dispensingService.submitPatientInfo(patientInfo) : dispensingService.updatePatientInfo(patientInfo);
+                if (response) {
+                        // Adding success message when Patient saved.
+                    notificationService.success('Successfully submitted.');
+                } else {
+                    notificationService.error('Failed to submit.');
+                }
+
+                //clearing all the fields
+                vm.patient.nationalID = "";
+                vm.patient.firstName = "";
+                vm.patient.lastName = "";
+                vm.patient.nickName = "";
+                vm.patient.DOB = "";
+                vm.patient.dateOfBirthEstimated = "";
+                vm.patient.physicalAddress = "";
+                vm.patient.contact.contactValue = "";
+                vm.patient.motherMaidenName = "";
+                vm.patient.nextOfKinNames = "";
+                vm.patient.nextOfKinContact = "";
+                vm.patient.sex = null;
+            });
+        }
+
+        vm.savePatientUpdates = function(){
+            
+       
+
+            //Updating Patient
+            confirmService
+            .confirm("Are you sure you want to Update this patient?", 'Yes')
+            .then(function () {
+                var patientInfo = vm.patient;
+                patientInfo.homeFacility = facility.id;
+                var response = dispensingService.updatePatientInfo(patientInfo);
                 if (response) {
                         // Adding success message when Patient saved.
                     notificationService.success('Successfully submitted.');

@@ -64,6 +64,7 @@
         this.show = show;
  
         this.submitPatientInfo = submitPatientInfo; // To post data POD Manage payload
+        this.updatePatientInfo = updatePatientInfo;
         this.getPatients = getPatients; //To retrieve PODs from the database
         this.getPatient = getPatient;
         
@@ -149,6 +150,48 @@
             }
             return resource.postPatientEvent(payload);
         }
+
+
+        function updatePatientInfo(patientInfo){
+            
+            var payload = {
+                "facilityId": patientInfo.homeFacility,
+                "personDto": {
+                    "nationalId": patientInfo.nationalID,
+                    "firstName": patientInfo.firstName,
+                    "lastName": patientInfo.lastName,
+                    "nickName": patientInfo.nickName,
+                    "sex": patientInfo.sex,
+                    "dateOfBirth": patientInfo.DOB,
+                    "isDobEstimated": patientInfo.isDobEstimated,
+                    "physicalAddress": patientInfo.physicalAddress,
+                    "nextOfKinFullName": patientInfo.nextOfKinNames,
+                    "nextOfKinContact": patientInfo.nextOfKinContact,
+                    "motherMaidenName": patientInfo.motherMaidenName,
+                    "deceased": patientInfo.deceased,
+                    "retired": patientInfo.retired,
+                    "contacts": [
+                        {
+                            "contactType": patientInfo.contact.contactType,
+                            "contactValue": patientInfo.contact.contactValue
+                        }
+                    ]
+                },
+                "medicalHistory": [
+                    {
+                        "type": "Diagnosis",
+                        "history": "Diagnosed with letsoejane."
+                    },
+                    {
+                        "type": "Treatment",
+                        "history": "O sebelisa hloella-hape (iphinde futhi)."
+                    }
+                ]
+            }
+            console.log("Updating");
+            return resource.updatePatientEvent({ id: patientInfo.id }, payload);
+        }
+
 
         /**
          * @ngdoc method
