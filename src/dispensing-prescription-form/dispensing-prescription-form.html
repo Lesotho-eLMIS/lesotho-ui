@@ -64,7 +64,8 @@
 
     <fieldset ng-if="vm.inPrescriptionServe" class="form-group">
         <label for="nationalID">Dispensing date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="lineItem.occurredDate"
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.issueDate
+        "
         min="{{vm.minFollowUpDate}}" required/>
         <span ng-show="followUpDateForm.followUpDate.$error.min && !vm.inPrescriptionServe" class="text-danger">
             Follow-up date must be from tomorrow onwards.
@@ -204,58 +205,10 @@
                 </td>
                 
             </tr>
-<!-- 
-            <tr ng-show="vm.inPrescriptionServe" ng-repeat="lineItem in vm.PrescriptionDetails">
-            
-                <td>{{lineItem.orderablePrescribedName}}</td>
-                <td ng-if="vm.inPrescriptionServe"><select id="substituteProduct" ng-model="vm.selectedSubstituteProduct" 
-                    ng-options="orderableGroup[0].orderable.fullProductName for orderableGroup in vm.orderableGroups"
-                    ng-disabled="!vm.substituteProduct"></select></td>
-                <td>{{lineItem.batchNumber}}</td>
-                <td>{{lineItem.expiryDate}}</td>
-                <td>{{lineItem.soh}}</td>
-                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.Dispense.dose" class="form-control" type="number" min="0" step="1"
-                        oninput="validity.valid||(value='');" required></td>
-
-               <td ng-if="vm.inPrescriptionServe"><select id="dispensingUnit" ng-model="lineItem.Dispense.doseUnit" ng-options="unit for unit in vm.dispensingUnits"
-                        required></select></td>
-
-                <td ng-if="vm.inPrescriptionServe"><select id="doseFrequency" ng-model="lineItem.Dispense.doseFrequency"
-                        ng-options="frequency for frequency in  vm.dosageFrequency" required></select></td>
-
-                <td ng-if="vm.inPrescriptionServe"><select id="doseRoute" ng-model="lineItem.Dispense.doseRoute" ng-options="route for route in  vm.doseRoute"
-                        required></select></td>
-
-                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.Dispense.duration" type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;" 
-                        required></td>
-                
-                <td ng-if="vm.inPrescriptionServe"><select id="durationUnit" ng-model="lineItem.Dispense.durationUnit" ng-options="durationUnit for durationUnit in  vm.durationUnits" 
-                    required></select></td>
-                
-                <td ng-if="vm.inPrescriptionServe"><select id="instruction" ng-model="lineItem.Dispense.instruction" ng-options="instruction for instruction in  vm.instructions" 
-                    required></select></td>
-
-                <td ng-if="vm.inPrescriptionServe"><input type="text" ng-model="lineItem.Dispense.additionalInstruction"></input></td>
-                
-                <td><input ng-model="lineItem.quantityPrescribed" type="number" min="0" step="1" oninput="validity.valid||(value='');" 
-                    required></td>
-
-                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.Dispense.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required/>
-                </td> 
-                <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.Dispense.isInternallyServed"></td>
-                <td><input type="text" ng-model="lineItem.Dispense.comments"></input></td>
-                <td>
-                    <button ng-if="!vm.inPrescriptionServe" type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
-                    <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.substitute(lineItem)">Substitute</button>
-                </td>
-                 -->
-            </tr>
-
-
         </tbody>
     </table>
 </section>
-<!-- </section> -->
+
 
 <div class="openlmis-toolbar">
     <button ui-sref="^">{{'dispensingPrescriptionForm.cancel' | message}}</button>
@@ -266,5 +219,6 @@
         <!-- <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button> -->
         <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
+        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.updatePrescription()">Edit</button>
     </div>
 </div>

@@ -42,6 +42,11 @@
                     method: 'GET',
                     isArray: true
                 }, 
+                getPatient: {
+                    url: openlmisUrlFactory('/api/patient/:id'),
+                    method: 'GET',
+                    isArray: true
+                },
                 postPatientEvent: {
                     url: openlmisUrlFactory('/api/patient'),
                     method: 'POST'
@@ -60,6 +65,7 @@
  
         this.submitPatientInfo = submitPatientInfo; // To post data POD Manage payload
         this.getPatients = getPatients; //To retrieve PODs from the database
+        this.getPatient = getPatient;
         
         var patients = [];     
 
@@ -74,7 +80,6 @@
          * @param  {String}     Facility UUID
          * @return {Promise}    POD promise
          */
-
         function getPatients(patientParams) {
             var params = {
                 patientNumber: patientParams.patientNumber,
@@ -100,6 +105,11 @@
                return response; 
              });
         };
+
+        function getPatient(patientId) {
+            var params = { id: patientId };
+            return resource.get(params);
+          };
  
         function submitPatientInfo(patientInfo){
             

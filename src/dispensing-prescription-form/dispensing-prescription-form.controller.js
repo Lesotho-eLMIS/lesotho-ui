@@ -41,6 +41,7 @@
         vm.servePrescription = servePrescription;
         vm.addProduct = addProduct;
         vm.substitute = substitute;
+        vm.editPrescription = editPrescription;
         vm.patient = undefined;
         vm.facility = undefined;
         vm.user = user;
@@ -114,6 +115,9 @@
             vm.allProducts = allProducts;
             vm.prescriptionDetails.createdDate = new Date(); //= vm.inPrescriptionServe ? null : new Date();
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
+
+
+           console.log("State Params: ", $stateParams);
 
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
@@ -211,7 +215,8 @@
 
         vm.createPrescrition = function () {
 
-            vm.prescriptionDetails.patientId = vm.patient.id;
+            if(!vm.updateMode){
+                vm.prescriptionDetails.patientId = vm.patient.id;
             vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType ? "In-Patient" : "Out-Patient",
                 vm.prescriptionDetails.isVoided = false;
             vm.prescriptionDetails.status = "INITIATED";
@@ -251,6 +256,11 @@
                         });
                 });
 
+            }
+            else{
+                editPrescription();
+            }
+
             // vm.prescriptionDetails.forEach(function (item) {
             //     if(item.selectedItem.stockOnHand === null){
             //         vm.substituteProduct = true;
@@ -258,6 +268,31 @@
 
             // });
         }
+
+        vm.updatePrescription = function (){
+            vm.inPrescriptionServe = false;
+            vm.updateMode = true;
+        }
+
+        function editPrescription () {
+            console.log(vm.prescriptionDetails);
+            confirmService.confirm('Do you wish to edit this prescription?')
+              .then(function () {
+                prescriptionsService.updatePrescription(vm.prescriptionDetails)
+                  .then(function (response) {
+                    console.log(response);
+                    // Success callback
+                    notificationService.success('Prepacking updated Successfully');
+                    $state.go('openlmis.prepacking.view');
+                  })
+              })
+              .catch(function (error) {
+                // Error callback
+                notificationService.error('Failed to update ' + error + '.');
+                console.error('Error occurred:', error);
+    
+              });
+          }
 
         function addProduct() {
 

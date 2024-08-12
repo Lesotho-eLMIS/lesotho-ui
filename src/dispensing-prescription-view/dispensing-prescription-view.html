@@ -1,6 +1,6 @@
 <h2>View Prescription Form</h2>
 
-<form class="sidebar">
+<!-- <form class="sidebar">
 
     <fieldset class="form-group">
         <label for="lastName">Status</label>
@@ -54,16 +54,16 @@
             <thead>
                 <tr>
                     <th>{{'dispensingPrescriptionForm.prescribedProduct' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.substituteProduct' | message}}</th>
+                    <th>{{'dispensingPrescriptionForm.dispensedProduct' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.batchNumber' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.dose' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.doseUnits' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.frequency' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.route' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.duration' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.durationUnits' | message}}</th>
+                    <!-- <th>{{'dispensingPrescriptionForm.durationUnits' | message}}</th> -->
                     <th>{{'dispensingPrescriptionForm.instructions' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th>
+                    <!-- <th>{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th> -->
                     <th>{{'dispensingPrescriptionForm.quantityPrescribed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.servedInternally' | message}}</th>
@@ -72,30 +72,20 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Abacavir/Lamivudine 120/60 Scored Dispersible Tablets 60</td>
-                    <td> </td>
-                    <td>ABA123</td>
-                    <td>60</td>
-                    <td>Tablet(s)</td>
-                    <td>Once a day</td>
-                    <td>Oral</td>
-                    <td>60</td>
-                    <td>Day(s)</td>
-                    <td>At bedtime</td>
-                    <td>
-                        <input id="contact" ng-model="vm.Prescription.InstructionDetails" type="text" style="width: 120px;"/>
-                    </td>
-                    <td>60</td>
-                    <td>
-                        <input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 50px;"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" ng-model="vm.Prescription.allowNotify"/>
-                    </td>
-                    <td>
-                        <input id="contact" ng-model="vm.Prescription.comments" type="text" style="width: 120px;"/>
-                    </td>
+                <tr ng-repeat="lineItem in vm.prescriptionLineItems">
+                    <td> {{lineItem.prescribedProduct}} </td>
+                    <td> {{lineItem.dispensedProduct}} </td>
+                    <td> {{lineItem.batchNumber}} </td>
+                    <td>{{lineItem.dose}}</td>
+                    <td>{{lineItem.doseUnits}}</td>
+                    <td>{{lineItem.frequency}}</td>
+                    <td>{{lineItem.route}}</td>
+                    <td>{{lineItem.dosePeriod}}</td>
+                    <td>{{lineItem.additionalInstructions}}</td>
+                    <td>{{lineItem.quantityPrescribed}}</td>
+                    <td>{{lineItem.quantityDispensed}}</td>
+                    <td> {{lineItem.servedExternally}} </td>
+                    <td> {{lineItem.comments}} </td>
                     <td>
                         <button type="button" class="primary" ng-click="removeContact($index)">Substitute</button>
                     </td>
@@ -106,10 +96,10 @@
     </section>
 <!-- </section> -->
 
-<div class="openlmis-toolbar">
+<!-- <div class="openlmis-toolbar">
     <button ui-sref="^">{{'dispensingPrescriptionForm.cancel' | message}}</button>
     <div class="button-group primary">
         <button class="primary" form="newPrescriptionForm" type="submit">Serve</button>
         <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{ 'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button>
     </div>
-</div>
+</div> -->
