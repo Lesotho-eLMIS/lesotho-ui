@@ -36,10 +36,8 @@
 
        var vm = this;
 
-       // vm.resetPatientPassword = resetPatientPassword;
        vm.search = search;
        vm.$onInit = onInit;
-       vm.searchPatients = searchPatients;
        vm.viewPrescription = viewPrescription;
        //vm.goToCreatePrescriptionForm = goToCreatePrescriptionForm;
 
@@ -107,78 +105,47 @@
            vm.facility = facility;
            vm.facilities = facilities;
            console.log($stateParams);
-           vm.fetchPatient();
            vm.fetchAllPrescriptions();
        }
 
-       function viewPrescription(prescription){
-           console.log("****** View Prescription ******");
-
-           $state.go('openlmis.dispensing.view', {
-            prescriptionId: prescription.id,
-            patientId: prescription.patientId
-        });
-
-          // $state.go('openlmis.dispensing.prescriptions.form2');
-           
-           console.log("****** Done ******");
+       function viewPrescription(prescription) {
+        console.log(prescription);
+           if (prescription.status === 'INITIATED' || prescription.status === "PARTIALLY_SERVED") {
+                    $state.go('openlmis.dispensing.prescriptions.form', {
+                    prescriptionId: prescription.id,
+                    patientId: prescription.patientId,
+                    update: true
+                })
+                // .then(function() {
+                    
+                // });
+               
+           } else {
+               $state.go('openlmis.dispensing.view', {
+                   prescriptionId: prescription.id,
+                   patientId: prescription.patientId
+               });
+           }
 
        }
 
-       //fetches prescriptions for a single patient
+       
         vm.fetchAllPrescriptions = function(){
-            //var patientNum = '09018273934';
+ 
             var searchParams = vm.prescriptionParams;
             { searchParams.isVoided =  false };
             console.log(vm.prescriptionParams);
            var pres= prescriptionsService.getPrescriptions(vm.prescriptionParams)
            .then(function(response){
             vm.prescriptionsData = response;
-            if(response){
-                response.forEach()
-            }
-            console.log("Prescriptions Object", vm.prescriptionsData);
+                console.log("Prescriptions Object", vm.prescriptionsData);
            });
       //     $scope.prescriptionsList.$setPristine();
            console.log("All Prescriptions", pres);
         }
 
-        vm.fetchPatient = function(){
+       
 
-            var patient = dispensingService.getPatient($stateParams.patientId);
-            console.log("PATIENT", patient);
-
-        }
-
-
-       function searchPatients(){
-           var getPatientParams = vm.patientParams;
-           if(getPatientParams.facilityLocation){
-               getPatientParams.facilityId = vm.facility.id;
-           }
-           else{
-               getPatientParams.facilityId = undefined;
-           }    
-           viewPatients(getPatientParams);   
-       }
-
-       function viewPatients(patientSearchParams){
-           return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {               
-               for (var key in patientsObject) {
-                       if (patientsObject.hasOwnProperty(key)) {
-                           // Access each patient object to modify its facilityId
-                           var patient = patientsObject[key];
-                           //Find the Patient's home facility
-                           let facility = vm.facilities.filter(item => item.id === patient.facilityId);
-                           patient.facilityId = facility[0].name;                      
-                       }
-                   }
-                   vm.patientsData =  patientsObject;
-
-                   console.log("vvvvvvvvvvvvvvvvv");
-                   console.log(vm.patientsData);
-           });
-       }
 
        /**
         * @ngdoc method
@@ -200,14 +167,6 @@
                reload: true
            });
        }
-
-    //    function goToCreatePrescriptionForm(patient) {
-    //     console.log("xxxxxxxxxx patient xxxxxxxxxx");
-    //     console.log(patient);
-    //         $state.go('openlmis.dispensing.prescriptions.form({patientId: patient.id})', {
-    //             patient: patient
-    //         });
-    //    }
    }
 
 })();
