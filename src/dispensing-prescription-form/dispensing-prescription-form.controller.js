@@ -42,7 +42,7 @@
         vm.addProduct = addProduct;
         vm.substitute = substitute;
         vm.editPrescription = editPrescription;
-        vm.servePrescription = setPrescription;
+        vm.setPrescription = setPrescription;
         vm.patient = undefined;
         vm.facility = undefined;
         vm.user = user;
@@ -120,6 +120,7 @@
 
            console.log("State Params: ", $stateParams);
            $stateParams.update ? setPrescription() : '';
+           vm.updateMode = $stateParams.update;
 
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
@@ -136,15 +137,6 @@
 
         }
 
-        // vm.handleStateChange = function() {
-        //     // Your custom logic here
-        //     if ($stateParams.prescriptionId) {
-        //         prescriptionsService.getPrescription($stateParams.prescriptionId).then(function(response) {
-        //             vm.prescription = response.data;
-        //         });
-        //     }
-        // };
-
         function setPrescription() {
             prescriptionsService.getPrescription($stateParams.prescriptionId).$promise
                 .then(function (response) {
@@ -152,6 +144,11 @@
                     vm.prescriptionDetails = response;
                     vm.prescriptionLineItems = response.lineItems;
                     vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType === "Inpatient";
+                    vm.prescriptionLineItems.forEach(item => {
+                        item.fullProductName = item.orderablePrescribedName;
+                        item.dispensedProduct = item.orderableDispensedName;
+                        item.selectedBatch = item.lotCode;
+                    });
                     console.log("Transitioning", vm.prescriptionDetails);
                 });
         }
@@ -294,8 +291,22 @@
         }
 
         vm.updatePrescription = function (){
-            vm.inPrescriptionServe = false;
-            vm.updateMode = true;
+            console.log("Updating Prescription");
+           console.log(vm.prescriptionDetails);
+
+           confirmService.confirm("Are you sure you want to update this prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "", "Yes")
+                .then(function () {
+                    prescriptionsService.updatePrescription(vm.prescriptionDetails)
+                        .then(function (response) {
+                            notificationService.success('Prescription updated Successfully.');
+                           // $state.go('openlmis.dispensing.prescriptions');
+                           console.log("Updated Prescription", response);
+                        })
+                        .catch(function (error) {
+                            console.error('Error occurred:', error);
+
+                        });
+                });
         }
 
         function editPrescription () {
@@ -345,7 +356,7 @@
                 }                
             );
             if (matchingOrderable) {
-                vm.updateBatchOptions(vm.prescriptionLineItems[0]); // Assumes the new line item is the first in the list
+                vm.updateBatchOptions(vm.prescriptionLineItems[0]); 
             }
         }
 

@@ -218,7 +218,7 @@
             message}}</button>
         <!-- <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button> -->
-        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
-        <!-- <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.updatePrescription()">Edit</button> -->
+        <button ng-if="vm.inPrescriptionServe && !vm.updateMode" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
+        <button ng-if="vm.inPrescriptionServe && vm.updateMode" type="button" class="primary" ng-click="vm.updatePrescription()">Update Prescription</button>
     </div>
 </div>
