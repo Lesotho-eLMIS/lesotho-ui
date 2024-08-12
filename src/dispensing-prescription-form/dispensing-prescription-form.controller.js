@@ -42,6 +42,7 @@
         vm.addProduct = addProduct;
         vm.substitute = substitute;
         vm.editPrescription = editPrescription;
+        vm.servePrescription = setPrescription;
         vm.patient = undefined;
         vm.facility = undefined;
         vm.user = user;
@@ -118,6 +119,7 @@
 
 
            console.log("State Params: ", $stateParams);
+           $stateParams.update ? setPrescription() : '';
 
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
@@ -133,6 +135,27 @@
             vm.instructions = ['Before meals', 'After Meals', 'Empty stomach', 'In the morning', 'In the evening', 'At bedtime', 'Immediately', 'As directed'];
 
         }
+
+        // vm.handleStateChange = function() {
+        //     // Your custom logic here
+        //     if ($stateParams.prescriptionId) {
+        //         prescriptionsService.getPrescription($stateParams.prescriptionId).then(function(response) {
+        //             vm.prescription = response.data;
+        //         });
+        //     }
+        // };
+
+        function setPrescription() {
+            prescriptionsService.getPrescription($stateParams.prescriptionId).$promise
+                .then(function (response) {
+                    vm.inPrescriptionServe = true;
+                    vm.prescriptionDetails = response;
+                    vm.prescriptionLineItems = response.lineItems;
+                    vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType === "Inpatient";
+                    console.log("Transitioning", vm.prescriptionDetails);
+                });
+        }
+    
 
         vm.updateBatchOptions = function (lineItem) {
 
@@ -189,6 +212,7 @@
 
         function servePrescription() {
 
+            console.log("Serving Prescription");
             vm.prescriptionLineItems.forEach(item => {
                 item.orderableDispensed = item.dispensedProduct.orderable.id;
                 item.lotId = item.selectedBatch.lot ? item.selectedBatch.lot.id : null;
