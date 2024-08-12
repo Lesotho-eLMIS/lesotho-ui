@@ -28,9 +28,9 @@
         .module('dispensing-patient-form')
         .controller('patientFormController', controller);
 
-    controller.$inject = ['dispensingService', 'notificationService', 'facility', '$scope', 'confirmService', 'alertService'];
+    controller.$inject = ['dispensingService', 'notificationService', 'facility', '$scope', 'confirmService', 'alertService', 'patient','patientState'];
 
-    function controller(dispensingService, notificationService, facility, $scope, confirmService, alertService) {
+    function controller(dispensingService, notificationService, facility, $scope, confirmService, alertService, patient, patientState) {
 
         var vm = this;
 
@@ -41,6 +41,7 @@
         vm.patient = {};
         vm.addContact = addContact;
         vm.removeContact = removeContact;
+        vm.initialisePatient = initialisePatient;
        // vm.submitPatientData = submitPatientData;
 
        vm.tbStatusOptions =['No signs', 'TB Presumptive Case', 'On DS TB Treatment', 'On DR TB Treatment'];
@@ -54,7 +55,8 @@
          * Initialization method of the PatientFormModalController.
          */
         function onInit() {
-
+            vm.viewTitle = (patientState === "New") ? "Add Patient" : "Edit Patient";
+            vm.patient = !(patientState === "New")? vm.initialisePatient(patient) : {};
             vm.contactOptions = ["email", "phone"];
 
             console.log("...In init...")
@@ -94,6 +96,8 @@
             .then(function () {
                 var patientInfo = vm.patient;
                 patientInfo.homeFacility = facility.id;
+
+                console.log(patientInfo);
                 var response = dispensingService.submitPatientInfo(patientInfo);
                 if (response) {
                         // Adding success message when Patient saved.
@@ -116,6 +120,28 @@
                 vm.patient.nextOfKinContact = "";
                 vm.patient.sex = null;
             });
+        }
+
+        function initialisePatient (patientObj) {
+            const patientArray = Object.values(patientObj)[0];
+            console.log(patientArray);
+            vm.patient.patientNumber = patientArray.patientNumber;
+            vm.patient.nationalID = patientArray.personDto.nationalId;
+            vm.patient.firstName = patientArray.personDto.firstName;
+            vm.patient.lastName = patientArray.personDto.lastName;
+            vm.patient.nickName = patientArray.personDto.nickName;
+            vm.patient.sex = patientArray.personDto.sex;
+            vm.patient.DOB = patientArray.personDto.dateOfBirth;
+            vm.patient.dateOfBirthEstimated = patientArray.personDto.isDobEstimated;
+            vm.patient.physicalAddress = patientArray.personDto.physicalAddress;
+            vm.patient.nextOfKinNames = patientArray.personDto.nextOfKinFullName; 
+            vm.patient.nextOfKinContact = patientArray.personDto.nextOfKinContact;
+            vm.patient.motherMaidenName = patientArray.personDto.motherMaidenName;
+            vm.patient.deceased = patientArray.personDto.deceased;
+            vm.patient.retired = patientArray.personDto.retired;
+          //  vm.patient.contact.contactValue = patientArray.personDto.contacts[0].contactValue ? patientArray.personDto.contacts[0].contactValue : "";
+            //console.log(vm.patient);
+            return vm.patient;
         }
     }
 })();
