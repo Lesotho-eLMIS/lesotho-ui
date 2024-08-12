@@ -2,7 +2,7 @@
 
 <aside class="stock-card-info">
     <div class="product-name-header">
-      <span>{{vm.patient.personDto.firstName}} {{vm.patient.personDto.firstName}}</span>
+      <span>{{vm.patient.personDto.firstName}} {{vm.patient.personDto.surname}}</span>
     </div>
   
     <ul>
@@ -64,9 +64,8 @@
 
     <fieldset ng-if="vm.inPrescriptionServe" class="form-group">
         <label for="nationalID">Dispensing date</label>
-        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.issueDate
-        "
-        min="{{vm.minFollowUpDate}}" required/>
+        <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.issueDate"
+             required/> <!--min="{{vm.minFollowUpDate}}"-->
         <span ng-show="followUpDateForm.followUpDate.$error.min && !vm.inPrescriptionServe" class="text-danger">
             Follow-up date must be from tomorrow onwards.
         </span>
@@ -75,7 +74,7 @@
     <fieldset class="form-group">
         <label for="followUpDate">Follow up date</label>
         <input id="followUpDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.followUpDate"
-            max-date="vm.maxDate" required ng-disabled="vm.inPrescriptionServe" />
+            max-date="vm.maxDate" ng-disabled="vm.inPrescriptionServe" />
     </fieldset>
 
     <fieldset class="form-group">
@@ -154,7 +153,7 @@
                 <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
                 <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.servedExternally' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.comments' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.action' | message}}</th>
+                <th ng-if="!vm.inPrescriptionServe">{{'dispensingPrescriptionForm.action' | message}}</th>
             </tr>
         </thead>
         <tbody>
@@ -199,9 +198,9 @@
                 </td> 
                 <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.servedExternally"></td>
                 <td><input type="text" ng-model="lineItem.comments"></input></td>
-                <td>
-                    <button ng-if="!vm.inPrescriptionServe" type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
-                    <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.substitute(lineItem)">Substitute</button>
+                <td ng-if="!vm.inPrescriptionServe">
+                    <button type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
+                    <!-- <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.substitute(lineItem)">Substitute</button> -->
                 </td>
                 
             </tr>
@@ -219,6 +218,6 @@
         <!-- <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button> -->
         <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
-        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.updatePrescription()">Edit</button>
+        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.updatePrescription()">Back to Create</button>
     </div>
 </div>

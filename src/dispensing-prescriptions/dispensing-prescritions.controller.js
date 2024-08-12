@@ -100,6 +100,7 @@
         * Method that is executed on initiating dispensingPrescriptionsController.
         */
        function onInit() {
+            vm.status = ["INITIATED","RETURNED","CANCELLED","PARTIALLY_SERVED","FULLY_SERVED"];
            vm.fetchPatients = undefined;
            vm.patientsData = undefined;
            vm.prescriptionParams = {};
