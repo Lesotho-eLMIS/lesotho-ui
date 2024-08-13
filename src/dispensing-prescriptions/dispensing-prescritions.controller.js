@@ -138,7 +138,8 @@
            var pres= prescriptionsService.getPrescriptions(vm.prescriptionParams)
            .then(function(response){
             vm.prescriptionsData = response;
-                console.log("Prescriptions Object", vm.prescriptionsData);
+            // vm.prescriptionsData.patientType = response.patientType ? "In-Patient" : "Out-Patient";
+            //     console.log("Prescriptions Object", vm.prescriptionsData);
            });
       //     $scope.prescriptionsList.$setPristine();
            console.log("All Prescriptions", pres);

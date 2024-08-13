@@ -67,8 +67,8 @@
                     <th>{{'dispensingPrescriptionForm.quantityPrescribed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.servedInternally' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.comments' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.action' | message}}</th>
+                    <!-- <th>{{'dispensingPrescriptionForm.comments' | message}}</th>
+                    <th>{{'dispensingPrescriptionForm.action' | message}}</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -85,10 +85,10 @@
                     <td>{{lineItem.quantityPrescribed}}</td>
                     <td>{{lineItem.quantityDispensed}}</td>
                     <td> {{lineItem.servedExternally}} </td>
-                    <td> {{lineItem.comments}} </td>
+                    <!-- <td> {{lineItem.comments}} </td> -->
                     <td>
-                        <button type="button" class="primary" ng-click="removeContact($index)">Substitute</button>
-                    </td>
+                        <button type="button" class="primary" ng-click="vm.serve()">Substitute</button>
+                    </td> 
                 </tr>
                 
             </tbody>

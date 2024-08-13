@@ -41,7 +41,7 @@
         vm.servePrescription = servePrescription;
         vm.addProduct = addProduct;
         vm.substitute = substitute;
-        vm.editPrescription = editPrescription;
+       // vm.editPrescription = editPrescription;
         vm.setPrescription = setPrescription;
         vm.patient = undefined;
         vm.facility = undefined;
@@ -149,6 +149,7 @@
                         item.fullProductName = item.orderablePrescribedName;
                         item.dispensedProduct = item.orderableDispensedName;
                         item.selectedBatch = item.lotCode;
+                        item.instructions = item.additionalInstructions;
                     });
                     console.log("Transitioning", vm.prescriptionDetails);
                 });
@@ -210,14 +211,24 @@
 
         function servePrescription() {
 
-            console.log("Serving Prescription");
-            vm.prescriptionLineItems.forEach(item => {
-                item.orderableDispensed = item.dispensedProduct.orderable.id;
-                item.lotId = item.selectedBatch.lot ? item.selectedBatch.lot.id : null;
-                item.servedExternally = false;
-                item.remainingBalance = item.quantityPrescribed - item.quantityDispensed;
-                item.collectBalanceDate = null
-            });
+            console.log("Serving Prescription", vm.prescriptionDetails);
+            if ($stateParams.update) {
+                vm.prescriptionLineItems.forEach(item => {
+                    item.orderableDispensed = item.orderableDispensed;
+                    item.lotId = item.lotId || null;
+                    item.servedExternally = item.servedExternally;
+                    item.remainingBalance = item.quantityPrescribed - item.quantityDispensed;
+                    item.collectBalanceDate = null
+                });
+            } else {
+                vm.prescriptionLineItems.forEach(item => {
+                    item.orderableDispensed = item.dispensedProduct.orderable.id;
+                    item.lotId = item.selectedBatch.lot ? item.selectedBatch.lot.id : null;
+                    item.servedExternally = false;
+                    item.remainingBalance = item.quantityPrescribed - item.quantityDispensed;
+                    item.collectBalanceDate = null
+                });
+            }
 
             vm.prescriptionDetails.servedByUserId = vm.user.user_id;
 
@@ -236,7 +247,7 @@
 
         vm.createPrescrition = function () {
 
-            if(!vm.updateMode){
+            // if(!vm.updateMode){
                 vm.prescriptionDetails.patientId = vm.patient.id;
             vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType ? "In-Patient" : "Out-Patient",
                 vm.prescriptionDetails.isVoided = false;
@@ -277,10 +288,10 @@
                         });
                 });
 
-            }
-            else{
-                editPrescription();
-            }
+            // }
+            // else{
+            //     editPrescription();
+            // }
 
             // vm.prescriptionDetails.forEach(function (item) {
             //     if(item.selectedItem.stockOnHand === null){
@@ -301,6 +312,10 @@
                             notificationService.success('Prescription updated Successfully.');
                            // $state.go('openlmis.dispensing.prescriptions');
                            console.log("Updated Prescription", response);
+                           $state.go('openlmis.dispensing.view', {
+                            prescriptionId: response.id,
+                            patientId: response.patientId
+                        });
                         })
                         .catch(function (error) {
                             console.error('Error occurred:', error);
@@ -309,25 +324,25 @@
                 });
         }
 
-        function editPrescription () {
-            console.log(vm.prescriptionDetails);
-            confirmService.confirm('Do you wish to edit this prescription?')
-              .then(function () {
-                prescriptionsService.updatePrescription(vm.prescriptionDetails)
-                  .then(function (response) {
-                    console.log(response);
-                    // Success callback
-                    notificationService.success('Prepacking updated Successfully');
-                    $state.go('openlmis.prepacking.view');
-                  })
-              })
-              .catch(function (error) {
-                // Error callback
-                notificationService.error('Failed to update ' + error + '.');
-                console.error('Error occurred:', error);
+        // function editPrescription () {
+        //     console.log(vm.prescriptionDetails);
+        //     confirmService.confirm('Do you wish to edit this prescription?')
+        //       .then(function () {
+        //         prescriptionsService.updatePrescription(vm.prescriptionDetails)
+        //           .then(function (response) {
+        //             console.log(response);
+        //             // Success callback
+        //             notificationService.success('Prepacking updated Successfully');
+        //             $state.go('openlmis.prepacking.view');
+        //           })
+        //       })
+        //       .catch(function (error) {
+        //         // Error callback
+        //         notificationService.error('Failed to update ' + error + '.');
+        //         console.error('Error occurred:', error);
     
-              });
-          }
+        //       });
+        //   }
 
         function addProduct() {
 

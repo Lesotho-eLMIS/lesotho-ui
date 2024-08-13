@@ -38,10 +38,10 @@
         <strong>BP</strong>
         {{vm.patient.BP}}
       </li>
-      <li>
+      <!-- <li>
         <strong>Medical History</strong>
         <button ng-click="vm.getMedicalHistory()">View</button>
-      </li>
+      </li> -->
       <li>
         <strong>Prescription Status</strong>
         {{vm.prescription.status}}
@@ -160,12 +160,14 @@
             <tr ng-repeat="lineItem in vm.prescriptionLineItems">
             
                 <td>{{lineItem.fullProductName}}</td>
-                <td ng-if="vm.inPrescriptionServe"><select id="dispensedProduct" ng-model="lineItem.dispensedProduct" 
+                <td ng-if="vm.inPrescriptionServe && !vm.updateMode"><select id="dispensedProduct" ng-model="lineItem.dispensedProduct" 
                     ng-options="orderableGroup.canFulfillForMe[0].orderableName for orderableGroup in vm.orderableGroups"
                     ng-change="vm.updateBatchOptions(lineItem)"></select></td>
-                <td ng-if="vm.inPrescriptionServe"><select ng-model="lineItem.selectedBatch" 
+                <td ng-show="vm.updateMode"><span>{{ lineItem.dispensedProduct || 'N/A' }}</span></td>
+                <td ng-if="vm.inPrescriptionServe && !vm.updateMode"><select ng-model="lineItem.selectedBatch" 
                     ng-options="batch as (batch.lot ? batch.lotCode : 'No Batch') for batch in lineItem.batches"                 
                     ng-change="vm.updateBatchDetails(lineItem)"></select></td>
+                <td ng-show="vm.updateMode"><span>{{ lineItem.selectedBatch|| 'N/A' }}</span></td>
                 <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.lotExpirationDate || 'N/A'}}</td>
                 <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.stockOnHand}}</td>
                 <td><input ng-model="lineItem.dose" class="form-control" type="number" min="0" step="1"
@@ -186,10 +188,10 @@
                 <td><select id="durationUnit" ng-model="lineItem.durationUnits" ng-options="durationUnit for durationUnit in  vm.durationUnits" 
                     required></select></td>
                 
-                <td><select id="instruction" ng-model="lineItem.additionalInstruction" ng-options="instruction for instruction in  vm.instructions" 
+                <td><select id="instruction" ng-model="lineItem.additionalInstructions" ng-options="instruction for instruction in  vm.instructions" 
                     required></select></td>
 
-                <td><input type="text" ng-model="lineItem.additionalInstructions" ng-disabled="true"></input></td>
+                <td><input type="text" ng-model="lineItem.additionalInstruction" ng-disabled="true"></input></td>
                 
                 <td><input ng-model="lineItem.quantityPrescribed" type="number" min="0" step="1" oninput="validity.valid||(value='');" 
                     required></td>
@@ -217,7 +219,7 @@
             message}}</button>
         <!-- <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button> -->
-        <button ng-if="vm.inPrescriptionServe && !vm.updateMode" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
-        <button ng-if="vm.inPrescriptionServe && vm.updateMode" type="button" class="primary" ng-click="vm.updatePrescription()">Update Prescription</button>
+        <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
+        <!-- <button ng-if="vm.inPrescriptionServe && vm.updateMode" type="button" class="primary" ng-click="vm.updatePrescription()">Update Prescription</button> -->
     </div>
 </div>
