@@ -132,7 +132,7 @@
                     "contacts": [
                         {
                             "contactType": patientInfo.contact.contactType,
-                            "contactValue": patientInfo.contact.contactValue
+                            "contactValue": patientInfo.contact //TO DO : handle multiple contacts
                         }
                     ]
                 },
@@ -152,7 +152,7 @@
  
         function submitPatientInfo(patientInfo){   
             var payload = createPatientPayload(patientInfo);
-            return resource.postPatientEvent(payload);
+            return resource.postPatientEvent(payload).$promise;
         }
 
 

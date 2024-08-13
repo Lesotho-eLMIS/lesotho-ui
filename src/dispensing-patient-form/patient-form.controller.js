@@ -105,37 +105,30 @@
             .then(function () {
                 var patientInfo = vm.patient;
                 patientInfo.homeFacility = facility.id;
-                patientInfo.mode = vm.updateMode;
-
-                console.log(patientInfo);
-                var response = !(vm.updateMode) ? dispensingService.submitPatientInfo(patientInfo) : dispensingService.updatePatientInfo(patientInfo);
-                if (response) {
-                        // Adding success message when Patient saved.
-                    notificationService.success('Successfully submitted.');
-                } else {
+                dispensingService.submitPatientInfo(patientInfo).then(function(response) {
+                    //clearing all the fields
+                    vm.patient.nationalID = "";
+                    vm.patient.firstName = "";
+                    vm.patient.lastName = "";
+                    vm.patient.nickName = "";
+                    vm.patient.DOB = "";
+                    vm.patient.dateOfBirthEstimated = "";
+                    vm.patient.physicalAddress = "";
+                    vm.patient.contact = "";
+                    vm.patient.motherMaidenName = "";
+                    vm.patient.nextOfKinNames = "";
+                    vm.patient.nextOfKinContact = "";
+                    vm.patient.sex = null;
+                    // Adding success message when Patient saved.
+                    notificationService.success('Successfully submitted.');   
+                }).catch(function(error) {
                     notificationService.error('Failed to submit.');
-                }
-
-                //clearing all the fields
-                vm.patient.nationalID = "";
-                vm.patient.firstName = "";
-                vm.patient.lastName = "";
-                vm.patient.nickName = "";
-                vm.patient.DOB = "";
-                vm.patient.dateOfBirthEstimated = "";
-                vm.patient.physicalAddress = "";
-                vm.patient.contact.contactValue = "";
-                vm.patient.motherMaidenName = "";
-                vm.patient.nextOfKinNames = "";
-                vm.patient.nextOfKinContact = "";
-                vm.patient.sex = null;
+                    console.error('Error occurred:', error);
+                });
             });
         }
 
         vm.savePatientUpdates = function(){
-            
-       
-
             //Updating Patient
             confirmService
             .confirm("Are you sure you want to Update this patient?", 'Yes')
@@ -143,27 +136,27 @@
                 var patientInfo = vm.patient;
                 patientInfo.homeFacility = facility.id;
                 console.log(patientInfo);
-                var response = dispensingService.updatePatientInfo(patientInfo);
-                if (response) {
-                        // Adding success message when Patient saved.
-                    notificationService.success('Successfully submitted.');
-                } else {
+                dispensingService.updatePatientInfo(patientInfo).then(function(response) {
+                    //clearing all the fields
+                    vm.patient.nationalID = "";
+                    vm.patient.firstName = "";
+                    vm.patient.lastName = "";
+                    vm.patient.nickName = "";
+                    vm.patient.DOB = "";
+                    vm.patient.dateOfBirthEstimated = "";
+                    vm.patient.physicalAddress = "";
+                    vm.patient.contact = "";
+                    vm.patient.motherMaidenName = "";
+                    vm.patient.nextOfKinNames = "";
+                    vm.patient.nextOfKinContact = "";
+                    vm.patient.sex = null;
+                    // Adding success message when Patient saved.
+                    notificationService.success('Successfully submitted.');   
+                }).catch(function(error) {
                     notificationService.error('Failed to submit.');
-                }
-
-                //clearing all the fields
-                vm.patient.nationalID = "";
-                vm.patient.firstName = "";
-                vm.patient.lastName = "";
-                vm.patient.nickName = "";
-                vm.patient.DOB = "";
-                vm.patient.dateOfBirthEstimated = "";
-                vm.patient.physicalAddress = "";
-                vm.patient.contact.contactValue = "";
-                vm.patient.motherMaidenName = "";
-                vm.patient.nextOfKinNames = "";
-                vm.patient.nextOfKinContact = "";
-                vm.patient.sex = null;
+                    console.error('Error occurred:', error);
+                });
+                              
             });
         }
 
@@ -185,6 +178,8 @@
             vm.patient.deceased = patientArray.personDto.deceased;
             vm.patient.retired = patientArray.personDto.retired;
             vm.patient.id = patientArray.id;
+
+            vm.patient.contact = patientArray.personDto.contacts[0].contactValue
           //  vm.patient.contact.contactValue = patientArray.personDto.contacts[0].contactValue ? patientArray.personDto.contacts[0].contactValue : "";
             console.log(vm.patient);
             return vm.patient;
