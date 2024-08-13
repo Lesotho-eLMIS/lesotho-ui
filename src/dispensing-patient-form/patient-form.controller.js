@@ -90,8 +90,10 @@
         }
         vm.submitMode =  function() {
             if (vm.updateMode) {
+                console.log("Updating Patient");
                 vm.savePatientUpdates();
             } else {
+                console.log("New Patient");
                 vm.submitPatientData();
             }
         }
@@ -140,6 +142,7 @@
             .then(function () {
                 var patientInfo = vm.patient;
                 patientInfo.homeFacility = facility.id;
+                console.log(patientInfo);
                 var response = dispensingService.updatePatientInfo(patientInfo);
                 if (response) {
                         // Adding success message when Patient saved.
@@ -181,8 +184,9 @@
             vm.patient.motherMaidenName = patientArray.personDto.motherMaidenName;
             vm.patient.deceased = patientArray.personDto.deceased;
             vm.patient.retired = patientArray.personDto.retired;
+            vm.patient.id = patientArray.id;
           //  vm.patient.contact.contactValue = patientArray.personDto.contacts[0].contactValue ? patientArray.personDto.contacts[0].contactValue : "";
-            //console.log(vm.patient);
+            console.log(vm.patient);
             return vm.patient;
         }
     }

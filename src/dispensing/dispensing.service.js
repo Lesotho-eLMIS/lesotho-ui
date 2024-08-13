@@ -52,7 +52,7 @@
                     method: 'POST'
                 },
                 updatePatientEvent: {
-                    url: openlmisUrlFactory('/api/patient:id'),
+                    url: openlmisUrlFactory('/api/patient/:id'),
                     method: 'PUT'
                 }, 
                 search: {
@@ -111,9 +111,8 @@
             var params = { id: patientId };
             return resource.get(params);
           };
- 
-        function submitPatientInfo(patientInfo){
-            
+
+        function createPatientPayload(patientInfo) {
             var payload = {
                 "facilityId": patientInfo.homeFacility,
                 "personDto": {
@@ -148,48 +147,20 @@
                     }
                 ]
             }
+            return payload;
+        }
+ 
+        function submitPatientInfo(patientInfo){   
+            var payload = createPatientPayload(patientInfo);
             return resource.postPatientEvent(payload);
         }
 
 
         function updatePatientInfo(patientInfo){
-            
-            var payload = {
-                "facilityId": patientInfo.homeFacility,
-                "personDto": {
-                    "nationalId": patientInfo.nationalID,
-                    "firstName": patientInfo.firstName,
-                    "lastName": patientInfo.lastName,
-                    "nickName": patientInfo.nickName,
-                    "sex": patientInfo.sex,
-                    "dateOfBirth": patientInfo.DOB,
-                    "isDobEstimated": patientInfo.isDobEstimated,
-                    "physicalAddress": patientInfo.physicalAddress,
-                    "nextOfKinFullName": patientInfo.nextOfKinNames,
-                    "nextOfKinContact": patientInfo.nextOfKinContact,
-                    "motherMaidenName": patientInfo.motherMaidenName,
-                    "deceased": patientInfo.deceased,
-                    "retired": patientInfo.retired,
-                    "contacts": [
-                        {
-                            "contactType": patientInfo.contact.contactType,
-                            "contactValue": patientInfo.contact.contactValue
-                        }
-                    ]
-                },
-                "medicalHistory": [
-                    {
-                        "type": "Diagnosis",
-                        "history": "Diagnosed with letsoejane."
-                    },
-                    {
-                        "type": "Treatment",
-                        "history": "O sebelisa hloella-hape (iphinde futhi)."
-                    }
-                ]
-            }
+            console.log(patientInfo.id);
+            var payload = createPatientPayload(patientInfo);
             console.log("Updating");
-            return resource.updatePatientEvent({ id: patientInfo.id }, payload);
+            return resource.updatePatientEvent({ id: patientInfo.id }, payload).$promise;
         }
 
 

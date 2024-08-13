@@ -84,10 +84,6 @@
                     <input id="contact" ng-model="vm.patient.contact.contactValue" type="text" />
                 </fieldset>
 
-                <fieldset class="form-group">.</fieldset>
-                <fieldset class="form-group">.</fieldset>
-                <!-- <fieldset class="form-group"><hr></fieldset> -->
-
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.nextOfKinNames' | message}}</label>
                     <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
@@ -135,7 +131,7 @@
 <div class="openlmis-toolbar">
     <button ui-sref="^">{{'dispensingPatientForm.cancel' | message}}</button>
     <div class="button-group primary">
-        <button class="primary" form="patientForm" ng-click="vm.submitPatientData()">{{(vm.updateMode ?
+        <button class="primary" form="patientForm" ng-click="vm.submitMode()">{{(vm.updateMode ?
             'dispensingPatientForm.updatePatient' : 'dispensingPatientForm.createPatient') | message}}</button> <!--type="submit"-->>
         <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPatientForm.sendVerificationEmail' | message }}</button>
