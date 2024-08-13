@@ -1,4 +1,4 @@
-<h2>{{'dispensingPatientForm.title' | message}}</h2>
+<h2>{{'dispensingPatientForm.patientFormTitle' | message:({'title': vm.viewTitle})}}</h2>
 
 <div class="container-lg">
     <div class="row">
@@ -81,12 +81,8 @@
                 </fieldset>
                 <fieldset class="openlmis-table-container">
                     <label for="contact">{{'dispensingPatientForm.contact' | message}}</label>
-                    <input id="contact" ng-model="vm.patient.contact.contactValue" type="text" />
+                    <input id="contact" ng-model="vm.patient.contact" type="text" />
                 </fieldset>
-
-                <fieldset class="form-group">.</fieldset>
-                <fieldset class="form-group">.</fieldset>
-                <!-- <fieldset class="form-group"><hr></fieldset> -->
 
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.nextOfKinNames' | message}}</label>
@@ -102,11 +98,12 @@
             <form name="newPatientForm3" class="content" ng-submit="vm.submitPatientData()">
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.height' | message}}</label>
-                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNamesX" type="text" disabled />
+                    <input id="nextOfKinNames" ng-model="vm.patient.height" type="text" />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="nextOfKinContact">{{'dispensingPatientForm.weight' | message}}</label>
-                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContactX" type="text" disabled />
+                    <input id="nextOfKinContact" ng-model="vm.patient.weight" type="text" />
+
                 </fieldset>
 
                 <fieldset class="form-group">
@@ -117,15 +114,16 @@
 
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.systolic' | message}}</label>
-                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNamesX" type="text" disabled />
+                    <input id="nextOfKinNames" ng-model="vm.patient.systolic" type="text" />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="nextOfKinContact">{{'dispensingPatientForm.diastolic' | message}}</label>
-                    <input id="nextOfKinContact" ng-model="vm.patient.nextOfKinContactX" type="text" disabled />
+                    <input id="nextOfKinContact" ng-model="vm.patient.diastolic" type="text" />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.muac' | message}}</label>
-                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNamesX" type="text" disabled />
+                    <input id="nextOfKinNames" ng-model="vm.patient.muac" type="text" />
+
                 </fieldset>
             </form>
         </div>
@@ -135,7 +133,7 @@
 <div class="openlmis-toolbar">
     <button ui-sref="^">{{'dispensingPatientForm.cancel' | message}}</button>
     <div class="button-group primary">
-        <button class="primary" form="patientForm" ng-click="vm.submitPatientData()">{{(vm.updateMode ?
+        <button class="primary" form="patientForm" ng-click="vm.submitMode()">{{(vm.updateMode ?
             'dispensingPatientForm.updatePatient' : 'dispensingPatientForm.createPatient') | message}}</button> <!--type="submit"-->>
         <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
             'dispensingPatientForm.sendVerificationEmail' | message }}</button>

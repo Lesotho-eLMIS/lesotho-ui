@@ -10,7 +10,7 @@
   "dispensingPatients.lastName": "Last Name",
   "dispensingPatients.view": "View",
   "dispensingPatients.nationalidNumber": "National Id Number",
-  "dispensingPatients.edit": "Edit",
+  "dispensingPatients.edit": "Edit Patient",
   "dispensingPatients.addPrescription": "Add Prescription",
   "dispensingPatients.patients.error": "There are no matches for patient.",
   "dispensingPatients.dateofBirth": "Date of Birth",

@@ -40,6 +40,7 @@
         vm.searchPatients = searchPatients;
         vm.$onInit = onInit;
         vm.viewPatients = viewPatients;
+        vm.editPatient = editPatient;
 
         // /**
         //  * @ngdoc property
@@ -112,6 +113,13 @@
             }    
             viewPatients(getPatientParams);   
         }
+
+        function editPatient (patient) {
+            $state.go('openlmis.dispensing.patients.form',{
+                id: patient.patientNumber
+            });
+        }
+
 
         function viewPatients(patientSearchParams){
             return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {               

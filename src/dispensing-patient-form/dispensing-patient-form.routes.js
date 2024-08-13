@@ -39,6 +39,17 @@
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
+                },
+                patient: function(dispensingService,$stateParams) {
+                    return dispensingService.getPatients({patientNumber:$stateParams.id})
+                },
+                patientState: function($stateParams,patient) {     
+                    console.log(patient) 
+                    if ($stateParams.id) {
+                        return "Created";      
+                    } else {
+                        return "New";
+                    }
                 }
             },
             views: {
