@@ -52,7 +52,7 @@
                     method: 'POST'
                 },
                 updatePatientEvent: {
-                    url: openlmisUrlFactory('/api/patient:id'),
+                    url: openlmisUrlFactory('/api/patient/:id'),
                     method: 'PUT'
                 }, 
                 search: {
@@ -64,6 +64,7 @@
         this.show = show;
  
         this.submitPatientInfo = submitPatientInfo; // To post data POD Manage payload
+        this.updatePatientInfo = updatePatientInfo;
         this.getPatients = getPatients; //To retrieve PODs from the database
         this.getPatient = getPatient;
         
@@ -110,9 +111,8 @@
             var params = { id: patientId };
             return resource.get(params);
           };
- 
-        function submitPatientInfo(patientInfo){
-            
+
+        function createPatientPayload(patientInfo) {
             var payload = {
                 "facilityId": patientInfo.homeFacility,
                 "personDto": {
@@ -132,7 +132,7 @@
                     "contacts": [
                         {
                             "contactType": patientInfo.contact.contactType,
-                            "contactValue": patientInfo.contact.contactValue
+                            "contactValue": patientInfo.contact //TO DO : handle multiple contacts
                         }
                     ]
                 },
@@ -147,8 +147,22 @@
                     }
                 ]
             }
-            return resource.postPatientEvent(payload);
+            return payload;
         }
+ 
+        function submitPatientInfo(patientInfo){   
+            var payload = createPatientPayload(patientInfo);
+            return resource.postPatientEvent(payload).$promise;
+        }
+
+
+        function updatePatientInfo(patientInfo){
+            console.log(patientInfo.id);
+            var payload = createPatientPayload(patientInfo);
+            console.log("Updating");
+            return resource.updatePatientEvent({ id: patientInfo.id }, payload).$promise;
+        }
+
 
         /**
          * @ngdoc method
