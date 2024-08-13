@@ -35,7 +35,8 @@
                 }
             },
             params: {
-                prescriptionId: null 
+                prescriptionId: null ,
+                update:null
               },
             resolve: {
                 facility: function (facilityFactory, $stateParams) {

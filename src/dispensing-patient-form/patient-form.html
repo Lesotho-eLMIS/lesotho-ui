@@ -6,7 +6,7 @@
             <form name="newPatientForm1" class="content" ng-submit="vm.submitPatientData()">
                 <fieldset class="form-group">
                     <label for="nationalID">{{'dispensingPatientForm.nationalID' | message}}</label>
-                    <input id="nationalID" ng-model="vm.patient.nationalID" type="text" required />
+                    <input id="nationalID" ng-model="vm.patient.nationalID" type="text" />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="firstName">{{'dispensingPatientForm.firstName' | message}}</label>
@@ -103,12 +103,13 @@
                 <fieldset class="form-group">
                     <label for="nextOfKinContact">{{'dispensingPatientForm.weight' | message}}</label>
                     <input id="nextOfKinContact" ng-model="vm.patient.weight" type="text" />
+
                 </fieldset>
 
                 <fieldset class="form-group">
                     <label for="tbStatus">{{'dispensingPatientForm.tbStatus' | message}}</label>
                     <select id="tbStatus" ng-model="vm.tbStatus"
-                        ng-options="option for option in  vm.tbStatusOptions"></select>
+                        ng-options="option for option in  vm.tbStatusOptions" disabled></select>
                 </fieldset>
 
                 <fieldset class="form-group">
@@ -122,6 +123,7 @@
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.muac' | message}}</label>
                     <input id="nextOfKinNames" ng-model="vm.patient.muac" type="text" />
+
                 </fieldset>
             </form>
         </div>

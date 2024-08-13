@@ -111,6 +111,7 @@
       var params = {
         patientNumber: prescriptionParams.patientNumber,
         status: prescriptionParams.status,
+        firstName: prescriptionParams.firstName,
         lastName: prescriptionParams.lastName,
         followUpDate: prescriptionParams.followUpDate,
         nationalId: prescriptionParams.nationalId,

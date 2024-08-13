@@ -67,15 +67,15 @@
                     <th>{{'dispensingPrescriptionForm.quantityPrescribed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
                     <th>{{'dispensingPrescriptionForm.servedInternally' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.comments' | message}}</th>
-                    <th>{{'dispensingPrescriptionForm.action' | message}}</th>
+                    <!-- <th>{{'dispensingPrescriptionForm.comments' | message}}</th>
+                    <th>{{'dispensingPrescriptionForm.action' | message}}</th> -->
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="lineItem in vm.prescriptionLineItems">
-                    <td> {{lineItem.prescribedProduct}} </td>
-                    <td> {{lineItem.dispensedProduct}} </td>
-                    <td> {{lineItem.batchNumber}} </td>
+                    <td> {{lineItem.orderablePrescribedName}} </td>
+                    <td> {{lineItem.orderableDispensedName}} </td>
+                    <td> {{lineItem.lotCode}} </td>
                     <td>{{lineItem.dose}}</td>
                     <td>{{lineItem.doseUnits}}</td>
                     <td>{{lineItem.frequency}}</td>
@@ -85,10 +85,10 @@
                     <td>{{lineItem.quantityPrescribed}}</td>
                     <td>{{lineItem.quantityDispensed}}</td>
                     <td> {{lineItem.servedExternally}} </td>
-                    <td> {{lineItem.comments}} </td>
+                    <!-- <td> {{lineItem.comments}} </td> -->
                     <td>
-                        <button type="button" class="primary" ng-click="removeContact($index)">Substitute</button>
-                    </td>
+                        <button type="button" class="primary" ng-click="vm.serve()">Substitute</button>
+                    </td> 
                 </tr>
                 
             </tbody>
