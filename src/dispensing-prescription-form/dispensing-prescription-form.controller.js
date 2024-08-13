@@ -143,6 +143,7 @@
                 .then(function (response) {
                     vm.inPrescriptionServe = true;
                     vm.prescriptionDetails = response;
+                    vm.prescriptionDetails.prescriptionId = response.id;
                     vm.prescriptionLineItems = response.lineItems;
                     vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType === "Inpatient";
                     vm.prescriptionLineItems.forEach(item => {
