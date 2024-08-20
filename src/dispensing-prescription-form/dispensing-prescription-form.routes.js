@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
@@ -25,23 +25,52 @@
 
         $stateProvider.state('openlmis.dispensing.prescriptions.form', {
             label: 'dispensingPrescriptionForm.title',
-            url: '/form/:id',
+            url: '/form/:patientId',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
-            resolve: {
-                // facilities: function(facilityService) {
-                //     return facilityService.getAllMinimal();
-                // },
-                // prescription: function(prescriptionService, $stateParams) {
-                //     return new prescriptionService().get($stateParams.id);
-                // }
-            },
             views: {
                 '@openlmis': {
-                    controller: 'prescriptionFormController',
-                    templateUrl: 'dispensing-prescription-form/prescription-form.html',
+                    controller: 'dispensingPrescriptionFormController',
+                    templateUrl: 'dispensing-prescription-form/dispensing-prescription-form.html',
                     controllerAs: 'vm'
+                }
+            },
+            params: {
+                prescriptionId: null ,
+                update:null
+              },
+            resolve: {
+                facility: function (facilityFactory, $stateParams) {
+                    if (!$stateParams.facility) {
+                        return facilityFactory.getUserHomeFacility();
+                    }
+                    return $stateParams.facility;
+                },
+                patient: function ($stateParams, dispensingService) {
+                    return dispensingService.getPatients($stateParams.patientId).then(function (patientsObject) {
+                        for (var key in patientsObject) {
+                            if (key == $stateParams.patientId) {
+                                return patientsObject[key];
+                            }
+                        }
+                    });
+                },
+                user: function (authorizationService) {
+                    return authorizationService.getUser();
+                },
+                productsWithSOH: function (prescriptionsService, facility) {
+                    return prescriptionsService.getProductsWithSOH(facility.id)
+                        .then(function (result) {
+                            return result.content;
+                        });
+                },
+                allProducts: function (prescriptionsService, facility) {
+                    return prescriptionsService.getAllFacilityProducts(facility.id)
+                        .then(function (result) {
+                            return result;
+                        });
                 }
             }
         });
     }
+
 })();

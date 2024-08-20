@@ -1,6 +1,7 @@
 {
   "dispensingPrescriptions.title": "Prescriptions",
   "dispensingPrescriptions.patientId": "Patient ID",
+  "dispensingPrescriptions.nationalidNumber": "National ID Number",
   "dispensingPrescriptions.patientNumber": "Patient Number",
   "dispensingPrescriptions.patientType": "Patient Type",
   "dispensingPrescriptions.search": "Search",
@@ -16,5 +17,7 @@
   "dispensingPrescriptions.issueDate": "Issue Date",
   "dispensingPrescriptions.status": "Status",
   "dispensingPrescriptions.followUpDate": "Follow up Date",
-  "dispensingPrescriptions.addPatient": "Add Patient"
+  "dispensingPrescriptions.addPatient": "Add Patient",
+  "dispensingPrescriptions.dispensingFacility" : "Dispensing Facility",
+  "dispensingPatients.contactNumber": "Contact Number"
 }

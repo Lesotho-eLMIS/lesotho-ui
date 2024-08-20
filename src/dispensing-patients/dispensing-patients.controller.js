@@ -40,6 +40,7 @@
         vm.searchPatients = searchPatients;
         vm.$onInit = onInit;
         vm.viewPatients = viewPatients;
+        vm.editPatient = editPatient;
 
         // /**
         //  * @ngdoc property
@@ -91,6 +92,15 @@
             $state.go('openlmis.dispensing.patients.form');
         }
 
+        // vm.addPrescription = function(){
+        //     $state.go('openlmis.dispensing.prescriptions.form', {
+        //         facilityId: vm.facility.id
+        //         // id: item.id,
+        //         // programId: item.programId,
+        //         // facilityId: item.facilityId
+        //     });
+        // }
+
 
         function searchPatients(){
 
@@ -104,6 +114,13 @@
             viewPatients(getPatientParams);   
         }
 
+        function editPatient (patient) {
+            $state.go('openlmis.dispensing.patients.form',{
+                id: patient.patientNumber
+            });
+        }
+
+
         function viewPatients(patientSearchParams){
             return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {               
                 for (var key in patientsObject) {
@@ -116,6 +133,7 @@
                         }
                     }
                     vm.patientsData =  patientsObject;
+                  //  console.log(vm.patientsData);
             });
         }
     }

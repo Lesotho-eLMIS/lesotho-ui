@@ -137,7 +137,9 @@
                             Object.values(result).forEach(function (record) {
                                 let receivingDate = new Date(record.receivingDate);
                                 if (receivingDate >= activePeriod) {
-                                    references.push(record.referenceNumber);
+                                    //console.log('>>>>> - ',record);
+                                    references.push(record);
+                                    //references.push(record.referenceNumber);
                                 }
                             });
                            return references;

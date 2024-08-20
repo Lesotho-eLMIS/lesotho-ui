@@ -13,7 +13,9 @@
             <input type="submit" value="{{vm.key('search') | message}}"/>
         </form>
         <section class="is-primary">
-            <form class="form-inline" ng-submit="vm.addProduct()" name="productForm">
+            <!-- <div class="row">
+                <div class="col-sm-12"> -->
+            <form class="d-flex" ng-submit="vm.addProduct()" name="productForm"> <!--class="form-inline"   class="d-flex"-->
                 <div ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser">
                     <label for="referenceNumberSelect">{{vm.key('referenceNumber') | message}}</label>
                     <select id="referenceNumberSelect" ng-model="vm.referenceNumber" 
@@ -49,6 +51,8 @@
                 </div>
                 <button type="submit" class="add">{{vm.key('add') | message}}</button>
             </form>
+                <!-- </div>
+            </div> -->
         </section>
         <table suppress-tr-openlmis-invalid>
             <caption ng-if="!vm.displayItems.length">{{vm.key('noProducts') | message}}</caption>
@@ -133,13 +137,13 @@
                     <td ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser" ng-hide="vm.FromSupplier">
                     <input class="form-control" ng-model="lineItem.individualCartonNumber"   ng-class="{'error': lineItem.$errors.cartonsInvalid}"
                         ng-change="vm.validateCartonNumber(lineItem)" 
-                        type="number" style="width: 20px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
+                        type="number" style="width: 40px;" min="0" step="1" oninput="validity.valid||(value='');"></td>
 
                     <td ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser"><label style="display: inline-block;">of</label></td>
                     <td ng-if="vm.showDeliveryNoteAttributes && !vm.servicePointUser" openlmis-invalid="{{lineItem.$errors.cartonsInvalid}}" class="digit-cell">
                         <input class="form-control" ng-model="lineItem.totalCartonNumber" ng-change="vm.validateCartonNumber(lineItem)" 
-                        ng-class="{'error': lineItem.$errors.cartonsInvalid}" ng-blur="vm.validateCartonNumber(lineItem)"                         
-                        type="number" style="width: 20px;" min="0" step="1" oninput="validity.valid||(value='');">
+                        ng-class="{'error': lineItem.$errors.cartonsInvalid}" ng-blur="vm.validateCartonNumber(lineItem)"                        
+                        style="width: 30px;" disabled> <!-- type="number"  min="0" step="1" oninput="validity.valid||(value='');">  -->
                     <!-- <input class="form-control" type="text" value="{{lineItem.assignment}}" ng-model="lineItem.cartonNumber" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"> -->
                     </td>
                     
@@ -162,7 +166,7 @@
                     </td>
 
                     <td ng-if="!vm.showPrepackingAttributes" openlmis-invalid="{{lineItem.$errors.quantityInvalid}}" class="digit-cell">
-                        <input class="form-control" ng-model="lineItem.quantity"
+                        <input class="form-control" ng-model="lineItem.quantity" style="width: 50px;"
                             ng-disabled="lineItem.expired" 
                             ng-class="{'error': lineItem.$errors.quantityInvalid}"
                             ng-change="vm.validateQuantity(lineItem)" ng-blur="vm.validateQuantity(lineItem)">
@@ -170,13 +174,13 @@
                      
                     <!-- LESOTHO-ELMIS -- These should be added to prepack payload -->
                     <td ng-if="vm.showPrepackingAttributes"><input class="form-control" type="text" style="width: 150px;"></td>
-                    <td ng-if="vm.showDeliveryNoteAttributes || vm.showPrepackingAttributes"><input class="form-control" type="text" style="width: 150px;"></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes || vm.showPrepackingAttributes"><input class="form-control" type="text" style="width: 100px;"></td>
                     <!-- The two above should be added to prepack payload -->
 
                     <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input class="form-control" value="{{ 0 | openlmisCurrency}}" type="text" style="width: 50px;" ng-model="lineItem.unitPrice" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"></td>
-                    <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input type="text" readonly value="{{ (lineItem.quantity*lineItem.unitPrice) || 0 | openlmisCurrency}}" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"/></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input type="text" readonly style="width: 85px;" value="{{ (lineItem.quantity*lineItem.unitPrice) || 0 | openlmisCurrency}}" ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"/></td>
                     <td ng-if="vm.showVVMStatusColumn">
-                        <select ng-if="lineItem.orderable.extraData.useVVM == 'true'"
+                        <select ng-if="lineItem.orderable.extraData.useVVM == 'true'" 
                             ng-model="lineItem.vvmStatus"
                             ng-options="status as vm.getStatusDisplay(status) for status in vm.vvmStatuses"
                             placeholder="{{'stockAdjustmentCreation.selectStatus' | message}}">

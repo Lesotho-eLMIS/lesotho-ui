@@ -1,6 +1,7 @@
 {
     "dispensingPatientForm.addPatient": "Add Patient",
-    "dispensingPatientForm.title": "Add Patient Form",
+    "dispensingPatientForm.title": "Patient Form",
+    "dispensingPatientForm.patientFormTitle": "${title}",
     "dispensingPatientForm.patientNumber": "Patient Number",
     "dispensingPatientForm.nationalID": "National ID",
     "dispensingPatientForm.firstName": "First name",
@@ -30,5 +31,12 @@
     "dispensingPatientForm.patientUpdatedSuccessfully": "patient updated successfully!",
     "dispensingPatientForm.cancel": "Cancel",
     "dispensingPatientForm.failedToUpdatepatient": "Failed to update patient",
-    "dispensingPatientForm.failedToCreatepatient": "Failed to create patient"
+    "dispensingPatientForm.failedToCreatepatient": "Failed to create patient",
+    "dispensingPatientForm.muac": "MUAC",
+    "dispensingPatientForm.diastolic": "Diastolic (mm Hg)",
+    "dispensingPatientForm.systolic": "Systolic (mm Hg)",
+    "dispensingPatientForm.tbStatus": "TB Status",
+    "dispensingPatientForm.weight": "Weight (Kg)",
+    "dispensingPatientForm.height": "Height (cm)"
+ 
 }

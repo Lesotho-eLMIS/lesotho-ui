@@ -25,15 +25,15 @@
      * Responsible for dispensing data as well as commiting it to the server.
      */
     angular
-        .module('requisition-search')
+        .module('dispensing')
         .service('dispensingService', dispensingService);
 
         dispensingService.$inject = ['$resource','openlmisUrlFactory', 'notificationService', 'confirmService','openlmisModalService'];
 
     function dispensingService($resource,openlmisUrlFactory, notificationService, confirmService, openlmisModalService ) {
 
-        var promise,
-            POD_FACILITIES = 'dispensingPatientsFacilities';
+        // var promise,
+        //     POD_FACILITIES = 'dispensingPatientsFacilities';
            // Using Resource to Communicate with dispensing Endpoints
 
             var resource = $resource(openlmisUrlFactory('/api/patient:id'), {}, {
@@ -42,12 +42,17 @@
                     method: 'GET',
                     isArray: true
                 }, 
+                getPatient: {
+                    url: openlmisUrlFactory('/api/patient/:id'),
+                    method: 'GET',
+                    isArray: true
+                },
                 postPatientEvent: {
                     url: openlmisUrlFactory('/api/patient'),
                     method: 'POST'
                 },
                 updatePatientEvent: {
-                    url: openlmisUrlFactory('/api/patient:id'),
+                    url: openlmisUrlFactory('/api/patient/:id'),
                     method: 'PUT'
                 }, 
                 search: {
@@ -59,7 +64,9 @@
         this.show = show;
  
         this.submitPatientInfo = submitPatientInfo; // To post data POD Manage payload
+        this.updatePatientInfo = updatePatientInfo;
         this.getPatients = getPatients; //To retrieve PODs from the database
+        this.getPatient = getPatient;
         
         var patients = [];     
 
@@ -74,7 +81,6 @@
          * @param  {String}     Facility UUID
          * @return {Promise}    POD promise
          */
-
         function getPatients(patientParams) {
             var params = {
                 patientNumber: patientParams.patientNumber,
@@ -100,9 +106,13 @@
                return response; 
              });
         };
- 
-        function submitPatientInfo(patientInfo){
-            
+
+        function getPatient(patientId) {
+            var params = { id: patientId };
+            return resource.get(params);
+          };
+
+        function createPatientPayload(patientInfo) {
             var payload = {
                 "facilityId": patientInfo.homeFacility,
                 "personDto": {
@@ -122,7 +132,7 @@
                     "contacts": [
                         {
                             "contactType": patientInfo.contact.contactType,
-                            "contactValue": patientInfo.contact.contactValue
+                            "contactValue": patientInfo.contact //TO DO : handle multiple contacts
                         }
                     ]
                 },
@@ -137,8 +147,22 @@
                     }
                 ]
             }
-            return resource.postPatientEvent(payload);
+            return payload;
         }
+ 
+        function submitPatientInfo(patientInfo){   
+            var payload = createPatientPayload(patientInfo);
+            return resource.postPatientEvent(payload).$promise;
+        }
+
+
+        function updatePatientInfo(patientInfo){
+            console.log(patientInfo.id);
+            var payload = createPatientPayload(patientInfo);
+            console.log("Updating");
+            return resource.updatePatientEvent({ id: patientInfo.id }, payload).$promise;
+        }
+
 
         /**
          * @ngdoc method
