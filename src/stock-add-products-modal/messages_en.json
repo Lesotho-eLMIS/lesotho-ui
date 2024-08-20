@@ -1,4 +1,4 @@
 {
-  "stockAddProductsModal.lotCode": "Batch Number",
-  "stockAddProductsModal.newLotCode": "New Batch Number"
+  "stockAddProductsModal.lotCode": "Batch",
+  "stockAddProductsModal.newLotCode": "New Batch"
 }
