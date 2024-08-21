@@ -126,7 +126,7 @@
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
 
-            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon',
+            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg','g','MU','IU', 'Drop', 'Tablespoon',
                 'Teaspoon', 'Unit(s)', 'Puff(s)'];
             vm.dosageFrequency = ['Immediately', 'Once a day', 'Twice a day', 'Thrice a day', 'Every hour', 'Every 2 hours', 'Every 3 hours',
                 'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'On alternate days', 'Once a week', 'Twice a week',
