@@ -119,7 +119,7 @@
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
 
 
-           console.log("State Params: ", $stateParams);
+           console.log("Patient: ", vm.patient);
            $stateParams.update ? setPrescription() : '';
            vm.updateMode = $stateParams.update;
 
