@@ -116,9 +116,6 @@
                     patientId: prescription.patientId,
                     update: true
                 })
-                // .then(function() {
-                    
-                // });
                
            } else {
                $state.go('openlmis.dispensing.view', {

@@ -68,6 +68,14 @@
                         .then(function (result) {
                             return result;
                         });
+                },
+                prescription: function (prescriptionsService, $stateParams) {
+                    if($stateParams.prescriptionId){
+                        return prescriptionsService.getPrescription($stateParams.prescriptionId);
+                    }else{
+                        return undefined;
+                    }
+                    
                 }
             }
         });

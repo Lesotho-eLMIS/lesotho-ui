@@ -180,7 +180,7 @@
         isVoided: false,
         status: prescriptionDetails.status,
         facilityId: prescriptionDetails.facilityId,
-        prescribedByUserId: prescriptionDetails.prescribedByUserId,
+        prescribedByUserId: prescriptionDetails.prescribedByUserId || prescriptionDetails.servedByUserId,
         servedByUserId: prescriptionDetails.servedByUserId,
         lineItems: prescriptionDetails.lineItems
       }

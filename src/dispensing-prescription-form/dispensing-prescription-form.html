@@ -198,7 +198,7 @@
 
                 <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required/>
                 </td> 
-                <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.servedExternally"></td>
+                <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.servedExternally" ng-init="lineItem.servedExternally = false"></td>
                 <td><input type="text" ng-model="lineItem.comments"></input></td>
                 <td ng-if="!vm.inPrescriptionServe">
                     <button type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
