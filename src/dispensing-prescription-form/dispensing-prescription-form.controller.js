@@ -29,10 +29,10 @@
         .controller('dispensingPrescriptionFormController', controller);
 
     controller.$inject = ['$scope', '$state', 'prescriptionsService', 'allProducts', 'prepackingService', '$stateParams', 'user',
-        'dispensingService', 'patient', 'orderableGroupService', 'facility', 'messageService', 'confirmService', 'notificationService', 'productsWithSOH'];
+        'dispensingService', 'patient','prescription', 'orderableGroupService', 'facility', 'messageService', 'confirmService', 'notificationService', 'productsWithSOH'];
 
     function controller($scope, $state, prescriptionsService, allProducts, prepackingService, $stateParams, user,
-        dispensingService, patient, orderableGroupService, facility, messageService, confirmService, notificationService, productsWithSOH) {
+        dispensingService, patient, prescription, orderableGroupService, facility, messageService, confirmService, notificationService, productsWithSOH) {
 
         var vm = this;
 
@@ -119,14 +119,20 @@
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
 
 
-           console.log("State Params: ", $stateParams);
+           console.log("Prescription: ", prescription);
+
+           
            $stateParams.update ? setPrescription() : '';
            vm.updateMode = $stateParams.update;
 
+           if(prescription && prescription.status === 'INITIATED'){
+            vm.updateMode = false;
+           }
+        
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
 
-            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'IU', 'Drop', 'Tablespoon',
+            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg','g','MU','IU', 'Drop', 'Tablespoon',
                 'Teaspoon', 'Unit(s)', 'Puff(s)'];
             vm.dosageFrequency = ['Immediately', 'Once a day', 'Twice a day', 'Thrice a day', 'Every hour', 'Every 2 hours', 'Every 3 hours',
                 'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'On alternate days', 'Once a week', 'Twice a week',
@@ -183,6 +189,11 @@
             
             if (lineItem.selectedBatch) {
                 console.log('Selected Batch:', lineItem.selectedBatch.lotExpirationDate, lineItem.selectedBatch.stockOnHand);
+                console.log('New LineItem:', lineItem);
+                lineItem.lotCode = lineItem.selectedBatch.lotCode;
+                lineItem.lotId = lineItem.selectedBatch.lot.id;
+                lineItem.orderableDispensed = lineItem.selectedBatch.orderable.id;
+                lineItem.orderableDispensedName = lineItem.selectedBatch.orderableName
             } else {
                 console.log("No batch selected");
             }
@@ -212,7 +223,7 @@
 
         function servePrescription() {
 
-            console.log("Serving Prescription", vm.prescriptionDetails);
+
             if ($stateParams.update) {
                 vm.prescriptionLineItems.forEach(item => {
                     item.orderableDispensed = item.orderableDispensed;
@@ -230,7 +241,8 @@
                     item.collectBalanceDate = null
                 });
             }
-
+            console.log("Serving Prescription", vm.prescriptionDetails);
+            console.log("Prescription LineItems", vm.prescriptionLineItems);
             vm.prescriptionDetails.servedByUserId = vm.user.user_id;
 
             confirmService.confirm("Are you sure you want to serve a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "?", "Yes")

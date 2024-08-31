@@ -2,7 +2,7 @@
 
 <aside class="stock-card-info">
     <div class="product-name-header">
-      <span>{{vm.patient.personDto.firstName}} {{vm.patient.personDto.surname}}</span>
+      <span>{{vm.patient.personDto.firstName}} {{vm.patient.personDto.lastName}}</span>
     </div>
   
     <ul>
@@ -147,8 +147,8 @@
                 <th>{{'dispensingPrescriptionForm.route' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.duration' | message}}</th>
                 <th>{{'dispensingPrescriptionForm.durationUnits' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.instructions' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th> 
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.instructions' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th> 
                 <th>{{'dispensingPrescriptionForm.quantityPrescribed' | message}}</th>
                 <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
                 <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.servedExternally' | message}}</th>
@@ -188,17 +188,17 @@
                 <td><select id="durationUnit" ng-model="lineItem.durationUnits" ng-options="durationUnit for durationUnit in  vm.durationUnits" 
                     required></select></td>
                 
-                <td><select id="instruction" ng-model="lineItem.additionalInstructions" ng-options="instruction for instruction in  vm.instructions" 
+                <td ng-if="vm.inPrescriptionServe"><select id="instruction" ng-model="lineItem.additionalInstructions" ng-options="instruction for instruction in  vm.instructions" 
                     required></select></td>
 
-                <td><input type="text" ng-model="lineItem.additionalInstruction" ng-disabled="true"></input></td>
+                <td ng-if="vm.inPrescriptionServe"><input type="text" ng-model="lineItem.additionalInstruction" ng-disabled="false"></input></td>
                 
                 <td><input ng-model="lineItem.quantityPrescribed" type="number" min="0" step="1" oninput="validity.valid||(value='');" 
                     required></td>
 
                 <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required/>
                 </td> 
-                <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.servedExternally"></td>
+                <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.servedExternally" ng-init="lineItem.servedExternally = false"></td>
                 <td><input type="text" ng-model="lineItem.comments"></input></td>
                 <td ng-if="!vm.inPrescriptionServe">
                     <button type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
