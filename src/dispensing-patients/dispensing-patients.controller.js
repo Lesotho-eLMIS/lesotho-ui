@@ -84,6 +84,9 @@
             vm.patientParams = {};
             vm.facility = facility;
             vm.facilities = facilities;
+            vm.patientParams = {
+                facilityLocation: true  // This will select local radio button by default for searching patients
+            };
 
         }
 

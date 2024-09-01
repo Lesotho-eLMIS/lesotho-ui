@@ -171,7 +171,7 @@
                 <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.lotExpirationDate || 'N/A'}}</td>
                 <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.stockOnHand}}</td>
                 <td><input ng-model="lineItem.dose" class="form-control" type="number" min="0" step="1"
-                        oninput="validity.valid||(value='');" required></td>
+                        oninput="validity.valid||(value='');" required style="width: 40px;"></td>
 
                <td><select id="dispensingUnit" ng-model="lineItem.doseUnits" ng-options="unit for unit in vm.dispensingUnits"
                         required></select></td>
@@ -193,10 +193,10 @@
 
                 <td ng-if="vm.inPrescriptionServe"><input type="text" ng-model="lineItem.additionalInstruction" ng-disabled="false"></input></td>
                 
-                <td><input ng-model="lineItem.quantityPrescribed" type="number" min="0" step="1" oninput="validity.valid||(value='');" 
+                <td><input ng-model="lineItem.quantityPrescribed" type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 40px;"
                     required></td>
 
-                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required/>
+                <td ng-if="vm.inPrescriptionServe"><input ng-model="lineItem.quantityDispensed" type="number" min="0" step="1" oninput="validity.valid||(value='');" required style="width: 40px;"/>
                 </td> 
                 <td ng-if="vm.inPrescriptionServe"><input type="checkbox" ng-model="lineItem.servedExternally" ng-init="lineItem.servedExternally = false"></td>
                 <td><input type="text" ng-model="lineItem.comments"></input></td>
