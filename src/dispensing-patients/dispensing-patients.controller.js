@@ -84,6 +84,7 @@
             vm.patientParams = {};
             vm.facility = facility;
             vm.facilities = facilities;
+            console.log(vm.facility);
 
         }
 
@@ -106,7 +107,9 @@
 
             var getPatientParams = vm.patientParams;
             if(getPatientParams.facilityLocation){
-                getPatientParams.facilityId = vm.facility.id;
+                //find the Geographic Zone Id within which the facility is located
+               
+                getPatientParams.geoZoneId = vm.facility.geographicZone.id;
             }
             else{
                 getPatientParams.facilityId = undefined;
@@ -128,6 +131,7 @@
                 }
                 else {
                     for (var key in patientsObject) {
+                        console.log(patientsObject);
                         if (patientsObject.hasOwnProperty(key)) {
                             // Access each patient object to modify its facilityId
                             var patient = patientsObject[key];
