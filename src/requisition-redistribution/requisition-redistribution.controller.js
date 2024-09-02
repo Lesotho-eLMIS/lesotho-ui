@@ -62,6 +62,7 @@
         vm.submitOrders = submitOrders;
         vm.filteredProducts = filteredProducts;
         vm.filterFacilities = filterFacilities;
+        vm.calculatePacksToShip = calculatePacksToShip;
         
         function onInit() {
         
@@ -189,12 +190,15 @@
                 })
                 .then((fetchedOrder) => {
                     requestedItems.forEach((lineItem) => {
+                        let packs = calculatePacksToShip(lineItem);
+                        console.log(packs);
                         fetchedOrder.orderLineItems.push({                                    
                             orderable: lineItem.orderable,
-                            orderedQuantity: lineItem.packsToShip,
+                            orderedQuantity: packs, //lineItem.packsToShip,
                             soh: 45
                         });
-                    });                  
+                    }); 
+                    console.log(fetchedOrder);                 
                     return orderCreateService.send(fetchedOrder);
                 })
                 .then(() => {
@@ -203,6 +207,19 @@
                 .catch((error) => {
                     console.error('Error processing order:', error);
                 });
+        }
+
+        //Calculate packs to ship for each line item
+        function calculatePacksToShip(lineItem){
+            var netContent = lineItem.orderable.netContent,
+                quantityToIssue = lineItem.quantityToIssue,
+                packRoundingThreshold = lineItem.orderable.packRoundingThreshold;
+            var packsToShip = quantityToIssue / netContent,
+                remainder = quantityToIssue % netContent;
+            if(remainder > packRoundingThreshold){
+                packsToShip += 1;
+            }
+            return Math.floor(packsToShip);
         }
 
         /*Updates the status of the requisition to show that for all requisition line items,
