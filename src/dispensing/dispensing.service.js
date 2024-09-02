@@ -88,7 +88,8 @@
                 lastName: patientParams.lastName,
                 dateOfBirth: patientParams.dateOfBirth,
                 nationalId: patientParams.nationalId,
-                facilityId:patientParams.facilityId
+                facilityId:patientParams.facilityId,
+                geoZoneId:patientParams.geoZoneId
             };
             console.log("Dispensing Service");
             console.log(params);
@@ -114,17 +115,18 @@
 
         function createPatientPayload(patientInfo) {
             var payload = {
-                "facilityId": patientInfo.homeFacility,
+                "facilityId": patientInfo.facilityId,
+                "geoZoneId" : patientInfo.geoZoneId,
                 "personDto": {
                     "nationalId": patientInfo.nationalID,
                     "firstName": patientInfo.firstName,
                     "lastName": patientInfo.lastName,
                     "nickName": patientInfo.nickName,
                     "sex": patientInfo.sex,
-                    "dateOfBirth": patientInfo.DOB,
+                    "dateOfBirth": patientInfo.dateOfBirth,
                     "isDobEstimated": patientInfo.isDobEstimated,
                     "physicalAddress": patientInfo.physicalAddress,
-                    "nextOfKinFullName": patientInfo.nextOfKinNames,
+                    "nextOfKinFullName": patientInfo.nextOfKinFullName,
                     "nextOfKinContact": patientInfo.nextOfKinContact,
                     "motherMaidenName": patientInfo.motherMaidenName,
                     "deceased": patientInfo.deceased,
@@ -150,7 +152,8 @@
             return payload;
         }
  
-        function submitPatientInfo(patientInfo){   
+        function submitPatientInfo(patientInfo){  
+            console.log(patientInfo); 
             var payload = createPatientPayload(patientInfo);
             return resource.postPatientEvent(payload).$promise;
         }

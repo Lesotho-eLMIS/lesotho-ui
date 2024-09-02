@@ -59,6 +59,7 @@
             vm.patient = !(patientState === "New")? vm.initialisePatient(patient) : {};
             vm.contactOptions = ["email", "phone"];
             vm.updateMode = (patientState === "New") ? false : true;
+            vm.facility = facility;
 
             console.log("...In init...")
         }
@@ -100,25 +101,29 @@
         vm.submitPatientData = function(){
 
             //Saving New Patient
-            confirmService
-            .confirm("Are you sure you want to create this patient?", 'Submit')
+            confirmService.confirm("Are you sure you want to create this patient?", 'Submit')
             .then(function () {
                 var patientInfo = vm.patient;
-                patientInfo.homeFacility = facility.id;
+                console.log(vm.patient);
+                patientInfo.facilityId = vm.facility.id;
+                patientInfo.geoZoneId = vm.facility.geographicZone.id;
+                console.log("Do we get here??", patientInfo);
                 dispensingService.submitPatientInfo(patientInfo).then(function(response) {
                     //clearing all the fields
                     vm.patient.nationalID = "";
                     vm.patient.firstName = "";
                     vm.patient.lastName = "";
                     vm.patient.nickName = "";
-                    vm.patient.DOB = "";
-                    vm.patient.dateOfBirthEstimated = "";
+                    vm.patient.dateOfBirth = "";
+                    vm.patient.isDobEstimated = "";
                     vm.patient.physicalAddress = "";
                     vm.patient.contact = "";
                     vm.patient.motherMaidenName = "";
-                    vm.patient.nextOfKinNames = "";
+                    vm.patient.nextOfKinFullName = "";
                     vm.patient.nextOfKinContact = "";
                     vm.patient.sex = null;
+                    vm.patient.deceased = null;
+                    vm.patient.retired = null;
                     // Adding success message when Patient saved.
                     notificationService.success('Successfully submitted.');   
                 }).catch(function(error) {

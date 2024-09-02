@@ -28,10 +28,10 @@
         .controller('dispensingPatientsController', dispensingPatientsController);
 
         dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 'facilityService',
-        'offlineService', 'dispensingService'];
+        'offlineService', 'dispensingService', 'alertService'];
 
     function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, facilityService,
-        dispensingService) {
+        dispensingService, alertService) {
 
             
 
@@ -87,7 +87,6 @@
             vm.patientParams = {
                 facilityLocation: true  // This will select local radio button by default for searching patients
             };
-
         }
 
         vm.addPatientForm = function(){
@@ -109,7 +108,9 @@
 
             var getPatientParams = vm.patientParams;
             if(getPatientParams.facilityLocation){
-                getPatientParams.facilityId = vm.facility.id;
+                //find the Geographic Zone Id within which the facility is located
+               
+                getPatientParams.geoZoneId = vm.facility.geographicZone.id;
             }
             else{
                 getPatientParams.facilityId = undefined;
@@ -126,7 +127,12 @@
 
         function viewPatients(patientSearchParams){
             return dispensingService.getPatients(patientSearchParams).then(function(patientsObject) {               
-                for (var key in patientsObject) {
+                if (Object.entries(patientsObject).length === 0) {
+                    alertService.error("Patient not Found. Try searching Nationally or click on Add Patient to create a record for this patient.");
+                }
+                else {
+                    for (var key in patientsObject) {
+                        console.log(patientsObject);
                         if (patientsObject.hasOwnProperty(key)) {
                             // Access each patient object to modify its facilityId
                             var patient = patientsObject[key];
@@ -135,6 +141,7 @@
                             patient.facilityId = facility[0].name;                      
                         }
                     }
+                }
                     vm.patientsData =  patientsObject;
                   //  console.log(vm.patientsData);
             });

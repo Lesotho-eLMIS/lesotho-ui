@@ -52,12 +52,12 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <label>{{'dispensingPatientForm.dateOfBirth' | message}}</label>
-                    <input id="lineItem.occurredDate" type="date" ng-model="vm.patient.DOB"
+                    <input id="lineItem.occurredDate" type="date" ng-model="vm.patient.dateOfBirth"
                         ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate" required inputmode="none" />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="radio">
-                        <input type="checkbox" ng-model="vm.patient.dateOfBirthEstimated" />
+                        <input type="checkbox" ng-model="vm.patient.isDobEstimated" />
                         <label>{{'dispensingPatientForm.DOBestimated' | message}}</label>
                     </label>
                 </fieldset>
@@ -86,7 +86,7 @@
 
                 <fieldset class="form-group">
                     <label for="nextOfKinNames">{{'dispensingPatientForm.nextOfKinNames' | message}}</label>
-                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinNames" type="text" />
+                    <input id="nextOfKinNames" ng-model="vm.patient.nextOfKinFullName" type="text" />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="nextOfKinContact">{{'dispensingPatientForm.nextOfKinContact' | message}}</label>
