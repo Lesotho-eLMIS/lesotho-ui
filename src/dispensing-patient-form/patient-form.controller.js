@@ -60,8 +60,6 @@
             vm.contactOptions = ["email", "phone"];
             vm.updateMode = (patientState === "New") ? false : true;
             vm.facility = facility;
-
-            console.log("...In init...")
         }
 
         /**
@@ -74,7 +72,7 @@
          *
          */
         function addContact() {
-            console.log("Add line item..."); 
+            
                 vm.contacts.push({
                     contactType: '',
                     contactValue: ''
@@ -85,16 +83,15 @@
 
         // removing discrepancies from table
         function removeContact(index) {
-            console.log("Remove...");
-            console.log(index);
+           
             vm.contacts.splice(index, 1);
         }
         vm.submitMode =  function() {
             if (vm.updateMode) {
-                console.log("Updating Patient");
+               
                 vm.savePatientUpdates();
             } else {
-                console.log("New Patient");
+                
                 vm.submitPatientData();
             }
         }
@@ -104,10 +101,10 @@
             confirmService.confirm("Are you sure you want to create this patient?", 'Submit')
             .then(function () {
                 var patientInfo = vm.patient;
-                console.log(vm.patient);
+              
                 patientInfo.facilityId = vm.facility.id;
                 patientInfo.geoZoneId = vm.facility.geographicZone.id;
-                console.log("Do we get here??", patientInfo);
+              
                 dispensingService.submitPatientInfo(patientInfo).then(function(response) {
                     //clearing all the fields
                     vm.patient.nationalID = "";
@@ -140,7 +137,7 @@
             .then(function () {
                 var patientInfo = vm.patient;
                 patientInfo.homeFacility = facility.id;
-                console.log(patientInfo);
+               
                 dispensingService.updatePatientInfo(patientInfo).then(function(response) {
                     //clearing all the fields
                     vm.patient.nationalID = "";
@@ -167,7 +164,7 @@
 
         function initialisePatient (patientObj) {
             const patientArray = Object.values(patientObj)[0];
-            console.log(patientArray);
+           
             vm.patient.patientNumber = patientArray.patientNumber;
             vm.patient.nationalID = patientArray.personDto.nationalId;
             vm.patient.firstName = patientArray.personDto.firstName;
@@ -186,7 +183,7 @@
 
             vm.patient.contact = patientArray.personDto.contacts[0].contactValue
           //  vm.patient.contact.contactValue = patientArray.personDto.contacts[0].contactValue ? patientArray.personDto.contacts[0].contactValue : "";
-            console.log(vm.patient);
+           
             return vm.patient;
         }
     }

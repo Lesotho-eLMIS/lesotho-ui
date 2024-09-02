@@ -91,8 +91,7 @@
                 facilityId:patientParams.facilityId,
                 geoZoneId:patientParams.geoZoneId
             };
-            console.log("Dispensing Service");
-            console.log(params);
+           
             return resource.get(params).$promise.then(function(response) {
                 //Transforming the response to an object if it's an array
                     if (Array.isArray(response)) {
@@ -153,16 +152,16 @@
         }
  
         function submitPatientInfo(patientInfo){  
-            console.log(patientInfo); 
+          
             var payload = createPatientPayload(patientInfo);
             return resource.postPatientEvent(payload).$promise;
         }
 
 
         function updatePatientInfo(patientInfo){
-            console.log(patientInfo.id);
+            
             var payload = createPatientPayload(patientInfo);
-            console.log("Updating");
+        
             return resource.updatePatientEvent({ id: patientInfo.id }, payload).$promise;
         }
 

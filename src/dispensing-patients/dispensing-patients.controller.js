@@ -94,16 +94,6 @@
             $state.go('openlmis.dispensing.patients.form');
         }
 
-        // vm.addPrescription = function(){
-        //     $state.go('openlmis.dispensing.prescriptions.form', {
-        //         facilityId: vm.facility.id
-        //         // id: item.id,
-        //         // programId: item.programId,
-        //         // facilityId: item.facilityId
-        //     });
-        // }
-
-
         function searchPatients(){
 
             var getPatientParams = vm.patientParams;
@@ -132,7 +122,7 @@
                 }
                 else {
                     for (var key in patientsObject) {
-                        console.log(patientsObject);
+                        
                         if (patientsObject.hasOwnProperty(key)) {
                             // Access each patient object to modify its facilityId
                             var patient = patientsObject[key];
@@ -143,7 +133,7 @@
                     }
                 }
                     vm.patientsData =  patientsObject;
-                  //  console.log(vm.patientsData);
+                  
             });
         }
     }
