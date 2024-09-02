@@ -84,8 +84,9 @@
             vm.patientParams = {};
             vm.facility = facility;
             vm.facilities = facilities;
-            console.log(vm.facility);
-
+            vm.patientParams = {
+                facilityLocation: true  // This will select local radio button by default for searching patients
+            };
         }
 
         vm.addPatientForm = function(){
