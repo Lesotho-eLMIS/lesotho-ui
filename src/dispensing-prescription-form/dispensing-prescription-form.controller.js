@@ -134,9 +134,9 @@
 
             vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg','g','MU','IU', 'Drop', 'Tablespoon',
                 'Teaspoon', 'Unit(s)', 'Puff(s)'];
-            vm.dosageFrequency = ['Immediately', 'Once a day', 'Twice a day', 'Thrice a day', 'Every hour', 'Every 2 hours', 'Every 3 hours',
-                'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'On alternate days', 'Once a week', 'Twice a week',
-                'Thrice a week', 'Every 2 weeks', 'Every 3 weeks', 'Once a month', '5 times a day', '4 days a week', '5 days a week', '6 days a week'];
+            vm.dosageFrequency = ['PRN (As Needed)', 'Nocte (At Night)', 'Immediately', 'Once a day', 'Twice a day', 'Thrice a day', '5 times a day', 'On alternate days', 'Every hour', 'Every 2 hours', 'Every 3 hours',
+                'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'Once a week', 'Twice a week',
+                'Thrice a week', 'Every 2 weeks', 'Every 3 weeks', '4 days a week', '5 days a week', '6 days a week', 'Once a month', 'Once in 2 months', 'Once in 3 months'];
             vm.doseRoute = ['Intramuscular', 'Intravenous', 'Oral', 'Per Vaginal', 'Sub Cutaneous', 'Per Rectum', 'Sub Lingual', 'Nasogastric',
                 'Intradermal', 'Intraperitoneal', 'Intrathecal', 'Intraosseous', 'Topical', 'Nasal', 'Inhalation'];
             vm.durationUnits = ['Day(s)', 'Weeks(s)', 'Month(s)'];

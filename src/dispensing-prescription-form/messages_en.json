@@ -15,6 +15,7 @@
     "dispensingPrescriptionForm.quantityPrescribed": "Quantity Prescribed",
     "dispensingPrescriptionForm.quantityDispensed": "Quantity Dispensed",
     "dispensingPrescriptionForm.servedExternally": "Served Externally",
+    "dispensingPrescriptionForm.fullyServed": "Fully Served",
     "dispensingPrescriptionForm.comments": "Comments",
     "dispensingPrescriptionForm.action": "Action",
     "dispensingPrescriptionForm.expiryDate": "Expiry Date",
