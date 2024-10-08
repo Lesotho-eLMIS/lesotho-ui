@@ -73,12 +73,12 @@
             </thead>
             <tbody>
                 <tr ng-repeat="lineItem in vm.prescriptionLineItems">
-                    <td> {{lineItem.orderablePrescribedName}} </td>
-                    <td> {{lineItem.orderableDispensedName}} </td>
-                    <td> {{lineItem.lotCode}} </td>
+                    <td> {{lineItem.prescribedProduct}} </td>
+                    <td> {{lineItem.dispensedProduct}} </td>
+                    <td> {{lineItem.orderableLotCode}} </td>
                     <td>{{lineItem.dose}}</td>
                     <td>{{lineItem.doseUnits}}</td>
-                    <td>{{lineItem.frequency}}</td>
+                    <td>{{lineItem.doseFrequency}}</td>
                     <td>{{lineItem.route}}</td>
                     <td>{{lineItem.dosePeriod}}</td>
                     <td>{{lineItem.additionalInstructions}}</td>

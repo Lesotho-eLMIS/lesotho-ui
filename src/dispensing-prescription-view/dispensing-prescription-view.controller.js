@@ -28,9 +28,9 @@
         .module('dispensing-prescription-view')
         .controller('dispensingPrescriptionView', controller);
 
-    controller.$inject = ['$filter', '$state', '$stateParams', 'Prescription', 'Products'];
+    controller.$inject = ['facility', 'Lots', 'Orderables', 'Prescription'];
 
-    function controller($filter, $state, $stateParams, Prescription, Products) {
+    function controller(facility, Lots, Orderables, Prescription) {
 
         var vm = this;
 
@@ -39,6 +39,13 @@
         vm.prescription = undefined;
         vm.prescriptionLineItems = undefined;
         vm.dispensableProducts = undefined;
+        vm.facility = undefined;
+        vm.facilityProducts = undefined;
+        vm.lots = undefined;
+        vm.orderables = undefined;
+        vm.orderableIds = [];
+        vm.dispensedProducts = [];
+        vm.prescribedProducts = [];
 
         /**
          * @ngdoc method
@@ -51,69 +58,26 @@
         function onInit() {
 
             vm.prescription = Prescription;
+            vm.facility = facility;
             vm.prescriptionLineItems = Prescription.lineItems;
-            vm.dispensableProducts = Products.content;
+            //vm.dispensableProducts = Products.content;
+            vm.lots = Lots;
+            vm.orderables = Orderables;
            getPrescriptionLineItemDetails(vm.prescriptionLineItems);
         }
 
-        function getPrescriptionLineItemDetails(){
-            vm.prescriptionLineItems.forEach(item => item.frequency = item.duration + " " + item.durationUnits);
-        }
-
-        // function getProductDetails(lineItems, products) {
-
-        //     /* HA NTHO LI ETSOA KA NEPO WE SHOULD RESOLVE IDS ... TLAASE MONA RE ETSA JOALO!
-        //     // Iterate over each line item in the prescription
-        //     return lineItems.map(lineItem => {
-        //         // Find the corresponding product in the products array
-        //         const product = products.find(prod => prod.orderable.id === lineItem.orderablePrescribed);
-            
-        //         console.log("PRODUCT", product);
-            
-        //         if (product) {
-        //             // Map batches from the product's 'canFulfillForMe' array
-        //             const batches = product.canFulfillForMe.map(batch => ({
-        //                 orderableName: batch.orderableName,
-        //                 lotId: batch.lot ? batch.lot.id : null,
-        //                 lotCode: batch.lot ? batch.lot.lotCode : 'No Batch',  // Handle case where lot or lotCode is null
-        //                 stockOnHand: batch.stockOnHand,
-        //                 lotExpirationDate: batch.lot ? batch.lot.lotExpirationDate : 'N/A' // Handle case where lotExpirationDate is null
-        //             }));
-
-        //             console.log("Batches", batches);
-            
-        //             let selectedBatch = undefined;
-        //             if (batches.length > 1) {
-        //                 const matchedBatches = batches.filter(batch => batch.lotId === lineItem.lotId);
-        //                 selectedBatch = matchedBatches.length > 0 ? matchedBatches[0] : null;
-        //             } else {
-        //                 selectedBatch = batches[0];
-        //             }
-            
-        //             if (selectedBatch) {
-        //                 // Create the prescribedProduct object
-        //                 lineItem.prescribedProduct = product.canFulfillForMe[0].orderableName; //selectedBatch.orderableName;
-        //                 lineItem.batchNumber = selectedBatch.lotCode;
-        //                 lineItem.expiryDate = selectedBatch.lotExpirationDate;
-        //                 lineItem.dosePeriod = lineItem.duration + " " + lineItem.durationUnits;
-
-        //                 // return {
-        //                 //     //orderableId: lineItem.orderablePrescribed;
-        //                 //     lineItem.productName: selectedBatch.orderableName; // Assuming all batches share the same orderableName
-        //                 //     lineItem.batchName = selectedBatch.lotCode;
-        //                 //     expiryDate: selectedBatch.lotExpirationDate 
-        //                 // };
-        //                 console.log(lineItem);
-        //             } else {
-        //                 // If no matching batch is found, return null or handle as needed
-        //                 return null;
-        //             }
-        //         } else {
-        //             // If no corresponding product is found, return null 
-        //             return null;
-        //         }
-        //     });*/
-        // }
+        function getPrescriptionLineItemDetails() {
+            vm.prescriptionLineItems.forEach(item => {
+                item.dosePeriod = item.duration + " " + item.durationUnits;
         
+                // Use find() and check for existence
+                var getLot = vm.lots.find(lot => item.lotId === lot.id);
+                item.orderableLotCode = getLot ? getLot.lotCode : null;
+                var dispensed = vm.orderables.find(orderable => item.orderableDispensed === orderable.id );
+                var prescribed = vm.orderables.find(orderable => item.orderablePrescribed === orderable.id );
+                item.dispensedProduct = dispensed ? dispensed.fullProductName : null;
+                item.prescribedProduct = prescribed ? prescribed.fullProductName : null;
+            });
+        }        
     }
 })();
