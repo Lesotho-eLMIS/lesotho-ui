@@ -150,7 +150,7 @@
             });
 
             if (!_.isEmpty(keyword)) {
-                keyword = keyword.trim();
+                keyword = keyword.trim().toLowerCase();
                 result = _.filter(lineItems, function(item) {
                     var hasStockOnHand = !(_.isNull(item.stockOnHand) || _.isUndefined(item.stockOnHand));
                     var hasQuantity = !(_.isNull(item.quantity) || _.isUndefined(item.quantity)) &&
@@ -163,9 +163,11 @@
                         getLot(item, hasLot),
                         item.lot ? openlmisDateFilter(item.lot.expirationDate) : ''
                     ];
-                    return _.any(searchableFields, function(field) {
-                        return field.toLowerCase().contains(keyword.toLowerCase());
-                    });
+                    // return _.any(searchableFields, function(field) {
+                    //     return field.toLowerCase().contains(keyword.toLowerCase());
+                    // });
+                    //some method checks if each field is truthy (i.e., not undefined or null) before calling toLowerCase() on it
+                    return searchableFields.some(field => field && field.toLowerCase().includes(keyword));
                 });
             }
 
