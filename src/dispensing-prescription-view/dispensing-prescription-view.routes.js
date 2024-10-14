@@ -50,19 +50,43 @@
                     }
                     return $stateParams.facility;
                 },
-                Products: function (prescriptionsService, facility) {
-                    return prescriptionsService.getProductsWithSOH(facility.id)
-                        .then(function (result) {
-                            return result;
-                        });
-                },
+                // Products: function (prescriptionsService, facility) {
+                //     return prescriptionsService.getProductsWithSOH(facility.id)
+                //         .then(function (result) {
+                //             return result;
+                //         });
+                // },
                 Prescription: function(prescriptionsService, $stateParams) {
                     return prescriptionsService.getPrescription($stateParams.prescriptionId).$promise
                     .then(function(response){
                         return response;
                     });
+                },
+                Lots: function (Prescription, lotService) {
+                    var lots = [];
+                    Prescription.lineItems.forEach(function (item) {
+                        var hasLot = item.lotId ? true : false;
+                        if (hasLot) {
+                            lots.push(item.lotId);
+                        }
+                    })
+                    return lotService.query({ id: lots })
+                        .then(result => {
+                            return result.content;
+                        });
+                },
+                Orderables: function(Prescription, orderableService){
+                    var promises = Prescription.lineItems.map(item => {
+                        return orderableService.get(item.orderableDispensed)
+                            .then(result => {
+                               // vm.dispensedProducts.push(result);
+                                return result; // Return the result to fulfill the Promise
+                            });
+                    });                
+                    // Return a promise that resolves when all individual promises resolve
+                    return Promise.all(promises);
                 }
-            },
+            }
         });
     }
 })();
