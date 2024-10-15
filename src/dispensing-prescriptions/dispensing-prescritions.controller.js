@@ -105,7 +105,6 @@
            vm.facility = facility;
            vm.facilities = facilities;
            console.log($stateParams);
-           vm.fetchAllPrescriptions();
        }
 
        function viewPrescription(prescription) {
