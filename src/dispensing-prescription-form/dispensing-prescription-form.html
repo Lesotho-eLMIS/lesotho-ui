@@ -162,14 +162,14 @@
             
                 <td>{{lineItem.fullProductName}}</td>
                 <td ng-if="vm.inPrescriptionServe && !vm.updateMode"><select id="dispensedProduct" ng-model="lineItem.dispensedProduct" 
-                    ng-options="orderableGroup.canFulfillForMe[0].orderableName for orderableGroup in vm.orderableGroups"
+                    ng-options="product.dispensedProductName for product in vm.allStockCardCommodities"
                     ng-change="vm.updateBatchOptions(lineItem)"></select></td>
                 <td ng-show="vm.updateMode"><span>{{ lineItem.dispensedProduct || 'N/A' }}</span></td>
                 <td ng-if="vm.inPrescriptionServe && !vm.updateMode"><select ng-model="lineItem.selectedBatch" 
-                    ng-options="batch as (batch.lot ? batch.lotCode : 'No Batch') for batch in lineItem.batches"                 
+                    ng-options="batch as (batch.lot ? batch.orderableLotCode : 'No Batch') for batch in lineItem.batches"                 
                     ng-change="vm.updateBatchDetails(lineItem)"></select></td>
                 <td ng-show="vm.updateMode"><span>{{ lineItem.selectedBatch|| 'N/A' }}</span></td>
-                <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.lotExpirationDate || 'N/A'}}</td>
+                <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.expirationDate || 'N/A'}}</td>
                 <td ng-if="vm.inPrescriptionServe">{{ lineItem.selectedBatch.stockOnHand}}</td>
                 <td><input ng-model="lineItem.dose" class="form-control" type="number" required style="width: 40px;"></td>
 
