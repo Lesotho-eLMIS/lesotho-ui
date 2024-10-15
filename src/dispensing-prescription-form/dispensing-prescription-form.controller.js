@@ -28,11 +28,11 @@
         .module('dispensing-prescription-form')
         .controller('dispensingPrescriptionFormController', controller);
 
-    controller.$inject = ['$scope', '$state', 'prescriptionsService', 'allProducts', 'prepackingService', '$stateParams', 'user',
-        'dispensingService', 'patient','prescription', 'orderableGroupService', 'facility', 'messageService', 'confirmService', 'notificationService', 'productsWithSOH'];
+    controller.$inject = ['$state', 'prescriptionsService', 'allProducts', '$stateParams', 'user', 'patient',
+        'prescription', 'facility', 'confirmService', 'notificationService', 'productsWithSOH', 'stockCardProducts', 'lotService'];
 
-    function controller($scope, $state, prescriptionsService, allProducts, prepackingService, $stateParams, user,
-        dispensingService, patient, prescription, orderableGroupService, facility, messageService, confirmService, notificationService, productsWithSOH) {
+    function controller($state, prescriptionsService, allProducts, $stateParams, user, patient,
+        prescription, facility, confirmService, notificationService, productsWithSOH, stockCardProducts, lotService) {
 
         var vm = this;
 
@@ -41,7 +41,8 @@
         vm.servePrescription = servePrescription;
         vm.addProduct = addProduct;
         vm.substitute = substitute;
-       // vm.editPrescription = editPrescription;
+        vm.getLots = getLots;
+        // vm.editPrescription = editPrescription;
         vm.setPrescription = setPrescription;
         vm.patient = undefined;
         vm.facility = undefined;
@@ -96,7 +97,10 @@
             'dispensingPrescriptions.dateCaptured': ['dateCaptured']
         };
 
-        vm.orderableGroups = undefined;
+        vm.allStockCardCommodities = undefined;
+        // vm.orderables = undefined;
+        vm.lots = undefined;
+        vm.allProducts = undefined;
 
         /**
          * @ngdoc method
@@ -112,27 +116,23 @@
             vm.patient = patient;
             vm.facility = facility;
             vm.user = user;
-            vm.orderableGroups = productsWithSOH;
-            vm.allProducts = allProducts;
+            vm.allStockCardCommodities = productsWithSOH; // All products (UUIDs ONLY) with stock cards within the facility
+            vm.allProducts = allProducts; // All facility approved products
             vm.prescriptionDetails.createdDate = new Date(); //= vm.inPrescriptionServe ? null : new Date();
             vm.prescriptionDetails.issueDate = new Date();
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
 
+            $stateParams.update ? setPrescription() : '';
+            vm.updateMode = $stateParams.update;
 
-           console.log("Prescription: ", prescription);
+            if (prescription && prescription.status === 'INITIATED') {
+                vm.updateMode = false;
+            }
 
-           
-           $stateParams.update ? setPrescription() : '';
-           vm.updateMode = $stateParams.update;
-
-           if(prescription && prescription.status === 'INITIATED'){
-            vm.updateMode = false;
-           }
-        
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
 
-            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg','g','MU','IU', 'Drop', 'Tablespoon',
+            vm.dispensingUnits = ['Capsule(s)', 'Tablet(s)', 'ml', 'mg', 'g', 'MU', 'IU', 'Drop', 'Tablespoon',
                 'Teaspoon', 'Unit(s)', 'Puff(s)'];
             vm.dosageFrequency = ['PRN (As Needed)', 'Nocte (At Night)', 'Immediately', 'Once a day', 'Twice a day', 'Thrice a day', '5 times a day', 'On alternate days', 'Every hour', 'Every 2 hours', 'Every 3 hours',
                 'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'Once a week', 'Twice a week',
@@ -144,9 +144,38 @@
 
         }
 
+        function getLots(lineItem) {
+
+            var lots = [];
+            if (lineItem && lineItem.dispensedProduct && Array.isArray(lineItem.dispensedProduct.canFulfillForMe)) {
+                lineItem.dispensedProduct.canFulfillForMe.forEach(item => {
+                    if (item.lot && item.lot.id) {
+                        lots.push(item.lot.id);
+                    }
+                });
+
+                return lotService.query({ id: lots })
+                    .then(result => {
+                        lineItem.dispensedProduct.canFulfillForMe.forEach(function (item) {
+                            if (item.lot) {
+                                var getLot = result.content.find(lot => item.lot.id === lot.id);
+                                item.orderableLotCode = getLot ? getLot.lotCode : null;
+                                item.expirationDate = getLot ? getLot.expirationDate : null;
+                            }
+                        });
+                        return result.content;
+                    });
+            } else {
+                // Handle the case where canFulfillForMe is undefined or not an array
+                console.error("Invalid lineItem structure or canFulfillForMe is not an array.");
+                return Promise.reject("Invalid lineItem structure.");
+            }
+        }
+
         function setPrescription() {
             prescriptionsService.getPrescription($stateParams.prescriptionId).$promise
                 .then(function (response) {
+
                     vm.inPrescriptionServe = true;
                     vm.prescriptionDetails = response;
                     vm.prescriptionDetails.prescriptionId = response.id;
@@ -158,20 +187,20 @@
                         item.selectedBatch = item.lotCode;
                         item.instructions = item.additionalInstructions;
                     });
-                    console.log("Transitioning", vm.prescriptionDetails);
                 });
         }
-    
+
 
         vm.updateBatchOptions = function (lineItem) {
+
+            getLots(lineItem);
 
             if (lineItem.dispensedProduct) {
                 // Retrieve and sort the batches by expiration date (earliest first)
                 lineItem.batches = lineItem.dispensedProduct.canFulfillForMe.sort((a, b) => {
-                    // Assuming expiration dates are JavaScript Date objects; if they are strings, convert them using new Date()
-                    return new Date(a.lotExpirationDate) - new Date(b.lotExpirationDate);
+                    return new Date(a.expirationDate) - new Date(b.expirationDate);
                 });
-        
+
                 // Auto-select batch if there is only one
                 if (lineItem.batches.length === 1) {
                     lineItem.selectedBatch = lineItem.batches[0];
@@ -186,14 +215,12 @@
 
         // Function to update expiry date and soh
         vm.updateBatchDetails = function (lineItem) {
-            
+
             if (lineItem.selectedBatch) {
-                console.log('Selected Batch:', lineItem.selectedBatch.lotExpirationDate, lineItem.selectedBatch.stockOnHand);
-                console.log('New LineItem:', lineItem);
-                lineItem.lotCode = lineItem.selectedBatch.lotCode;
+                lineItem.lotCode = lineItem.selectedBatch.orderableLotCode;
                 lineItem.lotId = lineItem.selectedBatch.lot.id;
                 lineItem.orderableDispensed = lineItem.selectedBatch.orderable.id;
-                lineItem.orderableDispensedName = lineItem.selectedBatch.orderableName
+                lineItem.orderableDispensedName = lineItem.dispensedProductName;
             } else {
                 console.log("No batch selected");
             }
@@ -223,7 +250,6 @@
 
         function servePrescription() {
 
-
             if ($stateParams.update) {
                 vm.prescriptionLineItems.forEach(item => {
                     item.orderableDispensed = item.orderableDispensed;
@@ -234,6 +260,7 @@
                 });
             } else {
                 vm.prescriptionLineItems.forEach(item => {
+                   
                     item.orderableDispensed = item.dispensedProduct.orderable.id;
                     item.lotId = item.selectedBatch.lot ? item.selectedBatch.lot.id : null;
                     item.servedExternally = false;
@@ -241,27 +268,25 @@
                     item.collectBalanceDate = null
                 });
             }
-            console.log("Serving Prescription", vm.prescriptionDetails);
-            console.log("Prescription LineItems", vm.prescriptionLineItems);
             vm.prescriptionDetails.servedByUserId = vm.user.user_id;
 
             confirmService.confirm("Are you sure you want to serve a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "?", "Yes")
-            .then(function () {
-                prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
-                .then(function (response) {
-                    notificationService.success('Prescription Served.');
-                    $state.go('openlmis.dispensing.prescriptions');
-                })
-                .catch(function (error) {
-                    console.error('Error occurred:', error);
+                .then(function () {
+                    prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
+                        .then(function (response) {
+                            notificationService.success('Prescription Served.');
+                            $state.go('openlmis.dispensing.prescriptions');
+                        })
+                        .catch(function (error) {
+                            console.error('Error occurred:', error);
+                        });
                 });
-            });
         }
 
         vm.createPrescrition = function () {
 
             // if(!vm.updateMode){
-                vm.prescriptionDetails.patientId = vm.patient.id;
+            vm.prescriptionDetails.patientId = vm.patient.id;
             vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType ? "In-Patient" : "Out-Patient",
                 vm.prescriptionDetails.isVoided = false;
             vm.prescriptionDetails.status = "INITIATED";
@@ -282,7 +307,7 @@
                             vm.prescriptionDetails.prescriptionId = prescriptionId;
                             prescriptionsService.getPrescription(prescriptionId).$promise
                                 .then(function (response) {
-                                    // Success callback
+                                    //console.log("Created Prescription ", response);
                                     vm.inPrescriptionServe = true;
                                     vm.savedPrescriptionDetails = response;
                                 }).catch(function (error) {
@@ -301,6 +326,8 @@
                         });
                 });
 
+
+
             // }
             // else{
             //     editPrescription();
@@ -314,21 +341,21 @@
             // });
         }
 
-        vm.updatePrescription = function (){
+        vm.updatePrescription = function () {
             console.log("Updating Prescription");
-           console.log(vm.prescriptionDetails);
+            console.log(vm.prescriptionDetails);
 
-           confirmService.confirm("Are you sure you want to update this prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "", "Yes")
+            confirmService.confirm("Are you sure you want to update this prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "", "Yes")
                 .then(function () {
                     prescriptionsService.updatePrescription(vm.prescriptionDetails)
                         .then(function (response) {
                             notificationService.success('Prescription updated Successfully.');
-                           // $state.go('openlmis.dispensing.prescriptions');
-                           console.log("Updated Prescription", response);
-                           $state.go('openlmis.dispensing.view', {
-                            prescriptionId: response.id,
-                            patientId: response.patientId
-                        });
+                            // $state.go('openlmis.dispensing.prescriptions');
+                            console.log("Updated Prescription", response);
+                            $state.go('openlmis.dispensing.view', {
+                                prescriptionId: response.id,
+                                patientId: response.patientId
+                            });
                         })
                         .catch(function (error) {
                             console.error('Error occurred:', error);
@@ -353,7 +380,7 @@
         //         // Error callback
         //         notificationService.error('Failed to update ' + error + '.');
         //         console.error('Error occurred:', error);
-    
+
         //       });
         //   }
 
@@ -361,8 +388,8 @@
 
             var selectedItem = vm.selectedProduct;
 
-            var matchingOrderable = vm.orderableGroups.find(orderableGroup => 
-                orderableGroup.canFulfillForMe[0].orderableName === selectedItem.orderable.fullProductName
+            var matchingOrderable = vm.allStockCardCommodities.find(product =>
+                product.canFulfillForMe[0].orderableName === selectedItem.orderable.fullProductName
             );
 
             vm.prescriptionLineItems.unshift(
@@ -381,10 +408,10 @@
                     orderablePrescribed: selectedItem.orderable.id,
                     dispensedProduct: matchingOrderable ? matchingOrderable : null,
                     status: "REQUESTED"
-                }                
+                }
             );
             if (matchingOrderable) {
-                vm.updateBatchOptions(vm.prescriptionLineItems[0]); 
+                vm.updateBatchOptions(vm.prescriptionLineItems[0]);
             }
         }
 

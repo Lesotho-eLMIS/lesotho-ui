@@ -63,6 +63,17 @@
                             return result.content;
                         });
                 },
+                stockCardProducts: function(productsWithSOH, orderableService){
+                    var promises = productsWithSOH.map(item => {
+                        return orderableService.get(item.orderable.id)
+                            .then(result => {
+                                item.dispensedProductName = result.fullProductName;
+                                return result; 
+                            });
+                    });                
+                    // Return a promise that resolves when all individual promises resolve
+                    return Promise.all(promises);
+                },
                 allProducts: function (prescriptionsService, facility) {
                     return prescriptionsService.getAllFacilityProducts(facility.id)
                         .then(function (result) {
