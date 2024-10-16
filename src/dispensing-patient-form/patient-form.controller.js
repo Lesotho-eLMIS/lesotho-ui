@@ -28,9 +28,9 @@
         .module('dispensing-patient-form')
         .controller('patientFormController', controller);
 
-    controller.$inject = ['dispensingService', 'notificationService', 'facility', '$scope', 'confirmService', 'alertService', 'patient','patientState'];
+    controller.$inject = ['dispensingService', 'notificationService', 'facility', '$scope', '$http', 'confirmService', 'alertService', 'patient','patientState'];
 
-    function controller(dispensingService, notificationService, facility, $scope, confirmService, alertService, patient, patientState) {
+    function controller(dispensingService, notificationService, facility, $scope, $http, confirmService, alertService, patient, patientState) {
 
         var vm = this;
 
@@ -40,11 +40,59 @@
         vm.contacts = []; 
         vm.patient = {};
         vm.addContact = addContact;
+        vm.estimateDOB = estimateDOB;
+        vm.calculateAge = calculateAge;
         vm.removeContact = removeContact;
         vm.initialisePatient = initialisePatient;
        // vm.submitPatientData = submitPatientData;
 
        vm.tbStatusOptions =['No signs', 'TB Presumptive Case', 'On DS TB Treatment', 'On DR TB Treatment'];
+
+       ////////////////////////////////////////////////////////////////////////////////////
+       // Fetch data from JSON file
+        // $http.get('../assets/dispensing-patient-form/data.json')
+        // .then(function(response) {
+        //     // Store the array in $scope
+        //     $scope.items = response.data;
+        //     console.log("&&&&&&&&&&&&&&&&&&&&&&&");
+        //     console.log($scope.items);
+        //     console.log("&&&&&&&&&&&&&&&&&&&&&&&");
+        // })
+        // .catch(function(error) {
+        //     console.error('Error loading JSON file:', error);
+        // });
+       ////////////////////////////////////////////////////////////////////////////////////
+        $scope.VillageSuggestions = ['HA KOPORALA, Tenesolo, Thaba-Tseka', 
+            'HA PAKI, Mohlakeng, Maseru', 
+            'HA MATALA, Maseru (Maseru District), Maseru', 
+            'HA ABIA, Maseru (Maseru District), Maseru', 
+            'HA LEPOLESA, Tebe-Tebe, Berea', 
+            'MABOTHILE, Botha-Bothe (Leribe District), Leribe'];
+
+        $scope.village = ['HA KOPORALA', 'HA PAKI', 'HA MATALA', 'HA ABIA', 'HA LEPOLESA', 'MABOTHILE'];
+        $scope.district = ['Thaba-Tseka', 'Maseru', 'Maseru', 'Maseru', 'Berea', 'Leribe'];
+        $scope.constituancy = ['Tenesolo', 'Mohlakeng', 'Maseru (Maseru District)', 'Maseru (Maseru District)', 'Tebe-Tebe', 'Botha-Bothe (Leribe District)'];
+        
+        vm.patient.village = '';
+        $scope.filteredVillageSuggestions = [];
+
+        $scope.onChange = function() {
+            if (vm.patient.village) {
+                $scope.filteredVillageSuggestions = $scope.VillageSuggestions.filter(function(VillageSuggestion) {
+                    return VillageSuggestion.toLowerCase().indexOf(vm.patient.village.toLowerCase()) !== -1;
+                });
+            } else {
+                $scope.filteredVillageSuggestions = [];
+            }
+        };
+
+        $scope.selectVillageSuggestion = function(VillageSuggestion) {
+            vm.patient.village = $scope.village[$scope.VillageSuggestions.indexOf(VillageSuggestion)];
+            vm.patient.district = $scope.district[$scope.VillageSuggestions.indexOf(VillageSuggestion)];
+            vm.patient.constituancy = $scope.constituancy[$scope.VillageSuggestions.indexOf(VillageSuggestion)];
+            $scope.filteredVillageSuggestions = [];
+        };
+        /////////////////////////////////////////////////////////////////////////////////////
 
         /**
          * @ngdoc method
@@ -81,11 +129,28 @@
              
         }
 
+        function calculateAge() {
+            var birthDate = new Date(vm.patient.dateOfBirth);
+            var today = new Date();
+            var age = today.getFullYear() - birthDate.getFullYear();
+            var monthDiff = today.getMonth() - birthDate.getMonth();
+            // If the current date is before the birth date, subtract one year from age
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            vm.patient.age=age;
+        }
+
+        function estimateDOB() {
+            vm.patient.dateOfBirth = ((new Date().getFullYear())-vm.patient.age)+"/1/2";
+            vm.patient.isDobEstimated = true;
+        }
+
         // removing discrepancies from table
         function removeContact(index) {
-           
             vm.contacts.splice(index, 1);
         }
+
         vm.submitMode =  function() {
             if (vm.updateMode) {
                
@@ -95,6 +160,7 @@
                 vm.submitPatientData();
             }
         }
+
         vm.submitPatientData = function(){
 
             //Saving New Patient
@@ -121,6 +187,9 @@
                     vm.patient.sex = null;
                     vm.patient.deceased = null;
                     vm.patient.retired = null;
+                    vm.patient.village = "";
+                    vm.patient.district = "";
+                    vm.patient.constituancy = "";
                     // Adding success message when Patient saved.
                     notificationService.success('Successfully submitted.');   
                 }).catch(function(error) {
@@ -152,6 +221,9 @@
                     vm.patient.nextOfKinNames = "";
                     vm.patient.nextOfKinContact = "";
                     vm.patient.sex = null;
+                    vm.patient.village = "";
+                    vm.patient.district = "";
+                    vm.patient.constituancy = "";
                     // Adding success message when Patient saved.
                     notificationService.success('Successfully submitted.');   
                 }).catch(function(error) {
