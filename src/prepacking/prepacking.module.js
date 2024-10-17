@@ -27,7 +27,10 @@
         'ui.router',
         'openlmis-config',
         'openlmis-pagination',
-        'openlmis-date'
+        'openlmis-date',
+        'openlmis-rights',
+        'openlmis-i18n',
+        'openlmis-main-state'
     ]);
 
 })();

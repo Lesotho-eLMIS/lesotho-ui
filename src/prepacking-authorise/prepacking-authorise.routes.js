@@ -22,9 +22,9 @@
         .config(routes);
 
 
-routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
+routes.$inject = ['$stateProvider', 'PREPACKING_RIGHTS'];
 
-    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
+    function routes($stateProvider, PREPACKING_RIGHTS) {
       
         $stateProvider.state('openlmis.prepacking.authorise', {
             isOffline: true,
@@ -35,6 +35,10 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
             showInNavigation: true,
             controller: 'prepackingViewController',
             controllerAs: 'vm',
+            accessRights: [
+                PREPACKING_RIGHTS.VIEW_PREPACKS,
+                PREPACKING_RIGHTS.AUTHORISE
+            ],
             resolve: {
                 facility: function($stateParams, facilityFactory) {
                     // Load the current User's Assigned Facility

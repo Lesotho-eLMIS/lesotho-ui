@@ -21,9 +21,9 @@
         .module('prepacking')
         .config(routes);
 
-routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
+routes.$inject = ['$stateProvider', 'PREPACKING_RIGHTS'];
 
-    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
+    function routes($stateProvider, PREPACKING_RIGHTS) {
         $stateProvider.state('openlmis.prepacking', {
             isOffline: true,
             url: '/prepacking',
@@ -32,7 +32,11 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
             showInNavigation: true,
             abstract: true,
             template: '<div ui-view></div>',
-            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST]
+            accessRights: [
+                PREPACKING_RIGHTS.CREATE_PREPACKS,
+                PREPACKING_RIGHTS.AUTHORISE_PREPACKS,
+                PREPACKING_RIGHTS.VIEW_PREPACKS
+            ]
         });
     }
 })();

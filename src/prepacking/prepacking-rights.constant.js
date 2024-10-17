@@ -18,28 +18,21 @@
     'use strict';
 
     /**
-     * @module prepacking-create
+     * @ngdoc object
+     * @name openlmis-rights.PREPACKING_RIGHTS
      *
      * @description
-     * Provides prepacking-create state and controller.
+     * This is constant for prepacking rights.
      */
-    angular.module('prepacking-create', [
-        'ngResource',
-        'openlmis-date',
-        'ui.router',
-        'openlmis-config',
-        'referencedata-facility',
-        'stockmanagement',
-        'openlmis-repository',
-        'openlmis-class-extender',
-        'referencedata-user',
-        'openlmis-urls',
-        'openlmis-modal',
-        'stock-adjustment',
-        'stock-adjustment-creation',
-        'prepacking',
-        'openlmis-permissions'
-    ]);
+    angular
+        .module('openlmis-rights')
+        .constant('PREPACKING_RIGHTS', rights());
 
+    function rights() {
+        return {
+            CREATE_PREPACKS: 'PREPACKING_CREATE',
+            AUTHORISE_PREPACKS: 'PREPACKING_AUTHORIZE',
+            VIEW_PREPACKS: 'PREPACKING_VIEW'
+        };
+    }
 })();
-

@@ -20,9 +20,9 @@
         .module('prepacking-create')
         .config(routes);
 
-    routes.$inject = ['$stateProvider', 'SEARCH_OPTIONS',  'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'];
+    routes.$inject = ['$stateProvider', 'SEARCH_OPTIONS',  'PREPACKING_RIGHTS', 'ADJUSTMENT_TYPE'];
 
-    function routes($stateProvider, SEARCH_OPTIONS, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE) {
+    function routes($stateProvider, SEARCH_OPTIONS, PREPACKING_RIGHTS, ADJUSTMENT_TYPE) {
 
         $stateProvider.state('openlmis.prepacking.create', {
             isOffline: true,
@@ -32,7 +32,7 @@
             showInNavigation: true,
             controller: 'prepackingCreateController',
             controllerAs: 'vm',
-            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST]
+            accessRights: [PREPACKING_RIGHTS.CREATE_PREPACKS]
         });
     }
 })();

@@ -34,7 +34,9 @@
         'openlmis-class-extender',
         'referencedata-user',
         'openlmis-urls',
-        'openlmis-modal'
+        'openlmis-modal',
+        'prepacking',
+        'openlmis-permissions'
     ]);
 
 })();

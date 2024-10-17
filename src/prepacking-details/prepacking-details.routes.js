@@ -22,9 +22,9 @@
         .config(routes);
 
 
-routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
+routes.$inject = ['$stateProvider', 'PREPACKING_RIGHTS'];
 
-    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
+    function routes($stateProvider, PREPACKING_RIGHTS) {
       
         $stateProvider.state('openlmis.prepacking.details', {
             isOffline: true,
@@ -32,6 +32,11 @@ routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
             templateUrl: 'prepacking-details/prepacking-details.html',
             controller: 'prepackingDetailsController',
             controllerAs: 'vm',
+            accessRights: [
+                PREPACKING_RIGHTS.VIEW_PREPACKS,
+                PREPACKING_RIGHTS.CREATE_PREPACKS,
+                PREPACKING_RIGHTS.AUTHORISE
+            ],
             resolve: {
                 facilities: function(facilityService) {
                     var paginationParams = {};
