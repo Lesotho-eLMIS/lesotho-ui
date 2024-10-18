@@ -130,6 +130,8 @@
                     "motherMaidenName": patientInfo.motherMaidenName,
                     "deceased": patientInfo.deceased,
                     "retired": patientInfo.retired,
+                    "chief": patientInfo.chief,
+                    "occupation": patientInfo.occupation,
                     "contacts": [
                         {
                             "contactType": patientInfo.contact.contactType,

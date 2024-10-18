@@ -13,6 +13,14 @@
     "dispensingPatientForm.dateOfBirth": "Date of Birth (DoB)",
     "dispensingPatientForm.DOBestimated": "DoB Estimated",
     "dispensingPatientForm.physicalAddress": "Physical Address",
+
+    "dispensingPatientForm.occupation": "Occupation",
+    "dispensingPatientForm.village": "Village",
+    "dispensingPatientForm.district": "District",
+    "dispensingPatientForm.constituancy": "Constituency",
+    "dispensingPatientForm.chief": "Chief",
+    "dispensingPatientForm.age": "Age",
+
     "dispensingPatientForm.nextOfKinNames": "Next of Kin Names",
     "dispensingPatientForm.nextOfKinContact": "Next of Kin Contact",
     "dispensingPatientForm.motherMaidenName": "Mother Maiden Name",
