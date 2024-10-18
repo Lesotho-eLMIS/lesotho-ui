@@ -142,7 +142,7 @@
         }
 
         function estimateDOB() {
-            vm.patient.dateOfBirth = ((new Date().getFullYear())-vm.patient.age)+"/1/2";
+            vm.patient.dateOfBirth = ((new Date().getFullYear())-vm.patient.age)+"-01-01";///1/2//2020-01-01
             vm.patient.isDobEstimated = true;
         }
 
@@ -190,6 +190,9 @@
                     vm.patient.village = "";
                     vm.patient.district = "";
                     vm.patient.constituancy = "";
+                    vm.patient.age = "";
+                    vm.patient.chief = "";
+                    vm.patient.occupation = "";
                     // Adding success message when Patient saved.
                     notificationService.success('Successfully submitted.');   
                 }).catch(function(error) {
@@ -224,6 +227,9 @@
                     vm.patient.village = "";
                     vm.patient.district = "";
                     vm.patient.constituancy = "";
+                    vm.patient.age = "";
+                    vm.patient.chief = "";
+                    vm.patient.occupation = "";
                     // Adding success message when Patient saved.
                     notificationService.success('Successfully submitted.');   
                 }).catch(function(error) {
