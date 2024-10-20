@@ -41,6 +41,10 @@
                     url: openlmisUrlFactory('/api/patient'),
                     method: 'GET',
                     isArray: true
+                },
+                getV2: {
+                    url: openlmisUrlFactory('/api/patient/v2'),
+                    method: 'GET'
                 }, 
                 getPatient: {
                     url: openlmisUrlFactory('/api/patient/:id'),
@@ -67,7 +71,8 @@
         this.updatePatientInfo = updatePatientInfo;
         this.getPatients = getPatients; //To retrieve PODs from the database
         this.getPatient = getPatient;
-        
+        this.getPatientsV2 = getPatientsV2;
+
         var patients = [];     
 
         /**
@@ -105,6 +110,21 @@
                     }
                return response; 
              });
+        };
+
+
+        function getPatientsV2(patientsParams) {
+            // var params = {
+            //     patientNumber: patientParams.patientNumber,
+            //     firstName: patientParams.firstName,
+            //     lastName: patientParams.lastName,
+            //     dateOfBirth: patientParams.dateOfBirth,
+            //     nationalId: patientParams.nationalId,
+            //     facilityId:patientParams.facilityId,
+            //     geoZoneId:patientParams.geoZoneId
+            // };
+           
+            return resource.getV2(patientsParams).$promise;
         };
 
         function getPatient(patientId) {

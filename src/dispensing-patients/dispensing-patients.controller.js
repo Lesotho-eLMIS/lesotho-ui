@@ -28,10 +28,10 @@
         .controller('dispensingPatientsController', dispensingPatientsController);
 
         dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 'facilityService',
-        'offlineService', 'dispensingService', 'alertService'];
+        'offlineService', 'dispensingService', 'alertService','patients2'];
 
     function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, facilityService,
-        dispensingService, alertService) {
+        dispensingService, alertService, patients2) {
 
             
 
@@ -80,7 +80,7 @@
          function onInit() {
 
             vm.fetchPatients = undefined;
-            vm.patientsData = undefined;
+            vm.patientsData = patients2;
             vm.patientParams = {};
             vm.facility = facility;
             vm.facilities = facilities;

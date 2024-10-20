@@ -37,7 +37,8 @@
         'openlmis-modal',
         'dispensing',
         'referencedata-user',
-        'admin-user-form'
+        'admin-user-form',
+        'openlmis-pagination',
     ]);
 
 })();
