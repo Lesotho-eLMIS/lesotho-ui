@@ -113,42 +113,49 @@
         }
 
         function search(){
-            //var stateParams = angular.copy($stateParams);
             var stateParams = {page: $stateParams.page, size: $stateParams.size}; // This clears Search Params from $stateParams
-            console.log(stateParams)
-            if(vm.patientParams.facilityLocation){
-                //find the Geographic Zone Id within which the facility is located
-                stateParams.geoZoneId = vm.facility.geographicZone.id;
-              
-            }
-            else{
-                stateParams.facilityId = undefined;
-            }
-
             stateParams = angular.extend(stateParams,vm.patientParams);
-
             
-            var searchObj = angular.copy(vm.patientParams)
+            var searchObj = angular.copy(vm.patientParams) //
             delete searchObj.facilityLocation;
             // Assigning Search params to the object
             if(areAllPropertiesNullOrUndefined(searchObj)){
-                $state.go($state.current, {
-                    //Should Include GeoZoneID when Local Is Selected
-                    page: 0, // To Make Dynamic i.e parse the current page not page zero.
-                    size: 10
-                  }, {
-                    reload: true, // Reloads the state
-                    inherit: false, // Ignores the current query parameters
-                    notify: true // Triggers state change events
-                  });
+                if(vm.patientParams.facilityLocation){
+                    $state.go($state.current, {
+                        page: stateParams.page, 
+                        size: 10,
+                        geoZoneId: vm.facility.geographicZone.id
+                      }, {
+                        reload: true, // Reloads the state
+                        inherit: false, // Ignores the current query parameters
+                        notify: true // Triggers state change events
+                      });              
+                }
+                else{
+                    $state.go($state.current, {
+                        page: stateParams.page, 
+                        size: 10
+                      }, {
+                        reload: true, // Reloads the state
+                        inherit: false, // Ignores the current query parameters
+                        notify: true // Triggers state change events
+                      });
+                }
+                
 
             }else{
-                console.log("Provided");
-                console.log(stateParams);
-                $state.go('openlmis.dispensing.patients', stateParams, {
-                    reload: true
-                });
-
+                if(vm.patientParams.facilityLocation){
+                    //find the Geographic Zone Id within which the facility is located
+                    stateParams.geoZoneId = vm.facility.geographicZone.id;
+                    $state.go('openlmis.dispensing.patients', stateParams, {
+                        reload: true
+                    });              
+                }
+                else{
+                    $state.go('openlmis.dispensing.patients', stateParams, {
+                        reload: true
+                    });
+                }
             }
             
 
