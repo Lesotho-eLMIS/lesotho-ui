@@ -38,6 +38,7 @@
         var vm = this;
         vm.addPatientForm = undefined;
         vm.searchPatients = searchPatients;
+        vm.search = search;
         vm.$onInit = onInit;
         vm.viewPatients = viewPatients;
         vm.editPatient = editPatient;
@@ -106,6 +107,51 @@
                 getPatientParams.facilityId = undefined;
             }    
             viewPatients(getPatientParams);   
+        }
+        function areAllPropertiesNullOrUndefined(obj) {
+            return Object.values(obj).every(value => value === null || value === undefined);
+        }
+
+        function search(){
+            //var stateParams = angular.copy($stateParams);
+            var stateParams = {page: $stateParams.page, size: $stateParams.size}; // This clears Search Params from $stateParams
+            console.log(stateParams)
+            if(vm.patientParams.facilityLocation){
+                //find the Geographic Zone Id within which the facility is located
+                stateParams.geoZoneId = vm.facility.geographicZone.id;
+              
+            }
+            else{
+                stateParams.facilityId = undefined;
+            }
+
+            stateParams = angular.extend(stateParams,vm.patientParams);
+
+            
+            var searchObj = angular.copy(vm.patientParams)
+            delete searchObj.facilityLocation;
+            // Assigning Search params to the object
+            if(areAllPropertiesNullOrUndefined(searchObj)){
+                $state.go($state.current, {
+                    page: 0,
+                    size: 10
+                  }, {
+                    reload: true, // Reloads the state
+                    inherit: false, // Ignores the current query parameters
+                    notify: true // Triggers state change events
+                  });
+
+            }else{
+                console.log("Provided");
+                console.log(stateParams);
+                $state.go('openlmis.dispensing.patients', stateParams, {
+                    reload: true
+                });
+
+            }
+            
+
+            
         }
 
         function editPatient (patient) {

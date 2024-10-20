@@ -1,6 +1,6 @@
 <h2>{{'dispensingPatients.patients.label' | message}}</h2>
 
-<form class="sidebar" ng-submit="vm.searchPatients()">
+<form class="sidebar" ng-submit="vm.search()">
   <label for="orderingFacility">{{'dispensingPatients.patientNumber' | message}}</label>
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.patientParams.patientNumber">
   <label for="lastName">{{'dispensingPatients.lastName' | message}}</label>

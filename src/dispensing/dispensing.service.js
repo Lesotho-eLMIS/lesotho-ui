@@ -114,16 +114,7 @@
 
 
         function getPatientsV2(patientsParams) {
-            // var params = {
-            //     patientNumber: patientParams.patientNumber,
-            //     firstName: patientParams.firstName,
-            //     lastName: patientParams.lastName,
-            //     dateOfBirth: patientParams.dateOfBirth,
-            //     nationalId: patientParams.nationalId,
-            //     facilityId:patientParams.facilityId,
-            //     geoZoneId:patientParams.geoZoneId
-            // };
-           
+            console.log(patientsParams);
             return resource.getV2(patientsParams).$promise;
         };
 
