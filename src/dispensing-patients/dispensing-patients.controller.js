@@ -28,10 +28,10 @@
         .controller('dispensingPatientsController', dispensingPatientsController);
 
         dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 'facilityService',
-        'offlineService', 'dispensingService', 'alertService','patients2'];
+        'offlineService', 'dispensingService', 'alertService','patients3'];
 
     function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, facilityService,
-        dispensingService, alertService, patients2) {
+        dispensingService, alertService, patients3) {
 
             
 
@@ -81,7 +81,7 @@
          function onInit() {
 
             vm.fetchPatients = undefined;
-            vm.patientsData = patients2;
+            vm.patientsData = patients3;
             vm.patientParams = {};
             vm.facility = facility;
             vm.facilities = facilities;
@@ -133,7 +133,8 @@
             // Assigning Search params to the object
             if(areAllPropertiesNullOrUndefined(searchObj)){
                 $state.go($state.current, {
-                    page: 0,
+                    //Should Include GeoZoneID when Local Is Selected
+                    page: 0, // To Make Dynamic i.e parse the current page not page zero.
                     size: 10
                   }, {
                     reload: true, // Reloads the state

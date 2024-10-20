@@ -47,8 +47,18 @@ routes.$inject = ['$stateProvider'];
                     });
             
                     },
-                patients: function(dispensingService, $stateParams ) {
-                        return dispensingService.getPatientsV2();
+                patients:function(patients2, facilities){
+                        return patients2.map(patient => {
+                          const facility = facilities.find(facility => facility.id === patient.facilityId);
+                          patient.facility = facility ? facility.name : 'Unknown Facility';
+                         return patient;
+                        });
+                      },
+
+                patients3: function(dispensingService, $stateParams, patients2, facilities,patients) {
+                        console.log(patients);
+                        //console.log(facilities);
+                        return patients;
                     },
                 facility: function($stateParams, patients, patients2, facilityFactory) {
                     // Load the current User's Assigned Facility
