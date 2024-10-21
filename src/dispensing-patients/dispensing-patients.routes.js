@@ -28,7 +28,7 @@ routes.$inject = ['$stateProvider'];
       
         $stateProvider.state('openlmis.dispensing.patients', {
             isOffline: true,
-            url: '/Patients?lastName&firstName&geoZoneId&page&size',
+            url: '/Patients?lastName&firstName&patientNumber&nationalId&dateOfBirth&geoZoneId&page&size',
             templateUrl: 'dispensing-patients/dispensing-patients.html',
             label: 'dispensingPatients.title',
             priority: 2,
