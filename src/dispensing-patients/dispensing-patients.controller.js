@@ -148,12 +148,14 @@
                     //find the Geographic Zone Id within which the facility is located
                     stateParams.geoZoneId = vm.facility.geographicZone.id;
                     $state.go('openlmis.dispensing.patients', stateParams, {
-                        reload: true
+                        reload: true,
+                        inherit: false
                     });              
                 }
                 else{
                     $state.go('openlmis.dispensing.patients', stateParams, {
-                        reload: true
+                        reload: true,
+                        inherit: false
                     });
                 }
             }
