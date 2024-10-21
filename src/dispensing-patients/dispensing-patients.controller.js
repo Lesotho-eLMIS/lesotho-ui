@@ -28,16 +28,17 @@
         .controller('dispensingPatientsController', dispensingPatientsController);
 
         dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 'facilityService',
-        'offlineService', 'dispensingService', 'alertService'];
+        'offlineService', 'dispensingService', 'alertService','patients3'];
 
     function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, facilityService,
-        dispensingService, alertService) {
+        dispensingService, alertService, patients3) {
 
             
 
         var vm = this;
         vm.addPatientForm = undefined;
         vm.searchPatients = searchPatients;
+        vm.search = search;
         vm.$onInit = onInit;
         vm.viewPatients = viewPatients;
         vm.editPatient = editPatient;
@@ -80,7 +81,7 @@
          function onInit() {
 
             vm.fetchPatients = undefined;
-            vm.patientsData = undefined;
+            vm.patientsData = patients3;
             vm.patientParams = {};
             vm.facility = facility;
             vm.facilities = facilities;
@@ -106,6 +107,59 @@
                 getPatientParams.facilityId = undefined;
             }    
             viewPatients(getPatientParams);   
+        }
+        function areAllPropertiesNullOrUndefined(obj) {
+            return Object.values(obj).every(value => value === null || value === undefined);
+        }
+
+        function search(){
+            var stateParams = {page: $stateParams.page, size: $stateParams.size}; // This clears Search Params from $stateParams
+            stateParams = angular.extend(stateParams,vm.patientParams);
+            
+            var searchObj = angular.copy(vm.patientParams) //
+            delete searchObj.facilityLocation;
+            // Assigning Search params to the object
+            if(areAllPropertiesNullOrUndefined(searchObj)){
+                if(vm.patientParams.facilityLocation){
+                    $state.go($state.current, {
+                        page: stateParams.page, 
+                        size: 10,
+                        geoZoneId: vm.facility.geographicZone.id
+                      }, {
+                        reload: true, // Reloads the state
+                        inherit: false, // Ignores the current query parameters
+                        notify: true // Triggers state change events
+                      });              
+                }
+                else{
+                    $state.go($state.current, {
+                        page: stateParams.page, 
+                        size: 10
+                      }, {
+                        reload: true, // Reloads the state
+                        inherit: false, // Ignores the current query parameters
+                        notify: true // Triggers state change events
+                      });
+                }
+                
+
+            }else{
+                if(vm.patientParams.facilityLocation){
+                    //find the Geographic Zone Id within which the facility is located
+                    stateParams.geoZoneId = vm.facility.geographicZone.id;
+                    $state.go('openlmis.dispensing.patients', stateParams, {
+                        reload: true
+                    });              
+                }
+                else{
+                    $state.go('openlmis.dispensing.patients', stateParams, {
+                        reload: true
+                    });
+                }
+            }
+            
+
+            
         }
 
         function editPatient (patient) {

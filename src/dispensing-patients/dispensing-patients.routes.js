@@ -28,7 +28,7 @@ routes.$inject = ['$stateProvider'];
       
         $stateProvider.state('openlmis.dispensing.patients', {
             isOffline: true,
-            url: '/Patients',
+            url: '/Patients?lastName&firstName&patientNumber&nationalId&dateOfBirth&geoZoneId&page&size',
             templateUrl: 'dispensing-patients/dispensing-patients.html',
             label: 'dispensingPatients.title',
             priority: 2,
@@ -40,7 +40,27 @@ routes.$inject = ['$stateProvider'];
                 facilities: function(facilityService) {
                         return facilityService.getAllMinimal();
                     },
-                facility: function($stateParams, facilityFactory) {
+                patients2: function(dispensingService, paginationService, $stateParams ) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
+                        var params = angular.copy(stateParams);
+                        return dispensingService.getPatientsV2(params);
+                    });
+            
+                    },
+                patients:function(patients2, facilities){
+                        return patients2.map(patient => {
+                          const facility = facilities.find(facility => facility.id === patient.facilityId);
+                          patient.facility = facility ? facility.name : 'Unknown Facility';
+                         return patient;
+                        });
+                      },
+
+                patients3: function(dispensingService, $stateParams, patients2, facilities,patients) {
+                        console.log(patients);
+                        //console.log(facilities);
+                        return patients;
+                    },
+                facility: function($stateParams, patients, patients2, facilityFactory) {
                     // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
