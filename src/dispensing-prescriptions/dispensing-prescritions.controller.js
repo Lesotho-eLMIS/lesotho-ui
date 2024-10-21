@@ -29,10 +29,10 @@
        .controller('dispensingPrescriptionsController', controller);
 
        controller.$inject = ['$state', '$stateParams', '$scope', 'facility','facilities', 
-       'prescriptionsService', 'dispensingService'];
+       'prescriptionsService', 'dispensingService', 'prescriptions'];
 
    function controller($state, $stateParams, $scope, facility,facilities, prescriptionsService, 
-       dispensingService ) {
+       dispensingService, prescriptions ) {
 
        var vm = this;
 
@@ -104,6 +104,7 @@
            vm.prescriptionParams = {};
            vm.facility = facility;
            vm.facilities = facilities;
+           vm.prescriptionsData = prescriptions;
            console.log($stateParams);
        }
 
