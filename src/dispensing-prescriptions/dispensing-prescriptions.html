@@ -3,7 +3,7 @@
   }}</h2>
 <h2 ng-if="!vm.orderingFacility">{{ 'dispensingPrescriptions.title' | message }}</h2>
 
-<form name="prescriptionsList" class="sidebar" ng-submit="vm.fetchAllPrescriptions()">
+<form name="prescriptionsList" class="sidebar" ng-submit="vm.search()">
   <label for="patientNumber">{{'dispensingPrescriptions.patientNumber' | message}}</label>
   <input class="form-control" type="text" style="width: 150px;" ng-model="vm.prescriptionParams.patientNumber">
   <label for="nationalidNumber">{{'dispensingPrescriptions.nationalidNumber' | message}}</label>

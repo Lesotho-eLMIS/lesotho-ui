@@ -155,14 +155,15 @@
         */
        function search() {
            var stateParams = angular.copy($stateParams);
-
-           stateParams.lastName = vm.lastName;
-           stateParams.firstName = vm.firstName;
-           stateParams.patientType = vm.patientType;
-           stateParams.patientId = vm.patientId;
-
-           $state.go('openlmis.dispensing.prescriptions.form', stateParams, {
-               reload: true
+           stateParams = angular.extend(stateParams, vm.prescriptionParams);
+        //    stateParams.lastName = vm.lastName;
+        //    stateParams.firstName = vm.firstName;
+        //    stateParams.patientType = vm.patientType;
+        //    stateParams.patientId = vm.patientId;
+            console.log(stateParams);
+           $state.go('openlmis.dispensing.prescriptions', stateParams, {
+               reload: true,
+               inherit: false,
            });
        }
    }
