@@ -42,11 +42,11 @@
         method: 'GET',
         isArray: true
       },
-      // getPatient: {
-      //   url: openlmisUrlFactory('api/patient'),
-      //   method: 'GET',
-      //   isArray: true
-      // }, 
+      getAllV2: {
+        url: openlmisUrlFactory('api/prescription/v2'),
+        method: 'GET',
+       // isArray: true
+      }, 
       postPrescriptionEvent: {
         url: openlmisUrlFactory('api/prescription'),
         method: 'POST'
@@ -80,6 +80,7 @@
 
     this.createPrescription = createPrescription; // To post Prescription paylodad
     this.getPrescriptions = getPrescriptions; //To retrieve a Prescription record from the database
+    this.getPrescriptionsV2 = getPrescriptionsV2; //To retrieve a Prescription record from the database
     this.getPrescription = getPrescription;
     this.getProductsWithSOH = getProductsWithSOH;
     this.servePrescription = servePrescription;
@@ -131,7 +132,19 @@
         return response;
       });
     };
+    function getPrescriptionsV2(prescriptionParams) {
+      // var params = {
+      //   patientNumber: prescriptionParams.patientNumber,
+      //   status: prescriptionParams.status,
+      //   firstName: prescriptionParams.firstName,
+      //   lastName: prescriptionParams.lastName,
+      //   followUpDate: prescriptionParams.followUpDate,
+      //   nationalId: prescriptionParams.nationalId,
+      //   contactNumber: prescriptionParams.contactNumber
+      // };
 
+      return resource.getAllV2(prescriptionParams).$promise;
+    };
     function getPrescription(prescriptionIdId) {
       var params = { id: prescriptionIdId };
       return resource.get(params);

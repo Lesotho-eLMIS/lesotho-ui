@@ -28,7 +28,7 @@ routes.$inject = ['$stateProvider'];
       
         $stateProvider.state('openlmis.dispensing.prescriptions', {
             isOffline: true,
-            url: '/Prescriptions',
+            url: '/Prescriptions?lastName&firstName&patientNumber&nationalId&dateOfBirth&status&followUpDate&page&size',
             templateUrl: 'dispensing-prescriptions/dispensing-prescriptions.html',
             label: 'dispensingPrescriptions.title',
             priority: 1,
@@ -40,13 +40,22 @@ routes.$inject = ['$stateProvider'];
                 facilities: function(facilityService) {
                         return facilityService.getAllMinimal();
                     },
-                facility: function($stateParams, facilityFactory) {
+                prescriptions: function(prescriptionsService, paginationService, $stateParams ){
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
+                        var params = angular.copy(stateParams);
+                        return prescriptionsService.getPrescriptionsV2(params);
+                    });
+                       // return prescriptionsService.getPrescriptionsV2();
+                    },
+                facility: function($stateParams, facilityFactory, prescriptions) {
+                    console.log(prescriptions);
                     // Load the current User's Assigned Facility
                     if (!$stateParams.facility) {
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
                 }
+                
              
             }
         });

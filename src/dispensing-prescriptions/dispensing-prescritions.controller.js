@@ -29,10 +29,10 @@
        .controller('dispensingPrescriptionsController', controller);
 
        controller.$inject = ['$state', '$stateParams', '$scope', 'facility','facilities', 
-       'prescriptionsService', 'dispensingService'];
+       'prescriptionsService', 'dispensingService', 'prescriptions'];
 
    function controller($state, $stateParams, $scope, facility,facilities, prescriptionsService, 
-       dispensingService ) {
+       dispensingService, prescriptions ) {
 
        var vm = this;
 
@@ -104,6 +104,7 @@
            vm.prescriptionParams = {};
            vm.facility = facility;
            vm.facilities = facilities;
+           vm.prescriptionsData = prescriptions;
            console.log($stateParams);
        }
 
@@ -153,15 +154,12 @@
         * Reloads page with new search parameters.
         */
        function search() {
-           var stateParams = angular.copy($stateParams);
-
-           stateParams.lastName = vm.lastName;
-           stateParams.firstName = vm.firstName;
-           stateParams.patientType = vm.patientType;
-           stateParams.patientId = vm.patientId;
-
-           $state.go('openlmis.dispensing.prescriptions.form', stateParams, {
-               reload: true
+           var stateParams = {page: $stateParams.page, size: $stateParams.size}; // Reset State Params
+           stateParams = angular.extend(stateParams, vm.prescriptionParams);
+            console.log(stateParams);
+           $state.go('openlmis.dispensing.prescriptions', stateParams, {
+               reload: true,
+               inherit: false,
            });
        }
    }
