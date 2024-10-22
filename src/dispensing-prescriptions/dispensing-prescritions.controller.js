@@ -154,12 +154,8 @@
         * Reloads page with new search parameters.
         */
        function search() {
-           var stateParams = angular.copy($stateParams);
+           var stateParams = {page: $stateParams.page, size: $stateParams.size}; // Reset State Params
            stateParams = angular.extend(stateParams, vm.prescriptionParams);
-        //    stateParams.lastName = vm.lastName;
-        //    stateParams.firstName = vm.firstName;
-        //    stateParams.patientType = vm.patientType;
-        //    stateParams.patientId = vm.patientId;
             console.log(stateParams);
            $state.go('openlmis.dispensing.prescriptions', stateParams, {
                reload: true,
