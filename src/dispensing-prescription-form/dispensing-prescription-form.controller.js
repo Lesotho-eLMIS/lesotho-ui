@@ -248,8 +248,19 @@
             return fullAge;
         }
 
-        function servePrescription() {
+        function validateSOH(prescriptionLineItems) {
+            return prescriptionLineItems.every(item => {
+                if (item.selectedBatch.stockOnHand < item.quantityDispensed) {
+                    console.log('Yes');
+                    return false;
+                }else{
+                    return true;
+                }    
+            });
+        }
+        
 
+        function servePrescription() {
             if ($stateParams.update) {
                 vm.prescriptionLineItems.forEach(item => {
                     item.orderableDispensed = item.orderableDispensed;
@@ -269,7 +280,8 @@
                 });
             }
             vm.prescriptionDetails.servedByUserId = vm.user.user_id;
-
+            console.log(vm.prescriptionDetails) //lineItems
+            if(validateSOH(vm.prescriptionDetails.lineItems)){
             confirmService.confirm("Are you sure you want to serve a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "?", "Yes")
                 .then(function () {
                     prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
@@ -281,6 +293,9 @@
                             console.error('Error occurred:', error);
                         });
                 });
+            }else{
+                notificationService.error('Quantity Dispensed should be less than Stock on Hand');
+            }
         }
 
         vm.createPrescrition = function () {
