@@ -1032,14 +1032,14 @@
     vm.updateReceiveBatches = function (lineItem) {
       console.log(lineItem);
 
-      if (lineItem.lot.selectedLot) {
+      if (!lineItem.selectedLot) {
         // Set expirationDate and stockOnHand based on the selected lot
-        lineItem.lot.expirationDate = lineItem.lot.selectedLot.expirationDate;
-        lineItem.lot.stockOnHand = lineItem.lot.selectedLot.stockOnHand;
-      } else {
+      //   lineItem.lot.expirationDate = lineItem.selectedLot.expirationDate;
+      //   lineItem.lot.stockOnHand = lineItem.selectedLot.stockOnHand;
+      // } else {
         // Clear values if no lot is selected
-        lineItem.lot.expirationDate = null;
-        lineItem.lot.stockOnHand = null;
+        lineItem.selectedLot.expirationDate = null;
+        lineItem.selectedLot.stockOnHand = null;
       }
     };
 

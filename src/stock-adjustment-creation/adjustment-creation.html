@@ -105,7 +105,7 @@
 
                 </tr>
             </thead>
-            <tbody ng-if="vm.isReceive">
+            <tbody ng-if="!vm.isReceive">
                 <tr ng-repeat="lineItem in vm.items">
                     <td>{{lineItem.orderable.productCode}}</td>
                     <td>{{lineItem.orderable | productName}}</td>
@@ -244,21 +244,24 @@
                 </tr>
             </tbody>
 
-            <tbody ng-if="!vm.isReceive">
+            <tbody ng-if="vm.isReceive">
                 We are here
                 <tr ng-repeat="lineItem in vm.lineItems">
                     <td>{{lineItem.orderable.productCode}}</td>
                     <td>{{lineItem.orderable.fullProductName}}</td>
-                    <td>
-                        <select id="lotSelect" ng-model="lineItem.lot.selectedLot"
-                                ng-options="lot as lot.lotCode for lot in lineItem.batches"
-                                ng-change="vm.updateReceiveBatches(lineItem)" required>
+                    <td ng-if="lineItem.batches.length > 0">
+                        <select id="lotSelect" ng-model="lineItem.selectedLot"
+                        ng-options="batch as (batch.lotCode ? batch.lotCode : 'No Batch') for batch in lineItem.batches"  
+                        ng-change="vm.updateReceiveBatches(lineItem)" required>
                         </select>
-                    </td>
-                    <td>{{lineItem.lot.selectedLot.expirationDate | openlmisDate}}</td>
-                    <td>{{lineItem.lot.selectedLot.stockOnHand}}</td>
-                    <td>
-                        <select ng-model="lineItem.assignment"
+                        </td>
+                        <td ng-if="lineItem.batches.length === 0">
+                            <input type="text" value="No Batch">
+                        </td>
+                        <td>{{lineItem.selectedLot.expirationDate || 'N/A'}}</td>
+                        <td>{{lineItem.selectedLot.stockOnHand || 'N/A'}}</td>
+                        <td>
+                            <select ng-model="lineItem.assignment"
                             ng-change="vm.validateAssignment(lineItem);vm.clearFreeText(lineItem, 'srcDstFreeText')"
                             ng-options="assignment.name for assignment in vm.srcDstAssignments track by assignment.id" autofocus>
                         </select>
@@ -270,11 +273,28 @@
                             ng-options="reason.name for reason in vm.reasons track by reason.id" autofocus>
                         </select>
                     </td>
-                    <td>Carton Number 1</td>
-                    <td>Carton Number 2</td>
-                    <td>Carton Number 3</td>
-                    <td>Delivery Note Qty</td>
-                    <td>Accepted Qty</td>
+                    <td>
+                    <input class="form-control" ng-model="lineItem.individualCartonNumber"
+                            ng-class="{'error': lineItem.$errors.cartonsInvalid}"
+                            ng-change="vm.validateCartonNumber(lineItem)" type="number" style="width: 40px;" min="0"
+                            step="1" oninput="validity.valid||(value='');">
+                    </td>
+                    <td>
+                        <label style="display: inline-block;">of</label>
+                    </td>
+                    <td openlmis-invalid="{{lineItem.$errors.cartonsInvalid}}" class="digit-cell">
+                    <input class="form-control" ng-model="lineItem.totalCartonNumber"
+                        ng-change="vm.validateCartonNumber(lineItem)"
+                        ng-class="{'error': lineItem.$errors.cartonsInvalid}"
+                        ng-blur="vm.validateCartonNumber(lineItem)" style="width: 30px;" disabled>
+                    </td>
+                    <td><input ng-model="lineItem.deliveryNoteQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1"
+                        oninput="validity.valid||(value='');" ng-change="vm.validateQuantity(lineItem)"required></td>
+                    <td openlmis-invalid="{{lineItem.$errors.quantityInvalid}}" class="digit-cell">
+                        <input class="form-control" ng-model="lineItem.quantity" style="width: 50px;"
+                        ng-disabled="lineItem.expired" ng-class="{'error': lineItem.$errors.quantityInvalid}"
+                        ng-change="vm.validateQuantity(lineItem)" ng-blur="vm.validateQuantity(lineItem)">
+                    </td>
                     <td>Comments</td>
                     <td>Unit Price</td>
                     <td>Amount</td>
