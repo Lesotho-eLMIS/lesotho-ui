@@ -42,7 +42,8 @@
                 displayItems: undefined,
                 addedLineItems: undefined,
                 orderableGroups: undefined,
-                srcDstAssignments: undefined
+                srcDstAssignments: undefined, 
+                requisitionLineItems: undefined
             },
             resolve: {
                 program: function($stateParams, programService) {
@@ -78,23 +79,7 @@
                 },
                 adjustmentType: function() {
                     return ADJUSTMENT_TYPE.RECEIVE;
-                },
-                // srcDstAssignments:function (facilityService, facility) {
-                //     var paginationParams = {};
-                //     const zoneId = facility.geographicZone.id;
-                //     var queryParams = {
-                //         "zoneId": zoneId                        
-                //     };
-                //     return facilityService.query(paginationParams, queryParams)
-                //         .then(function (result) {
-                //             return result.content;
-                //         })
-                //         .catch(function (error) {
-                //             // Handle any errors that may occur during the query
-                //             console.error("Error:", error);
-                //             return [];
-                //         });
-                // },  
+                },  
                 srcDstAssignments: function($stateParams, facility, sourceDestinationService) {
                     if (_.isUndefined($stateParams.srcDstAssignments)) {
                         $stateParams.srcDstAssignments = sourceDestinationService

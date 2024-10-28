@@ -132,6 +132,8 @@
     };
     vm.mergeFacilities = mergeFacilities;
     vm.filteredFacilities = filterFacilities;
+    vm.requisitionItemsLotCodes = requisitionItemsLotCodes; 
+    vm.allItems = undefined;
 
     /**
      * @ngdoc property
@@ -169,6 +171,17 @@
      * Indicates if VVM Status column should be visible.
      */
     vm.showVVMStatusColumn = false;
+
+     /**
+     * @ngdoc property
+     * @propertyOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+     * @name isReceive
+     * @type {boolean}
+     *
+     * @description
+     * Indicates if adjustement type is receive
+     */
+     vm.isReceive = adjustmentType.state === 'receive';
 
     /**
      * @ngdoc property
@@ -510,6 +523,7 @@
      * Allows inputs to add missing lot to be displayed.
      */
     function lotChanged() {
+      console.log(vm.selectedLot);
       vm.canAddNewLot =
         vm.selectedLot &&
         vm.selectedLot.lotCode ===
@@ -557,26 +571,18 @@
      */
     vm.submit = function () {
 
-      console.log(vm.addedLineItems);
+     // console.log(vm.addedLineItems);
       
       if(adjustmentType.state == "prepack"){
         // Handle prepacking logic
         vm.addedLineItems.forEach((lineItem) => {
           lineItem.orderableId = lineItem.orderable.id;
-         // containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
-          //lineItem.lotId  : lineItem.lot ? lineItem.lot.id : null;
-          // if(lineItem.lot !== null){
-          //   lineItem.lotId = lineItem.lot.id;
-          // }
           lineItem.lotId = lineItem.lot !== null ? lineItem.lot.id : null;
-          // else lineItem.lotId = null;
         });
         var prepackingEvent = {
           facilityId: facility.id,
           programId: program.id,
-         // supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
           prepackerUserId: user.user_id,
-          // status: "Initiated",
           comments: "", //To be used when there is need
           lineItems:vm.addedLineItems
         };
@@ -584,7 +590,6 @@
             username: user.username,
             number: vm.addedLineItems.length,
         });
-        console.log(prepackingEvent);
         confirmService
             .confirm(confirmMessage, vm.key('confirm'))
             .then(function () {
@@ -621,7 +626,7 @@
             reorderItems();
             alertService.error('stockAdjustmentCreation.submitInvalid');
           }
-
+          console.log(vm.addedLineItems);
       }
       
     };
@@ -910,44 +915,50 @@
       }
       return vm.srcDstAssignments;
     }
+
+
       
     function onInit() {   
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
-      //console.log('Ref >> ',ReferenceNumbers[0].referenceNumber);
-      if (adjustmentType.state === 'receive'){
-        vm.references = populateReferenceNumbers(ReferenceNumbers);
-      }
-     // filterFacilities();
-     
+    
       //Getting Rejection Reasons
       var rej = rejectionReasonService.getAll();
-      rej.then(function(reasons) {             
-          reasons.content.forEach(reason => {
-              // Load only those of type POD/Point of Delivery
-              if(reason.rejectionReasonCategory.code == "POD"){
-                  vm.rejectionReasons.push(reason.name);
-              }            
-           });                   
-        })
-        .catch(function(error) {
-         // Handle errors
-             console.error('Error getting reasons:', error);
-      });    
+      rej.then(function (reasons) {
+        reasons.content.forEach(reason => {
+          // Load only those of type POD/Point of Delivery
+          if (reason.rejectionReasonCategory.code == "POD") {
+            vm.rejectionReasons.push(reason.name);
+          }
+        });
+      })
+        .catch(function (error) {
+          // Handle errors
+          console.error('Error getting reasons:', error);
+        });    
 
       var copiedOrderableGroups = angular.copy(orderableGroups);
       vm.allItems = _.flatten(copiedOrderableGroups);
-
+      // console.log("ALL ITEMS: ", vm.allItems);
+      // console.log(vm.allItems);
+      // console.log("ALL ORDERABLES: ", orderableGroups);
       $state.current.label = messageService.get(vm.key('title'), {
         facilityCode: facility.code,
         facilityName: facility.name,
         program: program.name,
       });
 
+      /*When receiving, load the reference numbers of active PODs (Point-Of-Delivery)
+        and ordered products from active requisitions */
+        if (vm.isReceive){
+          vm.references = populateReferenceNumbers(ReferenceNumbers);
+          vm.lineItems = requisitionItemsLotCodes();
+          console.log("ITEMS: ", vm.lineItems);
+        }
       initViewModel();
       initStateParams();
-
+      
       $scope.$watch(
         function () {
           return vm.addedLineItems;
@@ -977,6 +988,36 @@
       });
     }
 
+    /**
+     * @ngdoc method
+     * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+     * @name requisitionItemsLotCodes
+     *
+     * @description
+     * Fetch ordered requisition line items, lots and stock on hand to populate the receive table.
+     */
+    function requisitionItemsLotCodes(){
+      var requisitionLineItems = $stateParams.requisitionLineItems;
+      //For each line item, find all the lots and stock on hand for each lot.
+      //Add this information to the line item
+      requisitionLineItems.forEach(item => {
+        let lots = [];
+          vm.allItems.filter(product => {
+            if(product.orderable.id === item.orderable.id){
+              if(product.lot && product.stockOnHand){
+                product.lot.stockOnHand = product.stockOnHand;
+                lots.push(product.lot);
+              }else{
+                product.lot && lots.push(product.lot);
+              }
+            }
+          })
+          item.batches = lots;
+      })
+      console.log("REQUISITION LINE ITEMS IN RECEIVE: ", requisitionLineItems);
+      return requisitionLineItems;
+    }
+
     function populateReferenceNumbers(pods) {
       //console.log('------- ',pods);
       var referencesArray = [];
@@ -986,6 +1027,21 @@
       }
       return referencesArray;
     }
+
+
+    vm.updateReceiveBatches = function (lineItem) {
+      console.log(lineItem);
+
+      if (lineItem.lot.selectedLot) {
+        // Set expirationDate and stockOnHand based on the selected lot
+        lineItem.lot.expirationDate = lineItem.lot.selectedLot.expirationDate;
+        lineItem.lot.stockOnHand = lineItem.lot.selectedLot.stockOnHand;
+      } else {
+        // Clear values if no lot is selected
+        lineItem.lot.expirationDate = null;
+        lineItem.lot.stockOnHand = null;
+      }
+    };
 
     function initViewModel() {
       //Set the max-date of date picker to the end of the current day.
