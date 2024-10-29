@@ -41,7 +41,8 @@
                 reasons: undefined,
                 displayItems: undefined,
                 addedLineItems: undefined,
-                orderableGroups: undefined
+                orderableGroups: undefined,
+                requisitionLineItems: undefined
             },
             resolve: {
                 program: function($stateParams, programService) {

@@ -13,15 +13,20 @@
         <thead>
             <tr>
                 <th>{{vm.key('program') | message}}</th>
+                <th ng-show="vm.isReceive">{{vm.key('type') | message}}</th>
+                <th ng-show="vm.isReceive">{{vm.key('status') | message}}</th>
                 <th>{{vm.key('action') | message}}</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="program in vm.programs">
-                <td>{{program.name}}</td>
+            <tr ng-repeat="program in (vm.isReceive ? vm.requisitions : vm.programs)">
+                <td ng-show="!vm.isReceive">{{program.name}}</td>
+                <td ng-show="vm.isReceive">{{program.program.name}}</td>
+                <td ng-show="vm.isReceive">Issue or Requisition</td>
+                <td ng-show="vm.isReceive">Status</td>
                 <td>
-                    <input id="proceedButton" type="button" ng-click="vm.proceed(program)"
-                        value="{{vm.key('proceed') | message}}" class="primary"/>
+                    <input id="proceedButton" type="button" ng-click="(vm.isReceive ? vm.receive(program) : vm.proceed(program))"
+                    value="{{vm.key('proceed') | message}}" class="primary"/>
                 </td>
             </tr>
         </tbody>

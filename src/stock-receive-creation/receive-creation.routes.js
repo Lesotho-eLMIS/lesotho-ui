@@ -42,7 +42,8 @@
                 displayItems: undefined,
                 addedLineItems: undefined,
                 orderableGroups: undefined,
-                srcDstAssignments: undefined
+                srcDstAssignments: undefined,
+                requisitionLineItems: undefined
             },
             resolve: {
                 program: function($stateParams, programService) {

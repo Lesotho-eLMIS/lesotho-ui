@@ -919,6 +919,8 @@
       if (adjustmentType.state === 'receive'){
         vm.references = populateReferenceNumbers(ReferenceNumbers);
       }
+
+      console.log("In Creation: ", $stateParams);
      // filterFacilities();
      
       //Getting Rejection Reasons

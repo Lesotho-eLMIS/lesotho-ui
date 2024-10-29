@@ -28,12 +28,16 @@
         .module('stock-adjustment')
         .controller('StockAdjustmentController', controller);
 
-    controller.$inject = ['facility', 'programs', 'adjustmentType', '$state', 'offlineService',
-        'localStorageService', 'ADJUSTMENT_TYPE'];
+    controller.$inject = ['facility', 'programs', 'adjustmentType', '$state', 'offlineService', 'localStorageService', 
+        'ADJUSTMENT_TYPE','requisitionService', '$filter', 'permissionService', 'REQUISITION_RIGHTS'];
 
     function controller(facility, programs, adjustmentType, $state, offlineService, localStorageService,
-                        ADJUSTMENT_TYPE) {
+                        ADJUSTMENT_TYPE, requisitionService, $filter, permissionService, REQUISITION_RIGHTS) {
         var vm = this;
+
+        vm.getRequisitions = getRequisitions;
+        vm.formatDate = formatDate;
+        vm.getRequisitionLineItems =getRequisitionLineItems;
 
         /**
          * @ngdoc property
@@ -70,6 +74,35 @@
 
         vm.goToPendingOfflineEventsPage = goToPendingOfflineEventsPage;
 
+        /**
+         * @ngdoc property
+         * @propertyOf stock-adjustment.controller:StockAdjustmentController
+         * @name requisition
+         * @type {Array}
+         *
+         * @description
+         * Holds available requisitions
+         */
+        getRequisitions().then(response => {
+            vm.requisitions = response.content;
+            console.log(vm.requisitions);
+        });
+
+        console.log("Requisitions", vm.requisitions);
+
+        /**
+         * @ngdoc property
+         * @propertyOf stock-adjustment.controller:StockAdjustmentController
+         * @name isReceive
+         * @type {Boolean}
+         *
+         * @description
+         * Is true if adjustment type is receive
+         */
+        vm.isReceive = (adjustmentType.prefix === "stockReceive");
+        console.log(vm.isReceive);
+
+
         vm.key = function(secondaryKey) {
             return adjustmentType.prefix + '.' + secondaryKey;
         };
@@ -81,6 +114,84 @@
                         facility: facility
                     });
         };
+
+        vm.receive = function(program){
+            var requisitionItems = [];
+            getRequisitionLineItems(program).then(result => {
+                console.log(result);
+                //Filter out skipped items and pass only ordered products
+                var orderedItems = result.filter(item => !item.skipped);
+                 orderedItems.forEach(item => {
+                    requisitionItems.push({
+                        orderableId : item.orderable.id,
+                        approvedQuantity : item.approvedQuantity,
+                        packsToShip : item.packsToShip
+                    })                 
+                 })
+                console.log(requisitionItems);
+                $state.go('openlmis.stockmanagement.' + adjustmentType.state + '.creation', {
+                    programId: program.program.id,
+                    requisitionLineItems: requisitionItems,
+                    facility: facility
+                });
+            });
+        }
+
+        vm.requestedItems =  function(requisition){
+
+        }
+
+        function getRequisitionLineItems(program){
+            if (permissionService.hasRoleWithRightAndFacility(REQUISITION_RIGHTS.REQUISITION_VIEW)) {
+                return requisitionService.get(program.id)
+                    .then(function (requisitionDetails) {
+                        // vm.requisitions = requisitionDetails;
+                        console.log(requisitionDetails.requisitionLineItems);
+                        return requisitionDetails.requisitionLineItems;
+                    });
+            }
+        }
+
+        function formatDate(dateString) {
+
+            const date = new Date(dateString);
+        
+            // Check if the date is valid
+            if (isNaN(date.getTime())) {
+                throw new Error("Invalid date format");
+            }
+        
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1
+            const day = String(date.getDate()).padStart(2, '0');
+        
+            return `${year}-${month}-${day}`;
+        } 
+
+        function getRequisitions() {
+            var startDate = new Date();
+            var endDate = new Date().setMonth(startDate.getMonth() - 3);
+            console.log("Start Date", startDate);
+            console.log("End Date", endDate);
+            startDate = formatDate(startDate);
+            endDate = formatDate(endDate);
+            console.log("Start Date_B", startDate);
+            console.log("End Date_B", endDate);
+            var params = {
+                initiatedDateFrom: endDate,
+                initiatedDateTo: startDate,
+                requisitionStatus: 'RELEASED'
+            };
+            var offlineFlag = false;
+            if (permissionService.hasRoleWithRightAndFacility(REQUISITION_RIGHTS.REQUISITION_VIEW)) {
+                return requisitionService.search(offlineFlag, params)
+                    .then(function (requisitionDetails) {
+                        // vm.requisitions = requisitionDetails;
+                        console.log(requisitionDetails);
+                        return requisitionDetails;
+                    });
+            }
+        }
 
         /**
          * @ngdoc property
