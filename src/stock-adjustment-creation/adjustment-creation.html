@@ -286,7 +286,7 @@
                     <input class="form-control" ng-model="lineItem.totalCartonNumber"
                         ng-change="vm.validateCartonNumber(lineItem)"
                         ng-class="{'error': lineItem.$errors.cartonsInvalid}"
-                        ng-blur="vm.validateCartonNumber(lineItem)" style="width: 30px;" disabled>
+                        ng-blur="vm.validateCartonNumber(lineItem)" style="width: 30px;">
                     </td>
                     <td><input ng-model="lineItem.deliveryNoteQuantity" class="form-control" type="number" style="width: 50px;" min="0" step="1"
                         oninput="validity.valid||(value='');" ng-change="vm.validateQuantity(lineItem)"required></td>
@@ -295,11 +295,26 @@
                         ng-disabled="lineItem.expired" ng-class="{'error': lineItem.$errors.quantityInvalid}"
                         ng-change="vm.validateQuantity(lineItem)" ng-blur="vm.validateQuantity(lineItem)">
                     </td>
-                    <td>Comments</td>
-                    <td>Unit Price</td>
-                    <td>Amount</td>
-                    <td>Discrepancy</td>
-                    <td>Date</td>
+                    <td><input class="form-control"
+                        type="text" style="width: 100px;"></td>
+                    <td ng-if="vm.showDeliveryNoteAttributes" ng-hide="vm.FromSupplier"><input type="text" readonly
+                        style="width: 85px;"
+                        value="{{ (lineItem.quantity*lineItem.unitPrice) || 0 | openlmisCurrency}}"
+                        ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" /></td>
+                        <td ><input type="text" readonly
+                            style="width: 85px;"
+                            value="{{ (lineItem.quantity*lineItem.unitPrice) || 0 | openlmisCurrency}}"
+                            ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" /></td>
+                    <td>
+                        <button ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'"
+                            type="button" class="primary" ng-click="vm.addDiscrepancyOnModal(lineItem.timestamp)"><b>+
+                            </b>Add</button>
+                    </td>
+                    <td class="date-cell">
+                        <input id="lineItem.occurredDate" type="date" style="width: 90px;"
+                            ng-model="lineItem.occurredDate" ng-change="vm.validateDate(lineItem)" max-date="vm.maxDate"
+                            required inputmode="none" />
+                    </td>
                     <td>Action</td>
                 </tr>
 
