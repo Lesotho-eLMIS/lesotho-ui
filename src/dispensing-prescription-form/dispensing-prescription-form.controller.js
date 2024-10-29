@@ -386,15 +386,15 @@
         function addProduct() {
 
             var selectedItem = vm.selectedProduct;
-
+            console.log(selectedItem);
             var matchingOrderable = vm.allStockCardCommodities.find(product =>
-                product.canFulfillForMe[0].orderableName === selectedItem.orderable.fullProductName
+                product.canFulfillForMe[0].orderableName === selectedItem.fullProductName
             );
 
             vm.prescriptionLineItems.unshift(
 
                 {
-                    fullProductName: selectedItem.orderable.fullProductName,
+                    fullProductName: selectedItem.fullProductName,
                     dose: "",
                     doseUnits: "",
                     doseFrequency: "",
@@ -404,7 +404,7 @@
                     additionalInstructions: "",
                     quantityPrescribed: "",
                     remainingBalance: "",
-                    orderablePrescribed: selectedItem.orderable.id,
+                    orderablePrescribed: selectedItem.id,
                     dispensedProduct: matchingOrderable ? matchingOrderable : null,
                     status: "REQUESTED"
                 }
