@@ -28,10 +28,10 @@
         .module('dispensing-prescription-form')
         .controller('dispensingPrescriptionFormController', controller);
 
-    controller.$inject = ['$state', 'prescriptionsService', 'allProducts', '$stateParams', 'user', 'patient',
+    controller.$inject = ['$state', 'prescriptionsService', 'allProducts2', 'allProducts', '$stateParams', 'user', 'patient',
         'prescription', 'facility', 'confirmService', 'notificationService', 'productsWithSOH', 'stockCardProducts', 'lotService'];
 
-    function controller($state, prescriptionsService, allProducts, $stateParams, user, patient,
+    function controller($state, prescriptionsService, allProducts2, allProducts, $stateParams, user, patient,
         prescription, facility, confirmService, notificationService, productsWithSOH, stockCardProducts, lotService) {
 
         var vm = this;
@@ -117,11 +117,10 @@
             vm.facility = facility;
             vm.user = user;
             vm.allStockCardCommodities = productsWithSOH; // All products (UUIDs ONLY) with stock cards within the facility
-            vm.allProducts = allProducts; // All facility approved products
+            vm.allProducts = allProducts2.content; // All orderables
             vm.prescriptionDetails.createdDate = new Date(); //= vm.inPrescriptionServe ? null : new Date();
             vm.prescriptionDetails.issueDate = new Date();
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
-
             $stateParams.update ? setPrescription() : '';
             vm.updateMode = $stateParams.update;
 

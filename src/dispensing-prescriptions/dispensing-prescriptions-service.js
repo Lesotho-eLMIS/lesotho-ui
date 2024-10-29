@@ -46,6 +46,11 @@
         url: openlmisUrlFactory('api/prescription/v2'),
         method: 'GET',
        // isArray: true
+      },
+      getAllProducts: {
+        url: openlmisUrlFactory('api/orderables'),
+        method: 'GET',
+       // isArray: true
       }, 
       postPrescriptionEvent: {
         url: openlmisUrlFactory('api/prescription'),
@@ -85,6 +90,7 @@
     this.getProductsWithSOH = getProductsWithSOH;
     this.servePrescription = servePrescription;
     this.getAllFacilityProducts = getAllFacilityProducts;
+    this.getAllProducts = getAllProducts;
     this.updatePrescription = updatePrescription;
 
     function getProductsWithSOH(facilityId) {
@@ -95,6 +101,10 @@
     function getAllFacilityProducts(facilityId) {
       var params = { facilityId: facilityId };
       return resource.getAllFacilityProducts(params).$promise;
+    }
+
+    function getAllProducts() {
+      return resource.getAllProducts().$promise;
     }
 
     /**

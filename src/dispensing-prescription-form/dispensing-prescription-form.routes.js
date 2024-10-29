@@ -74,7 +74,10 @@
                     // Return a promise that resolves when all individual promises resolve
                     return Promise.all(promises);
                 },
-                allProducts: function (prescriptionsService, facility) {
+                allProducts2: function (prescriptionsService) {
+                    return prescriptionsService.getAllProducts(); // all orderables
+                },
+                allProducts: function (prescriptionsService, facility, allProducts2) {
                     return prescriptionsService.getAllFacilityProducts(facility.id)
                         .then(function (result) {
                             return result;

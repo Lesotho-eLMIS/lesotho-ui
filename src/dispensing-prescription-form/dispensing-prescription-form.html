@@ -97,7 +97,7 @@
             <div>
                 <label for="productSelect">Product</label>
                 <select id="productSelect" ng-model="vm.selectedProduct" 
-                ng-options="product.orderable.fullProductName for product in vm.allProducts"
+                ng-options="product.fullProductName for product in vm.allProducts"
             required></select>
             </div>
             <button type="submit" class="add">Add Product</button>
