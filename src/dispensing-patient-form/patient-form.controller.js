@@ -242,15 +242,16 @@
 
         function initialisePatient (patientObj) {
             const patientArray = Object.values(patientObj)[0];
-           
+            
             vm.patient.patientNumber = patientArray.patientNumber;
             vm.patient.nationalID = patientArray.personDto.nationalId;
             vm.patient.firstName = patientArray.personDto.firstName;
             vm.patient.lastName = patientArray.personDto.lastName;
             vm.patient.nickName = patientArray.personDto.nickName;
             vm.patient.sex = patientArray.personDto.sex;
-            vm.patient.DOB = patientArray.personDto.dateOfBirth;
-            vm.patient.dateOfBirthEstimated = patientArray.personDto.isDobEstimated;
+            vm.patient.dateOfBirth = patientArray.personDto.dateOfBirth;
+            vm.patient.isDobEstimated = patientArray.personDto.isDobEstimated;
+            calculateAge();
             vm.patient.physicalAddress = patientArray.personDto.physicalAddress;
             vm.patient.nextOfKinNames = patientArray.personDto.nextOfKinFullName; 
             vm.patient.nextOfKinContact = patientArray.personDto.nextOfKinContact;
@@ -258,6 +259,8 @@
             vm.patient.deceased = patientArray.personDto.deceased;
             vm.patient.retired = patientArray.personDto.retired;
             vm.patient.id = patientArray.id;
+            vm.patient.chief = patientArray.personDto.chief;
+            vm.patient.occupation = patientArray.personDto.occupation;
 
             vm.patient.contact = patientArray.personDto.contacts[0].contactValue
           //  vm.patient.contact.contactValue = patientArray.personDto.contacts[0].contactValue ? patientArray.personDto.contacts[0].contactValue : "";
