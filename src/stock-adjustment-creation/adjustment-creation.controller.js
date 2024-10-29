@@ -120,6 +120,7 @@
     vm.validateExpirationDate = validateExpirationDate;
     vm.lotChanged = lotChanged;
     vm.addProduct = addProduct;
+    vm.loadRequisitionLineItems = loadRequisitionLineItems;
     vm.podReferenceNumbers = undefined;
     vm.hasPermissionToAddNewLot = hasPermissionToAddNewLot;
     vm.discrepancyOptions = ["Wrong Item", "Wrong Quantity", "Defective Item", "Missing Item","More..."];
@@ -180,6 +181,17 @@
      * Holds information about internet connection
      */
     vm.offline = offlineService.isOffline;
+
+    /**
+     * @ngdoc property
+     * @propertyOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+     * @name requisitionLineItems
+     * @type {Array}
+     *
+     * @description
+     * Holds information about items ordered by requisition
+     */
+    vm.requisitionLineItems = [];
 
     vm.addDiscrepancyOnModal = function(itemTimestamp) {
       receivingAddDiscrepancyModalService.show(itemTimestamp).then(function() {
@@ -910,14 +922,47 @@
       }
       return vm.srcDstAssignments;
     }
+
+    function loadRequisitionLineItems(){
+     
+      //vm.allItems is the array of all orderable items from orderableGroups
+    console.log("All Items: ", vm.allItems);
+      //vm.requisitionLineItems is the array of objects containing information about requisition line items
+    console.log("Requisition Items: ", vm.requisitionLineItems);
+
+      vm.selectedOrderableGroups = [];
+      
+      //If a requisition has line items
+      if (vm.requisitionLineItems.length > 0) {
+        vm.selectedOrderableGroups = vm.requisitionLineItems.map(item => {
+          //find the items matching requisition line items in orderableGroups
+          var requisitionOrderables = vm.allItems.filter(orderable => orderable.orderable.id === item.orderableId);
+          //Consolidate the objects to create orderables with requisition attributes
+          return requisitionOrderables.length > 0
+            ? requisitionOrderables.map(match => ({ ...item, ...match }))
+            : item;
+        });        
+
+      }
+
+      //vm.displayItems = vm.selectedOrderableGroups;
+    }
       
     function onInit() {   
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
       //console.log('Ref >> ',ReferenceNumbers[0].referenceNumber);
+
+      var copiedOrderableGroups = angular.copy(orderableGroups);
+      vm.allItems = _.flatten(copiedOrderableGroups);
+
+      
       if (adjustmentType.state === 'receive'){
         vm.references = populateReferenceNumbers(ReferenceNumbers);
+        vm.requisitionLineItems = $stateParams.requisitionLineItems;
+        loadRequisitionLineItems(); // This method is supposed to load requisition line items onto the receive page.
+                                    //It is incomplete
       }
 
       console.log("In Creation: ", $stateParams);
@@ -937,9 +982,6 @@
          // Handle errors
              console.error('Error getting reasons:', error);
       });    
-
-      var copiedOrderableGroups = angular.copy(orderableGroups);
-      vm.allItems = _.flatten(copiedOrderableGroups);
 
       $state.current.label = messageService.get(vm.key('title'), {
         facilityCode: facility.code,

@@ -10,5 +10,7 @@
   "stockReceive.pendingOfflineEvents": "Pending offline events",
   "stockReceive.offline3": " for details.",
   "stockReceive.type": "Type",
-  "stockReceive.status": "Status"
+  "stockReceive.status": "Status",
+  "stockReceive.processingPeriod": "Requisition Period",
+  "stockReceive.emergency": "Requisition Type"
 }

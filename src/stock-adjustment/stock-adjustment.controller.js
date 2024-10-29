@@ -77,7 +77,7 @@
         /**
          * @ngdoc property
          * @propertyOf stock-adjustment.controller:StockAdjustmentController
-         * @name requisition
+         * @name requisitions
          * @type {Array}
          *
          * @description
@@ -85,10 +85,7 @@
          */
         getRequisitions().then(response => {
             vm.requisitions = response.content;
-            console.log(vm.requisitions);
         });
-
-        console.log("Requisitions", vm.requisitions);
 
         /**
          * @ngdoc property
@@ -100,9 +97,7 @@
          * Is true if adjustment type is receive
          */
         vm.isReceive = (adjustmentType.prefix === "stockReceive");
-        console.log(vm.isReceive);
-
-
+        
         vm.key = function(secondaryKey) {
             return adjustmentType.prefix + '.' + secondaryKey;
         };
@@ -115,6 +110,15 @@
                     });
         };
 
+        /**
+         * @ngdoc method
+         * @methodOf stock-adjustment.controller:StockAdjustmentController
+         * @name receive
+         * @param {Object} requisition object to against which to receive
+         * 
+         * @description
+         * Builds the requisition object to pass onto the requisition creation and changes state
+         */
         vm.receive = function(program){
             var requisitionItems = [];
             getRequisitionLineItems(program).then(result => {
@@ -128,7 +132,6 @@
                         packsToShip : item.packsToShip
                     })                 
                  })
-                console.log(requisitionItems);
                 $state.go('openlmis.stockmanagement.' + adjustmentType.state + '.creation', {
                     programId: program.program.id,
                     requisitionLineItems: requisitionItems,
@@ -137,46 +140,63 @@
             });
         }
 
-        vm.requestedItems =  function(requisition){
-
-        }
-
-        function getRequisitionLineItems(program){
+       /**
+         * @ngdoc method
+         * @methodOf stock-adjustment.controller:StockAdjustmentController
+         * @name getRequisitionLineItems
+         * @param {Object} requisition object whose line items to retrieve.
+         *
+         * @description
+         * Builds the requisition object to pass onto the requisition creation and changes state
+         */ 
+        function getRequisitionLineItems(program) {
             if (permissionService.hasRoleWithRightAndFacility(REQUISITION_RIGHTS.REQUISITION_VIEW)) {
                 return requisitionService.get(program.id)
                     .then(function (requisitionDetails) {
-                        // vm.requisitions = requisitionDetails;
-                        console.log(requisitionDetails.requisitionLineItems);
+                        console.log("Get requisition line items: ", requisitionDetails);
                         return requisitionDetails.requisitionLineItems;
                     });
             }
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf stock-adjustment.controller:StockAdjustmentController
+         * @name formatDate
+         *
+         * @description
+         * Changes the format of a date string
+         */
         function formatDate(dateString) {
 
             const date = new Date(dateString);
-        
+
             // Check if the date is valid
             if (isNaN(date.getTime())) {
                 throw new Error("Invalid date format");
             }
-        
+
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1
             const day = String(date.getDate()).padStart(2, '0');
-        
-            return `${year}-${month}-${day}`;
-        } 
 
-        function getRequisitions() {
+            return `${year}-${month}-${day}`;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf stock-adjustment.controller:StockAdjustmentController
+         * @name getRequisitions
+         *
+         * @description
+         * Retrieves all "Open" requisitions from the past 3 months
+         */
+        function getRequisitions() { // edit time to make it 6 weeks
             var startDate = new Date();
             var endDate = new Date().setMonth(startDate.getMonth() - 3);
-            console.log("Start Date", startDate);
-            console.log("End Date", endDate);
             startDate = formatDate(startDate);
             endDate = formatDate(endDate);
-            console.log("Start Date_B", startDate);
-            console.log("End Date_B", endDate);
+            //Build params object for retrieving requisitions
             var params = {
                 initiatedDateFrom: endDate,
                 initiatedDateTo: startDate,
@@ -186,8 +206,7 @@
             if (permissionService.hasRoleWithRightAndFacility(REQUISITION_RIGHTS.REQUISITION_VIEW)) {
                 return requisitionService.search(offlineFlag, params)
                     .then(function (requisitionDetails) {
-                        // vm.requisitions = requisitionDetails;
-                        console.log(requisitionDetails);
+                        console.log("Get requisitions: ", requisitionDetails)
                         return requisitionDetails;
                     });
             }
