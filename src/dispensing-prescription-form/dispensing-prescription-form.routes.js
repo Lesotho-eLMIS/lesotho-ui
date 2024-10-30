@@ -77,12 +77,12 @@
                 allProducts2: function (prescriptionsService) {
                     return prescriptionsService.getAllProducts(); // all orderables
                 },
-                allProducts: function (prescriptionsService, facility, allProducts2) {
-                    return prescriptionsService.getAllFacilityProducts(facility.id)
-                        .then(function (result) {
-                            return result;
-                        });
-                },
+                // allProducts: function (prescriptionsService, facility, allProducts2) {
+                //     return prescriptionsService.getAllFacilityProducts(facility.id)
+                //         .then(function (result) {
+                //             return result;
+                //         });
+                // },
                 prescription: function (prescriptionsService, $stateParams) {
                     if($stateParams.prescriptionId){
                         return prescriptionsService.getPrescription($stateParams.prescriptionId);

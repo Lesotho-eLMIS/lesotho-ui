@@ -28,10 +28,10 @@
         .module('dispensing-prescription-form')
         .controller('dispensingPrescriptionFormController', controller);
 
-    controller.$inject = ['$state', 'prescriptionsService', 'allProducts2', 'allProducts', '$stateParams', 'user', 'patient',
+    controller.$inject = ['$state', 'prescriptionsService', 'allProducts2', '$stateParams', 'user', 'patient',
         'prescription', 'facility', 'confirmService', 'notificationService', 'productsWithSOH', 'stockCardProducts', 'lotService'];
 
-    function controller($state, prescriptionsService, allProducts2, allProducts, $stateParams, user, patient,
+    function controller($state, prescriptionsService, allProducts2,  $stateParams, user, patient,
         prescription, facility, confirmService, notificationService, productsWithSOH, stockCardProducts, lotService) {
 
         var vm = this;
