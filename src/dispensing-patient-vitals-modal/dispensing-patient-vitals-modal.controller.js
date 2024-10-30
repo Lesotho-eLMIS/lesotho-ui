@@ -28,89 +28,42 @@
         .module('dispensing-patient-vitals-modal')
         .controller('dispensingPatientVitalsModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'patientNumber', 'notificationService', 'messageService', 'complaintService', 'confirmService'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'patient', 'notificationService', 'messageService', 'complaintService', 'confirmService'];
 
-    function controller( modalDeferred, $scope, patientNumber, notificationService, messageService, complaintService, confirmService) {//
+    function controller( modalDeferred, $scope, patient, notificationService, messageService, complaintService, confirmService) {//
         
         var vm = this;
 
         vm.$onInit = onInit;
 
-        vm.patientNumber = patientNumber;
-
-        // vm.confirm = confirm;
-        // vm.lotChanged = lotChanged;
-        // vm.addProductToComplaintForm = addProductToComplaintForm;
-        // vm.removeProductLineItem = removeProductLineItem;
-        // // vm.onChangeComplainingFacility = onChangeComplainingFacility;
-        // vm.productsForComplaint = [];
-        // //vm.discrepancies = rejectionReasons;
-        // vm.discrepancyOptions = [];
-        // vm.discrepancies =[];
-        // vm.selectedDiscrepancy = undefined;
-        // // vm.facility = facility;
-        // // vm.facilities = undefined;
-        // // vm.homeFacilities = [facility];
-        // vm.complaint = {}
-        // vm.natureOfcomplaintOptions = [
-        //     "Wrong product",
-        //     "Wrong pack size",
-        //     "Over supply",
-        //     "Expired products",
-        //     "Due to expire",
-        //     "Delivery queries",
-        //     "Shortage",
-        //     "Quality",
-        //     "Price hike",
-        //     "Other (specify)"
-        //   ];
-        // vm.complaintReasonOptions = [
-        //     "Issued",
-        //     "Ordered",
-        //     "Requested"
-        // ];
-        // vm.complaintDetailOptions = [
-        //     "Ordered",
-        //     "Requested"
-        // ];
-
-        //vm.complaintFormFacility = undefined;
-
-        //vm.addDiscrepancy = addDiscrepancy;
-        //vm.removeDispency = removeDiscrepancy;
+        vm.patient = patient;
 
         $scope.showModal=false;
         
         function onInit() {
-            console.log("++++++++++++++++++++++++");
-            console.log(patientNumber);
-        //     vm.receivingFacility = facility.name; 
-        //     vm.complaint.programId = program.id;
-        //     vm.complaint.userId = user.id;
-        //     vm.complaint.userNames = user.username;
-        //     vm.selectedDiscrepancy = [];
-           
-        //    vm.rejectionReasons = rejectionReasons.content;
-        //    vm.rejectionReasons.forEach(reason => {
-        //        // Load only those of type POD/Point of Delivery
-        //        if(reason.rejectionReasonCategory.code == "POD"){
-        //            vm.discrepancyOptions.push(reason.name);
-        //        }
-               
-        //    });
+            vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
+        }
 
+        vm.calculateAge = function (birthDate) {
+            var today = new Date();
+            var birthDate = new Date(birthDate);
+            var ageYears = today.getFullYear() - birthDate.getFullYear();
+            var ageMonths = today.getMonth() - birthDate.getMonth();
+            var ageDays = today.getDate() - birthDate.getDate();
 
-        //    vm.orderableGroups = orderableGroups;
-        //    vm.hasLot = false;
-        //    vm.orderableGroups.forEach(function (group) {
-        //      vm.hasLot =
-        //        vm.hasLot ||
-        //        orderableGroupService.lotsOf(group, hasPermissionToAddNewLot).length >
-        //          0;
-        //    });
-        //    vm.showVVMStatusColumn = orderableGroupService.areOrderablesUseVvm(
-        //      vm.orderableGroups
-        //    );
+            if (ageDays < 0) {
+                ageMonths--;
+                ageDays += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            }
+
+            if (ageMonths < 0) {
+                ageYears--;
+                ageMonths += 12;
+            }
+
+            var fullAge = (ageYears + ' years,' + ageMonths + ' months, ' + ageDays + ' days')
+
+            return fullAge;
         }
 
         /**
@@ -121,73 +74,7 @@
          * @description
          * Reset form status and change content inside lots drop down list.
          */
-        // vm.orderableSelectionChanged = function () {
-        //     //reset selected lot, so that lot field has no default value
-        //     vm.selectedLot = null;
-    
-        //     initiateNewLotObject();
-        //     vm.canAddNewLot = false;
-    
-        //     //same as above
-        //     $scope.productForm.$setUntouched();
-    
-        //     //make form good as new, so errors won't persist
-        //     $scope.productForm.$setPristine();
-    
-        //     vm.lots = orderableGroupService.lotsOf(
-        //     vm.selectedOrderableGroup,
-        //     vm.hasPermissionToAddNewLot
-        //     );
-        //     vm.selectedOrderableHasLots = vm.lots.length > 0;
-        // };
-
-        // /**
-        //  * @ngdoc method
-        //  * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
-        //  * @name lotChanged
-        //  *
-        //  * @description
-        //  * Allows inputs to add missing lot to be displayed.
-        //  */
-        // function lotChanged() {
-        //     vm.canAddNewLot =
-        //     vm.selectedLot &&
-        //     vm.selectedLot.lotCode ===
-        //         messageService.get('orderableGroupService.addMissingLot');
-        //     initiateNewLotObject();
-        // }
-
-        // // function onChangeComplainingFacility() {
-        // //     vm.complaint.facilityId = vm.complaintFormFacility.id
-        // //     console.log(vm.complaint)
-        // // }
-
-        // function initiateNewLotObject() {
-        //     vm.newLot = {
-        //       active: true,
-        //     };
-        // }
-
-        // function addProductToComplaintForm() {
-        //     vm.productsForComplaint.push({
-        //             'name': vm.selectedOrderableGroup[0].orderable.fullProductName,
-        //             'batch': vm.selectedLot.lotCode,
-        //             'expiary': vm.selectedLot.expirationDate,
-        //             'orderable': vm.selectedOrderableGroup[0].orderable,
-        //             'lot':vm.selectedLot,
-        //             'lotId':vm.selectedLot.id,
-        //             'orderableId': vm.selectedOrderableGroup[0].orderable.id
-
-        //     });
-            
-        // }
-
-        // // removing discrepancies from table
-        // function removeProductLineItem(index) {
-        //     vm.productsForComplaint.splice(index, 1);
-        // }
-
-    
+        
         function confirm (){
             vm.complaint.lineItems = vm.productsForComplaint; // Add complaint payload lineitems
             confirmService

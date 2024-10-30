@@ -48,7 +48,7 @@
 
         var modalDialog = null;
 
-        function show(patientNumber) {
+        function show(patient) {
             modalDialog = openlmisModalService.createDialog(
                 {
                     controller: 'dispensingPatientVitalsModalController',
@@ -56,34 +56,10 @@
                     templateUrl: 'dispensing-patient-vitals-modal/dispensing-patient-vitals-modal.html',
                     show: true ,
                     resolve: {
-                        // rejectionReasons: function(rejectionReasonService) {
-                        //         // Load rejection Reasons into the controller.
-                        //         return rejectionReasonService.getAll();
-                            
-                        // },
-                        patientNumber: function() {
-                            // Load patientNumber into the controller.
-                            return patientNumber;
+                        patient: function() {
+                            // Load patient into the controller.
+                            return patient;
                         }
-                        // program: function() {
-                        //     console.log(program);
-                        //     return program;
-                        // },
-                        // facility: function() {
-                        //     console.log(facility);
-                        //     return facility;
-                        // },
-                        // orderableGroups: function() {
-                        //     console.log(orderableGroups);
-                        //     return orderableGroups;
-                        // },
-                        // hasPermissionToAddNewLot: function() {
-                        //     console.log(hasPermissionToAddNewLot);
-                        //     return hasPermissionToAddNewLot;
-                        // },
-                        // user: function(currentUserService) {
-                        //     return currentUserService.getUserInfo();
-                        // }
                     }   
                 }
             ).promise.finally(function() {

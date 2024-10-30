@@ -95,8 +95,8 @@
             $state.go('openlmis.dispensing.patients.form');
         }
 
-        vm.addVitalsOnModal = function(patientNumber) {
-            dispensingPatientVitalsModalService.show(patientNumber).then(function() {
+        vm.addVitalsOnModal = function(patient) {
+            dispensingPatientVitalsModalService.show(patient).then(function() {
                 $stateParams.noReload = true;
                 draft.$modified = true;
                 vm.cacheDraft();
