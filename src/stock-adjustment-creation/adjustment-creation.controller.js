@@ -257,7 +257,34 @@
         notify: false,
       });
     };
+    function loadRequisitionLineItemsV2() {
+      vm.selectedOrderableGroups = [];
+      console.log("Working Here");
+      console.log(orderableGroups);
+      
+      //console.log(orderableGroups.filter(group => group[0].orderable.id == "fef5f410-f263-41a7-b390-67ea93f24ce0"));
 
+      vm.requisitionLineItems.forEach(lineItem  => {
+        var match = orderableGroups.filter(group => group[0].orderable.id == lineItem.orderableId)
+        console.log(lineItem.orderableId,":", match)
+        vm.selectedOrderableGroups.push(match);
+      });
+
+      console.log("Filtered");
+      console.log(vm.selectedOrderableGroups);
+
+
+      // vm.addedLineItems.unshift(
+      //   _.extend(
+      //     {
+      //       $errors: {},
+      //       $previewSOH: selectedItem.stockOnHand
+      //     },
+      //     selectedItem,
+      //     copyDefaultValue()
+      //   )
+      // );
+    }
     /**
      * @ngdoc method
      * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
@@ -963,6 +990,7 @@
         vm.requisitionLineItems = $stateParams.requisitionLineItems;
         loadRequisitionLineItems(); // This method is supposed to load requisition line items onto the receive page.
                                     //It is incomplete
+        loadRequisitionLineItemsV2()
       }
 
       console.log("In Creation: ", $stateParams);
