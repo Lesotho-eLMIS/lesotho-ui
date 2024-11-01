@@ -17,20 +17,20 @@
 
     'use strict';
 
-    angular.module('dispensing-prescription-form').config(routes);
+    angular.module('dispensing-prescription-create').config(routes);
 
     routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
 
     function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
 
-        $stateProvider.state('openlmis.dispensing.prescriptions.form', {
-            label: 'dispensingPrescriptionForm.title',
+        $stateProvider.state('openlmis.dispensing.prescriptions.create', {
+            label: 'dispensingPrescriptionCreate.title',
             url: '/form/:patientId',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             views: {
                 '@openlmis': {
-                    controller: 'dispensingPrescriptionFormController',
-                    templateUrl: 'dispensing-prescription-form/dispensing-prescription-form.html',
+                    controller: 'dispensingPrescriptionCreateController',
+                    templateUrl: 'dispensing-prescription-create/dispensing-prescription-create.html',
                     controllerAs: 'vm'
                 }
             },

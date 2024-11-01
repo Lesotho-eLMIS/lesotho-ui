@@ -19,14 +19,14 @@
 
     /**
      * @ngdoc controller
-     * @name dispensing-prescription-form.controller:dispensingPrescriptionFormController
+     * @name dispensing-prescription-form.controller:dispensingPrescriptionCreateController
      *
      * @description
      * Controller for managing prescription list screen.
      */
     angular
-        .module('dispensing-prescription-form')
-        .controller('dispensingPrescriptionFormController', controller);
+        .module('dispensing-prescription-create')
+        .controller('dispensingPrescriptionCreateController', controller);
 
     controller.$inject = ['$state', 'prescriptionsService', 'allProducts2', '$stateParams', 'user', 'patient',
         'prescription', 'facility', 'confirmService', 'notificationService', 'productsWithSOH', 'stockCardProducts', 'lotService'];

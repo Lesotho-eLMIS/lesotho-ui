@@ -111,7 +111,7 @@
        function viewPrescription(prescription) {
         console.log(prescription);
            if (prescription.status === 'INITIATED' || prescription.status === "PARTIALLY_SERVED") {
-                    $state.go('openlmis.dispensing.prescriptions.form', {
+                    $state.go('openlmis.dispensing.prescriptions.create', {
                     prescriptionId: prescription.id,
                     patientId: prescription.patientId,
                     update: true

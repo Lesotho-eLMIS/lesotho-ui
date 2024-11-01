@@ -18,12 +18,12 @@
     'use strict';
 
     /**
-     * @module dispensing-prescription-form
+     * @module dispensing-prescription-create
      *
      * @description
      * Provides edit/add prescription screen for user.
      */
-    angular.module('dispensing-prescription-form', [
+    angular.module('dispensing-prescription-create', [
         'openlmis-modal',
         'openlmis-rights',
         'referencedata-facility',
