@@ -1,4 +1,4 @@
-<h2>{{'dispensingPrescriptionForm.title' | message}}</h2>
+<h2>{{'dispensingPrescriptionsCreate.title' | message}}</h2>
 
 <aside class="stock-card-info">
     <div class="product-name-header">
@@ -136,25 +136,25 @@
     <table suppress-tr-openlmis-invalid>
         <thead>
             <tr>
-                <th>{{'dispensingPrescriptionForm.prescribedProduct' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.dispensedProduct' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.batchNumber' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.expiryDate' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.soh' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.dose' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.doseUnits' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.frequency' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.route' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.duration' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.durationUnits' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.instructions' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.additionalInstructions' | message}}</th> 
-                <th>{{'dispensingPrescriptionForm.quantityPrescribed' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.quantityDispensed' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.servedExternally' | message}}</th>
-                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionForm.fullyServed' | message}}</th>
-                <th>{{'dispensingPrescriptionForm.comments' | message}}</th>
-                <th ng-if="!vm.inPrescriptionServe">{{'dispensingPrescriptionForm.action' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.prescribedProduct' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.dispensedProduct' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.batchNumber' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.expiryDate' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.soh' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.dose' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.doseUnits' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.frequency' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.route' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.duration' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.durationUnits' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.instructions' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.additionalInstructions' | message}}</th> 
+                <th>{{'dispensingPrescriptionsCreate.quantityPrescribed' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.quantityDispensed' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.servedExternally' | message}}</th>
+                <th ng-if="vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.fullyServed' | message}}</th>
+                <th>{{'dispensingPrescriptionsCreate.comments' | message}}</th>
+                <th ng-if="!vm.inPrescriptionServe">{{'dispensingPrescriptionsCreate.action' | message}}</th>
             </tr>
         </thead>
         <tbody>
@@ -213,13 +213,13 @@
 
 
 <div class="openlmis-toolbar">
-    <button ui-sref="^">{{'dispensingPrescriptionForm.cancel' | message}}</button>
+    <button ui-sref="^">{{'dispensingPrescriptionsCreate.cancel' | message}}</button>
     <div class="button-group primary">
         <button ng-if="!vm.inPrescriptionServe" class="primary" form="newPrescriptionForm" ng-click="vm.createPrescrition()">{{(vm.updateMode ?
-            'dispensingPrescriptionForm.updatePrescription' : 'dispensingPrescriptionForm.createPrescription') |
+            'dispensingPrescriptionsCreate.updatePrescription' : 'dispensingPrescriptionsCreate.createPrescription') |
             message}}</button>
         <!-- <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{
-            'dispensingPrescriptionForm.sendVerificationEmail' | message }}</button> -->
+            'dispensingPrescriptionsCreate.sendVerificationEmail' | message }}</button> -->
         <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.servePrescription()">Serve</button>
         <!-- <button ng-if="vm.inPrescriptionServe && vm.updateMode" type="button" class="primary" ng-click="vm.updatePrescription()">Update Prescription</button> -->
     </div>
