@@ -63,7 +63,7 @@
       serve: {
         url: openlmisUrlFactory('/api/prescription/:id/serve'),
         method: 'POST'
-        // params: { id: '@id' }
+        //params: { id: '@id' }
       },
       getProductsWithSOH: {
         url: openlmisUrlFactory('/api/v2/allStockCardSummaries'),
@@ -92,6 +92,7 @@
     this.getAllFacilityProducts = getAllFacilityProducts;
     this.getAllProducts = getAllProducts;
     this.updatePrescription = updatePrescription;
+    this.serveLineItems = serveLineItems;
 
     function getProductsWithSOH(facilityId) {
       var params = { facilityId: facilityId };
@@ -142,6 +143,7 @@
         return response;
       });
     };
+
     function getPrescriptionsV2(prescriptionParams) {
       // var params = {
       //   patientNumber: prescriptionParams.patientNumber,
@@ -159,6 +161,7 @@
       var params = { id: prescriptionIdId };
       return resource.get(params);
     };
+
     /**
     * @ngdoc method
     * @methodOf dispensing-prescriptions.prescriptionsService
@@ -176,43 +179,69 @@
         patientId: prescriptionDetails.patientId,
         patientType: prescriptionDetails.patientType ? "In-Patient" : "Out-Patient",
         followUpDate: prescriptionDetails.followUpDate,
-        issueDate: "2024-07-07",
+        issueDate: null,//"2024-07-07",
         createdDate: prescriptionDetails.createdDate,
         capturedDate: prescriptionDetails.createdDate,
-        lastUpdate: "2024-07-07",
+        lastUpdate: new Date(),
         isVoided: false,
         status: "INITIATED",
         facilityId: prescriptionDetails.facilityId,
-        userId: prescriptionDetails.userId,
+        //userId: prescriptionDetails.userId,
+        prescribedByUserId : prescriptionDetails.userId,
         lineItems: prescriptionDetails.lineItems
       }
       return resource.postPrescriptionEvent(prescriptionData);
     }
 
     function servePrescription(prescriptionDetails) {
-      var params = { id: prescriptionDetails.prescriptionId };
+
+      var params = { id: prescriptionDetails.id };
 
       var prescriptionData = {
         patientId: prescriptionDetails.patientId,
-        patientType: prescriptionDetails.patientType ? "Outpatient" : "Inpatient",
+        patientType: prescriptionDetails.patientType,
         followUpDate: prescriptionDetails.followUpDate,
         issueDate: prescriptionDetails.issueDate,
         createdDate: prescriptionDetails.createdDate,
         capturedDate: prescriptionDetails.createdDate,
-        lastUpdate: "2024-07-07",
+        lastUpdate: prescriptionDetails.lastUpdate,
         isVoided: false,
         status: prescriptionDetails.status,
         facilityId: prescriptionDetails.facilityId,
-        prescribedByUserId: prescriptionDetails.prescribedByUserId || prescriptionDetails.servedByUserId,
+        prescribedByUserId: prescriptionDetails.prescribedByUserId,
         servedByUserId: prescriptionDetails.servedByUserId,
-        lineItems: prescriptionDetails.lineItems
+        lineItems: serveLineItems(prescriptionDetails)
       }
-
       return resource.serve(params, prescriptionData);
     }
 
+    //Build line item objects for serve prescription lineItems array
+    function serveLineItems(prescriptionDetails) {
+      var servedItems = [];
+      prescriptionDetails.lineItems.forEach(item => {
+        let details = {
+          dose: item.dose,
+          doseUnits: item.doseUnits,
+          doseFrequency: item.doseFrequency,
+          route: item.route,
+          duration: item.duration,
+          durationUnits: item.durationUnits,
+          additionalInstructions: item.additionalInstructions,
+          quantityPrescribed: item.quantityPrescribed,
+          remainingBalance: item.quantityPrescribed - item.quantityDispensed,
+          orderablePrescribed: item.orderablePrescribed,
+          orderableDispensed: item.orderableDispensed,
+          lotId: item.lotId,
+          quantityDispensed: item.quantityDispensed,
+          servedExternally: item.servedExternally
+        };
+        servedItems.push(details);
+      });
+      return servedItems;
+    }
+
     function updatePrescription(prescriptionDetails) {
-      console.log("Editing Prescription", prescriptionDetails);
+      // console.log("Editing Prescription", prescriptionDetails);
       return resource.updatePrescriptionEvent({ id: prescriptionDetails.id }, prescriptionDetails).$promise;
     }
   }

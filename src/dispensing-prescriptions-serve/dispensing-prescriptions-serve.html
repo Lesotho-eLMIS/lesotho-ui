@@ -1,11 +1,11 @@
 <h2>{{'dispensingPrescriptionsServe.title' | message}}</h2>
 
 <aside class="stock-card-info">
-    <div class="product-name-header">
+    <div class="product-name-header" ng-if="vm.patient && vm.patient.personDto">
       <span>{{vm.patient.personDto.firstName}} {{vm.patient.personDto.lastName}}</span>
     </div>
   
-    <ul>
+    <ul ng-if="vm.patient && vm.patient.personDto">
       <li>
         <strong>Sex</strong>
         {{vm.patient.personDto.sex}}
@@ -38,24 +38,15 @@
         <strong>BP</strong>
         {{vm.patient.BP}}
       </li>
-      <!-- <li>
-        <strong>Medical History</strong>
-        <button ng-click="vm.getMedicalHistory()">View</button>
-      </li> -->
       <li>
         <strong>Prescription Status</strong>
-        {{vm.prescription.status}}
+        {{vm.prescriptionDetails.status}}
       </li>
     </ul>
 </aside>
 
-<form class="sidebar" ng-submit="vm.createPrescrition()">
+<form class="sidebar" ng-submit="vm.servePrescrition()">
 
-    <!-- <fieldset class="form-group">
-        <label for="status">Status</label>
-        <input class="form-control" type="text" ng-model="vm.prescriptionDetails.status" disabled>
-    </fieldset> -->
-    
     <fieldset class="form-group">
         <label for="createdDate">Created date</label>
         <input id="createdDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.createdDate"
@@ -65,7 +56,7 @@
     <fieldset ng-if="vm.inPrescriptionServe" class="form-group">
         <label for="nationalID">Dispensing date</label>
         <input id="lineItem.occurredDate" type="date" style="width: 90px;" ng-model="vm.prescriptionDetails.issueDate"
-             required/> <!--min="{{vm.minFollowUpDate}}"-->
+             required/>
         <span ng-show="followUpDateForm.followUpDate.$error.min && !vm.inPrescriptionServe" class="text-danger">
             Follow-up date must be from tomorrow onwards.
         </span>
@@ -90,49 +81,10 @@
     </fieldset>
 </form>
 
-<!-- <section id="newPrescriptionForm"> -->
 <section class="openlmis-table-container">
-    <section class="is-primary">
-        <form ng-if="!vm.inPrescriptionServe" class="form-inline" name="productForm" ng-submit="vm.addProduct()">
-            <div>
-                <label for="productSelect">Product</label>
-                <select id="productSelect" ng-model="vm.selectedProduct" 
-                ng-options="product.fullProductName for product in vm.allProducts"
-            required></select>
-            </div>
-            <button type="submit" class="add">Add Product</button>
-        </form>
-        <!-- <form ng-if="vm.inPrescriptionServe" class="form-inline" ng-submit="vm.addProduct()" name="productForm">
-            <div>
-                <label for="productSelect">Product</label>
-                <select id="productSelect" ng-model="vm.selectedOrderableGroup"
-                    ng-options="orderableGroup.productName for orderableGroup in vm.productsWithSOH"
-                    ng-change="vm.orderableSelectionChanged()"
-                    required>
-                </select>
-            </div>
-            <div ng-if="vm.selectedOrderableHasLots">
-                <label for="lotSelect">{{'stockAddProductsModal.lotCode' | message}}</label>
-                <select id="lotSelect" ng-model="vm.selectedLot"
-                    ng-options="lot.lotCode for lot in vm.lots"
-                    ng-change="vm.lotChanged()"
-                    required>
-                </select>
-            </div>
-            <div ng-if="vm.hasPermissionToAddNewLot && vm.canAddNewLot">
-                <label for="lotCode">{{'stockAddProductsModal.newLotCode' | message}}</label>
-                <input id="lotCode" type="text" ng-model="vm.newLot.lotCode"
-                ng-change="vm.newLotCodeChanged()"
-                openlmis-invalid="{{vm.newLot.lotCodeInvalid | message}}"
-                required>
-                <label for="expirationDate">{{'stockAddProductsModal.newLotExpirationDate' | message}}</label>
-                <input id="expirationDate" type="date" ng-model="vm.newLot.expirationDate"
-                ng-change="vm.expirationDateChanged()" 
-                openlmis-invalid="{{vm.newLot.expirationDateInvalid | message}}"/>
-            </div>
-            <button type="submit" class="add">Add</button>
-        </form> -->
-    </section>
+    <!-- <section class="is-primary">
+        
+    </section> -->
     <table suppress-tr-openlmis-invalid>
         <thead>
             <tr>
@@ -160,7 +112,7 @@
         <tbody>
             <tr ng-repeat="lineItem in vm.prescriptionLineItems">
             
-                <td>{{lineItem.fullProductName}}</td>
+                <td>{{lineItem.orderablePrescribedName}}</td>
                 <td ng-if="vm.inPrescriptionServe && !vm.updateMode"><select id="dispensedProduct" ng-model="lineItem.dispensedProduct" 
                     ng-options="product.dispensedProductName for product in vm.allStockCardCommodities"
                     ng-change="vm.updateBatchOptions(lineItem)"></select></td>
@@ -203,7 +155,6 @@
                 <td><input type="text" ng-model="lineItem.comments"></input></td>
                 <td ng-if="!vm.inPrescriptionServe">
                     <button type="button" class="danger" ng-click="vm.remove($index)">Remove</button>
-                    <!-- <button ng-if="vm.inPrescriptionServe" type="button" class="primary" ng-click="vm.substitute(lineItem)">Substitute</button> -->
                 </td>
                 
             </tr>

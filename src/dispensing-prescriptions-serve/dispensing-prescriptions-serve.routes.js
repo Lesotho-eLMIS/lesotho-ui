@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.dispensing.prescriptions.serve', {
             label: 'dispensingPrescriptionsServe.title',
-            url: '/form/:patientId',
+            url: '/serve/',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             views: {
                 '@openlmis': {
@@ -36,7 +36,8 @@
             },
             params: {
                 prescriptionId: null ,
-                update:null
+                update: null,
+                patientId: null
               },
             resolve: {
                 facility: function (facilityFactory, $stateParams) {
@@ -74,15 +75,6 @@
                     // Return a promise that resolves when all individual promises resolve
                     return Promise.all(promises);
                 },
-                allProducts2: function (prescriptionsService) {
-                    return prescriptionsService.getAllProducts(); // all orderables
-                },
-                // allProducts: function (prescriptionsService, facility, allProducts2) {
-                //     return prescriptionsService.getAllFacilityProducts(facility.id)
-                //         .then(function (result) {
-                //             return result;
-                //         });
-                // },
                 prescription: function (prescriptionsService, $stateParams) {
                     if($stateParams.prescriptionId){
                         return prescriptionsService.getPrescription($stateParams.prescriptionId);

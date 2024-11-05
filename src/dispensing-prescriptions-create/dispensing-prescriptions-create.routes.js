@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.dispensing.prescriptions.create', {
             label: 'dispensingPrescriptionsCreate.title',
-            url: '/form/:patientId',
+            url: '/create/:patientId',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             views: {
                 '@openlmis': {
@@ -57,39 +57,8 @@
                 user: function (authorizationService) {
                     return authorizationService.getUser();
                 },
-                productsWithSOH: function (prescriptionsService, facility) {
-                    return prescriptionsService.getProductsWithSOH(facility.id)
-                        .then(function (result) {
-                            return result.content;
-                        });
-                },
-                stockCardProducts: function(productsWithSOH, orderableService){
-                    var promises = productsWithSOH.map(item => {
-                        return orderableService.get(item.orderable.id)
-                            .then(result => {
-                                item.dispensedProductName = result.fullProductName;
-                                return result; 
-                            });
-                    });                
-                    // Return a promise that resolves when all individual promises resolve
-                    return Promise.all(promises);
-                },
                 allProducts2: function (prescriptionsService) {
                     return prescriptionsService.getAllProducts(); // all orderables
-                },
-                // allProducts: function (prescriptionsService, facility, allProducts2) {
-                //     return prescriptionsService.getAllFacilityProducts(facility.id)
-                //         .then(function (result) {
-                //             return result;
-                //         });
-                // },
-                prescription: function (prescriptionsService, $stateParams) {
-                    if($stateParams.prescriptionId){
-                        return prescriptionsService.getPrescription($stateParams.prescriptionId);
-                    }else{
-                        return undefined;
-                    }
-                    
                 }
             }
         });
