@@ -28,11 +28,11 @@
         .module('dispensing-prescriptions-serve')
         .controller('dispensingPrescriptionsServeController', controller);
 
-    controller.$inject = ['$state', 'prescriptionsService', '$stateParams', 'user', 'patient',
-        'prescription', 'facility', 'confirmService', 'notificationService', 'productsWithSOH', 'stockCardProducts', 'lotService'];
+    controller.$inject = ['$state', 'prescriptionsService', '$stateParams', 'user', 'patient', 'alertService',
+        'prescription', 'facility', 'confirmService', 'notificationService', 'productsWithSOH', 'messageService', 'lotService'];
 
-    function controller($state, prescriptionsService, $stateParams, user, patient,
-        prescription, facility, confirmService, notificationService, productsWithSOH, stockCardProducts, lotService) {
+    function controller($state, prescriptionsService, $stateParams, user, patient, alertService,
+        prescription, facility, confirmService, notificationService, productsWithSOH, messageService, lotService) {
 
         var vm = this;
 
@@ -244,52 +244,65 @@
             return fullAge;
         }
 
-        function servePrescription() {
-
-            // console.log("Prescription Items: ", vm.prescriptionLineItems);            
-
-            if (vm.updateMode) {
-                vm.prescriptionLineItems.forEach(item => {
-                    item.orderableDispensed = item.orderableDispensed;
-                    item.lotId = item.lotId || null;
-                    item.servedExternally = item.servedExternally;
-                    item.remainingBalance = item.quantityPrescribed - item.quantityDispensed;
-                    item.collectBalanceDate = null
-                  //  item.lastUpdate = new Date();
-                });
-            } else {
-                vm.prescriptionLineItems.forEach(item => {
-                   
-                    item.orderableDispensed = item.dispensedProduct.orderable.id;
-                    item.lotId = item.selectedBatch.lot ? item.selectedBatch.lot.id : null;
-                    item.servedExternally = item.servedExternally;
-                    item.remainingBalance = item.quantityPrescribed - item.quantityDispensed;
-                    item.collectBalanceDate = null
-                   // item.lastUpdate = new Date();
-                });
+        vm.validateQuantity = function (lineItem){
+            lineItem.$errors = {};
+            if (lineItem.quantityDispensed > lineItem.selectedBatch.stockOnHand) {
+                lineItem.$errors.quantityInvalid = messageService.get('dispensingPrescriptionsServe.insufficientStock');
             }
-            vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType ? "In-Patient" : "Out-Patient";
-            vm.prescriptionDetails.servedByUserId = vm.user.user_id;
-            vm.prescriptionDetails.lineItems = vm.prescriptionLineItems;
-            vm.prescriptionDetails.lastUpdate = new Date();
-            // console.log("Serving Prescription Details: ", vm.prescriptionDetails);
-
-            confirmService.confirm("Are you sure you want to serve a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "?", "Yes")
-                .then(function () {
-                    prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
-                        .then(function (response) {
-                            notificationService.success('Prescription Served.');
-                            $state.go('openlmis.dispensing.prescriptions',{}, {
-                                reload: true
-                            });
-                        })
-                        .catch(function (error) {
-                            console.error('Error occurred:', error);
-                        });
-                });
+            return lineItem;
         }
 
-       
+        function servePrescription() {
+
+            // console.log("Prescription Items: ", vm.prescriptionLineItems);  
+            const invalid = vm.prescriptionLineItems.find(item => item.$errors && item.$errors.quantityInvalid);
+            if (invalid) {
+                alertService.error("Please check that all items have sufficient stock");
+            } else {
+                if (vm.updateMode) {
+                    vm.prescriptionLineItems.forEach(item => {
+                        item.orderableDispensed = item.orderableDispensed;
+                        item.lotId = item.lotId || null;
+                        item.servedExternally = item.servedExternally;
+                        item.remainingBalance = item.quantityPrescribed - item.quantityDispensed;
+                        item.collectBalanceDate = null
+                        //  item.lastUpdate = new Date();
+                    });
+                } else {
+                    vm.prescriptionLineItems.forEach(item => {
+
+                        item.orderableDispensed = item.dispensedProduct.orderable.id;
+                        item.lotId = item.selectedBatch.lot ? item.selectedBatch.lot.id : null;
+                        item.servedExternally = item.servedExternally;
+                        item.remainingBalance = item.quantityPrescribed - item.quantityDispensed;
+                        item.collectBalanceDate = null
+                        // item.lastUpdate = new Date();
+                    });
+                }
+                vm.prescriptionDetails.patientType = vm.prescriptionDetails.patientType ? "In-Patient" : "Out-Patient";
+                vm.prescriptionDetails.servedByUserId = vm.user.user_id;
+                vm.prescriptionDetails.lineItems = vm.prescriptionLineItems;
+                vm.prescriptionDetails.lastUpdate = new Date();
+                // console.log("Serving Prescription Details: ", vm.prescriptionDetails);
+
+                confirmService.confirm("Are you sure you want to serve a prescription for " + vm.patient.personDto.firstName + " " + vm.patient.personDto.lastName + "?", "Yes")
+                    .then(function () {
+                        prescriptionsService.servePrescription(vm.prescriptionDetails).$promise
+                            .then(function (response) {
+                                notificationService.success('Prescription Served.');
+                                $state.go('openlmis.dispensing.prescriptions', {}, {
+                                    reload: true
+                                });
+                            })
+                            .catch(function (error) {
+                                console.error('Error occurred:', error);
+                            });
+                    });
+
+            }
+        }
+
+
         vm.updatePrescription = function () {
             console.log("Updating Prescription");
             console.log(vm.prescriptionDetails);

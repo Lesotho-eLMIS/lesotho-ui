@@ -26,6 +26,7 @@
     "dispensingPrescriptionsServe.inPatient": "In Patient",
     "dispensingPrescriptionsServe.outPatient": "Out Patient",
     "dispensingPrescriptionsServe.dispensingDate": "Dispensing date",
+    "dispensingPrescriptionsServe.insufficientStock": "Insufficient Stock",
 
     "dispensingPrescriptionsServe.addprescription": "Add prescription",
     "dispensingPrescriptionsServe.prescriptionNumber": "Prescription Number",

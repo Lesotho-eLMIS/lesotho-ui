@@ -29,7 +29,8 @@
         'referencedata-facility',
         'ui.router',
         'dispensing-prescriptions',
-        'stockmanagement'
+        'stockmanagement',
+        'openlmis-invalid'
     ]);
 
 })();
