@@ -28,16 +28,15 @@
         .module('dispensing-patient-vitals-modal')
         .controller('dispensingPatientVitalsModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'patient', 'notificationService', 'messageService', 'complaintService', 'confirmService'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'patient', 'notificationService', 'messageService', 'vitalsService', 'confirmService'];
 
-    function controller( modalDeferred, $scope, patient, notificationService, messageService, complaintService, confirmService) {//
+    function controller( modalDeferred, $scope, patient, notificationService, messageService, vitalsService, confirmService) {//
         
         var vm = this;
-
         vm.$onInit = onInit;
-
+        vm.confirm = confirm;
         vm.patient = patient;
-
+        vm.tbStatusOptions = ['On TB Treatment', 'Presumptive TB Case', 'No Signs'];
         $scope.showModal=false;
         
         function onInit() {
@@ -65,43 +64,22 @@
 
             return fullAge;
         }
-
-        /**
-         * @ngdoc method
-         * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
-         * @name orderableSelectionChanged
-         *
-         * @description
-         * Reset form status and change content inside lots drop down list.
-         */
         
         function confirm (){
-            vm.complaint.lineItems = vm.productsForComplaint; // Add complaint payload lineitems
-            confirmService
-            .confirm("Are you sure you want to send complaint?", "Send")
+            confirmService.confirm("Are you sure you want to send vitals?", "Send")
             .then(function () {
-               complaintService.saveComplaint(vm.complaint).$promise
-              .then(function(response) {
-                // Success callback
-                let complaintId = "";
-                for (let i = 0; i < Object.keys(response).length-2; i++) {
-                    complaintId += response[i];
-                }
-                notificationService.success('Complaint Saved Sucessfully.');
-                complaintService.sendComplaint(complaintId, vm.complaint).$promise
-                    .then(function(sendReponse) {
-                        notificationService.success('Complaint Sent Sucessfully.');
-                    });
-                
-                modalDeferred.resolve();
-                }
-              )
-              .catch(function(error) {
-                  // Error callback
-                  notificationService.error('Failed to submit.');
-                  console.error('Error occurred:', error);
-              
-              });
+                vm.vitals.patientId = patient.id;
+                vitalsService.saveVitals(vm.vitals).$promise
+                .then(function(response) {
+                    // Success callback
+                    notificationService.success('Vitals Saved Sucessfully.');
+                    modalDeferred.resolve();
+                    }
+                )
+                .catch(function(error) {
+                    // Error callback
+                    notificationService.error('Failed to submit.');
+                });
             });
         }
     }

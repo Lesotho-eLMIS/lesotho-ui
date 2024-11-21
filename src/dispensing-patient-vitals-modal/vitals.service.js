@@ -19,51 +19,48 @@
 
     /**
      * @ngdoc service
-     * @name complaint-form-modal.complaintService
+     * @name dispensing-patient-vitals-modal.vitalsService
      *
      * @description
      * Responsible for retrieving complaint data as well as commiting it to the server.
      */
     angular
-        .module('complaint-form-modal')
-        .service('complaintService', complaintService);
+        .module('dispensing-patient-vitals-modal')
+        .service('vitalsService', vitalsService);
 
-        complaintService.$inject = ['$resource','openlmisUrlFactory', 'openlmisModalService'];
+        vitalsService.$inject = ['$resource','openlmisUrlFactory', 'openlmisModalService'];
 
-    function complaintService($resource,openlmisUrlFactory, pointOfDeliveryManageResource, openlmisModalService ) {
+    function vitalsService($resource, openlmisUrlFactory, openlmisModalService ) {
 
         var promise;
         // Using Resource to Communicate with Complaint Endpoints
 
-        var resource = $resource(openlmisUrlFactory('/api/complaints:id'), {}, {
+        var resource = $resource(openlmisUrlFactory('/api/vital:id'), {}, {
                 get: {
-                    url: openlmisUrlFactory('/api/complaints'),
+                    url: openlmisUrlFactory('/api/vital'),
                     method: 'GET',
                     isArray: true
                 }, 
-                postComplaint: {
-                    url: openlmisUrlFactory('api/complaints'),
-                    method: 'POST'
-                },
-                sendComplaint: {
-                    url: openlmisUrlFactory('api/complaints/:id/send'),
+                postVitals: {
+                    url: openlmisUrlFactory('api/vital'),
                     method: 'POST'
                 }
         });
        
+        this.saveVitals = saveVitals;
+        this.getVitals = getVitals;
 
-        this.saveComplaint = saveComplaint;
-        this.sendComplaint = sendComplaintToCMS;
-
-
-        function saveComplaint(complaint) {
-            return resource.postComplaint({facilityId:complaint.facilityId}, complaint);
+        function getVitals(patientNumber){
+            var params = {
+                patientNumber: patientNumber
+            }
+            return resource.get(params).$promise.then(function(response) {
+                return response; 
+            });
         }
 
-        function sendComplaintToCMS(complaintId, complaint) {
-            console.log(complaintId);
-            return resource.sendComplaint({id:complaintId}, complaint);
+        function saveVitals(vitals) {
+            return resource.postVitals({patientId:vitals.patientId}, vitals);
         }
-        
     }
 })();
