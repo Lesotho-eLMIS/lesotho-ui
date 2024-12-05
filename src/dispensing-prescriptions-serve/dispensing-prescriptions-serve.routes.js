@@ -17,26 +17,27 @@
 
     'use strict';
 
-    angular.module('dispensing-prescription-form').config(routes);
+    angular.module('dispensing-prescriptions-serve').config(routes);
 
     routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
 
     function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
 
-        $stateProvider.state('openlmis.dispensing.prescriptions.form', {
-            label: 'dispensingPrescriptionForm.title',
-            url: '/form/:patientId',
+        $stateProvider.state('openlmis.dispensing.prescriptions.serve', {
+            label: 'dispensingPrescriptionsServe.title',
+            url: '/serve/',
             accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
             views: {
                 '@openlmis': {
-                    controller: 'dispensingPrescriptionFormController',
-                    templateUrl: 'dispensing-prescription-form/dispensing-prescription-form.html',
+                    controller: 'dispensingPrescriptionsServeController',
+                    templateUrl: 'dispensing-prescriptions-serve/dispensing-prescriptions-serve.html',
                     controllerAs: 'vm'
                 }
             },
             params: {
                 prescriptionId: null ,
-                update:null
+                update: null,
+                patientId: null
               },
             resolve: {
                 facility: function (facilityFactory, $stateParams) {
@@ -74,15 +75,6 @@
                     // Return a promise that resolves when all individual promises resolve
                     return Promise.all(promises);
                 },
-                allProducts2: function (prescriptionsService) {
-                    return prescriptionsService.getAllProducts(); // all orderables
-                },
-                // allProducts: function (prescriptionsService, facility, allProducts2) {
-                //     return prescriptionsService.getAllFacilityProducts(facility.id)
-                //         .then(function (result) {
-                //             return result;
-                //         });
-                // },
                 prescription: function (prescriptionsService, $stateParams) {
                     if($stateParams.prescriptionId){
                         return prescriptionsService.getPrescription($stateParams.prescriptionId);

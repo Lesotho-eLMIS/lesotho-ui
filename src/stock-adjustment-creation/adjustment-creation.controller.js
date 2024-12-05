@@ -557,7 +557,7 @@
      */
     vm.submit = function () {
 
-      console.log(vm.addedLineItems);
+      // console.log(vm.addedLineItems);
       
       if(adjustmentType.state == "prepack"){
         // Handle prepacking logic

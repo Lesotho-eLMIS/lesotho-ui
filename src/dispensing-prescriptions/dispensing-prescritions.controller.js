@@ -109,12 +109,12 @@
        }
 
        function viewPrescription(prescription) {
-        console.log(prescription);
+        // console.log(prescription);
            if (prescription.status === 'INITIATED' || prescription.status === "PARTIALLY_SERVED") {
-                    $state.go('openlmis.dispensing.prescriptions.form', {
+                    $state.go('openlmis.dispensing.prescriptions.serve', {
                     prescriptionId: prescription.id,
                     patientId: prescription.patientId,
-                    update: true
+                    //update: true
                 })
                
            } else {
@@ -135,11 +135,9 @@
            var pres= prescriptionsService.getPrescriptions(vm.prescriptionParams)
            .then(function(response){
             vm.prescriptionsData = response;
-            // vm.prescriptionsData.patientType = response.patientType ? "In-Patient" : "Out-Patient";
-            //     console.log("Prescriptions Object", vm.prescriptionsData);
            });
       //     $scope.prescriptionsList.$setPristine();
-           console.log("All Prescriptions", pres);
+        //    console.log("All Prescriptions", pres);
         }
 
        
@@ -156,7 +154,7 @@
        function search() {
            var stateParams = {page: $stateParams.page, size: $stateParams.size}; // Reset State Params
            stateParams = angular.extend(stateParams, vm.prescriptionParams);
-            console.log(stateParams);
+            // console.log(stateParams);
            $state.go('openlmis.dispensing.prescriptions', stateParams, {
                reload: true,
                inherit: false,
