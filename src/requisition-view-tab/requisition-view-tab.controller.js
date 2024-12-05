@@ -29,13 +29,13 @@
         .controller('ViewTabController', ViewTabController);
 
     ViewTabController.$inject = [
-        '$filter', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
+        '$filter', '$state', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
         'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility'
     ];
 
-    function ViewTabController($filter, selectProductsModalService, requisitionValidator, requisition, columns,
+    function ViewTabController($filter, $state, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
@@ -53,6 +53,7 @@
         vm.skippedFullSupplyProductCountMessage = skippedFullSupplyProductCountMessage;
         vm.cacheRequisition = cacheRequisition;
         vm.disabledRequisitionEdit = disabledRequisitionEdit;
+        vm.search = search;
 
         /**
          * @ngdoc property
@@ -64,6 +65,7 @@
          * Holds all requisition line items.
          */
         vm.lineItems = undefined;
+        vm.searchKeyword = undefined;
 
         /**
          * @ngdoc property
@@ -159,6 +161,15 @@
             vm.canApproveAndReject = canApproveAndReject;
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
             vm.requisition = disabledRequisitionEdit();
+        }
+
+        function search() {
+            console.log("Keyword", vm.searchKeyword);
+            $stateParams.searchKeyword = vm.searchKeyword;
+            $state.go('openlmis.requisitions.requisition.fullSupply', $stateParams, {
+                reload: true
+                //inherit: false,
+            });
         }
 
         // Allows requisition line items to be editable by skipping or unskipping line item
