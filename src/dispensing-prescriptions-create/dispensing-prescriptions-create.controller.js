@@ -28,10 +28,10 @@
         .module('dispensing-prescriptions-create')
         .controller('dispensingPrescriptionsCreateController', controller);
 
-    controller.$inject = ['$state', 'prescriptionsService', 'allProducts2', '$stateParams', 'user', 'patient',
+    controller.$inject = ['$state', 'prescriptionsService', 'allProducts2', '$stateParams', 'user', 'patient', 'vitalsService',
         'facility', 'confirmService', 'notificationService'];
 
-    function controller($state, prescriptionsService, allProducts2,  $stateParams, user, patient,
+    function controller($state, prescriptionsService, allProducts2,  $stateParams, user, patient, vitalsService,
         facility, confirmService, notificationService) {
 
         var vm = this;
@@ -110,6 +110,7 @@
             vm.prescriptionDetails.createdDate = new Date(); //= vm.inPrescriptionServe ? null : new Date();
             vm.prescriptionDetails.issueDate = new Date();
             vm.age = vm.calculateAge(new Date(patient.personDto.dateOfBirth));
+            vm.displayVitals(patient);
             vm.updateMode = false;
             vm.minFollowUpDate = new Date();
             vm.minFollowUpDate.setDate(vm.minFollowUpDate.getDate() + 1);
@@ -124,6 +125,23 @@
             vm.durationUnits = ['Day(s)', 'Weeks(s)', 'Month(s)'];
             vm.instructions = ['Before meals', 'After Meals', 'Empty stomach', 'In the morning', 'In the evening', 'At bedtime', 'Immediately', 'As directed'];
 
+        }
+
+        vm.displayVitals = function(patient) {
+            return vitalsService.getVitals(patient.patientNumber).then(function(vitalsObject) {               
+                if (Object.entries(vitalsObject).length === 0) {
+                    notificationService.error("Patient Vitals not Found. Please capture vitals for this patient.");
+                }
+                else {
+                    console.log("vitals VVVVVVVVVVVVVV");
+                    console.log(vitalsObject);
+                    vm.height = vitalsObject[vitalsObject.length-1].height;
+                    vm.weight = vitalsObject[vitalsObject.length-1].weight;
+                    vm.systolic = vitalsObject[vitalsObject.length-1].systolic;
+                    vm.diastolic = vitalsObject[vitalsObject.length-1].diastolic;
+                    vm.TBStatus = vitalsObject[vitalsObject.length-1].tbStatus;
+                }
+            });
         }
 
         vm.calculateAge = function (birthDate) {

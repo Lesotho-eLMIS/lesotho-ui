@@ -8,44 +8,44 @@
     <ul>
         <li>
             <strong>Sex</strong>
-            {{vm.patient.personDto.sex}}
-        </li>
-        <li>
-            <strong>Age</strong>
-            {{vm.age}}
-        </li>
-        <li>
-            <strong>Height</strong>
-            {{vm.patient.height}}
-        </li>
-        <li align="right">
-            <strong>Weight</strong>
-            {{vm.patient.weight}}
-        </li>
-        <li ng-if="vm.stockCard.lot">
-            <strong>BMI</strong>
-            {{patient.BMI}}
-        </li>
-        <li ng-if="vm.stockCard.lot">
-            <strong>BMI Status</strong>
-            {{vm.patient.BMIStatus}}
-        </li>
-        <li>
-            <strong>TB Status</strong>
-            {{vm.patient.TBStatus}}
-        </li>
-        <li>
-            <strong>BP</strong>
-            {{vm.patient.BP}}
-        </li>
-        <!-- <li>
-        <strong>Medical History</strong>
-        <button ng-click="vm.getMedicalHistory()">View</button>
-      </li> -->
-        <li>
-            <strong>Prescription Status</strong>
-            {{vm.prescription.status}}
-        </li>
+                {{vm.patient.personDto.sex}}
+            </li>
+            <li>
+                <strong>Age</strong>
+                {{vm.age}}
+            </li>
+            <li>
+                <strong>Height (cm)</strong>
+                {{vm.height}}
+            </li>
+            <li>
+                <strong>Weight (kg)</strong>
+                {{vm.weight}}
+            </li>
+            <li>
+                <strong>BMI</strong>
+                {{ vm.weight / ((vm.height/100)*(vm.height/100)) }}
+            </li>
+            <!-- <li ng-if="vm.stockCard.lot">
+                <strong>BMI Status</strong>
+                {{vm.patient.BMIStatus}}
+            </li> -->
+            <li>
+                <strong>TB Status</strong>
+                {{vm.TBStatus}}
+            </li>
+            <li>
+                <strong>BP</strong>
+                {{ vm.diastolic + ((1/3)*(vm.systolic - vm.diastolic)) }}
+            </li>
+            <!-- <li>
+                <strong>Medical History</strong>
+                <button ng-click="vm.getMedicalHistory()">View</button>
+            </li> -->
+            <!-- <li>
+                <strong>Prescription Status</strong>
+                {{vm.prescription.status}}
+            </li> -->
     </ul>
 </aside>
 
