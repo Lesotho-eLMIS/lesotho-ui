@@ -28,10 +28,10 @@
         .controller('dispensingPatientsController', dispensingPatientsController);
 
         dispensingPatientsController.$inject = ['$state', '$stateParams', 'facility','facilities', 'facilityService',
-        'offlineService', 'dispensingService', 'alertService','patients3'];
+        'offlineService', 'dispensingService', 'alertService','patients3', 'dispensingPatientVitalsModalService'];
 
     function dispensingPatientsController($state, $stateParams, facility,facilities,offlineService, facilityService,
-        dispensingService, alertService, patients3) {
+        dispensingService, alertService, patients3, dispensingPatientVitalsModalService) {
 
             
 
@@ -93,6 +93,18 @@
         vm.addPatientForm = function(){
 
             $state.go('openlmis.dispensing.patients.form');
+        }
+
+        vm.addVitalsOnModal = function(patient) {
+            dispensingPatientVitalsModalService.show(patient).then(function() {
+                $stateParams.noReload = true;
+                draft.$modified = true;
+                vm.cacheDraft();
+                //Only reload current state and avoid reloading parent state
+                $state.go($state.current.name, $stateParams, {
+                    reload: $state.current.name
+                });
+            }); 
         }
 
         function searchPatients(){

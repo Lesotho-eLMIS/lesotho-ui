@@ -1,0 +1,11 @@
+{
+  "dispensingPatientVitalsModal.title": "Vitals",
+  "dispensingPatientVitalsModal.muac": "MUAC",
+  "dispensingPatientVitalsModal.diastolic": "Diastolic (mm Hg)",
+  "dispensingPatientVitalsModal.systolic": "Systolic (mm Hg)",
+  "dispensingPatientVitalsModal.tbStatus": "TB Status",
+  "dispensingPatientVitalsModal.weight": "Weight (Kg)",
+  "dispensingPatientVitalsModal.height": "Height (cm)",
+  "dispensingPatientVitalsModal.save": "Save",
+  "dispensingPatientVitalsModal.cancel": "Cancel"
+}
