@@ -28,10 +28,10 @@
         .controller('pointOfDeliveryViewController', pointOfDeliveryViewController);
 
     pointOfDeliveryViewController.$inject = ['$stateParams', 'facility', 'facilities', 'facilityService', 'offlineService',
-        '$scope', 'PODs', 'pointOfDeliveryService', '$state', 'podEventsWithSuppliers'];
+        '$scope', 'PODs', 'pointOfDeliveryService', '$state', 'podEventsWithSuppliers', 'LocalDatabase'];
 
     function pointOfDeliveryViewController($stateParams, facility, facilities, facilityService, offlineService,
-        $scope, PODs, pointOfDeliveryService, $state, podEventsWithSuppliers) {
+        $scope, PODs, pointOfDeliveryService, $state, podEventsWithSuppliers, LocalDatabase) {
 
 
         var vm = this;
@@ -55,6 +55,12 @@
             vm.receivingFacility = facility.name;
             vm.supplyingFacilities = facilities;
             vm.offline = $stateParams.offline === 'true' || offlineService.isOffline();
+            const db = new LocalDatabase('POD','Offline Mode');
+            db.putAll(podEventsWithSuppliers).then(function(result) {
+                console.log("success")
+            }).catch(function(error) {
+                console.log("Awww")
+            })
         }
 
         /**
