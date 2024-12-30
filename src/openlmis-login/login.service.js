@@ -29,9 +29,9 @@
         .module('openlmis-login')
         .service('loginService', loginService);
 
-    loginService.$inject = ['$q', '$http', 'authUrl', 'authorizationService', 'authService', 'accessTokenFactory', 'offlineService'];
+    loginService.$inject = ['$q', '$http', 'authUrl', 'authorizationService', 'authService', 'accessTokenFactory', 'offlineService', 'openlmisUrlFactory'];
 
-    function loginService($q, $http, authUrl, authorizationService, authService, accessTokenFactory, offlineService) {
+    function loginService($q, $http, authUrl, authorizationService, authService, accessTokenFactory, offlineService, openlmisUrlFactory) {
 
         var postLoginActions = [],
             postLogoutActions = [];
@@ -72,6 +72,10 @@
                     .then(function(user) {
                         return waitForActions(postLoginActions, [user])
                             .then(function() {
+                                var rights = authorizationService.getRights();
+                                console.log(rights);
+                                //Saving Current User Details to Local Storage. (This will later allow them to login even when they are offline)
+                                authorizationService.saveOfflineUserData(username, password, user.userId, username, rights);
                                 return user;
                             });
                     });

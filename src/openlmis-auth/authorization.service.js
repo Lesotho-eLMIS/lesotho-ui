@@ -48,6 +48,8 @@
 
     function service(localStorageService, $filter, AuthUser, localStorageFactory) {
 
+        var offlineUserData = localStorageFactory('userData');
+
         this.isAuthenticated = isAuthenticated;
 
         this.getAccessToken = getAccessToken;
@@ -67,6 +69,32 @@
         this.getRightByName = getRightByName;
         this.hashPassword = hashPassword;
         this.comparePassword = comparePassword;
+        this.saveOfflineUserData = saveOfflineUserData;
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-auth.authorizationService
+         * @name  saveOfflineUserData
+         *
+         * @description
+         * Saves data for offline user.
+         *
+         * @param  {String} username name of offline user
+         * @param  {String} password offline user password
+         * @param  {String} username name of offline user
+         * @param  {Array}  username name of offline user
+         * @return {Object}          right which has the given name
+         */
+        function saveOfflineUserData(username, password, userId, referencedataUsername, userRights) {
+            if(offlineUserData.getBy('username', username)) offlineUserData.removeBy('username', username);
+            offlineUserData.put({
+                username: username,
+                password: hashPassword(password),
+                id: userId,
+                referencedataUsername: referencedataUsername,
+                rights: userRights
+            });
+        }
 
         /**
          * @ngdoc method
