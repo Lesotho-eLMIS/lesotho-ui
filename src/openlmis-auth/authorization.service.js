@@ -44,9 +44,9 @@
         USER_ROLE_ASSIGNMENTS: 'ROLE_ASSIGNMENTS'
     };
 
-    service.$inject = ['localStorageService', '$filter', 'AuthUser'];
+    service.$inject = ['localStorageService', '$filter', 'AuthUser','localStorageFactory'];
 
-    function service(localStorageService, $filter, AuthUser) {
+    function service(localStorageService, $filter, AuthUser, localStorageFactory) {
 
         this.isAuthenticated = isAuthenticated;
 

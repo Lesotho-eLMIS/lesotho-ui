@@ -29,9 +29,9 @@
         .module('openlmis-login')
         .service('loginService', loginService);
 
-    loginService.$inject = ['$q', '$http', 'authUrl', 'authorizationService', 'authService', 'accessTokenFactory'];
+    loginService.$inject = ['$q', '$http', 'authUrl', 'authorizationService', 'authService', 'accessTokenFactory', 'offlineService'];
 
-    function loginService($q, $http, authUrl, authorizationService, authService, accessTokenFactory) {
+    function loginService($q, $http, authUrl, authorizationService, authService, accessTokenFactory, offlineService) {
 
         var postLoginActions = [],
             postLogoutActions = [];
@@ -56,24 +56,28 @@
          */
         function login(username, password) {
             console.log(bcrypt.hashSync(password, 10));
-            return requestLogin(username, password)
-                .then(function(response) {
-                    authorizationService.setAccessToken(response.accessToken);
-                    authorizationService.setUser(response.userId, response.username);
+            if(!offlineService.isOffline()) { // If you are online
+                return requestLogin(username, password)
+                    .then(function(response) {
+                        authorizationService.setAccessToken(response.accessToken);
+                        authorizationService.setUser(response.userId, response.username);
 
-                    authService.loginConfirmed(null, function(config) {
-                        config.headers.Authorization = accessTokenFactory.authHeader();
-                        return config;
-                    });
-
-                    return response;
-                })
-                .then(function(user) {
-                    return waitForActions(postLoginActions, [user])
-                        .then(function() {
-                            return user;
+                        authService.loginConfirmed(null, function(config) {
+                            config.headers.Authorization = accessTokenFactory.authHeader();
+                            return config;
                         });
-                });
+
+                        return response;
+                    })
+                    .then(function(user) {
+                        return waitForActions(postLoginActions, [user])
+                            .then(function() {
+                                return user;
+                            });
+                    });
+            }else{
+                console.log("You are offline.  Here we go!!!!!!!!!!!!")
+            }
         }
 
         /**
