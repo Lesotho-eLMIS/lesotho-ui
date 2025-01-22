@@ -64,7 +64,7 @@
     'rejectionReasonService',
     'receivingAddDiscrepancyModalService',
     'complaintFormModalService',
-    'prepackingService',
+    //'prepackingService',
     'pointOfDeliveryService',
     'suppliers',
     'ReferenceNumbers'
@@ -107,7 +107,7 @@
     rejectionReasonService,
     receivingAddDiscrepancyModalService,
     complaintFormModalService,
-    prepackingService,
+    //prepackingService,
     pointOfDeliveryService, 
     suppliers,
     ReferenceNumbers
@@ -433,9 +433,9 @@
 
     //-----LESOTHO ELMIS-----
 
-    vm.validatePrepackQuantity = function(lineItem){
-      return prepackingService.validatePrepackQuantity(lineItem, vm.addedLineItems);
-    };
+    // vm.validatePrepackQuantity = function(lineItem){
+    //   return prepackingService.validatePrepackQuantity(lineItem, vm.addedLineItems);
+    // };
 
     //-----LESOTHO ELMIS-----
 
@@ -559,53 +559,53 @@
 
       // console.log(vm.addedLineItems);
       
-      if(adjustmentType.state == "prepack"){
-        // Handle prepacking logic
-        vm.addedLineItems.forEach((lineItem) => {
-          lineItem.orderableId = lineItem.orderable.id;
-         // containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
-          //lineItem.lotId  : lineItem.lot ? lineItem.lot.id : null;
-          // if(lineItem.lot !== null){
-          //   lineItem.lotId = lineItem.lot.id;
-          // }
-          lineItem.lotId = lineItem.lot !== null ? lineItem.lot.id : null;
-          // else lineItem.lotId = null;
-        });
-        var prepackingEvent = {
-          facilityId: facility.id,
-          programId: program.id,
-         // supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
-          prepackerUserId: user.user_id,
-          // status: "Initiated",
-          comments: "", //To be used when there is need
-          lineItems:vm.addedLineItems
-        };
-        var confirmMessage = messageService.get(vm.key('confirmInfo'), {
-            username: user.username,
-            number: vm.addedLineItems.length,
-        });
-        console.log(prepackingEvent);
-        confirmService
-            .confirm(confirmMessage, vm.key('confirm'))
-            .then(function () {
-              prepackingService.savePrepacks(prepackingEvent).$promise
-              .then(function(response) {
-                // Success callback
-                vm.addedLineItems =[]; // clear added lineItems
-                notificationService.success('Prepacking Event Saved Sucessfully.');
-                $state.go('openlmis.stockmanagement.prepack');
-                }
-              )
-              .catch(function(error) {
-                  // Error callback
-                  notificationService.error('Failed to submit.');
-                  console.error('Error occurred:', error);
+      // if(adjustmentType.state == "prepack"){
+      //   // Handle prepacking logic
+      //   vm.addedLineItems.forEach((lineItem) => {
+      //     lineItem.orderableId = lineItem.orderable.id;
+      //    // containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
+      //     //lineItem.lotId  : lineItem.lot ? lineItem.lot.id : null;
+      //     // if(lineItem.lot !== null){
+      //     //   lineItem.lotId = lineItem.lot.id;
+      //     // }
+      //     lineItem.lotId = lineItem.lot !== null ? lineItem.lot.id : null;
+      //     // else lineItem.lotId = null;
+      //   });
+      //   var prepackingEvent = {
+      //     facilityId: facility.id,
+      //     programId: program.id,
+      //    // supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
+      //     prepackerUserId: user.user_id,
+      //     // status: "Initiated",
+      //     comments: "", //To be used when there is need
+      //     lineItems:vm.addedLineItems
+      //   };
+      //   var confirmMessage = messageService.get(vm.key('confirmInfo'), {
+      //       username: user.username,
+      //       number: vm.addedLineItems.length,
+      //   });
+      //   console.log(prepackingEvent);
+      //   confirmService
+      //       .confirm(confirmMessage, vm.key('confirm'))
+      //       .then(function () {
+      //         prepackingService.savePrepacks(prepackingEvent).$promise
+      //         .then(function(response) {
+      //           // Success callback
+      //           vm.addedLineItems =[]; // clear added lineItems
+      //           notificationService.success('Prepacking Event Saved Sucessfully.');
+      //           $state.go('openlmis.stockmanagement.prepack');
+      //           }
+      //         )
+      //         .catch(function(error) {
+      //             // Error callback
+      //             notificationService.error('Failed to submit.');
+      //             console.error('Error occurred:', error);
               
-              });
-            });
+      //         });
+      //       });
 
        
-      }else{
+      // }else{
 
           $scope.$broadcast('openlmis-form-submit');
           if (validateAllAddedItems()) {
@@ -622,7 +622,7 @@
             alertService.error('stockAdjustmentCreation.submitInvalid');
           }
 
-      }
+      //}
       
     };
 
