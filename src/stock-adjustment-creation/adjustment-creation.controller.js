@@ -412,19 +412,36 @@
       return lineItem;
     };
 
+    vm.validateCartonNumberRange = function(lineItem){
+      if(adjustmentType.state === "receive"){
+        if (!lineItem.hasOwnProperty('totalCartonNumber') || lineItem.individualCartonNumberRange > lineItem.totalCartonNumber ||
+          isEmpty(lineItem.totalCartonNumber) || lineItem.individualCartonNumberRange === 0 ) {
+        
+          lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
+        }else if(lineItem.individualCartonNumberRange > 0 && lineItem.individualCartonNumberRange <= lineItem.totalCartonNumber && lineItem.individualCartonNumberRange >= lineItem.individualCartonNumber){
+        
+          lineItem.$errors.cartonsInvalid = false;
+          let cartonNumber = lineItem.individualCartonNumber + " to " + lineItem.individualCartonNumberRange + " of " + lineItem.totalCartonNumber;
+          lineItem.cartonNumber = cartonNumber;
+        }
+      }
+      return lineItem;
+    };
+
     vm.validateCartonNumber = function(lineItem){
+      lineItem.individualCartonNumberRange = lineItem.individualCartonNumber;
       if(adjustmentType.state === "receive"){
         if (!lineItem.hasOwnProperty('totalCartonNumber') || lineItem.individualCartonNumber > lineItem.totalCartonNumber ||
-          isEmpty(lineItem.totalCartonNumber)) {
+          isEmpty(lineItem.totalCartonNumber) || lineItem.individualCartonNumber === 0 ) {
         
           lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
-        }else if(!lineItem.hasOwnProperty('individualCartonNumber') || lineItem.individualCartonNumber === 0 ){
+        // }else if(!lineItem.hasOwnProperty('individualCartonNumber') || lineItem.individualCartonNumber === 0 ){
         
-          lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
+        //   lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
         }else if(lineItem.individualCartonNumber > 0 && lineItem.individualCartonNumber <= lineItem.totalCartonNumber){
         
           lineItem.$errors.cartonsInvalid = false;
-          let cartonNumber = lineItem.individualCartonNumber + " of " + lineItem.totalCartonNumber;
+          let cartonNumber = lineItem.individualCartonNumber + " to " + lineItem.individualCartonNumberRange + " of " + lineItem.totalCartonNumber;
           lineItem.cartonNumber = cartonNumber;
         }
       }
