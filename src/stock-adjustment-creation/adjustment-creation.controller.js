@@ -754,6 +754,7 @@
       var distinctLots = [];
       var lotResource = new LotResource();
       addedLineItems.forEach(function (lineItem) {
+        lineItem.quantity = lineItem.quantity * lineItem.orderable.netContent;
         if (
           lineItem.lot &&
           lineItem.$isNewItem &&
