@@ -52,6 +52,7 @@
         vm.quantityChanged = quantityChanged;
         vm.checkUnaccountedStockAdjustments = checkUnaccountedStockAdjustments;
         vm.selectProductForCyclic = selectProductForCyclic;
+        vm.addCyclicProduct = addCyclicProduct;
 
         /**
          * @ngdoc property
@@ -824,6 +825,69 @@
 
         vm.validateOnPageChange();
 
+        function addCyclicProduct () {
+
+            // Loop through the line item groups
+            displayLineItemsGroup.forEach(function (group) {
+                // Check if the selected product matches the product in the current group
+                if (vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName) {
+
+                    // Initialize vm.groupedCategories if it's not already defined
+                    if (!vm.groupedCategories) {
+                        vm.groupedCategories = []; // Initialize the grouped categories object
+                        console.log("0");
+                    }
+                    console.log(vm.groupedCategories);
+                    console.log(vm.selectedProductForCyclic);
+                    console.log("1");
+                    // Get the category for the selected product (you need to implement this logic)
+                    const category = getCategoryForProduct(vm.selectedProductForCyclic);
+                    console.log("2");
+                    // Check if the category already exists in vm.groupedCategories
+                    // If it exists, concatenate the new group with the existing items; otherwise, create a new array for that category
+                    if (vm.groupedCategories[category]) {
+                        vm.groupedCategories[category] = vm.groupedCategories[category].concat(group);
+                        console.log("3");
+                    } else {
+                        // If category doesn't exist, initialize it with the group
+                        vm.groupedCategories[category] = group;
+                        console.log("4");
+                    }
+                }
+                console.log("5");
+            });
+
+            console.log(Object.values(vm.groupedCategories));
+
+            console.log("6");
+            console.log(vm.program.id);
+
+            // Apply the groupByProgramProductCategory filter to the updated grouped categories
+            // We need to make sure that the data is grouped according to the program id
+            
+            vm.groupedCategories = vm.groupedCategories.filter(cat => cat.orderable.program[0].programId === "247759c0-351f-481b-a111-c3a162eb469d");
+                                        //$filter('groupByProgramProductCategory')(Object.values(vm.groupedCategories), "247759c0-351f-481b-a111-c3a162eb469d" );//vm.program.id);
+
+            console.log("7");
+
+            //old code***********************************************
+            // displayLineItemsGroup.forEach(function(group) {
+            //     if(vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName){
+            //         vm.groupedCategories = $filter('groupByProgramProductCategory')([group], vm.program.id);
+
+            //         console.log("vm.groupedCategories");
+            //         console.log(vm.groupedCategories);
+            //     }
+
+            //     console.log("group");
+            //     console.log(group);
+            // })
+            // displayLineItemsGroup.splice(index+1, 0, vm.groupedCategories);
+
+            // console.log("displayLineItemsGroup");
+            // console.log(displayLineItemsGroup);
+        }
+
         function selectProductForCyclic () {
             displayLineItemsGroup.forEach(function(group) {
                 if(vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName){
@@ -831,8 +895,8 @@
                 }
             })
 
-            //console.log("Draft LineItems");
-            //console.log(draft.lineItems);
+            // console.log("Draft LineItems");
+            // console.log(draft.lineItems);
         }
 
     }

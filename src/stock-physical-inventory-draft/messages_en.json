@@ -1,3 +1,4 @@
 {
-  "stockPhysicalInventoryDraft.lotCode": "Batch Number"
+  "stockPhysicalInventoryDraft.lotCode": "Batch Number",
+  "stockPhysicalInventoryDraft.add": "Add"
 }

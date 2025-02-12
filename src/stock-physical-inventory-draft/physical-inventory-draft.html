@@ -30,11 +30,14 @@
     <button ng-if="vm.stateParams.physicalInventoryType === 'Major'" class="pull-right add" ng-click="vm.addProducts()">
         {{'stockPhysicalInventoryDraft.addProduct' | message}}
     </button>
-    <div ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" class="pull-right add">
+    <div ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" class="pull-right add"> <!--class="form-inline"-->
         <label for="productSelect">{{'Select Product'}}</label>
-        <select ng-change="vm.selectProductForCyclic()" id="productSelect" ng-model="vm.selectedProductForCyclic"
-            ng-options="product.orderable.fullProductName for product in vm.productsForCyclic">
+        <select id="productSelect" ng-model="vm.selectedProductForCyclic"
+            ng-options="product.orderable.fullProductName for product in vm.productsForCyclic"> <!--ng-change="vm.selectProductForCyclic()"-->
         </select>
+        <fieldset class="form-group">
+            <button ng-click="vm.addCyclicProduct()" class="add">{{'stockPhysicalInventoryDraft.add' | message}}</button>
+        </fieldset>
     </div>
 
     <saving-indicator class="draft-indicator" object="vm.dataChanged"/>
