@@ -220,6 +220,16 @@
         vm.dataChanged = false;
 
         /**
+         * @ngdoc property
+         * @propertyOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
+         * @name itemsSelectedForCyclic
+         * @type {Array}
+         *
+         * @description
+         * Array that holds items selected for cyclic inventory*/
+        vm.itemsSelectedForCyclic = [];
+
+        /**
          * @ngdoc method
          * @methodOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
          * @name getStatusDisplay
@@ -684,7 +694,7 @@
         }
 
         function validateCyclic() {
-            let errorMessage = null;
+            let errorMessage = false;
         
             displayLineItemsGroup.forEach(function(group) {
                 if (vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName) {
@@ -822,18 +832,33 @@
             });
         }
 
-        vm.validateOnPageChange();
+        /**
+         * @ngdoc method
+         * @methodOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
+         * @name selectProductForCyclic
+         *
+         * @description
+         * Populates array of line items for cyclic inventory, and groups them by category
+         */        
+        function selectProductForCyclic() {
 
-        function selectProductForCyclic () {
-            displayLineItemsGroup.forEach(function(group) {
-                if(vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName){
-                    vm.groupedCategories = $filter('groupByProgramProductCategory')([group], vm.program.id);
+            const productId = vm.selectedProductForCyclic.orderable.id;
+            const productName = vm.selectedProductForCyclic.orderable.fullProductName;
+            
+            displayLineItemsGroup.forEach(group => {
+                //Check if the selected product matches the display line item (group) by name
+                if (group[0].orderable.fullProductName === productName) {
+                    //Check if the selected product has not yet been added to the array of items being
+                    //selected for cyclic count 
+                    if (!vm.itemsSelectedForCyclic.some(value => value[0].orderable.id === productId)) {
+                        vm.itemsSelectedForCyclic.push(group); // If not, add the item to the array.
+                    }
                 }
-            })
-
-            //console.log("Draft LineItems");
-            //console.log(draft.lineItems);
+            });
+            //Group the selected items by Category
+            vm.groupedCategories = $filter('groupByProgramProductCategory')(vm.itemsSelectedForCyclic, vm.program.id);
         }
-
+        
+        vm.validateOnPageChange();
     }
 })();
