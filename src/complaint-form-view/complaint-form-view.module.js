@@ -16,23 +16,14 @@
 (function() {
     'use strict';
 
-    angular.module('complaint-form-modal', [
-        'stock-adjustment-creation',
+    angular.module('complaint-form-view', [
         'openlmis-date',
-        'stock-adjustment',
-        'stock-confirm-discard',
-        'stock-orderable-group',
-        'stock-product-name',
-        'stock-constants',
-        'stock-valid-reason',
-        'referencedata-program',
         'referencedata-facility',
-        'referencedata-lot',
-        'stock-unpack-kit',
-        'stock-reasons-modal',
-        'stock-edit-lot-modal',
-        //'receiving-add-discrepancy-modal',
         'complaint-form-modal',
-        'openlmis-currency'
+        'ui.router',
+        'openlmis-i18n',
+        'openlmis-urls',
+        'stockmanagement'
+        
     ]);
 })();

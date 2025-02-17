@@ -1,0 +1,10 @@
+{
+  "complaintFormView.label": "View Complaints",
+  "complaintFormView.complaintsAt": "View Complaints at ${facility}",
+  "complaintFormView.complainingFacility": "Service Area",
+  "complaintFormView.complainant": "Complainant Name",
+  "complaintFormView.complaintDate": "Complaint Date",
+  "complaintFormView.incidenceDate": "Incidence Date",
+  "complaintFormView.description": "Description",
+  "complaintFormView.view": "View"    
+}

@@ -54,6 +54,7 @@
 
         this.saveComplaint = saveComplaint;
         this.sendComplaint = sendComplaintToCMS;
+        this.getComplaints = getComplaints;
 
 
         function saveComplaint(complaint) {
@@ -63,6 +64,34 @@
         function sendComplaintToCMS(complaintId, complaint) {
             console.log(complaintId);
             return resource.sendComplaint({id:complaintId}, complaint);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf complaint-form-modal.complaintService
+         * @name getComplaints
+         *
+         * @description
+         * Retrieves complaint records from the server.
+         *
+         * @param  {String}     Facility UUID
+         * @return {Promise}    complaints promise
+         */
+        function getComplaints(facilityId) {
+            var params = {
+                facilityId: facilityId
+            }
+            return resource.get(params).$promise.then(function (response) {
+                // Transforming the response to an object if it's an array
+                // if (Array.isArray(response)) {
+                //     var complaints = response.reduce((result, obj) => {
+                //         result[obj.id] = obj;
+                //         return result;
+                //     }, {});
+                //     return complaints;
+                // }
+                return response;
+            });
         }
         
     }
