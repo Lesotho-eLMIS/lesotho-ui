@@ -64,7 +64,7 @@
          * @description
          * Gets the line items of a complaint form.
          *
-         * @param {UUID} id of complaint record to get line items from
+         * @param {String} UUID of complaint record to get line items from
          * @return {Array} array of complaint line items
          */
         function viewComplaints(itemId){

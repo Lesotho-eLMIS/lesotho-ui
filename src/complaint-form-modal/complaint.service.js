@@ -62,7 +62,6 @@
         }
 
         function sendComplaintToCMS(complaintId, complaint) {
-            console.log(complaintId);
             return resource.sendComplaint({id:complaintId}, complaint);
         }
 
@@ -82,15 +81,7 @@
                 facilityId: facilityId
             }
             return resource.get(params).$promise.then(function (response) {
-                // Transforming the response to an object if it's an array
-                // if (Array.isArray(response)) {
-                //     var complaints = response.reduce((result, obj) => {
-                //         result[obj.id] = obj;
-                //         return result;
-                //     }, {});
-                //     return complaints;
-                // }
-                return response;
+                 return response;
             });
         }
         
