@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
@@ -38,13 +38,13 @@
         'editLotModalService'];
 
     function controller($scope, $state, $stateParams, addProductsModalService, messageService,
-                        physicalInventoryFactory, notificationService, alertService,
-                        chooseDateModalService, program, facility, draft, displayLineItemsGroup,
-                        confirmService, physicalInventoryService, MAX_INTEGER_VALUE, VVM_STATUS,
-                        reasons, stockReasonsCalculations, loadingModalService, $window,
-                        stockmanagementUrlFactory, accessTokenFactory, orderableGroupService, $filter, $q,
-                        offlineService, physicalInventoryDraftCacheService, stockCardService,
-                        LotResource, editLotModalService) {
+        physicalInventoryFactory, notificationService, alertService,
+        chooseDateModalService, program, facility, draft, displayLineItemsGroup,
+        confirmService, physicalInventoryService, MAX_INTEGER_VALUE, VVM_STATUS,
+        reasons, stockReasonsCalculations, loadingModalService, $window,
+        stockmanagementUrlFactory, accessTokenFactory, orderableGroupService, $filter, $q,
+        offlineService, physicalInventoryDraftCacheService, stockCardService,
+        LotResource, editLotModalService) {
 
         var vm = this;
         vm.$onInit = onInit;
@@ -64,21 +64,21 @@
          */
         vm.displayLineItemsGroup = displayLineItemsGroup;
 
-        $scope.$on('$stateChangeStart', function() {
+        $scope.$on('$stateChangeStart', function () {
             //Delete cyclic Draft before the state changes if it was not submitted yet.
-            if(vm.stateParams.physicalInventoryType === "Cyclic" && !vm.isSubmitted){
-            physicalInventoryService.deleteDraft(draft.id).then(function() {
-                   console.log("Cyclic Draft Deleted")
-            })
-                .catch(function() {
-                console.log("Cyclic Draft Delete Failed")
+            if (vm.stateParams.physicalInventoryType === "Cyclic" && !vm.isSubmitted) {
+                physicalInventoryService.deleteDraft(draft.id).then(function () {
+                    console.log("Cyclic Draft Deleted")
+                })
+                    .catch(function () {
+                        console.log("Cyclic Draft Delete Failed")
                     });
             }
-          });
+        });
 
-        vm.updateProgress = function() {
-            vm.itemsWithQuantity = _.filter(vm.displayLineItemsGroup, function(lineItems) {
-                return _.every(lineItems, function(lineItem) {
+        vm.updateProgress = function () {
+            vm.itemsWithQuantity = _.filter(vm.displayLineItemsGroup, function (lineItems) {
+                return _.every(lineItems, function (lineItem) {
                     return !isEmpty(lineItem.quantity);
                 });
             });
@@ -127,7 +127,7 @@
          * When true shows inactive items
          */
         vm.includeInactive = $stateParams.includeInactive;
-    
+
         /**
          * @ngdoc property
          * @propertyOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
@@ -220,6 +220,16 @@
         vm.dataChanged = false;
 
         /**
+         * @ngdoc property
+         * @propertyOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
+         * @name itemsSelectedForCyclic
+         * @type {Array}
+         *
+         * @description
+         * Array that holds items selected for cyclic inventory*/
+        vm.itemsSelectedForCyclic = [];
+
+        /**
          * @ngdoc method
          * @methodOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
          * @name getStatusDisplay
@@ -230,7 +240,7 @@
          * @param  {String} status VVM status
          * @return {String}        VVM status display name
          */
-        vm.getStatusDisplay = function(status) {
+        vm.getStatusDisplay = function (status) {
             return messageService.get(VVM_STATUS.$getDisplayName(status));
         };
 
@@ -242,22 +252,22 @@
          * @description
          * Pops up a modal for users to add products for physical inventory.
          */
-        vm.addProducts = function() {
+        vm.addProducts = function () {
             var notYetAddedItems = _.chain(draft.lineItems)
                 .difference(_.flatten(vm.displayLineItemsGroup))
                 .value();
 
-            var orderablesWithoutAvailableLots = draft.lineItems.map(function(item) {
+            var orderablesWithoutAvailableLots = draft.lineItems.map(function (item) {
                 return item.orderable;
-            }).filter(function(orderable) {
-                return !notYetAddedItems.find(function(item) {
+            }).filter(function (orderable) {
+                return !notYetAddedItems.find(function (item) {
                     return orderable.id === item.orderable.id;
                 });
             })
-                .filter(function(orderable, index, filtered) {
+                .filter(function (orderable, index, filtered) {
                     return filtered.indexOf(orderable) === index;
                 })
-                .map(function(uniqueOrderable) {
+                .map(function (uniqueOrderable) {
                     return {
                         lot: null,
                         orderable: uniqueOrderable,
@@ -269,11 +279,11 @@
                     };
                 });
 
-            orderablesWithoutAvailableLots.forEach(function(item) {
+            orderablesWithoutAvailableLots.forEach(function (item) {
                 notYetAddedItems.push(item);
             });
 
-            addProductsModalService.show(notYetAddedItems, draft.lineItems).then(function() {
+            addProductsModalService.show(notYetAddedItems, draft.lineItems).then(function () {
                 $stateParams.program = vm.program;
                 $stateParams.facility = vm.facility;
                 $stateParams.noReload = true;
@@ -298,9 +308,9 @@
          *
          * @param {Object} lineItem line items to be edited.
          */
-        vm.editLot = function(lineItem) {
+        vm.editLot = function (lineItem) {
             var addedLineItems = _.flatten(draft.lineItems);
-            editLotModalService.show(lineItem, addedLineItems).then(function() {
+            editLotModalService.show(lineItem, addedLineItems).then(function () {
                 $stateParams.draft = draft;
             });
         };
@@ -316,19 +326,19 @@
          * @param {Object} lineItems line items to be calculate.
          * @param {String} field     property name of line items to be aggregate.
          */
-        vm.calculate = function(lineItems, field) {
-            var allEmpty = _.every(lineItems, function(lineItem) {
+        vm.calculate = function (lineItems, field) {
+            var allEmpty = _.every(lineItems, function (lineItem) {
                 return isEmpty(lineItem[field]);
             });
             if (allEmpty) {
                 return undefined;
             }
 
-            return _.chain(lineItems).map(function(lineItem) {
+            return _.chain(lineItems).map(function (lineItem) {
                 return lineItem[field];
             })
                 .compact()
-                .reduce(function(memo, num) {
+                .reduce(function (memo, num) {
                     return parseInt(num) + memo;
                 }, 0)
                 .value();
@@ -344,7 +354,7 @@
          *
          * @param  {Object} lineItem line items to be hidded.
          */
-        vm.hideLineItem = function(lineItem) {
+        vm.hideLineItem = function (lineItem) {
             var itemToHide = lineItem;
             confirmService.confirm(
                 messageService.get('stockPhysicalInventoryDraft.deactivateItem', {
@@ -352,10 +362,10 @@
                     lot: lineItem.displayLotMessage
                 }),
                 'stockPhysicalInventoryDraft.deactivate'
-            ).then(function() {
+            ).then(function () {
                 loadingModalService.open();
-                stockCardService.deactivateStockCard(lineItem.stockCardId).then(function() {
-                    draft.lineItems.find(function(item) {
+                stockCardService.deactivateStockCard(lineItem.stockCardId).then(function () {
+                    draft.lineItems.find(function (item) {
                         if (item.stockCardId === itemToHide.stockCardId) {
                             return item;
                         }
@@ -367,7 +377,7 @@
                     });
                     notificationService.success('stockPhysicalInventoryDraft.deactivated');
                 })
-                    .catch(function() {
+                    .catch(function () {
                         loadingModalService.close();
                     });
             });
@@ -382,7 +392,7 @@
          * It searches from the total line items with given keyword and/or includeInactive.
          * If keyword and includeInactive are empty then all line items will be shown.
          */
-        vm.search = function() {
+        vm.search = function () {
             $stateParams.page = 0;
             $stateParams.keyword = vm.keyword;
             $stateParams.includeInactive = vm.includeInactive;
@@ -404,9 +414,9 @@
          * @description
          * Save physical inventory draft.
          */
-        vm.saveDraft = function(withNotification) {
+        vm.saveDraft = function (withNotification) {
             loadingModalService.open();
-            return physicalInventoryFactory.saveDraft(draft).then(function() {
+            return physicalInventoryFactory.saveDraft(draft).then(function () {
                 if (!withNotification) {
                     notificationService.success('stockPhysicalInventoryDraft.saved');
                 }
@@ -416,7 +426,7 @@
 
                 $stateParams.program = vm.program;
                 $stateParams.facility = vm.facility;
-                draft.lineItems.forEach(function(lineItem) {
+                draft.lineItems.forEach(function (lineItem) {
                     if (lineItem.$isNewItem) {
                         lineItem.$isNewItem = false;
                     }
@@ -426,7 +436,7 @@
                 $state.go($state.current.name, $stateParams, {
                     reload: $state.current.name
                 });
-            }, function(errorResponse) {
+            }, function (errorResponse) {
                 loadingModalService.close();
                 alertService.error(errorResponse.data.message);
             });
@@ -442,7 +452,7 @@
          *
          * @param {Object} lineItem line item to edit
          */
-        vm.canEditLot = function(lineItem) {
+        vm.canEditLot = function (lineItem) {
             return lineItem.lot && lineItem.$isNewItem;
         };
 
@@ -454,7 +464,7 @@
          * @description
          * Save physical inventory draft on page change.
          */
-        vm.saveOnPageChange = function() {
+        vm.saveOnPageChange = function () {
             var params = {};
             params.noReload = true;
             params.isSubmitted = vm.isSubmitted;
@@ -470,7 +480,7 @@
          * @description
          * Validate physical inventory draft if form was submitted once.
          */
-        vm.validateOnPageChange = function() {
+        vm.validateOnPageChange = function () {
             if ($stateParams.isSubmitted === true) {
                 validate();
                 $scope.$broadcast('openlmis-form-submit');
@@ -485,18 +495,18 @@
          * @description
          * Delete physical inventory draft.
          */
-        vm.delete = function() {
+        vm.delete = function () {
             confirmService.confirmDestroy(
                 'stockPhysicalInventoryDraft.deleteDraft',
                 'stockPhysicalInventoryDraft.delete'
-            ).then(function() {
+            ).then(function () {
                 loadingModalService.open();
-                physicalInventoryService.deleteDraft(draft.id).then(function() {
+                physicalInventoryService.deleteDraft(draft.id).then(function () {
                     $state.go('openlmis.stockmanagement.physicalInventory', $stateParams, {
                         reload: true
                     });
                 })
-                    .catch(function() {
+                    .catch(function () {
                         loadingModalService.close();
                     });
             });
@@ -510,13 +520,13 @@
          * @description
          * Submit physical inventory.
          */
-        vm.submit = function() {
+        vm.submit = function () {
             vm.isSubmitted = true;
             var error = undefined;//(vm.physicalInventoryType === "Major") ? validate() : validateCyclic();
-            if(vm.stateParams.physicalInventoryType === "Cyclic"){
+            if (vm.stateParams.physicalInventoryType === "Cyclic") {
                 console.log("Cyclic");
                 error = validateCyclic();
-            }else if(vm.stateParams.physicalInventoryType === "Major"){
+            } else if (vm.stateParams.physicalInventoryType === "Major") {
                 console.log("Major");
                 error = validate();
             }
@@ -525,30 +535,30 @@
                 $scope.$broadcast('openlmis-form-submit');
                 alertService.error(error);
             } else {
-                chooseDateModalService.show().then(function(resolvedData) {
+                chooseDateModalService.show().then(function (resolvedData) {
                     loadingModalService.open();
 
                     draft.occurredDate = resolvedData.occurredDate;
                     draft.signature = resolvedData.signature;
 
-                    return saveLots(draft, function() {
-                        physicalInventoryService.submitPhysicalInventory(draft,vm.stateParams.physicalInventoryType ).then(function() {
+                    return saveLots(draft, function () {
+                        physicalInventoryService.submitPhysicalInventory(draft, vm.stateParams.physicalInventoryType).then(function () {
                             notificationService.success('stockPhysicalInventoryDraft.submitted');
                             confirmService.confirm('stockPhysicalInventoryDraft.printModal.label',
                                 'stockPhysicalInventoryDraft.printModal.yes',
                                 'stockPhysicalInventoryDraft.printModal.no')
-                                .then(function() {
+                                .then(function () {
                                     $window.open(accessTokenFactory.addAccessToken(getPrintUrl(draft.id)),
                                         '_blank');
                                 })
-                                .finally(function() {
+                                .finally(function () {
                                     $state.go('openlmis.stockmanagement.stockCardSummaries', {
                                         program: program.id,
                                         facility: facility.id,
                                         includeInactive: false
                                     });
                                 });
-                        }, function(errorResponse) {
+                        }, function (errorResponse) {
                             loadingModalService.close();
                             alertService.error(errorResponse.data.message);
                             physicalInventoryDraftCacheService.removeById(draft.id);
@@ -563,14 +573,14 @@
                 lotResource = new LotResource(),
                 errorLots = [];
 
-            draft.lineItems.forEach(function(lineItem) {
+            draft.lineItems.forEach(function (lineItem) {
                 if (lineItem.lot && lineItem.$isNewItem && !lineItem.lot.id) {
                     lotPromises.push(lotResource.create(lineItem.lot)
-                        .then(function(createResponse) {
+                        .then(function (createResponse) {
                             lineItem.$isNewItem = false;
                             return createResponse;
                         })
-                        .catch(function(response) {
+                        .catch(function (response) {
                             if (response.data.messageKey ===
                                 'referenceData.error.lot.lotCode.mustBeUnique' ||
                                 response.data.messageKey ===
@@ -578,7 +588,7 @@
                                 errorLots.push({
                                     lotCode: lineItem.lot.lotCode,
                                     error: response.data.messageKey ===
-                                    'referenceData.error.lot.lotCode.mustBeUnique' ?
+                                        'referenceData.error.lot.lotCode.mustBeUnique' ?
                                         'stockPhysicalInventoryDraft.lotCodeMustBeUnique' :
                                         'stockPhysicalInventoryDraft.tradeItemRequuiredToAddLotCode'
                                 });
@@ -588,12 +598,12 @@
             });
 
             return $q.all(lotPromises)
-                .then(function(responses) {
+                .then(function (responses) {
                     if (errorLots !== undefined && errorLots.length > 0) {
                         return $q.reject();
                     }
-                    responses.forEach(function(lot) {
-                        draft.lineItems.forEach(function(lineItem) {
+                    responses.forEach(function (lot) {
+                        draft.lineItems.forEach(function (lineItem) {
                             if (lineItem.lot && lineItem.lot.lotCode === lot.lotCode
                                 && lineItem.orderable.identifiers['tradeItem'] === lot.tradeItemId) {
                                 lineItem.lot = lot;
@@ -603,10 +613,10 @@
                     });
                     return submitMethod();
                 })
-                .catch(function(errorResponse) {
+                .catch(function (errorResponse) {
                     loadingModalService.close();
                     if (errorLots) {
-                        var errorLotsReduced = errorLots.reduce(function(result, currentValue) {
+                        var errorLotsReduced = errorLots.reduce(function (result, currentValue) {
                             if (currentValue.error in result) {
                                 result[currentValue.error].push(currentValue.lotCode);
                             } else {
@@ -633,7 +643,7 @@
          *
          * @param {Object} lineItem line item to be validated.
          */
-        vm.validateQuantity = function(lineItem) {
+        vm.validateQuantity = function (lineItem) {
             if (lineItem.quantity > MAX_INTEGER_VALUE) {
                 lineItem.quantityInvalid = messageService.get('stockmanagement.numberTooLarge');
             } else if (isEmpty(lineItem.quantity)) {
@@ -654,7 +664,7 @@
          *
          * @param {Object} lineItem line item to be validated.
          */
-        vm.validateUnaccountedQuantity = function(lineItem) {
+        vm.validateUnaccountedQuantity = function (lineItem) {
             if (lineItem.unaccountedQuantity === 0) {
                 lineItem.unaccountedQuantityInvalid = false;
             } else {
@@ -673,7 +683,7 @@
             var activeError = false;
 
             _.chain(displayLineItemsGroup).flatten()
-                .each(function(item) {
+                .each(function (item) {
                     if (!item.active) {
                         activeError = 'stockPhysicalInventoryDraft.submitInvalidActive';
                     } else if (vm.validateQuantity(item) || vm.validateUnaccountedQuantity(item)) {
@@ -684,25 +694,27 @@
         }
 
         function validateCyclic() {
-            let errorMessage = null;
-        
-            displayLineItemsGroup.forEach(function(group) {
-                if (vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName) {
-                    for (let item of group) {
-                        if (!item.active) {
-                            errorMessage = 'stockPhysicalInventoryDraft.submitInvalidActive';
-                            break; // Exit the loop early if an active error is found
-                        } else if (vm.validateQuantity(item) || vm.validateUnaccountedQuantity(item)) {
-                            errorMessage = 'stockPhysicalInventoryDraft.submitInvalid';
-                            break; // Exit the loop early if a quantity error is found
+            let errorMessage = false;
+
+            displayLineItemsGroup.forEach(function (group) {
+                vm.itemsSelectedForCyclic.forEach(function (selectedItem) {
+                    if (selectedItem[0].orderable.fullProductName === group[0].orderable.fullProductName) {
+                        for (let item of group) {
+                            if (!item.active) {
+                                errorMessage = 'stockPhysicalInventoryDraft.submitInvalidActive';
+                                break; // Exit the loop early if an active error is found
+                            } else if (vm.validateQuantity(item) || vm.validateUnaccountedQuantity(item)) {
+                                errorMessage = 'stockPhysicalInventoryDraft.submitInvalid';
+                                break; // Exit the loop early if a quantity error is found
+                            }
                         }
                     }
-                }
+                })
             });
-        
+
             return errorMessage; // Returns the first error found or null if none
         }
-        
+
         function onInit() {
             $state.current.label = messageService.get('stockPhysicalInventoryDraft.title', {
                 facilityCode: facility.code,
@@ -713,16 +725,16 @@
             vm.stateParams = $stateParams;
             $stateParams.program = undefined;
             $stateParams.facility = undefined;
-            
+
             //Prepare product for select for cyclic stock count
-            displayLineItemsGroup.forEach(function(group) {
+            displayLineItemsGroup.forEach(function (group) {
                 vm.productsForCyclic.push(group[0])
             })
-            vm.hasLot = _.any(draft.lineItems, function(item) {
+            vm.hasLot = _.any(draft.lineItems, function (item) {
                 return item.lot;
             });
-            
-            draft.lineItems.forEach(function(item) {
+
+            draft.lineItems.forEach(function (item) {
                 item.unaccountedQuantity =
                     stockReasonsCalculations.calculateUnaccounted(item, item.stockAdjustments);
             });
@@ -732,17 +744,17 @@
                 var orderableGroups = orderableGroupService.groupByOrderableId(draft.lineItems);
                 vm.showVVMStatusColumn = orderableGroupService.areOrderablesUseVvm(orderableGroups);
                 shouldDisplayHideButtonColumn(draft.lineItems);
-                $scope.$watchCollection(function() {
+                $scope.$watchCollection(function () {
                     return vm.pagedLineItems;
-                }, function(newList) {
+                }, function (newList) {
                     vm.groupedCategories = $filter('groupByProgramProductCategory')(newList, vm.program.id);
                 }, true);
-    
+
                 if (!$stateParams.noReload) {
                     vm.cacheDraft();
-                }  
-            }else{
-               // Block for Initiating Cyclic stock count.
+                }
+            } else {
+                // Block for Initiating Cyclic stock count.
             }
         }
 
@@ -758,7 +770,7 @@
          */
         function checkUnaccountedStockAdjustments(lineItem) {
             lineItem.unaccountedQuantity =
-              stockReasonsCalculations.calculateUnaccounted(lineItem, lineItem.stockAdjustments);
+                stockReasonsCalculations.calculateUnaccounted(lineItem, lineItem.stockAdjustments);
             draft.$modified = true;
             vm.cacheDraft();
         }
@@ -815,25 +827,40 @@
          * Check if column with hide buttons should be displayed.
          */
         function shouldDisplayHideButtonColumn(lineItems) {
-            lineItems.forEach(function(item) {
+            lineItems.forEach(function (item) {
                 if (item.active && item.stockOnHand === 0 && !item.$isNewItem) {
                     vm.showHideButtonColumn = true;
                 }
             });
         }
 
-        vm.validateOnPageChange();
+        /**
+         * @ngdoc method
+         * @methodOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
+         * @name selectProductForCyclic
+         *
+         * @description
+         * Populates array of line items for cyclic inventory, and groups them by category
+         */
+        function selectProductForCyclic() {
 
-        function selectProductForCyclic () {
-            displayLineItemsGroup.forEach(function(group) {
-                if(vm.selectedProductForCyclic.orderable.fullProductName === group[0].orderable.fullProductName){
-                    vm.groupedCategories = $filter('groupByProgramProductCategory')([group], vm.program.id);
+            const productId = vm.selectedProductForCyclic.orderable.id;
+            const productName = vm.selectedProductForCyclic.orderable.fullProductName;
+
+            displayLineItemsGroup.forEach(group => {
+                //Check if the selected product matches the display line item (group) by name
+                if (group[0].orderable.fullProductName === productName) {
+                    //Check if the selected product has not yet been added to the array of items being
+                    //selected for cyclic count 
+                    if (!vm.itemsSelectedForCyclic.some(value => value[0].orderable.id === productId)) {
+                        vm.itemsSelectedForCyclic.push(group); // If not, add the item to the array.
+                    }
                 }
-            })
-
-            //console.log("Draft LineItems");
-            //console.log(draft.lineItems);
+            });
+            //Group the selected items by Category
+            vm.groupedCategories = $filter('groupByProgramProductCategory')(vm.itemsSelectedForCyclic, vm.program.id);
         }
 
+        vm.validateOnPageChange();
     }
 })();

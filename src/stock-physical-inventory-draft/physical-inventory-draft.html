@@ -32,9 +32,11 @@
     </button>
     <div ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" class="pull-right add">
         <label for="productSelect">{{'Select Product'}}</label>
-        <select ng-change="vm.selectProductForCyclic()" id="productSelect" ng-model="vm.selectedProductForCyclic"
-            ng-options="product.orderable.fullProductName for product in vm.productsForCyclic">
+        <select  id="productSelect" ng-model="vm.selectedProductForCyclic"
+            ng-options="product.orderable.fullProductName for product in vm.productsForCyclic" ng-required="true">
         </select>
+        <!-- <button ng-if="vm.stateParams.physicalInventoryType === 'Major'" class="pull-right add" ng-click="vm.addProducts()"> -->
+            <button ng-click="vm.selectProductForCyclic()"> {{'stockPhysicalInventoryDraft.addProduct' | message}}  </button>
     </div>
 
     <saving-indicator class="draft-indicator" object="vm.dataChanged"/>
@@ -60,7 +62,7 @@
                 <th ng-if="vm.showHideButtonColumn" >{{'stockPhysicalInventoryDraft.actions' | message}}</th>
             </tr>
         </thead>
-        <tbody ng-repeat="(category, groupedLineItems) in vm.groupedCategories"  tbody-title="{{category}}">
+        <tbody ng-repeat="(category, groupedLineItems) in vm.groupedCategories track by category"  tbody-title="{{category}}">
            <tr ng-if="lineItems.length > 1" ng-repeat-start="lineItems in groupedLineItems">
                 <td>{{lineItems[0].orderable.productCode}}</td>
                 <td>{{lineItems[0].orderable | productName}}</td>
