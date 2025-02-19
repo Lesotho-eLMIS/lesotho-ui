@@ -20,7 +20,7 @@
                 <td>{{item.userNames}}</td>
                 <td>{{item.complaintDate | openlmisDate}}</td>
                 <td>{{item.occurredDate | openlmisDate }}</td>
-                <td><button type="button" class="primary"  ng-click="vm.viewComplaints(item.id)">{{'complaintFormView.view' | message}}</button></td>
+                <td><button type="button" class="primary"  ng-click="vm.getComplaints(item.id)">{{'complaintFormView.view' | message}}</button></td>
             </tr>
         </tbody>
     </table>

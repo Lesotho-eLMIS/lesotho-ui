@@ -28,15 +28,18 @@
         .module('complaint-form-view')
         .controller('complaintFormViewController', controller);
 
-    controller.$inject = ['facility', 'complaints'];
+    controller.$inject = ['facility', 'complaints', 'lotService'];
 
-    function controller(facility, complaints) {
+    function controller(facility, complaints, lotService) {
         var vm = this;
 
-        vm.viewComplaints = viewComplaints;
+        vm.getComplaints = getComplaints;
+        vm.getLots = getLots;
+        vm.getLineItemDetails = getLineItemDetails;
 
         vm.facility = facility;
         vm.complaints = complaints;
+        
 
         /**
          * @ngdoc property
@@ -67,9 +70,34 @@
          * @param {String} UUID of complaint record to get line items from
          * @return {Array} array of complaint line items
          */
-        function viewComplaints(itemId){
+        function getComplaints(itemId) {
             vm.lineItems = vm.complaints.find(item => itemId === item.id).lineItems;
-            console.log('Complaining Items', vm.lineItems);   
+            getLots(vm.lineItems);
+        }
+
+        function getLineItemDetails(lineItems) {
+            var promises = lineItems.map(lineItem => {
+                getLots(lineItem.lotId).then(response => {
+                    lineItem.lotCode = response.content[0].lotCode
+                });
+            });
+            Promise.all(promises).then(() => {
+            });
+        }
+
+        
+        function getLots(lineItems) {
+
+            var promises = lineItems.map(lineItem => {
+                var params = { id: lineItem.lotId };
+                lotService.query(params).then(response => {
+                    lineItem.lotCode = response.content[0].lotCode;
+                })
+            });
+            Promise.all(promises).then(() => {
+                lineItems;
+                console.log("New Line Items: ", lineItems);
+            });
         }
     
     }
