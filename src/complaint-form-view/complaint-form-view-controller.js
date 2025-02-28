@@ -28,14 +28,14 @@
         .module('complaint-form-view')
         .controller('complaintFormViewController', controller);
 
-    controller.$inject = ['facility', 'complaints', 'lotService'];
+    controller.$inject = ['facility', 'complaints', 'lotService', 'orderableService', 'facilityService'];
 
-    function controller(facility, complaints, lotService) {
+    function controller(facility, complaints, lotService, orderableService, facilityService) {
         var vm = this;
 
         vm.getComplaints = getComplaints;
-        vm.getLots = getLots;
         vm.getLineItemDetails = getLineItemDetails;
+        vm.getFacility = getFacility;
 
         vm.facility = facility;
         vm.complaints = complaints;
@@ -55,7 +55,10 @@
         vm.$onInit = onInit;
 
         function onInit() {
+           // console.log("Facility: ", vm.facility);
             vm.facilityName = vm.facility.name;
+            getFacility();
+            //console.log(vm.complaints);
         }
 
         
@@ -68,35 +71,55 @@
          * Gets the line items of a complaint form.
          *
          * @param {String} UUID of complaint record to get line items from
-         * @return {Array} array of complaint line items
          */
         function getComplaints(itemId) {
             vm.lineItems = vm.complaints.find(item => itemId === item.id).lineItems;
-            getLots(vm.lineItems);
+            getLineItemDetails(vm.lineItems);
         }
-
-        function getLineItemDetails(lineItems) {
-            var promises = lineItems.map(lineItem => {
-                getLots(lineItem.lotId).then(response => {
-                    lineItem.lotCode = response.content[0].lotCode
-                });
-            });
-            Promise.all(promises).then(() => {
-            });
-        }
-
         
-        function getLots(lineItems) {
-
+        /**
+         * @ngdoc method
+         * @methodOf complaint-form-view.controller:complaintFormViewController
+         * @name getLineItemDetails
+         *
+         * @description
+         * Resolves UUIDs of line item properties and adds the details to the line item.
+         *
+         * @param {Array} Array of line items to be resolved
+         */        
+        function getLineItemDetails(lineItems) {
+            
             var promises = lineItems.map(lineItem => {
                 var params = { id: lineItem.lotId };
-                lotService.query(params).then(response => {
+
+                //Resolve lot codes and expiration dates
+                lotService.query(params).then(response => {                    
                     lineItem.lotCode = response.content[0].lotCode;
-                })
+                    lineItem.expirationDate = response.content[0].expirationDate;
+                }).then(data => {
+                //Resolve product names
+                    orderableService.get(lineItem.orderableId).then(info =>{                        
+                        lineItem.productName = info.fullProductName;
+                    });
+                });
             });
             Promise.all(promises).then(() => {
                 lineItems;
                 console.log("New Line Items: ", lineItems);
+            });
+        }
+
+        function getFacility(){
+            var promises = vm.complaints.map(complaint =>{
+                //Resolve service area (Facility) name
+                facilityService.get(complaint.facilityId).then(response =>{
+                   // console.log(response);
+                    complaint.facilityName = response.name;
+                });
+            });
+            Promise.all(promises).then(() => {
+                vm.complaints;
+               // console.log("New Complaints: ",  vm.complaints);
             });
         }
     
