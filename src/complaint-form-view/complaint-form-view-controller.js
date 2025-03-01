@@ -28,9 +28,9 @@
         .module('complaint-form-view')
         .controller('complaintFormViewController', controller);
 
-    controller.$inject = ['facility', 'complaints', 'lotService', 'orderableService', 'facilityService'];
+    controller.$inject = ['facility', 'complaints', 'lotService', 'orderableService', 'facilityService', 'complaintFormViewModalService'];
 
-    function controller(facility, complaints, lotService, orderableService, facilityService) {
+    function controller(facility, complaints, lotService, orderableService, facilityService, complaintFormViewModalService) {
         var vm = this;
 
         vm.getComplaints = getComplaints;
@@ -75,6 +75,16 @@
         function getComplaints(itemId) {
             vm.lineItems = vm.complaints.find(item => itemId === item.id).lineItems;
             getLineItemDetails(vm.lineItems);
+
+            complaintFormViewModalService.show(/*itemTimestamp,program,facility,orderableGroups,hasPermissionToAddNewLot*/).then(function() {
+                $stateParams.noReload = true;
+                draft.$modified = true;
+                vm.cacheDraft();
+                //Only reload current state and avoid reloading parent state
+                $state.go($state.current.name, $stateParams, {
+                    reload: $state.current.name
+                });
+            }); 
         }
         
         /**

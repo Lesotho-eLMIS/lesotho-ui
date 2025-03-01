@@ -28,7 +28,7 @@
             isOffline: true,
             url: '/view',
             label: 'complaintFormView.label',
-            priority: 7,
+            priority: 3,
             showInNavigation: true,
             views: {
                 '@openlmis': {
