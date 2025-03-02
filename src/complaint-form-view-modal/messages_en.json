@@ -8,7 +8,7 @@
   "complaintFormViewModal.actions": "Actions",
   "complaintFormViewModal.sendComplaint": "Send",
   "complaintFormViewModal.edit": "Exit",
-  "complaintFormViewModal.title": "Complaint Form to NDSO",
+  "complaintFormViewModal.title": "Complaint Details",
   "complaintFormViewModal.cancel": "Cancel",
   "complaintFormViewModal.NDSOInvoiceNumber": "NDSO Invoice Number",
   "complaintFormViewModal.purchaseOrderNumber": "Purchase Order Number",

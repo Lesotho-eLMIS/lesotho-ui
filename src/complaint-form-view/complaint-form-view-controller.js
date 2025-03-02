@@ -58,7 +58,6 @@
            // console.log("Facility: ", vm.facility);
             vm.facilityName = vm.facility.name;
             getFacility();
-            //console.log(vm.complaints);
         }
 
         
@@ -76,7 +75,7 @@
             vm.lineItems = vm.complaints.find(item => itemId === item.id).lineItems;
             getLineItemDetails(vm.lineItems);
 
-            complaintFormViewModalService.show(/*itemTimestamp,program,facility,orderableGroups,hasPermissionToAddNewLot*/).then(function() {
+            complaintFormViewModalService.show(vm.lineItems).then(function() {
                 $stateParams.noReload = true;
                 draft.$modified = true;
                 vm.cacheDraft();
@@ -115,7 +114,7 @@
             });
             Promise.all(promises).then(() => {
                 lineItems;
-                console.log("New Line Items: ", lineItems);
+                //console.log("New Line Items: ", lineItems);
             });
         }
 

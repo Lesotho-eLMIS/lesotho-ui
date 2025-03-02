@@ -48,7 +48,7 @@
 
         var modalDialog = null;
 
-        function show() {
+        function show(lineItems) {
             modalDialog = openlmisModalService.createDialog(
                 {
                     controller: 'complaintFormViewModalController',
@@ -56,35 +56,11 @@
                     templateUrl: 'complaint-form-view-modal/complaint-form-view-modal.html',
                     show: true ,
                     resolve: {
-                        rejectionReasons: function(rejectionReasonService) {
-                                // Load rejection Reasons into the controller.
-                                return rejectionReasonService.getAll();
-                            
-                        },
-                        // itemTimestamp: function() {
-                        //     // Load rejection Reasons into the controller.
-                        //     return itemTimestamp;
+                        lineItems: function() {
+                            // Load lineItems into the controller.
+                            return lineItems;
                         
-                        // },
-                        // program: function() {
-                        //     console.log(program);
-                        //     return program;
-                        // },
-                        // facility: function() {
-                        //     console.log(facility);
-                        //     return facility;
-                        // },
-                        // orderableGroups: function() {
-                        //     console.log(orderableGroups);
-                        //     return orderableGroups;
-                        // },
-                        // hasPermissionToAddNewLot: function() {
-                        //     console.log(hasPermissionToAddNewLot);
-                        //     return hasPermissionToAddNewLot;
-                        // },
-                        // user: function(currentUserService) {
-                        //     return currentUserService.getUserInfo();
-                        // }
+                        },
                     }   
                 }
             ).promise.finally(function() {
