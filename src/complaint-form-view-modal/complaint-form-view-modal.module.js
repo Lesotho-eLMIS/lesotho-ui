@@ -16,7 +16,7 @@
 (function() {
     'use strict';
 
-    angular.module('complaint-form-modal', [
+    angular.module('complaint-form-view-modal', [
         'stock-adjustment-creation',
         'openlmis-date',
         'stock-adjustment',
@@ -32,7 +32,7 @@
         'stock-reasons-modal',
         'stock-edit-lot-modal',
         //'receiving-add-discrepancy-modal',
-        'complaint-form-modal',
+        'complaint-form-view-modal',
         'openlmis-currency'
     ]);
 })();

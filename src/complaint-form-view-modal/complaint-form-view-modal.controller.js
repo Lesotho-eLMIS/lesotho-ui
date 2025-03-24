@@ -14,25 +14,31 @@
  */
 
 (function() {
+
     'use strict';
 
-    angular.module('complaint-form-modal', [
-        'stock-adjustment-creation',
-        'openlmis-date',
-        'stock-adjustment',
-        'stock-confirm-discard',
-        'stock-orderable-group',
-        'stock-product-name',
-        'stock-constants',
-        'stock-valid-reason',
-        'referencedata-program',
-        'referencedata-facility',
-        'referencedata-lot',
-        'stock-unpack-kit',
-        'stock-reasons-modal',
-        'stock-edit-lot-modal',
-        //'receiving-add-discrepancy-modal',
-        'complaint-form-modal',
-        'openlmis-currency'
-    ]);
+    /**
+     * @ngdoc controller
+     * @name complaint-form-modal.controller:complaintFormViewModalController
+     *
+     * @description
+     * Manages Add Discrepancy Modal.
+     */
+    angular
+        .module('complaint-form-modal')
+        .controller('complaintFormViewModalController', controller);
+
+    controller.$inject = [ 'modalDeferred', '$scope', 'messageService', 'complaintService','confirmService', 'lineItems', 'complaintFormViewModalService'];
+
+    function controller( modalDeferred, $scope, messageService, complaintService, confirmService, lineItems, complaintFormViewModalService) {//
+        
+        var vm = this;
+        vm.$onInit = onInit;
+        vm.lineItems = lineItems;
+        $scope.showModal=false;
+        
+        function onInit() {
+            //
+        }
+    }
 })();
