@@ -21,9 +21,9 @@
         .module('complaint-form-view')
         .config(routes);
 
-    routes.$inject = ['$stateProvider'];
+    routes.$inject = ['$stateProvider', 'STOCKMANAGEMENT_RIGHTS'];
 
-    function routes($stateProvider) {
+    function routes($stateProvider, STOCKMANAGEMENT_RIGHTS) {
         $stateProvider.state('openlmis.stockmanagement.complaintFormView', {
             isOffline: true,
             url: '/view',
@@ -37,6 +37,7 @@
                     templateUrl: 'complaint-form-view/complaint-form-view.html',
                 }
             },
+            accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
 
             resolve: {
                 facility: function ($stateParams, facilityFactory) {
