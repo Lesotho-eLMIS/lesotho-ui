@@ -102,23 +102,25 @@
                 <td>
                   <!-- Nature of complaint -->
                   <select id="natureOfComplaint" name="natureOfComplaint" 
-                          ng-model="product.natureOfComplaint"  
-                          ng-options="natureOfComplaint for natureOfComplaint in vm.natureOfcomplaintOptions"
+                          ng-model="vm.natureOfComplaint"  
+                          ng-options="natureOfComplaint.name for natureOfComplaint in vm.natureOfcomplaintOptions"
+                          ng-change="vm.setComplaintReason()"
                           required>
                   </select>
                 </td>
                 <td>
                   <!-- complaint reason -->
                   <select id="complaintReason" name="complaintReason"
-                          ng-model="product.complaintReason"  
-                          ng-options="complaintReason for complaintReason in vm.complaintReasonOptions">
+                          ng-model="vm.complaintReason"  
+                          ng-options="complaintReason for complaintReason in vm.complaintReasons"
+                          ng-change="vm.setComplaintDetail()">
                   </select>
                 </td>
                 <td>
                   <!-- reason detail -->
                   <select id="complaintDetail" name="complaintDetail"
                           ng-model="product.complaintDetail"  
-                          ng-options="complaintDetail for complaintDetail in vm.complaintDetailOptions">>
+                          ng-options="complaintDetail for complaintDetail in vm.complaintDetails">>
                   </select>
                 </td>
                 <td><input type="text" style="width: 70px;" ng-model="product.comments"></td>

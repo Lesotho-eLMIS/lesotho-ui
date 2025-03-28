@@ -42,7 +42,6 @@
         vm.removeProductLineItem = removeProductLineItem;
         vm.onChangeComplainingFacility = onChangeComplainingFacility;
         vm.productsForComplaint = [];
-        //vm.discrepancies = rejectionReasons;
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
         vm.selectedDiscrepancy = undefined;
@@ -50,33 +49,20 @@
         vm.facilities = undefined;
         vm.homeFacilities = [facility];
         vm.complaint = {}
-        vm.natureOfcomplaintOptions = [
-            "Wrong product",
-            "Wrong pack size",
-            "Over supply",
-            "Expired products",
-            "Due to expire",
-            "Delivery queries",
-            "Shortage",
-            "Quality",
-            "Price hike",
-            "Other (specify)"
-          ];
-        vm.complaintReasonOptions = [
-            "Issued",
-            "Ordered",
-            "Requested"
-        ];
-        vm.complaintDetailOptions = [
-            "Ordered",
-            "Requested"
-        ];
+         
+        vm.natureOfcomplaintOptions = [{ id: 1, name: "Wrong product" }, { id: 2, name: "Wrong pack size" }, { id: 3, name: "Over supply" },
+            {id:4, name: "Expired products"}, {id:5, name: "Due to expire"}, {id:6, name: "Delivery queries"}, {id:7, name: "Shortage"},
+            {id:8, name: "Quality"}, {id:9, name:  "Price hike"}, {id:10, name: "Other (specify)"}];   
+        
+        vm.complaintReasonOptions = [{id:1, reasons:["Issued", "Ordered"]}, {id:2, reasons:["Requested", "Issued"]}, 
+                              {id:3, reasons: ["Duplication", "Wrong calculations when converting pack size/strength", "Uncommunicated back order"]},
+                              {id:6, reasons: ["Invoiced but not delivered", "Delivered but not invoiced"]},
+                              {id:7, reasons: ["Miscalculations", "Pack size / strength conversion"]},
+                              {id:8, reasons: ["Damage", "Physical Inspection"]}];
 
-        //vm.complaintFormFacility = undefined;
-
-        //vm.addDiscrepancy = addDiscrepancy;
-        //vm.removeDispency = removeDiscrepancy;
-
+        vm.complaintDetailsOptions = [{name: "Damage", details: ["Container", "Product"]}, 
+                                      {name: "Physical Inspection", details: ["Moulding", "Decolourization", "Crystallization", "Cold chain was not maintained",
+                                            "Friability", "Unlabelled products", "Foreign language"]}];
         $scope.showModal=false;
         
         function onInit() {
@@ -136,6 +122,16 @@
             );
             vm.selectedOrderableHasLots = vm.lots.length > 0;
         };
+
+        vm.setComplaintReason = function(){
+            var complaint = vm.natureOfComplaint;
+            vm.complaintReasons = vm.complaintReasonOptions.find(reason => reason.id === complaint.id)?.reasons || [];
+        }
+
+        vm.setComplaintDetail = function(){
+            var reason = vm.complaintReason;
+            vm.complaintDetails = vm.complaintDetailsOptions.find(detail => reason === detail.name)?.details || [];
+        }
 
         /**
          * @ngdoc method

@@ -265,7 +265,7 @@
 
         vm.isEmergencyRequisition = function(){
           
-            if(vm.requisition.emergency && vm.homeFacility.type.code === "dist_store" ){
+            if(vm.requisition.emergency && (vm.homeFacility.type.code === "dist_store" || vm.homeFacility.type.code === "central_store") ){
                 return true;
             }
             else{
@@ -275,7 +275,7 @@
 
         vm.inDHMTForApproval = function(){
             if(vm.requisition.hasOwnProperty('supervisoryNode')){
-                if(vm.homeFacility.type.code === "dist_store" && vm.requisition.status === "IN_APPROVAL"){
+                if((vm.homeFacility.type.code === "dist_store" || vm.homeFacility.type.code === "central_store") && vm.requisition.status === "IN_APPROVAL"){
                     return false;
                 }
                 else{
