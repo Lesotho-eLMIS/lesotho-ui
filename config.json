@@ -12,5 +12,7 @@
     "/openlmis-offline-ui",
     "/one-network-integration-ui"
   ],
+  "applicationLoadingMessage": "Starting Lesotho eLMIS",
+  "applicationTitle": "Lesotho eLMIS",
   "showRequisitionLessOrder": "true"
 }
