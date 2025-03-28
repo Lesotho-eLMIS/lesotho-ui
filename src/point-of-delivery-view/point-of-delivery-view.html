@@ -30,7 +30,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in vm.PODEvents">
+            <tr ng-repeat="item in vm.PODEvents | orderBy: '-receivingDate'">
                 <td>{{item.sourceName}}</td>
                 <td>{{item.referenceNumber}}</td>
                 <td>{{item.packingDate | openlmisDate}}</td>
