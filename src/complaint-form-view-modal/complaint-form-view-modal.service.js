@@ -28,22 +28,18 @@
         .module('complaint-form-view-modal')
         .service('complaintFormViewModalService', service);
 
-    service.$inject = ['openlmisModalService'];
+    service.$inject = ['openlmisModalService', 'STOCKMANAGEMENT_RIGHTS'];
 
-    function service(openlmisModalService) {
+    function service(openlmisModalService, STOCKMANAGEMENT_RIGHTS) {
         this.show = show;
 
         /**
          * @ngdoc method
-         * @methodOf pod-add-discrepancy-modal.podAddDiscrepancyModalService
+         * @methodOf complaint-form-view-modal.complaintFormViewModalService
          * @name show
          *
          * @description
-         * Shows modal that allows users to choose products.
-         *
-         * @param  {Array}   availableItems orderable + lot items that can be selected
-         * @param  {Array}   selectedItems  orderable + lot items that were added already
-         * @return {Promise}                resolved with selected products.
+         * Shows modal that allows users to create complaints
          */
 
         var modalDialog = null;
@@ -55,6 +51,7 @@
                     controllerAs: 'vm',
                     templateUrl: 'complaint-form-view-modal/complaint-form-view-modal.html',
                     show: true ,
+                    accessRights: [STOCKMANAGEMENT_RIGHTS.STOCK_ADJUST],
                     resolve: {
                         lineItems: function() {
                             // Load lineItems into the controller.
