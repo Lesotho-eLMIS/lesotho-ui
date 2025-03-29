@@ -41,6 +41,7 @@
         vm.addProductToComplaintForm = addProductToComplaintForm;
         vm.removeProductLineItem = removeProductLineItem;
         vm.onChangeComplainingFacility = onChangeComplainingFacility;
+        vm.buildPayload = buildPayload;
         vm.productsForComplaint = [];
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
@@ -97,7 +98,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+         * @methodOf complaint-form-modal.controller:complaintFormModalController
          * @name orderableSelectionChanged
          *
          * @description
@@ -123,19 +124,38 @@
             vm.selectedOrderableHasLots = vm.lots.length > 0;
         };
 
-        vm.setComplaintReason = function(){
-            var complaint = vm.natureOfComplaint;
-            vm.complaintReasons = vm.complaintReasonOptions.find(reason => reason.id === complaint.id)?.reasons || [];
-        }
+        vm.setComplaintReason = function (product) {
+            console.log(product);
+            //set the nature of complaint
+            if (typeof product.natureOfComplaintName === "object") {
+                product.natureOfComplaint = product.natureOfComplaintName.name;
+            }
 
-        vm.setComplaintDetail = function(){
-            var reason = vm.complaintReason;
-            vm.complaintDetails = vm.complaintDetailsOptions.find(detail => reason === detail.name)?.details || [];
-        }
+            // Set complaint reasons for the selected nature of complaint
+            product.complaintReasons = vm.complaintReasonOptions.find(
+                reason => reason.id === product.natureOfComplaintName?.id
+            )?.reasons || [];
+
+            // Reset dependent dropdowns when nature of complaint changes
+            product.complaintReason = null;
+            product.reasonDetail = null;
+            product.reasonDetailOptions = [];
+        };
+
+        vm.setComplaintDetail = function (product) {
+            console.log(product);
+            // Set complaint details for the selected complaint reason
+            product.reasonDetailOptions = vm.complaintDetailsOptions.find(
+                detail => detail.name === product.complaintReason
+            )?.details || [];
+
+            // Reset complaint detail when complaint reason changes
+            product.reasonDetail = null;
+        };
 
         /**
          * @ngdoc method
-         * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+         * @methodOf complaint-form-modal.controller:complaintFormModalController
          * @name lotChanged
          *
          * @description
@@ -150,8 +170,7 @@
         }
 
         function onChangeComplainingFacility() {
-            vm.complaint.facilityId = vm.complaintFormFacility.id
-            console.log(vm.complaint)
+            vm.complaint.facilityId = vm.complaintFormFacility.id;
         }
 
         function initiateNewLotObject() {
@@ -161,7 +180,7 @@
         }
 
         function addProductToComplaintForm() {
-            vm.productsForComplaint.push({
+            vm.productsForComplaint.unshift({
                     'name': vm.selectedOrderableGroup[0].orderable.fullProductName,
                     'batch': vm.selectedLot.lotCode,
                     'expiary': vm.selectedLot.expirationDate,
@@ -179,35 +198,59 @@
             vm.productsForComplaint.splice(index, 1);
         }
 
-    
-        function confirm (){
-            vm.complaint.lineItems = vm.productsForComplaint; // Add complaint payload lineitems
-            confirmService
-            .confirm("Are you sure you want to send complaint?", "Send")
+ 
+         
+        function confirm() {
+            var lineItems = vm.productsForComplaint;
+            confirmService.confirm("Are you sure you want to send complaint?", "Send")
             .then(function () {
-               complaintService.saveComplaint(vm.complaint).$promise
-              .then(function(response) {
-                // Success callback
-                let complaintId = "";
-                for (let i = 0; i < Object.keys(response).length-2; i++) {
-                    complaintId += response[i];
-                }
-                notificationService.success('Complaint Saved Sucessfully.');
-                complaintService.sendComplaint(complaintId, vm.complaint).$promise
-                    .then(function(sendReponse) {
+
+                vm.complaint.lineItems = buildPayload(lineItems);
+
+                complaintService.saveComplaint(vm.complaint).$promise
+                .then(function (response) {
+                    //Success callback
+                    let complaintId = "";
+                    for (let i = 0; i < Object.keys(response).length - 2; i++) {
+                            complaintId += response[i];
+                    }
+                    notificationService.success('Complaint Saved Sucessfully.');
+                    complaintService.sendComplaint(complaintId, vm.complaint).$promise
+                    .then(function (sendReponse) {
                         notificationService.success('Complaint Sent Sucessfully.');
                     });
-                
-                modalDeferred.resolve();
-                }
-              )
-              .catch(function(error) {
-                  // Error callback
-                  notificationService.error('Failed to submit.');
-                  console.error('Error occurred:', error);
-              
-              });
+                    modalDeferred.resolve(); 
+                })
+                .catch(function (saveError) {
+                    // Handle error in saving complaint
+                    notificationService.error('Failed to save complaint.');
+                    modalDeferred.reject(); 
+                });
+            })
+            .catch(function () {
+                // Handle user cancellation from the confirmation modal
+                console.log("Complaint submission was cancelled.");
             });
+        }
+
+        function buildPayload(products) {
+            //Check that the complaint line items are not empty
+            if (!Array.isArray(products) || products.length === 0) {
+                console.error("Error: products is empty or undefined", products);
+                return [];
+            }
+            //Build the complaint form line items payload
+            var complaintLineItems = products.map(product => ({
+                orderableId: product.orderable?.id, 
+                lotId: product.lot?.id,  
+                quantityAffected: product.quantityAffected,
+                quantityReturned: product.quantityReturned,
+                natureOfComplaint: product.natureOfComplaint,  
+                complaintReason: product.complaintReason || null,
+                reasonDetails: product.reasonDetails || null,
+                comments: product.comments || null  
+            }));
+            return complaintLineItems;
         }
     }
 })();

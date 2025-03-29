@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in vm.complaints">
+            <tr ng-repeat="item in vm.complaints | orderBy: '-occurredDate'">
                 <td>{{item.facilityName}}</td>
                 <td>{{item.userNames}}</td>
                 <td>{{item.purchaseOrderNumber}}</td>
