@@ -21,23 +21,19 @@
             <select id="receivingFacility" ng-model="vm.complaintFormFacility"
               ng-options="facility.name for facility in vm.homeFacilities" ng-change="vm.onChangeComplainingFacility()"
               required></select>
-            <!-- <select id="receivingFacility" ng-model="vm.homeFacility" ng-required="!vm.supplyingFacility"
-              ng-options="facility.name for facility in vm.facility"></select> -->
 
           </fieldset>
 
           <fieldset class="form-group">
             <label for="purchaseOrderNumber">{{'complaintFormModal.purchaseOrderNumber' | message}}</label>
-            <input class="form-control" type="text" style="width: 150px;" ng-model="vm.complaint.purchaseOrderNumber">
+            <input class="form-control" type="text" style="width: 150px;" ng-model="vm.complaint.purchaseOrderNumber"
+            required>
           </fieldset>
 
           <fieldset class="form-group">
             <label for="ndsoInvoiceNumber">{{'complaintFormModal.NDSOInvoiceNumber' | message}}</label>
-            <input class="form-control" type="text" style="width: 150px;" ng-model="vm.complaint.invoiceNumber">
-            <p> </p>
-            <p> </p>
-            <p> </p>
-            <p> </p>
+            <input class="form-control" type="text" style="width: 150px;" ng-model="vm.complaint.invoiceNumber"
+            required>
           </fieldset>
 
         </form>
@@ -76,9 +72,7 @@
           </section>
 
           <table>
-            <!-- <caption ng-if="!vm.patientsData || vm.patientsData.length === 0">
-                {{'complaintFormModal.patients.error' | message}}
-            </caption> -->
+            
             <thead>
               <tr>
                 <th>{{'complaintFormModal.productName' | message}}</th>
@@ -99,10 +93,13 @@
                 <td>{{product.lot.lotCode}}</td>
                 <td><input type="date" style="width: 90px;" ng-model="product.lot.expirationDate" ng-disabled="true">
                 </td>
-                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;"
-                    ng-model="product.quantityAffected"></td>
-                <td><input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;"
-                    ng-model="product.quantityReturned"></td>
+                <td>
+                  <input type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;"
+                    ng-model="product.quantityAffected" ng-change = 'vm.validateQuantities(product)' required></td>
+                <td openlmis-invalid="{{product.$errors.quantityInvalid}}" class="digit-cell">
+                  <input class="form-control" type="number" min="0" step="1" oninput="validity.valid||(value='');" style="width: 10px;"
+                    ng-model="product.quantityReturned" ng-class="{'error': product.$errors.prepackQuantityInvalid}" 
+                    ng-blur="vm.validateQuantities(product)" required></td>
                 <td>
                   <!-- Nature of complaint -->
                   <select id="natureOfComplaint" name="natureOfComplaint" ng-model="product.natureOfComplaintName"

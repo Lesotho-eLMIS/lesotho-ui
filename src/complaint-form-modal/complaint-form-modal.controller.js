@@ -28,11 +28,11 @@
         .module('complaint-form-modal')
         .controller('complaintFormModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService', 'notificationService', 
-        'orderableGroups', 'program', 'facility', 'programService', 'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService','user', 'complaintService','confirmService'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'notificationService', 'orderableGroups', 'program', 'facility', 
+            'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService','user', 'complaintService','confirmService'];
 
-    function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService, 
-                        notificationService, orderableGroups, program, facility, programService, orderableGroupService, hasPermissionToAddNewLot, messageService, user, complaintService, confirmService) {//
+    function controller( modalDeferred, $scope, rejectionReasons, notificationService, orderableGroups, program, facility, 
+        orderableGroupService, hasPermissionToAddNewLot, messageService, user, complaintService, confirmService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -198,7 +198,23 @@
             vm.productsForComplaint.splice(index, 1);
         }
 
- 
+        /**
+         * @ngdoc method
+         * @methodOf complaint-form-modal.controller:complaintFormModalController
+         * @name validateQuantities
+         *
+         * @description
+         * Checks that returned quantity does not exceed affected quantity.
+         */
+        vm.validateQuantities = function (product) {
+            if (!product.$errors) product.$errors = {};          
+            if (product.quantityReturned > product.quantityAffected) {
+                product.$errors.quantityInvalid = messageService.get('complaintFormModal.quantityInvalid');
+            } else {
+                delete product.$errors.quantityInvalid;
+            }
+            return product;
+        };
          
         function confirm() {
             var lineItems = vm.productsForComplaint;
