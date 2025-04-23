@@ -67,19 +67,15 @@
                         
                         },
                         program: function() {
-                            console.log(program);
                             return program;
                         },
                         facility: function() {
-                            console.log(facility);
                             return facility;
                         },
                         orderableGroups: function() {
-                            console.log(orderableGroups);
                             return orderableGroups;
                         },
                         hasPermissionToAddNewLot: function() {
-                            console.log(hasPermissionToAddNewLot);
                             return hasPermissionToAddNewLot;
                         },
                         user: function(currentUserService) {

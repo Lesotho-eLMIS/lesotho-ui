@@ -28,11 +28,11 @@
         .module('complaint-form-modal')
         .controller('complaintFormModalController', controller);
 
-    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'itemTimestamp', 'stockAdjustmentCreationService', 'notificationService', 
-        'orderableGroups', 'program', 'facility', 'programService', 'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService','user', 'complaintService','confirmService'];
+    controller.$inject = [ 'modalDeferred', '$scope', 'rejectionReasons', 'notificationService', 'orderableGroups', 'program', 'facility', 
+            'orderableGroupService', 'hasPermissionToAddNewLot', 'messageService','user', 'complaintService','confirmService'];
 
-    function controller( modalDeferred, $scope, rejectionReasons, itemTimestamp, stockAdjustmentCreationService, 
-                        notificationService, orderableGroups, program, facility, programService, orderableGroupService, hasPermissionToAddNewLot, messageService, user, complaintService, confirmService) {//
+    function controller( modalDeferred, $scope, rejectionReasons, notificationService, orderableGroups, program, facility, 
+        orderableGroupService, hasPermissionToAddNewLot, messageService, user, complaintService, confirmService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -41,8 +41,8 @@
         vm.addProductToComplaintForm = addProductToComplaintForm;
         vm.removeProductLineItem = removeProductLineItem;
         vm.onChangeComplainingFacility = onChangeComplainingFacility;
+        vm.buildPayload = buildPayload;
         vm.productsForComplaint = [];
-        //vm.discrepancies = rejectionReasons;
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
         vm.selectedDiscrepancy = undefined;
@@ -50,33 +50,20 @@
         vm.facilities = undefined;
         vm.homeFacilities = [facility];
         vm.complaint = {}
-        vm.natureOfcomplaintOptions = [
-            "Wrong product",
-            "Wrong pack size",
-            "Over supply",
-            "Expired products",
-            "Due to expire",
-            "Delivery queries",
-            "Shortage",
-            "Quality",
-            "Price hike",
-            "Other (specify)"
-          ];
-        vm.complaintReasonOptions = [
-            "Issued",
-            "Ordered",
-            "Requested"
-        ];
-        vm.complaintDetailOptions = [
-            "Ordered",
-            "Requested"
-        ];
+         
+        vm.natureOfcomplaintOptions = [{ id: 1, name: "Wrong product" }, { id: 2, name: "Wrong pack size" }, { id: 3, name: "Over supply" },
+            {id:4, name: "Expired products"}, {id:5, name: "Due to expire"}, {id:6, name: "Delivery queries"}, {id:7, name: "Shortage"},
+            {id:8, name: "Quality"}, {id:9, name:  "Price hike"}, {id:10, name: "Other (specify)"}];   
+        
+        vm.complaintReasonOptions = [{id:1, reasons:["Issued", "Ordered"]}, {id:2, reasons:["Requested", "Issued"]}, 
+                              {id:3, reasons: ["Duplication", "Wrong calculations when converting pack size/strength", "Uncommunicated back order"]},
+                              {id:6, reasons: ["Invoiced but not delivered", "Delivered but not invoiced"]},
+                              {id:7, reasons: ["Miscalculations", "Pack size / strength conversion"]},
+                              {id:8, reasons: ["Damage", "Physical Inspection"]}];
 
-        //vm.complaintFormFacility = undefined;
-
-        //vm.addDiscrepancy = addDiscrepancy;
-        //vm.removeDispency = removeDiscrepancy;
-
+        vm.complaintDetailsOptions = [{name: "Damage", details: ["Container", "Product"]}, 
+                                      {name: "Physical Inspection", details: ["Moulding", "Decolourization", "Crystallization", "Cold chain was not maintained",
+                                            "Friability", "Unlabelled products", "Foreign language"]}];
         $scope.showModal=false;
         
         function onInit() {
@@ -111,7 +98,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+         * @methodOf complaint-form-modal.controller:complaintFormModalController
          * @name orderableSelectionChanged
          *
          * @description
@@ -137,9 +124,38 @@
             vm.selectedOrderableHasLots = vm.lots.length > 0;
         };
 
+        vm.setComplaintReason = function (product) {
+            console.log(product);
+            //set the nature of complaint
+            if (typeof product.natureOfComplaintName === "object") {
+                product.natureOfComplaint = product.natureOfComplaintName.name;
+            }
+
+            // Set complaint reasons for the selected nature of complaint
+            product.complaintReasons = vm.complaintReasonOptions.find(
+                reason => reason.id === product.natureOfComplaintName?.id
+            )?.reasons || [];
+
+            // Reset dependent dropdowns when nature of complaint changes
+            product.complaintReason = null;
+            product.reasonDetail = null;
+            product.reasonDetailOptions = [];
+        };
+
+        vm.setComplaintDetail = function (product) {
+            console.log(product);
+            // Set complaint details for the selected complaint reason
+            product.reasonDetailOptions = vm.complaintDetailsOptions.find(
+                detail => detail.name === product.complaintReason
+            )?.details || [];
+
+            // Reset complaint detail when complaint reason changes
+            product.reasonDetail = null;
+        };
+
         /**
          * @ngdoc method
-         * @methodOf stock-adjustment-creation.controller:StockAdjustmentCreationController
+         * @methodOf complaint-form-modal.controller:complaintFormModalController
          * @name lotChanged
          *
          * @description
@@ -154,8 +170,7 @@
         }
 
         function onChangeComplainingFacility() {
-            vm.complaint.facilityId = vm.complaintFormFacility.id
-            console.log(vm.complaint)
+            vm.complaint.facilityId = vm.complaintFormFacility.id;
         }
 
         function initiateNewLotObject() {
@@ -165,7 +180,7 @@
         }
 
         function addProductToComplaintForm() {
-            vm.productsForComplaint.push({
+            vm.productsForComplaint.unshift({
                     'name': vm.selectedOrderableGroup[0].orderable.fullProductName,
                     'batch': vm.selectedLot.lotCode,
                     'expiary': vm.selectedLot.expirationDate,
@@ -183,35 +198,75 @@
             vm.productsForComplaint.splice(index, 1);
         }
 
-    
-        function confirm (){
-            vm.complaint.lineItems = vm.productsForComplaint; // Add complaint payload lineitems
-            confirmService
-            .confirm("Are you sure you want to send complaint?", "Send")
+        /**
+         * @ngdoc method
+         * @methodOf complaint-form-modal.controller:complaintFormModalController
+         * @name validateQuantities
+         *
+         * @description
+         * Checks that returned quantity does not exceed affected quantity.
+         */
+        vm.validateQuantities = function (product) {
+            if (!product.$errors) product.$errors = {};          
+            if (product.quantityReturned > product.quantityAffected) {
+                product.$errors.quantityInvalid = messageService.get('complaintFormModal.quantityInvalid');
+            } else {
+                delete product.$errors.quantityInvalid;
+            }
+            return product;
+        };
+         
+        function confirm() {
+            var lineItems = vm.productsForComplaint;
+            confirmService.confirm("Are you sure you want to send complaint?", "Send")
             .then(function () {
-               complaintService.saveComplaint(vm.complaint).$promise
-              .then(function(response) {
-                // Success callback
-                let complaintId = "";
-                for (let i = 0; i < Object.keys(response).length-2; i++) {
-                    complaintId += response[i];
-                }
-                notificationService.success('Complaint Saved Sucessfully.');
-                complaintService.sendComplaint(complaintId, vm.complaint).$promise
-                    .then(function(sendReponse) {
+
+                vm.complaint.lineItems = buildPayload(lineItems);
+
+                complaintService.saveComplaint(vm.complaint).$promise
+                .then(function (response) {
+                    //Success callback
+                    let complaintId = "";
+                    for (let i = 0; i < Object.keys(response).length - 2; i++) {
+                            complaintId += response[i];
+                    }
+                    notificationService.success('Complaint Saved Sucessfully.');
+                    complaintService.sendComplaint(complaintId, vm.complaint).$promise
+                    .then(function (sendReponse) {
                         notificationService.success('Complaint Sent Sucessfully.');
                     });
-                
-                modalDeferred.resolve();
-                }
-              )
-              .catch(function(error) {
-                  // Error callback
-                  notificationService.error('Failed to submit.');
-                  console.error('Error occurred:', error);
-              
-              });
+                    modalDeferred.resolve(); 
+                })
+                .catch(function (saveError) {
+                    // Handle error in saving complaint
+                    notificationService.error('Failed to save complaint.');
+                    modalDeferred.reject(); 
+                });
+            })
+            .catch(function () {
+                // Handle user cancellation from the confirmation modal
+                console.log("Complaint submission was cancelled.");
             });
+        }
+
+        function buildPayload(products) {
+            //Check that the complaint line items are not empty
+            if (!Array.isArray(products) || products.length === 0) {
+                console.error("Error: products is empty or undefined", products);
+                return [];
+            }
+            //Build the complaint form line items payload
+            var complaintLineItems = products.map(product => ({
+                orderableId: product.orderable?.id, 
+                lotId: product.lot?.id,  
+                quantityAffected: product.quantityAffected,
+                quantityReturned: product.quantityReturned,
+                natureOfComplaint: product.natureOfComplaint,  
+                complaintReason: product.complaintReason || null,
+                reasonDetails: product.reasonDetails || null,
+                comments: product.comments || null  
+            }));
+            return complaintLineItems;
         }
     }
 })();

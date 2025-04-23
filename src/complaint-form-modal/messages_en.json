@@ -20,5 +20,6 @@
   "complaintFormModal.complaintReason": "Complaint Reason",
   "complaintFormModal.complaintDetail": "Complaint Detail",
   "complaintFormModal.complainComment": "Complain Comment",
-  "complaintFormModal.add": "Add"
+  "complaintFormModal.add": "Add",
+  "complaintFormModal.quantityInvalid": "Quantity Returned cannot be greater than Quantity Affected"
 }

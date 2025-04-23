@@ -19,7 +19,7 @@
 
             
           </div>
-          <div ng-repeat="systemNotification in vm.userNotifications">
+          <div ng-repeat="systemNotification in vm.userNotifications | orderBy: '-createdDate'">
             <openlmis-notification
                     message-title="systemNotification.messages.email.subject" 
                     user-first-name="systemNotification.author.firstName"
