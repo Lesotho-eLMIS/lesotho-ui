@@ -64,7 +64,6 @@
     'rejectionReasonService',
     'receivingAddDiscrepancyModalService',
     'complaintFormModalService',
-    //'prepackingService',
     'pointOfDeliveryService',
     'suppliers',
     'ReferenceNumbers'
@@ -107,7 +106,6 @@
     rejectionReasonService,
     receivingAddDiscrepancyModalService,
     complaintFormModalService,
-    //prepackingService,
     pointOfDeliveryService, 
     suppliers,
     ReferenceNumbers
@@ -126,7 +124,6 @@
     vm.rejectionReasons = []; // To Store Shipment rejection Reasons
     vm.FromSupplier = false; 
     vm.hideColumns=function(){
-      //vm.FromSupplier = true;
      vm.addedLineItems[0].assignment.name
       vm.UPrice=$scope.lineItem.assignment.name;
     };
@@ -435,9 +432,6 @@
           isEmpty(lineItem.totalCartonNumber) || lineItem.individualCartonNumber === 0 ) {
         
           lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
-        // }else if(!lineItem.hasOwnProperty('individualCartonNumber') || lineItem.individualCartonNumber === 0 ){
-        
-        //   lineItem.$errors.cartonsInvalid = messageService.get('stockAdjustmentCreation.cartonsInvalidError');
         }else if(lineItem.individualCartonNumber > 0 && lineItem.individualCartonNumber <= lineItem.totalCartonNumber){
         
           lineItem.$errors.cartonsInvalid = false;
@@ -447,14 +441,6 @@
       }
       return lineItem;
     };
-
-    //-----LESOTHO ELMIS-----
-
-    // vm.validatePrepackQuantity = function(lineItem){
-    //   return prepackingService.validatePrepackQuantity(lineItem, vm.addedLineItems);
-    // };
-
-    //-----LESOTHO ELMIS-----
 
     /**
      * @ngdoc method
@@ -574,57 +560,7 @@
      */
     vm.submit = function () {
 
-      // console.log(vm.addedLineItems);
-      
-      // if(adjustmentType.state == "prepack"){
-      //   // Handle prepacking logic
-      //   vm.addedLineItems.forEach((lineItem) => {
-      //     lineItem.orderableId = lineItem.orderable.id;
-      //    // containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
-      //     //lineItem.lotId  : lineItem.lot ? lineItem.lot.id : null;
-      //     // if(lineItem.lot !== null){
-      //     //   lineItem.lotId = lineItem.lot.id;
-      //     // }
-      //     lineItem.lotId = lineItem.lot !== null ? lineItem.lot.id : null;
-      //     // else lineItem.lotId = null;
-      //   });
-      //   var prepackingEvent = {
-      //     facilityId: facility.id,
-      //     programId: program.id,
-      //    // supervisoryNodeId: "953c7ccf-7a02-4161-b4f6-abb796fa5e3b", //To be made not compulsory by BE
-      //     prepackerUserId: user.user_id,
-      //     // status: "Initiated",
-      //     comments: "", //To be used when there is need
-      //     lineItems:vm.addedLineItems
-      //   };
-      //   var confirmMessage = messageService.get(vm.key('confirmInfo'), {
-      //       username: user.username,
-      //       number: vm.addedLineItems.length,
-      //   });
-      //   console.log(prepackingEvent);
-      //   confirmService
-      //       .confirm(confirmMessage, vm.key('confirm'))
-      //       .then(function () {
-      //         prepackingService.savePrepacks(prepackingEvent).$promise
-      //         .then(function(response) {
-      //           // Success callback
-      //           vm.addedLineItems =[]; // clear added lineItems
-      //           notificationService.success('Prepacking Event Saved Sucessfully.');
-      //           $state.go('openlmis.stockmanagement.prepack');
-      //           }
-      //         )
-      //         .catch(function(error) {
-      //             // Error callback
-      //             notificationService.error('Failed to submit.');
-      //             console.error('Error occurred:', error);
-              
-      //         });
-      //       });
-
-       
-      // }else{
-
-          $scope.$broadcast('openlmis-form-submit');
+      $scope.$broadcast('openlmis-form-submit');
           if (validateAllAddedItems()) {
             var confirmMessage = messageService.get(vm.key('confirmInfo'), {
               username: user.username,
@@ -638,8 +574,6 @@
             reorderItems();
             alertService.error('stockAdjustmentCreation.submitInvalid');
           }
-
-      //}
       
     };
 
@@ -935,12 +869,10 @@
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
-      //console.log('Ref >> ',ReferenceNumbers[0].referenceNumber);
       if (adjustmentType.state === 'receive'){
         vm.references = populateReferenceNumbers(ReferenceNumbers);
       }
-     // filterFacilities();
-     
+
       //Getting Rejection Reasons
       var rej = rejectionReasonService.getAll();
       rej.then(function(reasons) {             
@@ -998,11 +930,11 @@
     }
 
     function populateReferenceNumbers(pods) {
-      //console.log('------- ',pods);
+      
       var referencesArray = [];
       for (var i = 0; i < pods.length; i++) {
         referencesArray.push(pods[i].referenceNumber);
-        //console.log(pods[i].referenceNumber);
+        
       }
       return referencesArray;
     }

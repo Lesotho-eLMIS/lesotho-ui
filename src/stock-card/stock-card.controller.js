@@ -103,7 +103,6 @@
                     freeText: lineItem.reasonFreeText
                 });
             }
-            //console.log("Reason Name ->"+lineItem.reason.name);
             return lineItem.reason.isPhysicalReason()
                 ? messageService.get('stockCard.physicalInventory')
                 : lineItem.reason.name;

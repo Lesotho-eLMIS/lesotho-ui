@@ -112,7 +112,6 @@
         };
 
         vm.onChangePhysicalInventoryType = function(){
-            //Major = 0, Cyclic = 1
             vm.drafts = (vm.physicalInventoryType === "Major") ? drafts[0] : drafts[1];
         }
 

@@ -115,7 +115,6 @@
             });
             return itemDiscrepancies;
         }
-    //----------------------------------------------
 
         function submitAdjustments(programId, facilityId, lineItems, adjustmentType) {
             var event = {

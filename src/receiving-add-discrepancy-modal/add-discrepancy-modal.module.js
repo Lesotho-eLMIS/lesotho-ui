@@ -18,7 +18,6 @@
 
     angular.module('receiving-add-discrepancy-modal', [
         'openlmis-modal',
-        //'point-of-delivery-manage',
         'stock-adjustment-creation'
     ]);
 })();

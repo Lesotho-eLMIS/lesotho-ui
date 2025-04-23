@@ -35,7 +35,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf pod-add-discrepancy-modal.podAddDiscrepancyModalService
+         * @methodOf complaint-form-modal.complaintFormModalService
          * @name show
          *
          * @description

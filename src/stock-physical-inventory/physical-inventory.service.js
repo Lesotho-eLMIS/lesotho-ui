@@ -163,10 +163,6 @@
                         getLot(item, hasLot),
                         item.lot ? openlmisDateFilter(item.lot.expirationDate) : ''
                     ];
-                    // return _.any(searchableFields, function(field) {
-                    //     return field.toLowerCase().contains(keyword.toLowerCase());
-                    // });
-                    //some method checks if each field is truthy (i.e., not undefined or null) before calling toLowerCase() on it
                     return searchableFields.some(field => field && field.toLowerCase().includes(keyword));
                 });
             }

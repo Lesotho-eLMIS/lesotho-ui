@@ -50,7 +50,6 @@
                         return physicalInventoryDraftCacheService.getDraft($stateParams.id);
                     }
                     var currentDraft = getDraftFromParent(drafts, $stateParams);
-                    //console.log(draft);
                     return physicalInventoryFactory.getPhysicalInventory(currentDraft);
                 },
                 program: function($stateParams, programService, draft) {
@@ -116,7 +115,6 @@
         });
 
         function getDraftFromParent(drafts, $stateParams) {
-            //Major = 0, Cyclic = 1
             var index = ($stateParams.physicalInventoryType === "Major") ? 0 : 1 ;
             return drafts[index].reduce(function(draft, physicalInventory) {
                 if (physicalInventory.id === $stateParams.id) {
