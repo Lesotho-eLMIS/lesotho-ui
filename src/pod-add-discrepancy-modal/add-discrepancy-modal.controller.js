@@ -34,12 +34,10 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        //vm.discrepancies = rejectionReasons;
         vm.currentShipmentType = shipmentType; //Storing Selected ShipmentType
         vm.discrepancyOptions = [];
         vm.discrepancies = []; //undefined;
         vm.selectedDiscrepancy = undefined;
-        //vm.selectedDiscrepancies = []; // To hold list of selected discrepancy names
         vm.addDiscrepancy = addDiscrepency;
         vm.removeDispency = removeDiscrepancy;
         vm.confirm = confirm;
@@ -55,7 +53,6 @@
          */        
         function onInit() {
            vm.discrepancies = populateModalWithCurrentDiscrepancies(discrepancies);
-           console.log(vm.discrepancies);
            vm.selectedDiscrepancy = [];
 
            vm.rejectionReasons = rejectionReasons.content;

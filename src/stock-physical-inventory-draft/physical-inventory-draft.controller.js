@@ -524,10 +524,8 @@
             vm.isSubmitted = true;
             var error = undefined;//(vm.physicalInventoryType === "Major") ? validate() : validateCyclic();
             if (vm.stateParams.physicalInventoryType === "Cyclic") {
-                console.log("Cyclic");
                 error = validateCyclic();
             } else if (vm.stateParams.physicalInventoryType === "Major") {
-                console.log("Major");
                 error = validate();
             }
 

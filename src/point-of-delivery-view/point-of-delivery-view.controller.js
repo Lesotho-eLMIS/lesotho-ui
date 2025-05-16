@@ -74,57 +74,6 @@
             }
         };
 
-        /**
-       * @ngdoc method
-       * @methodOf point-of-delivery-view.controller:pointOfDeliveryViewController
-       * @name getSupplyingFacilityName
-       *
-       * @description
-       * Retrieves the name of the Supplying Facility
-       */
-        // vm.getSupplyingFacilityName = async function (supplyingFacilityId) {
-        //     try {
-        //         var facilityObject = await facilityService.get(supplyingFacilityId);
-        //         return facilityObject.name;
-        //     } catch (error) {
-        //         // Handle any errors that may occur during the query
-        //         console.error("Error:", error);
-        //         return ''; // Or handle the error appropriately
-        //     }
-        // };
-
-        // vm.addSupplyingFacility = async function (eventPODs) {
-        //     try {
-        //         // Create an array of Promises
-        //         const promises = Object.keys(eventPODs).map(async key => {
-        //             const singlePODEvent = eventPODs[key];
-        //             // Check whether SourceId has a value before calling
-        //             if (singlePODEvent.sourceId) {
-        //                 try {
-        //                     const resolvedObject = await pointOfDeliveryService.getSupplyingFacilityName(singlePODEvent.sourceId);
-        //                     console.log(resolvedObject);
-        //                     singlePODEvent.sourceName = resolvedObject;
-        //                 } catch (error) {
-        //                     // Handle errors
-        //                     console.error('Error in controller:', error);
-        //                 }
-        //             }
-        //             return singlePODEvent;
-        //         });
-
-        //         // Await all Promises to resolve
-        //         const eventPODsWithSupplierNames = await Promise.all(promises);
-        //         return eventPODsWithSupplierNames.reduce((acc, curr, index) => {
-        //             acc[index] = curr;
-        //             return acc;
-        //         }, {});
-        //     } catch (error) {
-        //         // Handle any errors that may occur during processing
-        //         console.error('Error:', error);
-        //         return {};
-        //     }
-        // };
-
         // For Displaying Recieved By Name without a comma
         $scope.formatPODrecievedBy = function (name) {
             if (name) {
@@ -134,27 +83,6 @@
                 return ''; // Handle if input is empty or undefined
             }
         };
-
-        // var sendToView = pointOfDeliveryService.getPODs(facility.id);
-
-        // // Handle the promise resolution
-        // sendToView.then(function (resolvedObject) {
-        //     // Assign the resolved object to a scope variable
-        //     $scope.dataObject = vm.addSupplyingFacility(resolvedObject);
-        //     $scope.dataObject.then(function (resolvedObject) {
-        //         $scope.PODEvents = resolvedObject;
-        //     })
-        //         .catch(function (error) {
-        //             // Handle errors
-        //             console.error('Error in controller:', error);
-        //         });
-
-        // })
-        //     .catch(function (error) {
-        //         // Handle errors
-        //         console.error('Error in controller:', error);
-        //     });
-
         /*Function for view single POD event*/
         vm.viewPOD = function (id) {
             $state.go('openlmis.pointOfDelivery.manage', {

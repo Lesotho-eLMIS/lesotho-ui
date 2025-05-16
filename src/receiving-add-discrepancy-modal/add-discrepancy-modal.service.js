@@ -35,7 +35,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf pod-add-discrepancy-modal.podAddDiscrepancyModalService
+         * @methodOf receiving-add-discrepancy-modal.receivingAddDiscrepancyModalService
          * @name show
          *
          * @description

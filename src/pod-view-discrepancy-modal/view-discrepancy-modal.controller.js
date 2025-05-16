@@ -35,17 +35,7 @@
 
         vm.$onInit = onInit;
         vm.discrepancies = discrepancies;
-        vm.referenceNumber = referenceNumber;
-        //vm.discrepancies = rejectionReasons;
-        // vm.discrepancyOptions = [];
-        //  //undefined;
-        // vm.selectedDiscrepancy = undefined;
-        // //vm.selectedDiscrepancies = []; // To hold list of selected discrepancy names
-        // vm.addDiscrepancy = addDiscrepency;
-        // vm.removeDispency = removeDiscrepancy;
-        // vm.confirmDiscrepancyList = confirmDiscrepancyList;
-
-        
+        vm.referenceNumber = referenceNumber;        
        
         /**
          * @ngdoc method
@@ -57,11 +47,7 @@
          * setting data to be available on the view.
          */        
         function onInit() {
-          
-            //vm.discrepancies = discrepancies;
-            console.log(discrepancies);
-
-         
+                   
         }
                      
     }

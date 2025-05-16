@@ -29,10 +29,10 @@
 
     pointOfDeliveryManageController.$inject = [
         '$rootScope', '$state', '$stateParams', 'facility', 'facilities', 'facilityService', 'offlineService', 'pointOfDeliveryService',
-        '$scope', 'notificationService', 'podAddDiscrepancyModalService', 'podEvents', 'confirmService', 'alertService'];
+        '$scope', 'notificationService', 'podEvents', 'confirmService', 'alertService'];
 
     function pointOfDeliveryManageController($rootScope, $state, $stateParams, facility, facilities, facilityService, offlineService,
-        pointOfDeliveryService, $scope, notificationService, podAddDiscrepancyModalService, podEvents, confirmService, alertService) {
+        pointOfDeliveryService, $scope, notificationService, podEvents, confirmService, alertService) {
 
 
         var vm = this;
@@ -55,7 +55,7 @@
 
         /**
             * @ngdoc method
-            * @methodOf requisition-search.controller:RequisitionViewController
+            * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
             * @name $onInit
             *
             * @description
@@ -137,22 +137,15 @@
                 cartonsQuantityOnWaybill: vm.POD ? vm.POD.cartonsQuantityOnWaybill : null,
                 cartonsQuantityShipped: vm.POD ? (vm.POD.cartonsQuantityRejected + vm.POD.cartonsQuantityAccepted) : null,
                 cartonsQuantityAccepted: vm.POD ? vm.POD.cartonsQuantityAccepted : null,
-                // cartonsQuantityRejected: vm.POD ? vm.POD.cartonsQuantityRejected : null,
                 containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
                 containersQuantityShipped: vm.POD ? (vm.POD.containersQuantityAccepted + vm.POD.containersQuantityRejected) : null,
                 containersQuantityAccepted: vm.POD ? vm.POD.containersQuantityAccepted : null,
-                // containersQuantityRejected: vm.POD ? vm.POD.containersQuantityRejected : null,
                 discrepancies: discrepancyList
             };
             const inputsValid = vm.validatePODinputs(payloadData);
-            // const validatedCartonsAndContainers = vm.validateCartonsAndContainers(payloadData);
             const consignmentValid = validateConsignment(payloadData);
             if (inputsValid && consignmentValid) {
-                // if (validatedCartonsAndContainers) {
                     vm.submitPOD(payloadData);
-                // } else {
-                    // alertService.error("Please ensure that cartons and containers details are correct.");
-                // }
             } else {
                 alertService.error('pointOfDeliveryManage.emptyConsignment');
             }
@@ -181,24 +174,6 @@
                 return true;
             }
         };
-
-        /**
-         * @ngdoc method
-         * @methodOf point-of-delivery-manage.controller:pointOfDeliveryManageController
-         * @name validateCartonsAndContainers
-         *
-         * @description
-         * 
-         */
-        // vm.validateCartonsAndContainers = function (podDetails) {
-        //     if ((podDetails.cartonsQuantityRejected > podDetails.cartonsQuantityOnWaybill) || (podDetails.containersQuantityRejected > podDetails.containersQuantityOnWaybill)) {
-
-        //         return false;
-        //     }
-        //     else {
-        //         return true;
-        //     }
-        // }
 
         /**
          * @ngdoc method

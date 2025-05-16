@@ -35,7 +35,6 @@
 
         vm.$onInit = onInit;
         vm.confirm = confirm;
-        //vm.discrepancies = rejectionReasons;
         vm.discrepancyOptions = [];
         vm.discrepancies =[];
         vm.selectedDiscrepancy = undefined;
@@ -52,7 +51,6 @@
                 'quantity': '',
                 'comments': ''
             });
-            console.log(vm.discrepancies);
         };
 
         // removing discrepancies from table
@@ -90,7 +88,6 @@
                             timestamp: itemTimestamp,
                             remarks: discrepancy.comments
                         };
-                        console.log(receivingDiscrepancy);
                         stockAdjustmentCreationService.addReceivingDiscrepancies(receivingDiscrepancy);
                         receivingDiscrepancy = {};
                     }

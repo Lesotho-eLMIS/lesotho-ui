@@ -266,7 +266,6 @@
                     product.addRowButton = true;
                 });      
             }
-           //  vm.showRemoveButton(index);
         };
     
         //Adds a row to the table

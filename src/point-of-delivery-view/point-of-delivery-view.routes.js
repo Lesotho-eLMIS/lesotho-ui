@@ -21,9 +21,9 @@
         .module('point-of-delivery-view')
         .config(routes);
 
-routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE'*/];
+routes.$inject = ['$stateProvider'];
 
-    function routes($stateProvider/*, STOCKMANAGEMENT_RIGHTS, ADJUSTMENT_TYPE*/) {
+    function routes($stateProvider) {
         $stateProvider.state('openlmis.pointOfDelivery.view', {
             isOffline: true,
             url: '/View?facility&page&size',
@@ -37,10 +37,6 @@ routes.$inject = ['$stateProvider'/*, 'STOCKMANAGEMENT_RIGHTS', 'ADJUSTMENT_TYPE
                     templateUrl: 'point-of-delivery-view/point-of-delivery-view.html',
                 }
             },
-            // params: {
-            //     sort: ['packingDate,desc']
-            // },
-
             resolve: {
                 facilities: function(facilityService) {
                     var paginationParams = {};                      
