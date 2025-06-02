@@ -689,7 +689,8 @@
       var lotResource = new LotResource();
       addedLineItems.forEach(function (lineItem) {
         if (adjustmentType.state === 'receive') {
-          lineItem.quantity = lineItem.quantity * lineItem.orderable.netContent;
+          facility.type.code === 'service_point' ? lineItem.quantity = lineItem.quantity : 
+                                lineItem.quantity = lineItem.quantity * lineItem.orderable.netContent;
         }
         if (
           lineItem.lot &&
@@ -958,7 +959,7 @@
       vm.showReasonsInAdjustment =
         adjustmentType.state === ADJUSTMENT_TYPE.ADJUSTMENT.state;
       vm.servicePointUser =
-        adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state && (facility.type.code === "quarantine" || facility.type.code === "unserviceable");
+        adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state && (facility.type.code === "service_point");//(facility.type.code === "quarantine" || facility.type.code === "unserviceable");
       /* eLMIS Lesotho : end */
      
       vm.addedLineItems = $stateParams.addedLineItems || [];
