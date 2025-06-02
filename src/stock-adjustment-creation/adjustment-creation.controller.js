@@ -689,7 +689,8 @@
       var lotResource = new LotResource();
       addedLineItems.forEach(function (lineItem) {
         if (adjustmentType.state === 'receive') {
-          lineItem.quantity = lineItem.quantity * lineItem.orderable.netContent;
+          facility.type.code === 'service_point' ? lineItem.quantity = lineItem.quantity : 
+                                lineItem.quantity = lineItem.quantity * lineItem.orderable.netContent;
         }
         if (
           lineItem.lot &&

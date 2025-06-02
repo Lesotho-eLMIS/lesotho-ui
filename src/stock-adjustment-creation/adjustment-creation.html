@@ -179,23 +179,23 @@
                             oninput="validity.valid||(value='');" ng-change="vm.validateQuantity(lineItem)"
                             ng-show="lineItem.assignment.name=='NGO' || lineItem.assignment.name=='NDSO'" required></td>
 
-                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.prepackSize"
+                    <!-- <td ng-if="vm.showPrepackingAttributes"><input class="form-control" ng-model="lineItem.prepackSize"
                             ng-change="vm.validatePrepackQuantity(lineItem)" type="number" min="0" style="width: 70px;">
-                    </td>
-                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control"
+                    </td> -->
+                    <!-- <td ng-if="vm.showPrepackingAttributes"><input class="form-control"
                             ng-model="lineItem.numberOfPrepacks" ng-change="vm.validatePrepackQuantity(lineItem)"
-                            type="number" style="width: 120px;"></td>
-                    <td ng-if="vm.showPrepackingAttributes"
+                            type="number" style="width: 120px;"></td> -->
+                    <!-- <td ng-if="vm.showPrepackingAttributes"
                         openlmis-invalid="{{lineItem.$errors.prepackQuantityInvalid}}" class="digit-cell">
                         <input class="form-control" ng-model="lineItem.prepackQuantity"
                             ng-class="{'error': lineItem.$errors.prepackQuantityInvalid}"
                             ng-blur="vm.validatePrepackQuantity(lineItem)" readonly
                             value="{{(lineItem.prepackSize*lineItem.numberOfPrepacks)}}" type="number"
                             style="width: 120px;" min="0">
-                    </td>
-                    <td ng-if="vm.showPrepackingAttributes"><input class="form-control"
+                    </td> -->
+                    <!-- <td ng-if="vm.showPrepackingAttributes"><input class="form-control"
                             ng-model="lineItem.remainingStock" readonly type="number" style="width: 120px;" min="0">
-                    </td>
+                    </td> -->
 
                     <td ng-if="!vm.showPrepackingAttributes" openlmis-invalid="{{lineItem.$errors.quantityInvalid}}"
                         class="digit-cell">
