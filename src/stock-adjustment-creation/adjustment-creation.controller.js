@@ -612,6 +612,7 @@
         vm.lots.splice(index, 1);
         /* eLMIS Lesotho : end */
       };
+    }
 
     /**
      * @ngdoc method
