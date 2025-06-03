@@ -605,9 +605,13 @@
       vm.selectedOrderableHasLots = vm.lots.length > 0;
 
       /* eLMIS Lesotho : start */
-      vm.lots.splice(1, 1);  //Removing no lot defined because all products should have lots/batches
-      /* eLMIS Lesotho : end */
-    };
+      //Removing no lot defined because all products should have lots/batches
+      const removeElement = "No batch defined";
+      const index = vm.lots.findIndex(lot => lot.lotCode === removeElement);
+      if (index !== -1) {
+        vm.lots.splice(index, 1);
+        /* eLMIS Lesotho : end */
+      };
 
     /**
      * @ngdoc method
