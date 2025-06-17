@@ -15,6 +15,15 @@
 	<span ng-if="vm.showAddFullSupplyProductControls">
 		{{ vm.skippedFullSupplyProductCountMessage() }}
 	</span>
+	<div ng-show="vm.showSkipControls" id="skipped-line-items-visibility">
+		<label for="skippedItemsVisibility">Show skipped items</label>
+		<input
+			type="checkbox"
+			name="skippedItemsVisibility"
+			id="skippedItemsVisibility"
+			ng-model="vm.showSkippedLineItems"
+			ng-change="vm.filterByOrderableParams()">
+	</div>
 	<button class="add" ng-if="vm.showAddFullSupplyProductsButton" ng-click="vm.addFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showAddNonFullSupplyProductsButton" ng-click="vm.addNonFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>
 	<button class="add" ng-if="vm.showUnskipFullSupplyProductsButton" ng-click="vm.unskipFullSupplyProducts()" >{{'requisitionViewTab.addProduct' | message}}</button>

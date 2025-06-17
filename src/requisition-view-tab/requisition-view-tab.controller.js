@@ -54,6 +54,7 @@
         vm.cacheRequisition = cacheRequisition;
         vm.disabledRequisitionEdit = disabledRequisitionEdit;
         vm.search = search;
+        vm.showSkippedLineItems = true;
 
         /**
          * @ngdoc property
@@ -161,6 +162,24 @@
             vm.canApproveAndReject = canApproveAndReject;
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
             vm.requisition = disabledRequisitionEdit();
+            registerSkippedItemsWatcher();
+        }
+
+        function registerSkippedItemsWatcher() {
+            $scope.$watchCollection(function() {
+                return vm.items ? vm.items.map(function(item) {
+                    return item.skipped;
+                }) : [];
+            }, function(newValues, oldValues) {
+                if (!angular.equals(newValues, oldValues) && !vm.showSkippedLineItems) {
+                    for (var i = 0; i < newValues.length; i++) {
+                        if (newValues[i] !== oldValues[i]) {
+                            vm.filterByOrderableParams();
+                            break;
+                        }
+                    }
+                }
+            });
         }
 
         function search() {
@@ -425,6 +444,21 @@
                 'requisitionViewTab.noFullSupplyProducts' :
                 'requisitionViewTab.noNonFullSupplyProducts';
         }
+
+        function orderableHasMatchingName(orderableName, filterValue) {
+            return orderableName.toLowerCase().includes(filterValue.toLowerCase());
+        }
+
+        function getFilteredLineItems() {
+            return vm.lineItems.filter(function(item) {
+                return orderableHasMatchingName(item.orderable.fullProductName, vm.orderableFilterProperties.name)
+                    && (vm.showSkippedLineItems ? true : !item.skipped);
+            });
+        }
+
+        vm.filterByOrderableParams = function() {
+            vm.filteredItems = getFilteredLineItems();
+        };
     }
 
 })();
