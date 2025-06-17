@@ -32,14 +32,14 @@
         '$filter', '$state', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility','$scope'
     ];
 
     function ViewTabController($filter, $state, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, homeFacility) {
+                               canUnskipRequisitionItemWhenApproving, homeFacility, $scope) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -146,6 +146,10 @@
          * Holds the list of columns visible on this screen.
          */
         vm.columns = undefined;
+
+         vm.orderableFilterProperties = {
+            name: ''
+        };
 
         function onInit() {
             vm.lineItems = lineItems;
@@ -451,8 +455,7 @@
 
         function getFilteredLineItems() {
             return vm.lineItems.filter(function(item) {
-                return orderableHasMatchingName(item.orderable.fullProductName, vm.orderableFilterProperties.name)
-                    && (vm.showSkippedLineItems ? true : !item.skipped);
+                return (vm.showSkippedLineItems ? true : !item.skipped); 
             });
         }
 
