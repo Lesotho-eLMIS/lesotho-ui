@@ -32,14 +32,14 @@
         '$filter', '$state', 'selectProductsModalService', 'requisitionValidator', 'requisition', 'columns', 'messageService',
         'lineItems', 'alertService', 'canSubmit', 'canAuthorize', 'fullSupply', 'TEMPLATE_COLUMNS', '$q',
         'OpenlmisArrayDecorator', 'canApproveAndReject', 'items', 'paginationService', '$stateParams',
-        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility'
+        'requisitionCacheService', 'canUnskipRequisitionItemWhenApproving', 'homeFacility','$scope'
     ];
 
     function ViewTabController($filter, $state, selectProductsModalService, requisitionValidator, requisition, columns,
                                messageService, lineItems, alertService, canSubmit, canAuthorize, fullSupply,
                                TEMPLATE_COLUMNS, $q, OpenlmisArrayDecorator, canApproveAndReject, items,
                                paginationService, $stateParams, requisitionCacheService,
-                               canUnskipRequisitionItemWhenApproving, homeFacility) {
+                               canUnskipRequisitionItemWhenApproving, homeFacility, $scope) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -54,6 +54,7 @@
         vm.cacheRequisition = cacheRequisition;
         vm.disabledRequisitionEdit = disabledRequisitionEdit;
         vm.search = search;
+        vm.showSkippedLineItems = true;
 
         /**
          * @ngdoc property
@@ -146,6 +147,10 @@
          */
         vm.columns = undefined;
 
+         vm.orderableFilterProperties = {
+            name: ''
+        };
+
         function onInit() {
             vm.lineItems = lineItems;
             vm.items = items;
@@ -161,6 +166,24 @@
             vm.canApproveAndReject = canApproveAndReject;
             vm.paginationId = fullSupply ? 'fullSupplyList' : 'nonFullSupplyList';
             vm.requisition = disabledRequisitionEdit();
+            registerSkippedItemsWatcher();
+        }
+
+        function registerSkippedItemsWatcher() {
+            $scope.$watchCollection(function() {
+                return vm.items ? vm.items.map(function(item) {
+                    return item.skipped;
+                }) : [];
+            }, function(newValues, oldValues) {
+                if (!angular.equals(newValues, oldValues) && !vm.showSkippedLineItems) {
+                    for (var i = 0; i < newValues.length; i++) {
+                        if (newValues[i] !== oldValues[i]) {
+                            vm.filterByOrderableParams();
+                            break;
+                        }
+                    }
+                }
+            });
         }
 
         function search() {
@@ -425,6 +448,20 @@
                 'requisitionViewTab.noFullSupplyProducts' :
                 'requisitionViewTab.noNonFullSupplyProducts';
         }
+
+        function orderableHasMatchingName(orderableName, filterValue) {
+            return orderableName.toLowerCase().includes(filterValue.toLowerCase());
+        }
+
+        function getFilteredLineItems() {
+            return vm.lineItems.filter(function(item) {
+                return (vm.showSkippedLineItems ? true : !item.skipped); 
+            });
+        }
+
+        vm.filterByOrderableParams = function() {
+            vm.filteredItems = getFilteredLineItems();
+        };
     }
 
 })();
