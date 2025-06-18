@@ -399,7 +399,7 @@
         lineItem.$errors.quantityInvalid = messageService.get(
           'stockAdjustmentCreation.acceptedQuantityError');
       } 
-      else if (lineItem.quantity >= 1) {
+      else if (lineItem.quantity >= 0) {
         lineItem.$errors.quantityInvalid = false;
       } 
       else {

@@ -111,9 +111,9 @@
             vm.POD.cartonsQuantityOnWaybill = podObject.cartonsQuantityOnWaybill;
             vm.POD.cartonsQuantityAccepted = podObject.cartonsQuantityAccepted;
             vm.POD.cartonsQuantityRejected = podObject.cartonsQuantityRejected;
-            vm.POD.containersQuantityOnWayBill = podObject.containersQuantityOnWaybill;
-            vm.POD.containersQuantityAccepted = podObject.containersQuantityAccepted;
-            vm.POD.containersQuantityRejected = podObject.containersQuantityRejected;
+            // vm.POD.containersQuantityOnWayBill = podObject.containersQuantityOnWaybill;
+            // vm.POD.containersQuantityAccepted = podObject.containersQuantityAccepted;
+            // vm.POD.containersQuantityRejected = podObject.containersQuantityRejected;
         }
 
         /**
@@ -137,9 +137,9 @@
                 cartonsQuantityOnWaybill: vm.POD ? vm.POD.cartonsQuantityOnWaybill : null,
                 cartonsQuantityShipped: vm.POD ? (vm.POD.cartonsQuantityRejected + vm.POD.cartonsQuantityAccepted) : null,
                 cartonsQuantityAccepted: vm.POD ? vm.POD.cartonsQuantityAccepted : null,
-                containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
-                containersQuantityShipped: vm.POD ? (vm.POD.containersQuantityAccepted + vm.POD.containersQuantityRejected) : null,
-                containersQuantityAccepted: vm.POD ? vm.POD.containersQuantityAccepted : null,
+                // containersQuantityOnWaybill: vm.POD ? vm.POD.containersQuantityOnWayBill : null,
+                // containersQuantityShipped: vm.POD ? (vm.POD.containersQuantityAccepted + vm.POD.containersQuantityRejected) : null,
+                // containersQuantityAccepted: vm.POD ? vm.POD.containersQuantityAccepted : null,
                 discrepancies: discrepancyList
             };
             const inputsValid = vm.validatePODinputs(payloadData);
@@ -186,9 +186,9 @@
         function validateConsignment(consignmentDetails) {
 
             const hasCartonsQuantity = consignmentDetails.hasOwnProperty('cartonsQuantityOnWaybill') && consignmentDetails.cartonsQuantityOnWaybill;
-            const hasContainersQuantity = consignmentDetails.hasOwnProperty('containersQuantityOnWaybill') && consignmentDetails.containersQuantityOnWaybill;
+            // const hasContainersQuantity = consignmentDetails.hasOwnProperty('containersQuantityOnWaybill') && consignmentDetails.containersQuantityOnWaybill;
             const hasCartonsAcceptedQuantity = consignmentDetails.hasOwnProperty('cartonsQuantityAccepted') && consignmentDetails.cartonsQuantityAccepted;
-            const hasContainersAcceptedQuantity = consignmentDetails.hasOwnProperty('containersQuantityAccepted') && consignmentDetails.containersQuantityAccepted;
+            // const hasContainersAcceptedQuantity = consignmentDetails.hasOwnProperty('containersQuantityAccepted') && consignmentDetails.containersQuantityAccepted;
             
 
             //Check if Cartons and Containers have values
