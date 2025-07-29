@@ -55,6 +55,7 @@
         vm.disabledRequisitionEdit = disabledRequisitionEdit;
         vm.search = search;
         vm.showSkippedLineItems = true;
+        vm.displayedItems = [];
 
         /**
          * @ngdoc property
@@ -153,6 +154,7 @@
 
         function onInit() {
             vm.lineItems = lineItems;
+            vm.displayedItems = lineItems;
             vm.items = items;
             vm.requisition = requisition;
             vm.homeFacility = homeFacility;
@@ -461,6 +463,12 @@
 
         vm.filterByOrderableParams = function() {
             vm.filteredItems = getFilteredLineItems();
+            if(vm.showSkippedLineItems) {
+                vm.displayedItems = vm.lineItems;
+            }else {
+                vm.displayedItems = vm.filteredItems;
+            }
+
         };
     }
 
