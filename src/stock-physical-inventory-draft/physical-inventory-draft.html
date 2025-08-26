@@ -37,6 +37,9 @@
         </select>
             <button ng-click="vm.selectProductForCyclic()"> {{'stockPhysicalInventoryDraft.addProduct' | message}}  </button>
     </div>
+    <button ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" class="pull-right add" ng-click="vm.selectProducts()">
+        {{'stockPhysicalInventoryDraft.selectProduct' | message}}
+    </button>
 
     <saving-indicator class="draft-indicator" object="vm.dataChanged"/>
 

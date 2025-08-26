@@ -35,16 +35,16 @@
         'VVM_STATUS', 'reasons', 'stockReasonsCalculations', 'loadingModalService', '$window',
         'stockmanagementUrlFactory', 'accessTokenFactory', 'orderableGroupService', '$filter', '$q',
         'offlineService', 'physicalInventoryDraftCacheService', 'stockCardService', 'LotResource',
-        'editLotModalService'];
+        'editLotModalService','OpenlmisArrayDecorator', 'selectProductsModalService'];
 
-    function controller($scope, $state, $stateParams, addProductsModalService, messageService,
+    function controller($scope, $state,$stateParams, addProductsModalService, messageService,
         physicalInventoryFactory, notificationService, alertService,
         chooseDateModalService, program, facility, draft, displayLineItemsGroup,
         confirmService, physicalInventoryService, MAX_INTEGER_VALUE, VVM_STATUS,
         reasons, stockReasonsCalculations, loadingModalService, $window,
         stockmanagementUrlFactory, accessTokenFactory, orderableGroupService, $filter, $q,
         offlineService, physicalInventoryDraftCacheService, stockCardService,
-        LotResource, editLotModalService) {
+        LotResource, editLotModalService, OpenlmisArrayDecorator,selectProductsModalService) {
 
         var vm = this;
         vm.$onInit = onInit;
@@ -284,6 +284,61 @@
             });
 
             addProductsModalService.show(notYetAddedItems, draft.lineItems).then(function () {
+                $stateParams.program = vm.program;
+                $stateParams.facility = vm.facility;
+                $stateParams.noReload = true;
+
+                draft.$modified = true;
+                vm.cacheDraft();
+
+                //Only reload current state and avoid reloading parent state
+                $state.go($state.current.name, $stateParams, {
+                    reload: $state.current.name
+                });
+            });
+        };
+
+        /**
+         * @ngdoc method
+         * @methodOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
+         * @name addProducts
+         *
+         * @description
+         * Pops up a modal for users to add products for physical inventory.
+         */
+        vm.selectProducts = function () {
+            var notYetAddedItems = _.chain(draft.lineItems)
+                .difference(_.flatten(vm.displayLineItemsGroup))
+                .value();
+
+            var orderablesWithoutAvailableLots = draft.lineItems.map(function (item) {
+                return item.orderable;
+            }).filter(function (orderable) {
+                return !notYetAddedItems.find(function (item) {
+                    return orderable.id === item.orderable.id;
+                });
+            })
+                .filter(function (orderable, index, filtered) {
+                    return filtered.indexOf(orderable) === index;
+                })
+                .map(function (uniqueOrderable) {
+                    return {
+                        lot: null,
+                        orderable: uniqueOrderable,
+                        quantity: null,
+                        stockAdjustments: [],
+                        stockOnHand: null,
+                        vvmStatus: null,
+                        $allLotsAdded: true
+                    };
+                });
+
+            orderablesWithoutAvailableLots.forEach(function (item) {
+                notYetAddedItems.push(item);
+            });
+            console.log(notYetAddedItems);
+            console.log(vm.displayLineItemsGroup);
+            addProductsModalService.show(_.flatten(vm.displayLineItemsGroup),[]).then(function () {
                 $stateParams.program = vm.program;
                 $stateParams.facility = vm.facility;
                 $stateParams.noReload = true;
@@ -832,6 +887,18 @@
             });
         }
 
+        function getOrderablesFromGroups(orderableGroups) {
+            console.log(orderableGroups);
+            let orderablesAvailable = [];
+            if(orderableGroups.length > 0){
+                orderableGroups.forEach(group =>{
+               
+                orderablesAvailable.push(group[0].orderable);
+                });
+            }
+            return orderablesAvailable;           
+        }
+
         /**
          * @ngdoc method
          * @methodOf stock-physical-inventory-draft.controller:PhysicalInventoryDraftController
@@ -841,6 +908,21 @@
          * Populates array of line items for cyclic inventory, and groups them by category
          */
         function selectProductForCyclic() {
+          
+            var stockedOrderables = getOrderablesFromGroups(displayLineItemsGroup); // product that have historically had stock in the facility
+
+            var decoratedAvailableProducts = new OpenlmisArrayDecorator(stockedOrderables);
+            decoratedAvailableProducts.sortBy('fullProductName');
+            console.log(decoratedAvailableProducts);
+            /**
+             * Continue Below 
+             * It throws an error when try to show select products modal
+             */
+            var test = selectProductsModalService.show({
+                products: decoratedAvailableProducts
+            });
+
+            console.log(test);
 
             const productId = vm.selectedProductForCyclic.orderable.id;
             const productName = vm.selectedProductForCyclic.orderable.fullProductName;

@@ -35,6 +35,13 @@
         'openlmis-auth',
         'stock-physical-inventory',
         'stock-card',
-        'stock-edit-lot-modal'
+        'stock-edit-lot-modal',
+        'openlmis-array-decorator',
+        'ui.router',
+        'select-products-modal',
+        'openlmis-pagination',
+        'openlmis-urls',
+        'openlmis-form',
+        'openlmis-state-tracker',
     ]);
 })();
