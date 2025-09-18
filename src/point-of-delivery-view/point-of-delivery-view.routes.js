@@ -68,10 +68,12 @@ routes.$inject = ['$stateProvider'];
                     return pointOfDeliveryService.getPODs(facility.id);
                 },
                 podEventsWithSuppliers: function(podEvents, facilitiesMinimal) {
+                    // Map through the podEvents and find the corresponding supplier from facilitiesMinimal
                     const podEventsWithSuppliers = Object.keys(podEvents).map(key => {
                         const event = podEvents[key];
                         const supplier = facilitiesMinimal.find(facility => facility.id == event.sourceId);
                         event.sourceName = supplier.name;
+                        event.packingDate = event.packingDate+"T00:00:00Z"; // Append time to packingDate to make it ISO 8601 compliant to avoid timezone issues
                         return event;
                       });
                     return podEventsWithSuppliers;
