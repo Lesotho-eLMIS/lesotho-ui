@@ -52,6 +52,7 @@
         vm.quantityChanged = quantityChanged;
         vm.checkUnaccountedStockAdjustments = checkUnaccountedStockAdjustments;
         vm.selectProductForCyclic = selectProductForCyclic;
+        vm.removeGroup = removeGroup;                       
 
         /**
          * @ngdoc property
@@ -856,6 +857,16 @@
                 }
             });
             //Group the selected items by Category
+            vm.groupedCategories = $filter('groupByProgramProductCategory')(vm.itemsSelectedForCyclic, vm.program.id);
+        }
+
+        function removeGroup(group) {
+            // Remove the group from the array of items selected for cyclic count
+            const index = vm.itemsSelectedForCyclic.indexOf(group);
+            if (index !== -1) {
+                vm.itemsSelectedForCyclic.splice(index, 1);
+            }
+            // Re-group the remaining items by Category
             vm.groupedCategories = $filter('groupByProgramProductCategory')(vm.itemsSelectedForCyclic, vm.program.id);
         }
 
