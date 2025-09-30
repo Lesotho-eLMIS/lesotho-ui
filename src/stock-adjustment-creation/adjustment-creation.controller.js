@@ -779,6 +779,7 @@
                   facility: facility.id,
                   program: program.id,
                   active: STOCKCARD_STATUS.ACTIVE,
+                  supervised: $stateParams.supervised
                 });
               },
               function (errorResponse) {
@@ -873,7 +874,9 @@
       return vm.srcDstAssignments;
     }
       
-    function onInit() {   
+    function onInit() { 
+      
+      console.log("Facility: ", $stateParams )
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;

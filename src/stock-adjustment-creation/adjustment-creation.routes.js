@@ -41,7 +41,8 @@
                 reasons: undefined,
                 displayItems: undefined,
                 addedLineItems: undefined,
-                orderableGroups: undefined
+                orderableGroups: undefined, 
+                supervised: undefined
             },
             resolve: {
                 program: function($stateParams, programService) {
@@ -74,7 +75,7 @@
                     return registerDisplayItemsService($stateParams);
                 },
                 reasons: function($stateParams, stockReasonsFactory, facilityWithType) {
-                    console.log("Facility Type:", facilityWithType);
+                    console.log("Params:", $stateParams);
                     if (_.isUndefined($stateParams.reasons)) {
                         return stockReasonsFactory.getAdjustmentReasons($stateParams.programId, facilityWithType.type.id);
                     }

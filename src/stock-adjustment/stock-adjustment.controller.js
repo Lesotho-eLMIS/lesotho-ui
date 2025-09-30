@@ -83,11 +83,12 @@
         // };
 
         vm.proceed = function () {
-            console.log(vm.facility, vm.program);
+            
             $state.go('openlmis.stockmanagement.' + adjustmentType.state + '.creation', {
                 programId: vm.program.id,
                 program: vm.program,
-                facility: vm.facility
+                facility: vm.facility,
+                supervised: vm.isSupervised
             });
         };
 
