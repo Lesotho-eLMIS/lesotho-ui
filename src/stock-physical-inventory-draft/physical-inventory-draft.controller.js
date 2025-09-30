@@ -713,6 +713,11 @@
 
             return errorMessage; // Returns the first error found or null if none
         }
+        
+        // Helper function to check if an object has a valid quantity property
+        function hasValidQuantity(obj) {
+            return obj && Object.prototype.hasOwnProperty.call(obj, "quantity") && obj.quantity !== null && obj.quantity !== undefined;
+        }
 
         function onInit() {
             $state.current.label = messageService.get('stockPhysicalInventoryDraft.title', {
@@ -727,7 +732,16 @@
 
             //Prepare product for select for cyclic stock count
             displayLineItemsGroup.forEach(function (group) {
-                vm.productsForCyclic.push(group[0])
+                if (hasValidQuantity(group[0]))
+                {
+                    // If the group has a valid quantity, push it to the add it to the table of items selected for cyclic count
+                    vm.itemsSelectedForCyclic.push(group);
+                    vm.groupedCategories = $filter('groupByProgramProductCategory')(vm.itemsSelectedForCyclic, vm.program.id);
+                }
+                else{
+                    // If the group does not have a valid quantity, push it to the array of products to choose from in the dropdown
+                    vm.productsForCyclic.push(group[0]);
+                }
             })
             vm.hasLot = _.any(draft.lineItems, function (item) {
                 return item.lot;

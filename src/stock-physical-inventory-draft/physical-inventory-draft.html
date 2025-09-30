@@ -27,7 +27,7 @@
         title="{{'stockPhysicalInventoryDraft.numberOfProductsComplete' | message: {'num': vm.itemsWithQuantity.length, 'total': vm.displayLineItemsGroup.length} }}">
     </openlmis-progressbar>
 
-    <button ng-if="vm.stateParams.physicalInventoryType === 'Major'" class="pull-right add" ng-click="vm.addProducts()">
+    <button class="pull-right add" ng-click="vm.addProducts()">
         {{'stockPhysicalInventoryDraft.addProduct' | message}}
     </button>
     <div ng-if="vm.stateParams.physicalInventoryType === 'Cyclic'" class="pull-right add">
@@ -35,7 +35,7 @@
         <select  id="productSelect" ng-model="vm.selectedProductForCyclic"
             ng-options="product.orderable.fullProductName for product in vm.productsForCyclic" ng-required="true">
         </select>
-            <button ng-click="vm.selectProductForCyclic()"> {{'stockPhysicalInventoryDraft.addProduct' | message}}  </button>
+            <button ng-click="vm.selectProductForCyclic()">Add</button>
     </div>
 
     <saving-indicator class="draft-indicator" object="vm.dataChanged"/>
