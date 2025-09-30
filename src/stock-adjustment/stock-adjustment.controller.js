@@ -74,13 +74,24 @@
             return adjustmentType.prefix + '.' + secondaryKey;
         };
 
-        vm.proceed = function(program) {
+        // vm.proceed = function(program) {
+        //     $state.go('openlmis.stockmanagement.' + adjustmentType.state + '.creation', {
+        //                 programId: program.id,
+        //                 program: program,
+        //                 facility: facility
+        //             });
+        // };
+
+        vm.proceed = function () {
+            
             $state.go('openlmis.stockmanagement.' + adjustmentType.state + '.creation', {
-                        programId: program.id,
-                        program: program,
-                        facility: facility
-                    });
+                programId: vm.program.id,
+                program: vm.program,
+                facility: vm.facility,
+                supervised: vm.isSupervised
+            });
         };
+
 
         /**
          * @ngdoc property

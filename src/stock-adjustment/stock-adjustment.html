@@ -6,7 +6,18 @@
     {{ vm.key('offline3') | message}}<br>
 </p>
 
-<section class="openlmis-table-container">
+<form class="sidebar" ng-submit="vm.proceed()">
+    <openlmis-facility-program-select
+        is-supervised="vm.isSupervised"
+        facility="vm.facility"
+        program="vm.program"
+        module="'requisition-initiate'">
+    </openlmis-facility-program-select>
+
+    <input type="submit"  value="{{vm.key('proceed') | message}}"/>
+</form>
+
+<!-- <section class="openlmis-table-container">
     <table>
         <caption ng-if="!vm.programs.length">{{vm.key('noProgramAvailable') | message}}
         </caption>
@@ -26,4 +37,4 @@
             </tr>
         </tbody>
     </table>
-</section>
+</section> -->

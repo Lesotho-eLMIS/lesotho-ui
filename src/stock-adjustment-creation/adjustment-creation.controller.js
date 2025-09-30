@@ -66,7 +66,8 @@
     'complaintFormModalService',
     'pointOfDeliveryService',
     'suppliers',
-    'ReferenceNumbers'
+    'ReferenceNumbers',
+    'facilityWithType'
   ];
 
   function controller(
@@ -108,7 +109,8 @@
     complaintFormModalService,
     pointOfDeliveryService, 
     suppliers,
-    ReferenceNumbers
+    ReferenceNumbers,
+    facilityWithType
   ) {
     var vm = this,
       previousAdded = {};
@@ -694,7 +696,7 @@
       var lotResource = new LotResource();
       addedLineItems.forEach(function (lineItem) {
         if (adjustmentType.state === 'receive') {
-          facility.type.code === 'service_point' ? lineItem.quantity = lineItem.quantity : 
+          facilityWithType.type.code === 'service_point' ? lineItem.quantity = lineItem.quantity : 
                                 lineItem.quantity = lineItem.quantity * lineItem.orderable.netContent;
         }
         if (
@@ -777,6 +779,7 @@
                   facility: facility.id,
                   program: program.id,
                   active: STOCKCARD_STATUS.ACTIVE,
+                  supervised: $stateParams.supervised
                 });
               },
               function (errorResponse) {
@@ -871,7 +874,9 @@
       return vm.srcDstAssignments;
     }
       
-    function onInit() {   
+    function onInit() { 
+      
+      console.log("Facility: ", $stateParams )
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
@@ -964,7 +969,7 @@
       vm.showReasonsInAdjustment =
         adjustmentType.state === ADJUSTMENT_TYPE.ADJUSTMENT.state;
       vm.servicePointUser =
-        adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state && (facility.type.code === "service_point");//(facility.type.code === "quarantine" || facility.type.code === "unserviceable");
+        adjustmentType.state === ADJUSTMENT_TYPE.RECEIVE.state && (facilityWithType.type.code === "service_point");//(facility.type.code === "quarantine" || facility.type.code === "unserviceable");
       /* eLMIS Lesotho : end */
      
       vm.addedLineItems = $stateParams.addedLineItems || [];

@@ -41,7 +41,8 @@
                 reasons: undefined,
                 displayItems: undefined,
                 addedLineItems: undefined,
-                orderableGroups: undefined
+                orderableGroups: undefined, 
+                supervised: undefined
             },
             resolve: {
                 program: function($stateParams, programService) {
@@ -55,6 +56,9 @@
                         return facilityFactory.getUserHomeFacility();
                     }
                     return $stateParams.facility;
+                },
+                facilityWithType: function(facilityService,facility ) {
+                    return facilityService.get(facility.id);
                 },
                 user: function(authorizationService) {
                     return authorizationService.getUser();
@@ -70,9 +74,10 @@
                 displayItems: function($stateParams, registerDisplayItemsService) {
                     return registerDisplayItemsService($stateParams);
                 },
-                reasons: function($stateParams, stockReasonsFactory, facility) {
+                reasons: function($stateParams, stockReasonsFactory, facilityWithType) {
+                    console.log("Params:", $stateParams);
                     if (_.isUndefined($stateParams.reasons)) {
-                        return stockReasonsFactory.getAdjustmentReasons($stateParams.programId, facility.type.id);
+                        return stockReasonsFactory.getAdjustmentReasons($stateParams.programId, facilityWithType.type.id);
                     }
                     return $stateParams.reasons;
                 },
