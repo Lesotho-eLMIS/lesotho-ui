@@ -876,7 +876,7 @@
       
     function onInit() { 
       
-      console.log("Facility: ", $stateParams )
+      // console.log("Facility: ", $stateParams )
 
       vm.srcDstAssignments = srcDstAssignments;
       vm.suppliers = suppliers;
